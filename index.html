@@ -48,6 +48,9 @@
                         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                         <span>Auto-WA Móvil</span>
                     </button>
+                    <button onclick="openWaTemplatesModal()" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-colors flex items-center gap-1" title="Configurar Mensajes Predeterminados por Canal">
+                        <span>💬 Mensajes WA</span>
+                    </button>
                     <button onclick="openBackupModal()" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors flex items-center gap-1" title="Respaldo y Sala">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
                         <span class="hidden sm:inline">Respaldo</span>
@@ -97,6 +100,9 @@
                 <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera de respuesta • Auto-pasa a "No Contestó" a las 48h.</span>
             </div>
             <div class="flex items-center gap-1.5">
+                <button onclick="openWaTemplatesModal()" class="px-2.5 py-1 rounded-lg bg-teal-50 text-teal-800 hover:bg-teal-100 border border-teal-200 font-semibold transition-colors">
+                    💬 Plantillas WA
+                </button>
                 <button onclick="openWaBridgeModal()" class="px-2.5 py-1 rounded-lg bg-slate-900 text-white hover:bg-slate-800 font-semibold transition-colors">
                     📲 Vincular Celular
                 </button>
@@ -1082,6 +1088,49 @@
         </div>
     </div>
 
+    <!-- MODAL DE CONFIGURACIÓN DE MENSAJES PREDETERMINADOS POR CANAL -->
+    <div id="wa-templates-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[66] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10">
+                <div>
+                    <h3 class="text-base sm:text-lg font-bold text-slate-800">Mensajes Predeterminados de WhatsApp por Canal</h3>
+                    <p class="text-xs text-slate-500">Configura el texto que se abrirá listo para enviar según de qué ventana lo envíes. Usa <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800 font-semibold">{nombre}</code> para insertar el nombre del contacto.</p>
+                </div>
+                <button onclick="closeWaTemplatesModal()" class="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div class="p-5 space-y-4 text-xs sm:text-sm">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">1. Base de Datos — No Compra</label>
+                    <textarea id="tpl-wa-crm" rows="2" placeholder="Ej: Hola {nombre}, te escribo de Toyota por tu consulta anterior..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-indigo-700 mb-1">2. Gestión Personal</label>
+                    <textarea id="tpl-wa-gestion" rows="2" placeholder="Ej: Hola {nombre}, ¿cómo estás? Te contacto por recomendación..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-700 mb-1">3. Redes Sociales</label>
+                    <textarea id="tpl-wa-redes" rows="2" placeholder="Ej: Hola {nombre}, vimos tu consulta en redes sociales por nuestros planes Toyota..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-pink-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-sky-700 mb-1">4. Salesforce Leads</label>
+                    <textarea id="tpl-wa-salesforce" rows="2" placeholder="Ej: Hola {nombre}, recibimos tu solicitud web en Toyota..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-sky-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-emerald-700 mb-1">5. Datos Convencional</label>
+                    <textarea id="tpl-wa-convencional" rows="2" placeholder="Ej: Hola {nombre}, me pasaron tu contacto desde salón convencional..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-amber-700 mb-1">6. Cartera de Clientes (Seguimiento)</label>
+                    <textarea id="tpl-wa-clientes" rows="2" placeholder="Ej: Hola {nombre}, te escribo para seguir tu propuesta..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-amber-500 resize-none"></textarea>
+                </div>
+            </div>
+            <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2 sticky bottom-0">
+                <button onclick="closeWaTemplatesModal()" class="px-4 py-2 text-slate-600 text-xs sm:text-sm font-medium hover:bg-slate-200 rounded-xl">Cancelar</button>
+                <button onclick="saveWaTemplates()" class="px-5 py-2 bg-emerald-600 text-white text-xs sm:text-sm font-semibold hover:bg-emerald-700 rounded-xl">Guardar Mensajes</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
 
     <script>
@@ -1126,6 +1175,14 @@
         let latestAiSuggestedWeekly = null;
         let waIncomingLogs = [];
         let processedWaEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_wa_events') || '[]'));
+        let waTemplates = {
+            crm: 'Hola {nombre}, ¿cómo estás? Te contacto de Toyota para comentarte las condiciones vigentes de financiación.',
+            gestion: 'Hola {nombre}, ¿cómo estás? Te escribo de Toyota.',
+            redes: 'Hola {nombre}, ¿cómo estás? Te contacto por tu consulta en redes sociales sobre Toyota.',
+            salesforce: 'Hola {nombre}, ¿cómo estás? Recibimos tu consulta web en Toyota y quería asesorarte.',
+            convencional: 'Hola {nombre}, ¿cómo estás? Me pasaron tu contacto desde el salón de Toyota.',
+            clientes: 'Hola {nombre}, ¿cómo estás? Te escribo para hacer seguimiento de tu consulta en Toyota.'
+        };
 
         // --- OBJETIVOS SEMANALES Y MENSUALES (LUNES A VIERNES + RITMO DIARIO REQUERIDO) ---
         function ensureWeeklyGoalsStructure() {
@@ -1655,7 +1712,8 @@
                 convencionalSellers,
                 plansHistory: lightPlans,
                 predefinedModels,
-                goals
+                goals,
+                waTemplates
             };
         }
 
@@ -1677,6 +1735,7 @@
             if (Array.isArray(data.convencionalSellers)) convencionalSellers = data.convencionalSellers;
             if (Array.isArray(data.predefinedModels)) predefinedModels = data.predefinedModels;
             if (data.goals) goals = data.goals;
+            if (data.waTemplates && typeof data.waTemplates === 'object') waTemplates = { ...waTemplates, ...data.waTemplates };
 
             if (Array.isArray(data.plansHistory)) {
                 const localJpgMap = {};
@@ -1799,6 +1858,8 @@
                 if (savedModels) predefinedModels = JSON.parse(savedModels);
                 const savedGoals = localStorage.getItem('crm_goals');
                 if (savedGoals) goals = JSON.parse(savedGoals);
+                const savedWaTemplates = localStorage.getItem('crm_wa_templates');
+                if (savedWaTemplates) waTemplates = { ...waTemplates, ...JSON.parse(savedWaTemplates) };
             } catch (e) {
                 console.error("Error cargando localStorage:", e);
             }
@@ -1815,6 +1876,7 @@
                 localStorage.setItem('convencional_sellers', JSON.stringify(convencionalSellers));
                 localStorage.setItem('predefined_models', JSON.stringify(predefinedModels));
                 localStorage.setItem('crm_goals', JSON.stringify(goals));
+                localStorage.setItem('crm_wa_templates', JSON.stringify(waTemplates));
                 try {
                     localStorage.setItem('plans_history', JSON.stringify(plansHistory));
                 } catch (quotaErr) {
@@ -2116,8 +2178,12 @@
         }
 
         function matchAndMarkContactReplied(senderRaw, textRaw = '') {
-            const sender = String(senderRaw || '').trim();
+            let sender = String(senderRaw || '').trim();
             if (!sender) return null;
+
+            // Limpiar sufijos típicos de notificaciones de WhatsApp Business (ej: "Juan Pérez (2 mensajes)")
+            sender = sender.replace(/\s*\(\d+\s*(mensajes?|messages?|chats?)\)\s*$/i, '').trim();
+
             const senderDigits = sender.replace(/\D/g, '');
             const tailDigits = senderDigits.length >= 7 ? senderDigits.slice(-7) : '';
             const normSenderName = sender.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
@@ -2146,6 +2212,7 @@
             if (matchedContact) {
                 matchedContact.status = 'Contestó';
                 matchedContact.method = 'Mensaje';
+                matchedContact.waSentAt = null;
                 delete matchedContact.waSentAt;
                 if (textRaw) {
                     const snippet = String(textRaw).slice(0, 60);
@@ -2186,7 +2253,7 @@
 
                     if (matched) {
                         anyUpdated = true;
-                        showToast(`📲 WhatsApp recibido de ${matched.name || matched.phone} → Marcado "Contestó"`);
+                        showToast(`📲 WhatsApp recibido de ${matched.name || matched.phone} → Cronómetro cortado y marcado "Contestó"`);
                     }
 
                     // Limpiar evento ya consumido en Firebase
@@ -2201,7 +2268,8 @@
                 localStorage.setItem('crm_processed_wa_events', JSON.stringify(Array.from(processedWaEventIds)));
 
                 if (anyUpdated) {
-                    saveLocalData();
+                    persistToLocalStorageOnly();
+                    await pushToFirebase();
                     renderAllTables();
                     updateDashboard();
                 }
@@ -2584,6 +2652,7 @@
                 gallery.appendChild(card);
             });
         }
+
         // --- CATÁLOGO DE MODELOS PREDEFINIDOS Y FICHAS POR MODELO ---
         const FIXED_INTEREST_MODELS = [
             'Yaris',
@@ -2626,11 +2695,22 @@
                 if (currentVal) sel.value = currentVal;
             });
         }
-        function renderWhatsAppLink(phone, contactId = null, waSentAt = null, status = '') {
+
+        function renderWhatsAppLink(phone, contactId = null, waSentAt = null, status = '', channelKey = 'crm', contactName = '') {
             if (!phone) return `<span class="text-xs text-slate-400">Sin teléfono</span>`;
             const formatted = formatPhoneAR(phone);
             const waDigits = formatted.replace(/\D/g, '');
             const clickAttr = contactId ? `onclick="event.stopPropagation(); trackWhatsAppMessageSent('${contactId}')"` : `onclick="event.stopPropagation()"`;
+
+            const rawTpl = (waTemplates && waTemplates[channelKey]) ? waTemplates[channelKey] : '';
+            const cleanName = (contactName && !['Sin Nombre', 'Lead Salesforce'].includes(contactName.trim())) ? contactName.trim() : '';
+            let composedMsg = rawTpl;
+            if (composedMsg) {
+                composedMsg = cleanName
+                    ? composedMsg.replace(/\{nombre\}/gi, cleanName)
+                    : composedMsg.replace(/\s*\{nombre\}/gi, '').replace(/\s+,/g, ',');
+            }
+            const textParam = composedMsg.trim() ? `&text=${encodeURIComponent(composedMsg.trim())}` : '';
 
             let timerBadge = '';
             if (waSentAt && status === 'Mensaje Enviado (48h)') {
@@ -2641,7 +2721,7 @@
 
             return `
                 <span class="inline-flex items-center gap-1 flex-wrap">
-                    <a href="https://web.whatsapp.com/send?phone=${waDigits}" target="_blank" rel="noopener noreferrer" ${clickAttr} class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-lg transition-colors" title="Abrir en WhatsApp Web (Inicia temporizador automático de 48h)">
+                    <a href="https://web.whatsapp.com/send?phone=${waDigits}${textParam}" target="_blank" rel="noopener noreferrer" ${clickAttr} class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-lg transition-colors" title="Abrir en WhatsApp Web con mensaje predeterminado del canal">
                         <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
                         <span>${formatted}</span>
                     </a>
@@ -2649,6 +2729,35 @@
                 </span>
             `;
         }
+
+        window.openWaTemplatesModal = function() {
+            document.getElementById('tpl-wa-crm').value = waTemplates.crm || '';
+            document.getElementById('tpl-wa-gestion').value = waTemplates.gestion || '';
+            document.getElementById('tpl-wa-redes').value = waTemplates.redes || '';
+            document.getElementById('tpl-wa-salesforce').value = waTemplates.salesforce || '';
+            document.getElementById('tpl-wa-convencional').value = waTemplates.convencional || '';
+            document.getElementById('tpl-wa-clientes').value = waTemplates.clientes || '';
+            document.getElementById('wa-templates-modal').classList.remove('hidden');
+        };
+
+        window.closeWaTemplatesModal = function() {
+            document.getElementById('wa-templates-modal').classList.add('hidden');
+        };
+
+        window.saveWaTemplates = function() {
+            waTemplates = {
+                crm: document.getElementById('tpl-wa-crm').value.trim(),
+                gestion: document.getElementById('tpl-wa-gestion').value.trim(),
+                redes: document.getElementById('tpl-wa-redes').value.trim(),
+                salesforce: document.getElementById('tpl-wa-salesforce').value.trim(),
+                convencional: document.getElementById('tpl-wa-convencional').value.trim(),
+                clientes: document.getElementById('tpl-wa-clientes').value.trim()
+            };
+            saveLocalData();
+            renderAllTables();
+            closeWaTemplatesModal();
+            showToast("Mensajes predeterminados por canal guardados");
+        };
 
         // --- NAVEGACIÓN DE PESTAÑAS Y SUBVISTAS DE CONTACTOS ---
         window.switchTab = function(tabName) {
@@ -2783,11 +2892,11 @@
             return 'bg-slate-100 text-slate-600';
         }
 
-        function renderContactRowHTML(c, defaultTitle = 'Sin Nombre') {
+        function renderContactRowHTML(c, defaultTitle = 'Sin Nombre', channelKey = 'crm') {
             return `
                 <td class="p-3.5">
                     <div class="text-sm sm:text-base font-bold text-slate-900">${c.name || defaultTitle}</div>
-                    <div class="mt-0.5 flex flex-wrap items-center gap-1.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status)} <span class="text-xs text-slate-400">• ${c.date}</span></div>
+                    <div class="mt-0.5 flex flex-wrap items-center gap-1.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status, channelKey, c.name)} <span class="text-xs text-slate-400">• ${c.date}</span></div>
                     ${c.interestModel ? `<div class="text-xs font-semibold text-emerald-700 bg-emerald-50 inline-block px-2 py-0.5 rounded mt-1 border border-emerald-200">Modelo: ${c.interestModel}</div>` : ''}
                     ${c.observations ? `<div class="text-xs text-blue-600 mt-1 truncate max-w-[220px]" title="${c.observations}">Nota: ${c.observations}</div>` : ''}
                 </td>
@@ -2893,7 +3002,7 @@
             filtered.forEach(c => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition-colors';
-                tr.innerHTML = renderContactRowHTML(c);
+                tr.innerHTML = renderContactRowHTML(c, 'Sin Nombre', 'crm');
                 tbody.appendChild(tr);
             });
         };
@@ -2939,7 +3048,7 @@
             filtered.forEach(c => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition-colors';
-                tr.innerHTML = renderContactRowHTML(c);
+                tr.innerHTML = renderContactRowHTML(c, 'Sin Nombre', 'gestion');
                 tbody.appendChild(tr);
             });
         };
@@ -2980,7 +3089,7 @@
             filtered.forEach(c => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition-colors';
-                tr.innerHTML = renderContactRowHTML(c);
+                tr.innerHTML = renderContactRowHTML(c, 'Sin Nombre', 'redes');
                 tbody.appendChild(tr);
             });
         };
@@ -3106,7 +3215,7 @@
             filtered.forEach(c => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition-colors';
-                tr.innerHTML = renderContactRowHTML(c, 'Lead Salesforce');
+                tr.innerHTML = renderContactRowHTML(c, 'Lead Salesforce', 'salesforce');
                 tbody.appendChild(tr);
             });
         };
@@ -3221,7 +3330,7 @@
                     tr.innerHTML = `
                         <td class="p-3">
                             <div class="font-bold text-slate-900">${c.name}</div>
-                            <div class="mt-0.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status)}</div>
+                            <div class="mt-0.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status, 'convencional', c.name)}</div>
                             ${c.observations ? `<div class="text-[11px] text-slate-500 mt-0.5">${c.observations}</div>` : ''}
                         </td>
                         <td class="p-3 text-xs font-semibold text-indigo-700">
@@ -3487,7 +3596,7 @@
                     tr.innerHTML = `
                         <td class="p-3.5">
                             <div class="text-sm sm:text-base font-bold text-slate-900">${c.name || 'Sin Nombre'}</div>
-                            <div class="mt-0.5 flex flex-wrap items-center gap-1.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status)} <span class="text-xs text-slate-400">• ${c.date}</span></div>
+                            <div class="mt-0.5 flex flex-wrap items-center gap-1.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status, 'clientes', c.name)} <span class="text-xs text-slate-400">• ${c.date}</span></div>
                             ${c.observations ? `<div class="text-xs text-blue-600 mt-1 max-w-[260px]" title="${c.observations}">Nota: ${c.observations}</div>` : ''}
                         </td>
                         <td class="p-3.5">
@@ -3581,9 +3690,6 @@
             link.click();
         };
 
-        // --- OBJETIVOS DIARIOS Y MENSUALES ---
-        // (Calculados dinámicamente en renderObjetivos arriba)
-
         // --- ACCIONES DE CONTACTO ---
         window.renderActions = function(contact) {
             let buttons = `<button onclick="openEditModal('${contact.id}')" class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium hover:bg-slate-200">Editar</button>`;
@@ -3596,12 +3702,15 @@
                 buttons += `<button onclick="executeStatusUpdate('${contact.id}', 'Contestó', 'Mensaje')" class="px-2.5 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-medium hover:bg-blue-100 border border-blue-200">Contestó</button>`;
                 buttons += `<button onclick="executeStatusUpdate('${contact.id}', 'No Contestó', 'Mensaje')" class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 border border-red-200">No Contestó</button>`;
             } else if (s === 'Contestó') {
-                buttons += `<button onclick="updateStatus('${contact.id}', 'Interesado')" class="px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-medium hover:bg-emerald-100 border border-emerald-200">Interesado</button>`;
-                buttons += `<button onclick="updateStatus('${contact.id}', 'Interesado a Futuro')" class="px-2.5 py-1 bg-amber-50 text-amber-600 rounded-lg text-xs font-medium hover:bg-amber-100 border border-amber-200">A Futuro</button>`;
+                buttons += `<button onclick="updateStatus('${contact.id}', 'Interesado')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-semibold hover:bg-emerald-100 border border-emerald-200">✓ Interesado</button>`;
+                buttons += `<button onclick="updateStatus('${contact.id}', 'Interesado a Futuro')" class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-medium hover:bg-amber-100 border border-amber-200">A Futuro</button>`;
+                buttons += `<button onclick="executeStatusUpdate('${contact.id}', 'No Interesado')" class="px-2.5 py-1 bg-rose-50 text-rose-700 rounded-lg text-xs font-medium hover:bg-rose-100 border border-rose-200">✕ No Interesado</button>`;
             } else if (s === 'Interesado' || s === 'Interesado a Futuro') {
                 buttons += `<button onclick="updateStatus('${contact.id}', 'Entrevista')" class="px-2.5 py-1 bg-purple-50 text-purple-600 rounded-lg text-xs font-medium hover:bg-purple-100 border border-purple-200">Entrevista</button>`;
             } else if (s === 'Entrevista') {
                 buttons += `<button onclick="updateStatus('${contact.id}', 'Venta')" class="px-2.5 py-1 bg-yellow-400 text-yellow-900 rounded-lg text-xs font-bold hover:bg-yellow-500">¡Venta!</button>`;
+            } else if (s === 'No Interesado') {
+                buttons += `<button onclick="updateStatus('${contact.id}', 'Interesado')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-medium hover:bg-emerald-100 border border-emerald-200">Reactivar Interesado</button>`;
             }
             return `<div class="flex flex-wrap items-center gap-1">${buttons}</div>`;
         };
