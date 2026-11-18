@@ -1045,7 +1045,7 @@
                             <li>Instala <b>MacroDroid</b> (gratis en Play Store) y dale permiso de <i>Acceso a notificaciones</i>.</li>
                             <li><b>Disparador:</b> Notificación recibida → App: <b>WhatsApp / WhatsApp Business</b>.</li>
                             <li><b>Acción:</b> <i>Solicitud HTTP</i> → Método <b>POST</b> → pega la URL de arriba.</li>
-                            <li><b>Cuerpo JSON:</b> <code class="bg-white px-1 py-0.5 rounded border text-[11px]">{"sender":"{not_title}","text":"{notification}","ts":{unix_time}}</code></li>
+                            <li><b>Cuerpo JSON:</b> <code class="bg-white px-1 py-0.5 rounded border text-[11px]">{"sender":"{not_title}","text":"{notification}"}</code></li>
                         </ol>
                     </div>
 
@@ -2181,12 +2181,16 @@
             let sender = String(senderRaw || '').trim();
             if (!sender) return null;
 
-            // Limpiar sufijos típicos de notificaciones de WhatsApp Business (ej: "Juan Pérez (2 mensajes)")
-            sender = sender.replace(/\s*\(\d+\s*(mensajes?|messages?|chats?)\)\s*$/i, '').trim();
+            // Limpiar sufijos típicos de notificaciones de WhatsApp Business (ej: "Juan Pérez (2 mensajes)" o "WhatsApp Business: Juan")
+            sender = sender
+                .replace(/^WhatsApp(\s+Business)?\s*[:\-]\s*/i, '')
+                .replace(/\s*\(\d+\s*(mensajes?|messages?|chats?|nuevos?)\)\s*$/i, '')
+                .replace(/[\u200e\u200f\u202a-\u202e]/g, '')
+                .trim();
 
             const senderDigits = sender.replace(/\D/g, '');
-            const tailDigits = senderDigits.length >= 7 ? senderDigits.slice(-7) : '';
-            const normSenderName = sender.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+            const tailDigits = senderDigits.length >= 6 ? senderDigits.slice(-6) : '';
+            const normSenderName = sender.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
             const allLists = [crmContacts, gestionContacts, redesContacts, salesforceContacts, convencionalContacts];
             let matchedContact = null;
@@ -2195,10 +2199,10 @@
                 for (const c of list) {
                     if (isClientStatus(c.status) || c.status === 'Contestó') continue;
                     const cDigits = String(c.phone || '').replace(/\D/g, '');
-                    const cNameNorm = String(c.name || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+                    const cNameNorm = String(c.name || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
                     const phoneMatch = tailDigits && cDigits.endsWith(tailDigits);
-                    const nameMatch = normSenderName.length >= 3 && cNameNorm && cNameNorm !== 'sin nombre' &&
+                    const nameMatch = normSenderName.length >= 3 && cNameNorm && !['sin nombre', 'lead salesforce'].includes(cNameNorm) &&
                                       (cNameNorm.includes(normSenderName) || normSenderName.includes(cNameNorm));
 
                     if (phoneMatch || nameMatch) {
@@ -2224,6 +2228,24 @@
             return matchedContact;
         }
 
+        function extractIncomingSenderAndText(ev) {
+            if (!ev) return { sender: '', text: '' };
+            if (typeof ev === 'string') {
+                try {
+                    const parsed = JSON.parse(ev);
+                    return extractIncomingSenderAndText(parsed);
+                } catch (e) {
+                    return { sender: ev, text: '' };
+                }
+            }
+            if (typeof ev === 'object') {
+                const sender = ev.sender || ev.title || ev.not_title || ev.phone || ev.from || ev.contact || ev.name || '';
+                const text = ev.text || ev.message || ev.notification || ev.body || '';
+                return { sender: String(sender), text: String(text) };
+            }
+            return { sender: '', text: '' };
+        }
+
         window.pollIncomingWhatsAppEvents = async function(manual = false) {
             try {
                 const res = await fetch(`${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`);
@@ -2240,12 +2262,11 @@
                     if (processedWaEventIds.has(evId)) continue;
                     processedWaEventIds.add(evId);
 
-                    const sender = ev?.sender || ev?.title || ev?.phone || '';
-                    const text = ev?.text || ev?.message || '';
+                    const { sender, text } = extractIncomingSenderAndText(ev);
                     const matched = matchAndMarkContactReplied(sender, text);
 
                     waIncomingLogs.unshift({
-                        sender: sender || 'Desconocido',
+                        sender: sender || 'Evento sin remitente',
                         matched: Boolean(matched),
                         matchedName: matched ? (matched.name || matched.phone) : '',
                         time: new Date().toLocaleTimeString()
@@ -2696,11 +2717,26 @@
             });
         }
 
+        window.openWhatsAppSingleTab = function(event, url, contactId) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            if (contactId) {
+                trackWhatsAppMessageSent(contactId);
+            }
+            // Reutiliza siempre la misma pestaña/ventana de WhatsApp Web sin abrir duplicados
+            const waWin = window.open(url, 'crm_whatsapp_tab');
+            if (waWin) {
+                try { waWin.focus(); } catch (e) {}
+            }
+            return false;
+        };
+
         function renderWhatsAppLink(phone, contactId = null, waSentAt = null, status = '', channelKey = 'crm', contactName = '') {
             if (!phone) return `<span class="text-xs text-slate-400">Sin teléfono</span>`;
             const formatted = formatPhoneAR(phone);
             const waDigits = formatted.replace(/\D/g, '');
-            const clickAttr = contactId ? `onclick="event.stopPropagation(); trackWhatsAppMessageSent('${contactId}')"` : `onclick="event.stopPropagation()"`;
 
             const rawTpl = (waTemplates && waTemplates[channelKey]) ? waTemplates[channelKey] : '';
             const cleanName = (contactName && !['Sin Nombre', 'Lead Salesforce'].includes(contactName.trim())) ? contactName.trim() : '';
@@ -2711,6 +2747,8 @@
                     : composedMsg.replace(/\s*\{nombre\}/gi, '').replace(/\s+,/g, ',');
             }
             const textParam = composedMsg.trim() ? `&text=${encodeURIComponent(composedMsg.trim())}` : '';
+            const waUrl = `https://web.whatsapp.com/send?phone=${waDigits}${textParam}`;
+            const safeContactId = contactId ? `'${contactId}'` : 'null';
 
             let timerBadge = '';
             if (waSentAt && status === 'Mensaje Enviado (48h)') {
@@ -2721,7 +2759,7 @@
 
             return `
                 <span class="inline-flex items-center gap-1 flex-wrap">
-                    <a href="https://web.whatsapp.com/send?phone=${waDigits}${textParam}" target="_blank" rel="noopener noreferrer" ${clickAttr} class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-lg transition-colors" title="Abrir en WhatsApp Web con mensaje predeterminado del canal">
+                    <a href="${waUrl}" onclick="return openWhatsAppSingleTab(event, '${waUrl.replace(/'/g, "\\'")}', ${safeContactId})" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-lg transition-colors" title="Abrir en la misma pestaña de WhatsApp Web">
                         <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
                         <span>${formatted}</span>
                     </a>
