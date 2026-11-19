@@ -155,7 +155,7 @@
                     <span>→</span>
                 </button>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
                 <button onclick="setContactosSubView('all')" id="subnav-all" class="p-3 rounded-xl border-2 border-blue-600 bg-blue-50 text-left transition-all">
                     <div class="text-[11px] font-bold text-blue-700 uppercase">Todos Divididos</div>
                     <div class="text-lg font-bold text-slate-900 mt-0.5" id="subcount-all">0</div>
@@ -179,6 +179,14 @@
                 <button onclick="setContactosSubView('convencional')" id="subnav-convencional" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-emerald-400 text-left transition-all">
                     <div class="text-[11px] font-bold text-emerald-600 uppercase">5. Convencional</div>
                     <div class="text-lg font-bold text-slate-900 mt-0.5" id="subcount-convencional">0</div>
+                </button>
+                <button onclick="setContactosSubView('cancelados')" id="subnav-cancelados" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-400 text-left transition-all">
+                    <div class="text-[11px] font-bold text-amber-600 uppercase">6. Cancelados</div>
+                    <div class="text-lg font-bold text-slate-900 mt-0.5" id="subcount-cancelados">0</div>
+                </button>
+                <button onclick="setContactosSubView('rescindidos')" id="subnav-rescindidos" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-rose-400 text-left transition-all">
+                    <div class="text-[11px] font-bold text-rose-600 uppercase">7. Rescindidos</div>
+                    <div class="text-lg font-bold text-slate-900 mt-0.5" id="subcount-rescindidos">0</div>
                 </button>
             </div>
         </div>
@@ -533,16 +541,130 @@
                                     </tr>
                                 </thead>
                                 <tbody id="conv-received-body" class="divide-y divide-slate-100 text-sm"></tbody>
-                            </table>
-                        </div>
-                        <div id="conv-received-empty" class="p-6 text-center text-slate-400 text-xs">Sin datos recibidos pendientes.</div>
-                    </div>
+                    </table>
                 </div>
-                <div id="convencional-waiting-sublist"></div>
-                <div id="convencional-nocompra48-sublist"></div>
-            </section>
+                <div id="conv-received-empty" class="p-6 text-center text-slate-400 text-xs">Sin datos recibidos pendientes.</div>
+            </div>
         </div>
-    </main>
+        <div id="convencional-waiting-sublist"></div>
+        <div id="convencional-nocompra48-sublist"></div>
+    </section>
+
+    <!-- SECCIÓN 6: CANCELADOS -->
+    <section id="section-block-cancelados" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-4 sm:px-6 py-4 bg-amber-900 text-white flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                <h3 class="text-sm sm:text-base font-bold">6. Base de Datos — Cancelados</h3>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="openWaTemplatesModal('cancelados')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
+                <label class="cursor-pointer bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors">
+                    Subir CSVs
+                    <input type="file" id="cancelados-csv-upload" accept=".csv" multiple class="hidden" onchange="handleExtraBaseCsvUpload(event, 'cancelados')">
+                </label>
+                <button onclick="exportSectionCSV('cancelados')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors">
+                    Exportar CSV
+                </button>
+            </div>
+        </div>
+        <div class="p-4 sm:p-6 border-b border-slate-200 bg-slate-50/70">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 mb-1">Nombre</label>
+                    <input type="text" id="cancelados-name" placeholder="Ej: Esteban Ruiz" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 mb-1">Teléfono</label>
+                    <input type="text" id="cancelados-phone" placeholder="Ej: 3415554321" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 mb-1">Grupo / Orden / Referencia</label>
+                    <input type="text" id="cancelados-reference" placeholder="Ej: Grupo 4520 - Orden 112" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                </div>
+                <button onclick="addCanceladosContact()" class="bg-amber-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-amber-700 transition-colors shadow-sm">
+                    Añadir Cancelado
+                </button>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[640px]">
+                <thead>
+                    <tr class="bg-white border-b border-slate-200 text-xs sm:text-sm font-semibold text-slate-600">
+                        <th class="p-3.5">Contacto (Cancelados)</th>
+                        <th class="p-3.5">Origen / Grupo-Orden</th>
+                        <th class="p-3.5">Estado</th>
+                        <th class="p-3.5">Acciones y Avance</th>
+                    </tr>
+                </thead>
+                <tbody id="cancelados-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
+            </table>
+        </div>
+        <div id="cancelados-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">
+            No hay contactos pendientes de envío en Cancelados.
+        </div>
+        <div id="cancelados-waiting-sublist"></div>
+        <div id="cancelados-nocompra48-sublist"></div>
+    </section>
+
+    <!-- SECCIÓN 7: RESCINDIDOS -->
+    <section id="section-block-rescindidos" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-4 sm:px-6 py-4 bg-rose-950 text-white flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+                <h3 class="text-sm sm:text-base font-bold">7. Base de Datos — Rescindidos</h3>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="openWaTemplatesModal('rescindidos')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
+                <label class="cursor-pointer bg-rose-600 hover:bg-rose-700 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors">
+                    Subir CSVs
+                    <input type="file" id="rescindidos-csv-upload" accept=".csv" multiple class="hidden" onchange="handleExtraBaseCsvUpload(event, 'rescindidos')">
+                </label>
+                <button onclick="exportSectionCSV('rescindidos')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors">
+                    Exportar CSV
+                </button>
+            </div>
+        </div>
+        <div class="p-4 sm:p-6 border-b border-slate-200 bg-slate-50/70">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 mb-1">Nombre</label>
+                    <input type="text" id="rescindidos-name" placeholder="Ej: Valeria Sosa" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 mb-1">Teléfono</label>
+                    <input type="text" id="rescindidos-phone" placeholder="Ej: 3415559876" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 mb-1">Grupo / Orden / Referencia</label>
+                    <input type="text" id="rescindidos-reference" placeholder="Ej: Grupo 3890 - Orden 045" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none bg-white">
+                </div>
+                <button onclick="addRescindidosContact()" class="bg-rose-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-rose-700 transition-colors shadow-sm">
+                    Añadir Rescindido
+                </button>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[640px]">
+                <thead>
+                    <tr class="bg-white border-b border-slate-200 text-xs sm:text-sm font-semibold text-slate-600">
+                        <th class="p-3.5">Contacto (Rescindidos)</th>
+                        <th class="p-3.5">Origen / Grupo-Orden</th>
+                        <th class="p-3.5">Estado</th>
+                        <th class="p-3.5">Acciones y Avance</th>
+                    </tr>
+                </thead>
+                <tbody id="rescindidos-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
+            </table>
+        </div>
+        <div id="rescindidos-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">
+            No hay contactos pendientes de envío en Rescindidos.
+        </div>
+        <div id="rescindidos-waiting-sublist"></div>
+        <div id="rescindidos-nocompra48-sublist"></div>
+    </section>
+</div>
+</main>
 
     <!-- TAB 3: CLIENTES (INTERESADOS, A FUTURO, ENTREVISTAS, VENTAS + LISTA APARTE NO COMPRA) -->
     <main id="tab-clientes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
@@ -624,6 +746,8 @@
                         <option value="redes">Redes Sociales</option>
                         <option value="salesforce">Salesforce</option>
                         <option value="convencional">Convencional</option>
+                        <option value="cancelados">Cancelados</option>
+                        <option value="rescindidos">Rescindidos</option>
                         <option value="crm">No Compra</option>
                     </select>
                 </div>
@@ -1059,44 +1183,21 @@
                         </div>
                         <textarea id="tpl-input-clientes" rows="3" placeholder="Ej: Hola {nombre}, ¿cómo venís con la propuesta que charlamos?" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none focus:ring-2 focus:ring-amber-500 resize-none"></textarea>
                     </div>
-                </div>
-            </div>
-            <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
-                <button onclick="closeWaTemplatesModal()" class="px-4 py-2 text-slate-600 text-sm font-medium hover:bg-slate-200 rounded-xl">Cancelar</button>
-                <button onclick="saveWaTemplates()" class="px-5 py-2 bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 rounded-xl">Guardar Mensajes</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- MODAL DE RESPALDO Y SALA FIREBASE -->
-    <div id="backup-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[65] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
-                <h3 class="text-base font-bold text-slate-800">Sincronización en Vivo & Respaldo</h3>
-                <button onclick="closeBackupModal()" class="text-slate-400 hover:text-slate-600">✕</button>
-            </div>
-            <div class="p-5 space-y-4">
-                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800">
-                    <div class="font-bold">Conectado a Firebase Realtime Database</div>
-                    <div class="mt-0.5 text-emerald-700" id="firebase-sync-detail">Todos los cambios entre PC y móvil se sincronizan automáticamente.</div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Código de Sala Compartida (PC y Móvil)</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="sync-room-input" class="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
-                        <button onclick="changeSyncRoom()" class="px-3.5 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700">Aplicar</button>
+                    <div class="p-3.5 rounded-xl border border-orange-200 bg-orange-50/40" id="tpl-card-cancelados">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-xs font-bold text-orange-900 uppercase">7. Base Cancelados</label>
+                            <button type="button" onclick="insertNamePlaceholder('tpl-input-cancelados')" class="text-[11px] font-semibold text-indigo-600 hover:underline">+ Insertar {nombre}</button>
+                        </div>
+                        <textarea id="tpl-input-cancelados" rows="3" placeholder="Ej: Hola {nombre}, te contacto de Toyota por tu plan cancelado..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
                     </div>
-                </div>
-                <div class="pt-3 border-t border-slate-100">
-                    <p class="text-xs font-semibold text-slate-700 mb-2">Copia de Seguridad Local (.JSON):</p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="exportBackupFile()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold">
-                            Descargar Copia
-                        </button>
-                        <label class="cursor-pointer px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold text-center">
-                            Restaurar Copia
-                            <input type="file" accept=".json" onchange="importBackupFile(event)" class="hidden">
-                        </label>
+
+                    <div class="p-3.5 rounded-xl border border-rose-200 bg-rose-50/40" id="tpl-card-rescindidos">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-xs font-bold text-rose-900 uppercase">8. Base Rescindidos</label>
+                            <button type="button" onclick="insertNamePlaceholder('tpl-input-rescindidos')" class="text-[11px] font-semibold text-indigo-600 hover:underline">+ Insertar {nombre}</button>
+                        </div>
+                        <textarea id="tpl-input-rescindidos" rows="3" placeholder="Ej: Hola {nombre}, te contacto de Toyota por tu plan rescindido..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none focus:ring-2 focus:ring-rose-500 resize-none"></textarea>
                     </div>
                 </div>
             </div>
@@ -1204,6 +1305,8 @@
         let salesforceContacts = [];
         let convencionalContacts = [];
         let convencionalSellers = [];
+        let canceladosContacts = [];
+        let rescindidosContacts = [];
         let plansHistory = [];
         let predefinedModels = [
             { id: 'm1', name: 'Yaris', planType: '100% / 70/30', cuota: 0, info: 'Hatchback y Sedán' },
@@ -1219,6 +1322,8 @@
             redes: "Hola {nombre}, ¿cómo estás? Te escribo de Toyota por tu consulta en redes sociales.",
             salesforce: "Hola {nombre}, ¿cómo estás? Te contacto de concesionario oficial Toyota por tu consulta web.",
             convencional: "Hola {nombre}, ¿cómo estás? Me pasó tu contacto mi compañero de salón para asesorarte en Plan Toyota.",
+            cancelados: "Hola {nombre}, ¿cómo estás? Te escribo de Toyota respecto a tu plan cancelado para comentarte opciones vigentes.",
+            rescindidos: "Hola {nombre}, ¿cómo estás? Te escribo de Toyota respecto a tu plan rescindido para acercarte una propuesta de reactivación.",
             clientes: "Hola {nombre}, ¿cómo venís con la propuesta que estuvimos viendo?"
         };
         let currentPlanJpgs = [];
@@ -1251,7 +1356,7 @@
         }
 
         window.openWaTemplatesModal = function(focusChannel = null) {
-            ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'clientes'].forEach(key => {
+            ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'cancelados', 'rescindidos', 'clientes'].forEach(key => {
                 const input = document.getElementById(`tpl-input-${key}`);
                 const card = document.getElementById(`tpl-card-${key}`);
                 if (input) input.value = waTemplates[key] || '';
@@ -1281,7 +1386,7 @@
         };
 
         window.saveWaTemplates = function() {
-            ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'clientes'].forEach(key => {
+            ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'cancelados', 'rescindidos', 'clientes'].forEach(key => {
                 const input = document.getElementById(`tpl-input-${key}`);
                 if (input) waTemplates[key] = input.value.trim();
             });
@@ -1401,7 +1506,7 @@
                 paceSummary.textContent = `Hoy es ${now.toLocaleDateString()} — Quedan ${dayStats.remainingWeekdays} de ${dayStats.totalWeekdays} días hábiles (Lunes a Viernes) en ${monthNames[now.getMonth()]}.`;
             }
 
-            const allContacts = [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts];
+            const allContacts = [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts, ...canceladosContacts, ...rescindidosContacts];
             const isThisMonth = (c) => {
                 if (!c.date) return false;
                 const parts = c.date.split('/');
@@ -1744,7 +1849,7 @@
 
         window.normalizeAllStoredPhones = function(silent = false) {
             let changed = false;
-            [crmContacts, gestionContacts, redesContacts, salesforceContacts, convencionalContacts].forEach(list => {
+            [crmContacts, gestionContacts, redesContacts, salesforceContacts, convencionalContacts, canceladosContacts, rescindidosContacts].forEach(list => {
                 list.forEach(c => {
                     if (c.phone) {
                         const formatted = formatPhoneAR(c.phone);
@@ -1796,6 +1901,8 @@
                 salesforceContacts,
                 convencionalContacts,
                 convencionalSellers,
+                canceladosContacts,
+                rescindidosContacts,
                 plansHistory: lightPlans,
                 predefinedModels,
                 waTemplates,
@@ -1819,6 +1926,8 @@
             if (Array.isArray(data.salesforceContacts)) salesforceContacts = data.salesforceContacts;
             if (Array.isArray(data.convencionalContacts)) convencionalContacts = data.convencionalContacts;
             if (Array.isArray(data.convencionalSellers)) convencionalSellers = data.convencionalSellers;
+            if (Array.isArray(data.canceladosContacts)) canceladosContacts = data.canceladosContacts;
+            if (Array.isArray(data.rescindidosContacts)) rescindidosContacts = data.rescindidosContacts;
             if (Array.isArray(data.predefinedModels)) predefinedModels = data.predefinedModels;
             if (data.waTemplates && typeof data.waTemplates === 'object') waTemplates = { ...waTemplates, ...data.waTemplates };
             if (data.goals) goals = data.goals;
@@ -1935,7 +2044,8 @@
 
         function hasAnyLocalData() {
             return crmContacts.length > 0 || gestionContacts.length > 0 || redesContacts.length > 0 ||
-                   salesforceContacts.length > 0 || convencionalContacts.length > 0 || plansHistory.length > 0;
+                   salesforceContacts.length > 0 || convencionalContacts.length > 0 ||
+                   canceladosContacts.length > 0 || rescindidosContacts.length > 0 || plansHistory.length > 0;
         }
 
         // --- PERSISTENCIA LOCAL ---
@@ -1956,6 +2066,10 @@
                 if (savedConv) convencionalContacts = JSON.parse(savedConv);
                 const savedSellers = localStorage.getItem('convencional_sellers');
                 if (savedSellers) convencionalSellers = JSON.parse(savedSellers);
+                const savedCancelados = localStorage.getItem('cancelados_contacts');
+                if (savedCancelados) canceladosContacts = JSON.parse(savedCancelados);
+                const savedRescindidos = localStorage.getItem('rescindidos_contacts');
+                if (savedRescindidos) rescindidosContacts = JSON.parse(savedRescindidos);
                 const savedPlans = localStorage.getItem('plans_history');
                 if (savedPlans) plansHistory = JSON.parse(savedPlans);
                 const savedModels = localStorage.getItem('predefined_models');
@@ -1978,6 +2092,8 @@
                 localStorage.setItem('salesforce_contacts', JSON.stringify(salesforceContacts));
                 localStorage.setItem('convencional_contacts', JSON.stringify(convencionalContacts));
                 localStorage.setItem('convencional_sellers', JSON.stringify(convencionalSellers));
+                localStorage.setItem('cancelados_contacts', JSON.stringify(canceladosContacts));
+                localStorage.setItem('rescindidos_contacts', JSON.stringify(rescindidosContacts));
                 localStorage.setItem('predefined_models', JSON.stringify(predefinedModels));
                 localStorage.setItem('crm_wa_templates', JSON.stringify(waTemplates));
                 localStorage.setItem('crm_goals', JSON.stringify(goals));
@@ -2061,6 +2177,8 @@
             renderSalesforceTable();
             renderConvencionalSellers();
             renderConvencionalTables();
+            renderCanceladosTable();
+            renderRescindidosTable();
             renderClientesTable();
             renderObjetivos();
             renderPlansHistory();
@@ -2134,7 +2252,7 @@
         };
 
         window.updateDashboard = function() {
-            const allList = [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts];
+            const allList = [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts, ...canceladosContacts, ...rescindidosContacts];
             const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
             setTxt('stat-total', allList.length);
             setTxt('stat-interesados', allList.filter(c => c.status === 'Interesado' || c.status === 'Interesado a Futuro').length);
@@ -2149,7 +2267,7 @@
             const sourceGrid = document.getElementById('source-metrics-grid');
             if (!kpiGrid || !sourceGrid) return;
 
-            const allContacts = [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts];
+            const allContacts = [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts, ...canceladosContacts, ...rescindidosContacts];
             kpiGrid.innerHTML = '';
             kpis.forEach(kpi => {
                 const count = allContacts.filter(c => (c.method || '').toLowerCase() === kpi.name.toLowerCase()).length;
@@ -2172,7 +2290,9 @@
                 { label: 'Gestión Personal', count: gestionContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-indigo-100 text-indigo-700', sub: 'gestion' },
                 { label: 'Redes Sociales', count: redesContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-pink-100 text-pink-700', sub: 'redes' },
                 { label: 'Salesforce', count: salesforceContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-sky-100 text-sky-700', sub: 'salesforce' },
-                { label: 'Convencional', count: convencionalContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-emerald-100 text-emerald-700', sub: 'convencional' }
+                { label: 'Convencional', count: convencionalContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-emerald-100 text-emerald-700', sub: 'convencional' },
+                { label: 'Cancelados', count: canceladosContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-amber-100 text-amber-700', sub: 'cancelados' },
+                { label: 'Rescindidos', count: rescindidosContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-rose-100 text-rose-700', sub: 'rescindidos' }
             ];
 
             sourceGrid.innerHTML = '';
@@ -2195,7 +2315,7 @@
         function updateWaBannerSummary() {
             const summaryEl = document.getElementById('wa-tracker-summary');
             if (!summaryEl) return;
-            const allContacts = [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts];
+            const allContacts = [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts, ...canceladosContacts, ...rescindidosContacts];
             const waitingCount = allContacts.filter(c => c.status === 'Mensaje Enviado (48h)').length;
             summaryEl.innerHTML = `<b>${waitingCount}</b> mensaje(s) en lista aparte de espera • Auto-pasa a "No Compra" con fecha a las 48h.`;
         }
@@ -2221,7 +2341,7 @@
             const todayStr = new Date().toLocaleDateString();
             let expiredCount = 0;
 
-            [crmContacts, gestionContacts, redesContacts, salesforceContacts, convencionalContacts].forEach(list => {
+            [crmContacts, gestionContacts, redesContacts, salesforceContacts, convencionalContacts, canceladosContacts, rescindidosContacts].forEach(list => {
                 list.forEach(c => {
                     if (c.status === 'Mensaje Enviado (48h)' && c.waSentAt) {
                         if (now - Number(c.waSentAt) >= limitMs) {
@@ -2309,7 +2429,7 @@
 
             const normSenderName = sender.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
-            const allLists = [crmContacts, gestionContacts, redesContacts, salesforceContacts, convencionalContacts];
+            const allLists = [crmContacts, gestionContacts, redesContacts, salesforceContacts, convencionalContacts, canceladosContacts, rescindidosContacts];
             let matchedContact = null;
 
             for (const list of allLists) {
@@ -2456,7 +2576,8 @@
             const data = {
                 updatedAt: Date.now(),
                 kpis, crmContacts, gestionContacts, redesContacts, salesforceContacts,
-                convencionalContacts, convencionalSellers, plansHistory, predefinedModels, waTemplates, goals
+                convencionalContacts, convencionalSellers, canceladosContacts, rescindidosContacts,
+                plansHistory, predefinedModels, waTemplates, goals
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const link = document.createElement("a");
@@ -2480,6 +2601,8 @@
                     if (data.salesforceContacts) salesforceContacts = data.salesforceContacts;
                     if (data.convencionalContacts) convencionalContacts = data.convencionalContacts;
                     if (data.convencionalSellers) convencionalSellers = data.convencionalSellers;
+                    if (data.canceladosContacts) canceladosContacts = data.canceladosContacts;
+                    if (data.rescindidosContacts) rescindidosContacts = data.rescindidosContacts;
                     if (data.plansHistory) plansHistory = data.plansHistory;
                     if (data.predefinedModels) predefinedModels = data.predefinedModels;
                     if (data.waTemplates) waTemplates = { ...waTemplates, ...data.waTemplates };
@@ -2918,6 +3041,8 @@
                 renderSalesforceTable();
                 renderConvencionalSellers();
                 renderConvencionalTables();
+                renderCanceladosTable();
+                renderRescindidosTable();
             } else if (tabName === 'clientes') {
                 renderClientesTable();
             } else if (tabName === 'objetivos') {
@@ -2930,7 +3055,7 @@
 
         window.setContactosSubView = function(subView) {
             activeContactosSubView = subView;
-            const sections = ['crm', 'gestion', 'redes', 'salesforce', 'convencional'];
+            const sections = ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'cancelados', 'rescindidos'];
             ['all', ...sections].forEach(key => {
                 const btn = document.getElementById(`subnav-${key}`);
                 if (!btn) return;
@@ -2960,7 +3085,9 @@
             const redPend = redesContacts.filter(c => !isClientStatus(c.status)).length;
             const sfPend = salesforceContacts.filter(c => !isClientStatus(c.status)).length;
             const convPend = convencionalContacts.filter(c => !isClientStatus(c.status)).length;
-            const totalPend = crmPend + gesPend + redPend + sfPend + convPend;
+            const cancPend = canceladosContacts.filter(c => !isClientStatus(c.status)).length;
+            const rescPend = rescindidosContacts.filter(c => !isClientStatus(c.status)).length;
+            const totalPend = crmPend + gesPend + redPend + sfPend + convPend + cancPend + rescPend;
 
             const allCli = getAllClientesWithSource();
             const activeCliCount = allCli.filter(c => c.status !== 'No Compra').length;
@@ -2972,6 +3099,8 @@
             setTxt('subcount-redes', redPend);
             setTxt('subcount-salesforce', sfPend);
             setTxt('subcount-convencional', convPend);
+            setTxt('subcount-cancelados', cancPend);
+            setTxt('subcount-rescindidos', rescPend);
             setTxt('nav-clientes-badge', activeCliCount);
             setTxt('contactos-moved-count', activeCliCount);
         };
@@ -2985,7 +3114,9 @@
                 ...tagList(gestionContacts, 'gestion', 'Gestión Personal', 'bg-indigo-50 text-indigo-700 border-indigo-200'),
                 ...tagList(redesContacts, 'redes', 'Redes Sociales', 'bg-pink-50 text-pink-700 border-pink-200'),
                 ...tagList(salesforceContacts, 'salesforce', 'Salesforce', 'bg-sky-50 text-sky-700 border-sky-200'),
-                ...tagList(convencionalContacts, 'convencional', 'Convencional', 'bg-emerald-50 text-emerald-700 border-emerald-200')
+                ...tagList(convencionalContacts, 'convencional', 'Convencional', 'bg-emerald-50 text-emerald-700 border-emerald-200'),
+                ...tagList(canceladosContacts, 'cancelados', 'Cancelados', 'bg-amber-50 text-amber-700 border-amber-200'),
+                ...tagList(rescindidosContacts, 'rescindidos', 'Rescindidos', 'bg-rose-50 text-rose-700 border-rose-200')
             ];
         }
 
@@ -3611,6 +3742,173 @@
             renderSectionSublists('convencional', baseList, 'convencional');
         };
 
+        // --- SECCIÓN 6 Y 7: CANCELADOS Y RESCINDIDOS ---
+        window.addCanceladosContact = function() {
+            const name = document.getElementById('cancelados-name').value.trim();
+            const rawPhone = document.getElementById('cancelados-phone').value.trim();
+            const phone = rawPhone ? formatPhoneAR(rawPhone) : '';
+            const reference = document.getElementById('cancelados-reference').value.trim();
+            if (!name && !phone) { showToast("Ingresa al menos nombre o teléfono", "error"); return; }
+            const loc = document.getElementById('input-localidad').value.trim() || getProvincia(phone);
+            canceladosContacts.unshift({
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                name: name || 'Sin Nombre',
+                phone,
+                method: 'Cancelados',
+                reference,
+                locality: loc !== 'Desconocido' ? loc : '',
+                status: 'Pendiente',
+                observations: '',
+                date: new Date().toLocaleDateString()
+            });
+            saveLocalData();
+            renderAllTables();
+            updateDashboard();
+            document.getElementById('cancelados-name').value = '';
+            document.getElementById('cancelados-phone').value = '';
+            document.getElementById('cancelados-reference').value = '';
+            showToast("Contacto agregado a Cancelados");
+        };
+
+        window.renderCanceladosTable = function() {
+            const tbody = document.getElementById('cancelados-table-body');
+            const emptyState = document.getElementById('cancelados-empty-state');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            const filtered = canceladosContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                filtered.forEach(c => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 transition-colors';
+                    tr.innerHTML = renderContactRowHTML(c, 'Sin Nombre', 'cancelados');
+                    tbody.appendChild(tr);
+                });
+            }
+            renderSectionSublists('cancelados', canceladosContacts, 'cancelados');
+        };
+
+        window.addRescindidosContact = function() {
+            const name = document.getElementById('rescindidos-name').value.trim();
+            const rawPhone = document.getElementById('rescindidos-phone').value.trim();
+            const phone = rawPhone ? formatPhoneAR(rawPhone) : '';
+            const reference = document.getElementById('rescindidos-reference').value.trim();
+            if (!name && !phone) { showToast("Ingresa al menos nombre o teléfono", "error"); return; }
+            const loc = document.getElementById('input-localidad').value.trim() || getProvincia(phone);
+            rescindidosContacts.unshift({
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                name: name || 'Sin Nombre',
+                phone,
+                method: 'Rescindidos',
+                reference,
+                locality: loc !== 'Desconocido' ? loc : '',
+                status: 'Pendiente',
+                observations: '',
+                date: new Date().toLocaleDateString()
+            });
+            saveLocalData();
+            renderAllTables();
+            updateDashboard();
+            document.getElementById('rescindidos-name').value = '';
+            document.getElementById('rescindidos-phone').value = '';
+            document.getElementById('rescindidos-reference').value = '';
+            showToast("Contacto agregado a Rescindidos");
+        };
+
+        window.renderRescindidosTable = function() {
+            const tbody = document.getElementById('rescindidos-table-body');
+            const emptyState = document.getElementById('rescindidos-empty-state');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            const filtered = rescindidosContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                filtered.forEach(c => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 transition-colors';
+                    tr.innerHTML = renderContactRowHTML(c, 'Sin Nombre', 'rescindidos');
+                    tbody.appendChild(tr);
+                });
+            }
+            renderSectionSublists('rescindidos', rescindidosContacts, 'rescindidos');
+        };
+
+        window.handleExtraBaseCsvUpload = async function(event, baseKey) {
+            const files = Array.from(event.target.files || []);
+            if (files.length === 0) return;
+            const isCancelados = baseKey === 'cancelados';
+            const targetList = isCancelados ? canceladosContacts : rescindidosContacts;
+            const methodLabel = isCancelados ? 'Cancelados' : 'Rescindidos';
+
+            let totalAdded = 0;
+            let totalDuplicates = 0;
+
+            for (const file of files) {
+                const text = await file.text();
+                const lines = text.split('\n').filter(l => l.trim() !== '');
+                if (lines.length < 2) continue;
+
+                lines.slice(1).forEach(line => {
+                    const cells = line.split(/[,;]/).map(c => c.trim().replace(/^"|"$/g, ''));
+                    let rawPhone = '';
+                    let name = '';
+                    let ref = '';
+                    let phoneIndex = -1;
+
+                    for (let i = 0; i < cells.length; i++) {
+                        if (cells[i].match(/\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/)) continue;
+                        const digits = cells[i].replace(/\D/g, '');
+                        if (digits.length >= 6) {
+                            rawPhone = digits;
+                            phoneIndex = i;
+                            break;
+                        }
+                    }
+
+                    for (let i = 0; i < cells.length; i++) {
+                        if (i === phoneIndex) continue;
+                        const cell = cells[i];
+                        if (cell.length > 2 && /[a-zA-Z]/.test(cell)) {
+                            if (!name) name = cell;
+                            else if (!ref && cell.toLowerCase() !== name.toLowerCase()) ref = cell;
+                        }
+                    }
+
+                    if (rawPhone) {
+                        const formattedPhone = formatPhoneAR(rawPhone);
+                        const cleanDigits = formattedPhone.replace(/\D/g, '');
+                        const isDup = targetList.some(c => formatPhoneAR(c.phone).replace(/\D/g, '') === cleanDigits);
+                        if (!isDup) {
+                            targetList.unshift({
+                                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                                name: name || 'Sin Nombre',
+                                phone: formattedPhone,
+                                method: methodLabel,
+                                reference: ref,
+                                locality: getProvincia(formattedPhone),
+                                status: 'Pendiente',
+                                observations: '',
+                                date: new Date().toLocaleDateString()
+                            });
+                            totalAdded++;
+                        } else {
+                            totalDuplicates++;
+                        }
+                    }
+                });
+            }
+
+            saveLocalData();
+            renderAllTables();
+            updateDashboard();
+            showToast(`CSV ${methodLabel}: ${totalAdded} nuevos (${totalDuplicates} repetidos omitidos).`);
+            event.target.value = '';
+        };
+
         window.addDirectCliente = function() {
             const name = document.getElementById('cli-direct-name').value.trim();
             const rawPhone = document.getElementById('cli-direct-phone').value.trim();
@@ -3621,11 +3919,21 @@
 
             if (!name && !phone) { showToast("Ingresa al menos nombre o teléfono del cliente", "error"); return; }
 
+            const methodLabelMap = {
+                redes: 'Redes Sociales',
+                salesforce: 'Salesforce',
+                convencional: 'Convencional',
+                cancelados: 'Cancelados',
+                rescindidos: 'Rescindidos',
+                crm: 'No Compra',
+                gestion: 'Gestión Personal'
+            };
+
             const newClient = {
                 id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
                 name: name || 'Sin Nombre',
                 phone,
-                method: channel === 'redes' ? 'Redes Sociales' : channel === 'salesforce' ? 'Salesforce' : channel === 'convencional' ? 'Convencional' : 'Gestión Personal',
+                method: methodLabelMap[channel] || 'Gestión Personal',
                 reference: '',
                 locality: getProvincia(phone),
                 interestModel: model,
@@ -3638,6 +3946,8 @@
             else if (channel === 'redes') redesContacts.unshift(newClient);
             else if (channel === 'salesforce') salesforceContacts.unshift(newClient);
             else if (channel === 'convencional') convencionalContacts.unshift(newClient);
+            else if (channel === 'cancelados') canceladosContacts.unshift(newClient);
+            else if (channel === 'rescindidos') rescindidosContacts.unshift(newClient);
             else gestionContacts.unshift(newClient);
 
             document.getElementById('cli-direct-name').value = '';
@@ -3970,7 +4280,7 @@
             let buttons = `<button onclick="openEditModal('${contact.id}')" class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium hover:bg-slate-200">Editar</button>`;
             const s = contact.status;
             if (s === 'Pendiente' || s === 'Registrado') {
-                buttons += `<button onclick="executeStatusUpdate('${contact.id}', 'Llamada Realizada', 'Llamada')" class="px-2.5 py-1 bg-indigo-600 text-white rounded-lg text-xs font-semibold hover:bg-indigo-700">📞 Llamada</button>`;
+                buttons += `<button onclick="executeStatusUpdate('${contact.id}', 'Llamada Realizada', 'Llamada')" class="px-2.5 py-1 bg-indigo-600 text-white rounded-lg text-xs font-semibold hover:bg-indigo-700">📞 Llamar</button>`;
                 buttons += `<button onclick="sendMessageAndStart48h('${contact.id}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700" title="Envía mensaje e inicia conteo de 48h">💬 Mensaje</button>`;
             } else if (s === 'Llamada Realizada') {
                 buttons += `<button onclick="executeStatusUpdate('${contact.id}', 'Contestó', 'Llamada')" class="px-2.5 py-1 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700">Contestó</button>`;
@@ -4004,6 +4314,10 @@
             if (c) return { contact: c, source: 'salesforce' };
             c = convencionalContacts.find(x => x.id === id);
             if (c) return { contact: c, source: 'convencional' };
+            c = canceladosContacts.find(x => x.id === id);
+            if (c) return { contact: c, source: 'cancelados' };
+            c = rescindidosContacts.find(x => x.id === id);
+            if (c) return { contact: c, source: 'rescindidos' };
             return null;
         }
 
@@ -4138,7 +4452,9 @@
                 gestion: [gestionContacts, 'Gestion_Personal'],
                 redes: [redesContacts, 'Redes_Sociales'],
                 salesforce: [salesforceContacts, 'Salesforce_Leads'],
-                convencional: [convencionalContacts, 'Datos_Convencional']
+                convencional: [convencionalContacts, 'Datos_Convencional'],
+                cancelados: [canceladosContacts, 'Base_Cancelados'],
+                rescindidos: [rescindidosContacts, 'Base_Rescindidos']
             };
             const [list, prefix] = map[section] || [[], 'Export'];
             if (list.length === 0) { showToast("No hay datos para exportar.", "error"); return; }
