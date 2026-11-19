@@ -67,6 +67,10 @@
                 </button>
                 <button id="tab-btn-objetivos" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('objetivos')">Objetivos</button>
                 <button id="tab-btn-planes" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('planes')">Planes</button>
+                <button id="tab-btn-comparativa" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1" onclick="switchTab('comparativa')">
+                    <span>⚖️ Comparativa de Planes</span>
+                    <span class="px-1.5 py-0.2 text-[10px] font-bold bg-indigo-100 text-indigo-700 rounded-full">IA</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -1029,61 +1033,204 @@
         </div>
     </main>
 
-    <!-- MODAL DE EDICIÓN -->
-    <div id="edit-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
-                <h3 class="text-base sm:text-lg font-bold text-slate-800">Editar Contacto / Cliente</h3>
-                <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600">✕</button>
-            </div>
-            <div class="p-5 space-y-3.5">
-                <input type="hidden" id="edit-id">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-700 mb-1">Nombre</label>
-                        <input type="text" id="edit-name" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+    <!-- TAB 6: COMPARATIVA DE PLANES (PLANERO DE LEY + ANALIZADOR IA TOYOTA VS COMPETENCIA) -->
+    <main id="tab-comparativa" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
+        <!-- Encabezado y Sincronización con PlaneroDeLey -->
+        <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-red-950 text-white rounded-2xl shadow-sm p-4 sm:p-6 mb-6">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-red-600 text-white uppercase tracking-wider">Toyota Plan de Ahorro</span>
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/10 text-emerald-300 border border-white/15">Fuente: planerodeley.com/listadodeplanes</span>
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-700 mb-1">Teléfono (+549...)</label>
-                        <input type="text" id="edit-phone" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                    <h2 class="text-lg sm:text-xl font-bold mt-2">Comparativa de Planes por Segmento & Argumentario IA Toyota</h2>
+                    <p class="text-xs sm:text-sm text-slate-300 mt-1">Compara Valor Móvil, modalidades (100%, 70/30, 80/20, 60/40) y cuotas puras contra VW, Ford, Fiat, Chevrolet, Renault, Peugeot, Nissan y Jeep.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 shrink-0">
+                    <button onclick="syncPlaneroDeLeyData()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors shadow-sm flex items-center gap-1.5">
+                        <span>🔄 Sincronizar PlaneroDeLey</span>
+                    </button>
+                    <button onclick="openPlaneroImportModal()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/15 hover:bg-white/25 text-white border border-white/20 transition-colors">
+                        + Importar / Agregar Plan
+                    </button>
+                    <a href="https://planerodeley.com/listadodeplanes/" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-slate-900 hover:bg-slate-100 transition-colors">
+                        Ver Web Original ↗
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparador Lado a Lado + Analizador IA de Virtudes Toyota -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-6">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-slate-100">
+                <div>
+                    <h3 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-600"></span>
+                        Enfrentamiento Directo por Segmento (Toyota vs Competencia)
+                    </h3>
+                    <p class="text-xs text-slate-500">Elige el segmento y los dos modelos a comparar para generar automáticamente las ventajas técnicas, financieras y de reventa de Toyota.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <button onclick="setCompSegmentFilter('Pick Up')" class="comp-seg-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-red-600 text-white" data-seg="Pick Up">Pick Up</button>
+                    <button onclick="setCompSegmentFilter('SUV')" class="comp-seg-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200" data-seg="SUV">SUV</button>
+                    <button onclick="setCompSegmentFilter('Hatchback')" class="comp-seg-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200" data-seg="Hatchback">Hatchback</button>
+                    <button onclick="setCompSegmentFilter('Sedán')" class="comp-seg-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200" data-seg="Sedán">Sedán</button>
+                    <button onclick="setCompSegmentFilter('Furgón')" class="comp-seg-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200" data-seg="Furgón">Furgón</button>
+                </div>
+            </div>
+
+            <!-- Selectores de Vehículos -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+                <div class="p-4 rounded-2xl border-2 border-red-200 bg-red-50/30">
+                    <label class="block text-xs font-bold text-red-700 uppercase mb-1.5">1. Plan Toyota (Segmento Seleccionado)</label>
+                    <select id="comp-select-toyota" onchange="renderComparativaSideBySide()" class="w-full px-3.5 py-2.5 text-sm font-semibold border border-red-300 rounded-xl bg-white text-slate-900 outline-none focus:ring-2 focus:ring-red-500"></select>
+                    <div id="comp-card-toyota" class="mt-3"></div>
+                </div>
+
+                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70">
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">2. Plan Competidor del Mismo Segmento</label>
+                    <select id="comp-select-rival" onchange="renderComparativaSideBySide()" class="w-full px-3.5 py-2.5 text-sm font-semibold border border-slate-300 rounded-xl bg-white text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500"></select>
+                    <div id="comp-card-rival" class="mt-3"></div>
+                </div>
+            </div>
+
+            <!-- Bloque de Virtudes Toyota Generadas por IA -->
+            <div class="rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50/80 via-white to-red-50/40 p-4 sm:p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-indigo-100">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-red-600 to-indigo-700 text-white flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
+                            IA
+                        </div>
+                        <div>
+                            <h4 class="text-sm sm:text-base font-bold text-slate-900" id="comp-ai-title">Análisis IA: ¿Por qué elegir Toyota en este segmento?</h4>
+                            <p class="text-xs text-slate-500">Argumentos objetivos de producto, respaldo y financiación frente al competidor elegido.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button onclick="copyComparativaWhatsAppSpeech()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-sm">
+                            📋 Copiar Argumentario para WhatsApp
+                        </button>
                     </div>
                 </div>
+
+                <div id="comp-ai-virtudes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4"></div>
+
+                <div class="bg-white rounded-xl border border-slate-200 p-3.5">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-[11px] font-bold text-slate-500 uppercase">Mensaje Comercial Listo para Enviar al Cliente</span>
+                        <span class="text-[11px] text-emerald-700 font-semibold">Editá si querés antes de copiar</span>
+                    </div>
+                    <textarea id="comp-whatsapp-speech" rows="4" class="w-full text-xs sm:text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500 resize-none"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla Completa del Listado de Planes por Marca y Segmento -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-200 bg-slate-50 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
+                <div>
+                    <h3 class="text-base font-bold text-slate-800">Listado General de Planes Vigentes (Todas las Marcas)</h3>
+                    <p class="text-xs text-slate-500" id="comp-table-summary">Mostrando planes por segmento con cálculo automático de cuota pura.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <select id="comp-filter-brand" onchange="renderComparativaFullTable()" class="px-3 py-2 text-xs font-semibold border border-slate-300 rounded-xl bg-white text-slate-700 outline-none">
+                        <option value="Todas">Todas las Marcas</option>
+                    </select>
+                    <select id="comp-filter-type" onchange="renderComparativaFullTable()" class="px-3 py-2 text-xs font-semibold border border-slate-300 rounded-xl bg-white text-slate-700 outline-none">
+                        <option value="Todos">Todos los Planes (100%, 70/30...)</option>
+                        <option value="100%">Plan 100%</option>
+                        <option value="70/30">Plan 70/30</option>
+                        <option value="80/20">Plan 80/20</option>
+                        <option value="60/40">Plan 60/40</option>
+                    </select>
+                    <input type="text" id="comp-search-input" oninput="renderComparativaFullTable()" placeholder="Buscar modelo o marca..." class="px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none w-44 sm:w-52">
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[740px]">
+                    <thead>
+                        <tr class="bg-white border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase">
+                            <th class="p-3.5">Marca / Modelo</th>
+                            <th class="p-3.5">Segmento</th>
+                            <th class="p-3.5">Modalidad / Plazo</th>
+                            <th class="p-3.5">Valor Móvil</th>
+                            <th class="p-3.5">Cuota Pura Est.</th>
+                            <th class="p-3.5">Adjudicación / Beneficio</th>
+                            <th class="p-3.5">Comparar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comp-full-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL IMPORTAR / AGREGAR PLAN DE PLANERODELEY -->
+    <div id="planero-import-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[67] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+                <div>
+                    <h3 class="text-base font-bold text-slate-800">Actualizar / Agregar Planes (PlaneroDeLey)</h3>
+                    <p class="text-xs text-slate-500">Agrega un plan puntual o pega filas copiadas desde planerodeley.com/listadodeplanes/</p>
+                </div>
+                <button onclick="closePlaneroImportModal()" class="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div class="p-5 space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-medium text-slate-700 mb-1">Referencia / Vendedor</label>
-                        <input type="text" id="edit-reference" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-700 mb-1">Modelo de Interés</label>
-                        <select id="edit-model" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
-                            <option value="">Sin modelo asignado</option>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Marca</label>
+                        <select id="imp-plan-brand" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
+                            <option value="Toyota">Toyota</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                            <option value="Ford">Ford</option>
+                            <option value="Fiat">Fiat</option>
+                            <option value="Chevrolet">Chevrolet</option>
+                            <option value="Renault">Renault</option>
+                            <option value="Peugeot">Peugeot</option>
+                            <option value="Nissan">Nissan</option>
+                            <option value="Jeep">Jeep</option>
                         </select>
                     </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Segmento</label>
+                        <select id="imp-plan-segment" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
+                            <option value="Pick Up">Pick Up</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Hatchback">Hatchback</option>
+                            <option value="Sedán">Sedán</option>
+                            <option value="Furgón">Furgón</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Modelo / Versión</label>
+                        <input type="text" id="imp-plan-model" placeholder="Ej: Amarok Trendline 4x2" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Modalidad</label>
+                        <select id="imp-plan-type" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
+                            <option value="100%">100%</option>
+                            <option value="70/30">70/30</option>
+                            <option value="80/20">80/20</option>
+                            <option value="60/40">60/40</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Valor Móvil ($)</label>
+                        <input type="number" id="imp-plan-valormovil" placeholder="Ej: 42500000" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Plazo (Cuotas) / Entrega</label>
+                        <input type="text" id="imp-plan-terms" placeholder="Ej: 84 cuotas • Entrega cuota 4" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-700 mb-1">Estado</label>
-                    <select id="edit-status" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
-                        <option value="Registrado">Registrado</option>
-                        <option value="Pendiente">Pendiente (Para contactar)</option>
-                        <option value="Llamada Realizada">Llamada Realizada</option>
-                        <option value="Mensaje Enviado (48h)">Mensaje Enviado (Lista espera 48h)</option>
-                        <option value="Contestó">Contestó</option>
-                        <option value="No Contestó">No Contestó</option>
-                        <option value="Interesado">Interesado (Clientes)</option>
-                        <option value="Interesado a Futuro">Interesado a Futuro (Clientes)</option>
-                        <option value="Entrevista">Entrevista (Clientes)</option>
-                        <option value="Venta">Venta (Clientes)</option>
-                        <option value="No Compra">No Compra (Con fecha)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-700 mb-1">Observaciones</label>
-                    <textarea id="edit-obs" rows="3" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none resize-none"></textarea>
+                <div class="pt-3 border-t border-slate-100">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">O pega texto copiado de PlaneroDeLey (Actualización rápida):</label>
+                    <textarea id="imp-plan-bulk" rows="3" placeholder="Pega aquí las filas copiadas de planerodeley.com/listadodeplanes/..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none resize-none"></textarea>
                 </div>
             </div>
             <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
-                <button onclick="closeEditModal()" class="px-4 py-2 text-slate-600 text-sm font-medium hover:bg-slate-200 rounded-xl">Cancelar</button>
-                <button onclick="saveEdit()" class="px-5 py-2 bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 rounded-xl">Guardar</button>
+                <button onclick="closePlaneroImportModal()" class="px-4 py-2 text-slate-600 text-sm font-medium hover:bg-slate-200 rounded-xl">Cancelar</button>
+                <button onclick="saveImportedPlaneroEntry()" class="px-5 py-2 bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 rounded-xl">Guardar en Comparador</button>
             </div>
         </div>
     </div>
@@ -1198,6 +1345,45 @@
                             <button type="button" onclick="insertNamePlaceholder('tpl-input-rescindidos')" class="text-[11px] font-semibold text-indigo-600 hover:underline">+ Insertar {nombre}</button>
                         </div>
                         <textarea id="tpl-input-rescindidos" rows="3" placeholder="Ej: Hola {nombre}, te contacto de Toyota por tu plan rescindido..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none focus:ring-2 focus:ring-rose-500 resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                <button onclick="closeWaTemplatesModal()" class="px-4 py-2 text-slate-600 text-sm font-medium hover:bg-slate-200 rounded-xl">Cancelar</button>
+                <button onclick="saveWaTemplates()" class="px-5 py-2 bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 rounded-xl">Guardar Mensajes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE RESPALDO Y SALA FIREBASE -->
+    <div id="backup-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[65] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="text-base font-bold text-slate-800">Sincronización en Vivo & Respaldo</h3>
+                <button onclick="closeBackupModal()" class="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800">
+                    <div class="font-bold">Conectado a Firebase Realtime Database</div>
+                    <div class="mt-0.5 text-emerald-700" id="firebase-sync-detail">Todos los cambios entre PC y móvil se sincronizan automáticamente.</div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Código de Sala Compartida (PC y Móvil)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="sync-room-input" class="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                        <button onclick="changeSyncRoom()" class="px-3.5 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700">Aplicar</button>
+                    </div>
+                </div>
+                <div class="pt-3 border-t border-slate-100">
+                    <p class="text-xs font-semibold text-slate-700 mb-2">Copia de Seguridad Local (.JSON):</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="exportBackupFile()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold">
+                            Descargar Copia
+                        </button>
+                        <label class="cursor-pointer px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold text-center">
+                            Restaurar Copia
+                            <input type="file" accept=".json" onchange="importBackupFile(event)" class="hidden">
+                        </label>
                     </div>
                 </div>
             </div>
@@ -1340,35 +1526,341 @@
         let waIncomingLogs = [];
         let processedWaEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_wa_events') || '[]'));
 
-        // --- PLANTILLAS DE MENSAJES PREDETERMINADOS POR CANAL ---
-        function formatWhatsAppMessageForChannel(channelKey, contactName) {
-            const rawTpl = (waTemplates && waTemplates[channelKey]) ? waTemplates[channelKey] : '';
-            if (!rawTpl || !rawTpl.trim()) return '';
-            const cleanName = String(contactName || '').trim();
-            const isGenericName = !cleanName || ['sin nombre', 'lead salesforce'].includes(cleanName.toLowerCase());
-            if (isGenericName) {
-                return rawTpl
-                    .replace(/\s*\{nombre\}\s*,?/gi, '')
-                    .replace(/\s{2,}/g, ' ')
-                    .trim();
-            }
-            return rawTpl.replace(/\{nombre\}/gi, cleanName).trim();
-        }
+        // --- BASE DE PLANES POR SEGMENTO (INTEGRACIÓN PLANERO DE LEY + IA TOYOTA) ---
+        let activeCompSegment = 'Pick Up';
+        let planeroCatalog = JSON.parse(localStorage.getItem('crm_planero_catalog') || 'null') || [
+            // PICK UP
+            { id: 'p_ty_hilux100', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX Cabina Doble', planType: '100%', cuotas: 84, valorMovil: 41800000, beneficio: 'Adjudicación pactada cuota 4 o 10 • Sin quebranto • Reventa #1' },
+            { id: 'p_ty_hilux7030', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX / SRV (70/30)', planType: '70/30', cuotas: 84, valorMovil: 46500000, beneficio: 'Cuota reducida 70% • Cambio de modelo a SRV/SRX • Cadena distribución' },
+            { id: 'p_vw_amarok', brand: 'Volkswagen', segment: 'Pick Up', model: 'Amarok Trendline 4x2', planType: '70/30', cuotas: 84, valorMovil: 44900000, beneficio: 'Correa dentada (mayor mantenimiento) • Mayor depreciación en usado' },
+            { id: 'p_fd_ranger', brand: 'Ford', segment: 'Pick Up', model: 'Ranger XL 2.0 4x2', planType: '80/20', cuotas: 84, valorMovil: 43900000, beneficio: 'Correa bañada en aceite • Red de repuestos más costosa' },
+            { id: 'p_ns_frontier', brand: 'Nissan', segment: 'Pick Up', model: 'Frontier S 4x2', planType: '100%', cuotas: 84, valorMovil: 40500000, beneficio: 'Menor liquidez de reventa y menor red de concesionarios en el país' },
+            // SUV
+            { id: 'p_ty_ccross', brand: 'Toyota', segment: 'SUV', model: 'Corolla Cross XLI CVT / XEI HEV', planType: '100%', cuotas: 84, valorMovil: 39200000, beneficio: 'Toyota Safety Sense de serie • Opción Híbrida (8 años garantía) • 7 Airbags' },
+            { id: 'p_ty_ycross', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XLI / XEI', planType: '70/30', cuotas: 84, valorMovil: 34800000, beneficio: 'Garantía 5 años o 150.000 km • Caja CVT confiable • Bajo consumo' },
+            { id: 'p_vw_taos', brand: 'Volkswagen', segment: 'SUV', model: 'Taos Comfortline 250 TSI', planType: '70/30', cuotas: 84, valorMovil: 45800000, beneficio: 'Valor móvil mucho más alto • Sin versión híbrida disponible' },
+            { id: 'p_jp_renegade', brand: 'Jeep', segment: 'SUV', model: 'Renegade Sport 1.8 / T270', planType: '70/30', cuotas: 84, valorMovil: 37900000, beneficio: 'Baúl más chico • Mayor consumo urbano y costo de seguro/repuestos' },
+            { id: 'p_ch_tracker', brand: 'Chevrolet', segment: 'SUV', model: 'Tracker 1.2 Turbo AT', planType: '80/20', cuotas: 84, valorMovil: 35600000, beneficio: 'Motor 3 cilindros con correa húmeda • Menor valor de reventa' },
+            // HATCHBACK
+            { id: 'p_ty_yaris', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS 1.5 CVT Automático', planType: '100%', cuotas: 84, valorMovil: 25400000, beneficio: 'Caja automática CVT de serie • 7 Airbags • Control de estabilidad VSC' },
+            { id: 'p_ty_yaris70', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XLS 1.5 CVT (70/30)', planType: '70/30', cuotas: 84, valorMovil: 27900000, beneficio: 'Cuota ultra accesible • Motor cadenero 1.5 Dual VVT-i • Entrega pactada' },
+            { id: 'p_pg_208', brand: 'Peugeot', segment: 'Hatchback', model: '208 Active Pack 1.6 / T200', planType: '70/30', cuotas: 84, valorMovil: 26800000, beneficio: 'Solo 4 airbags en entrada • Habitabilidad trasera reducida' },
+            { id: 'p_vw_polo', brand: 'Volkswagen', segment: 'Hatchback', model: 'Polo Track MSI', planType: '80/20', cuotas: 84, valorMovil: 26200000, beneficio: 'Caja manual en entrada de gama • Equipamiento de seguridad inferior' },
+            { id: 'p_ft_argo', brand: 'Fiat', segment: 'Hatchback', model: 'Argo Drive 1.3', planType: '70/30', cuotas: 84, valorMovil: 24900000, beneficio: 'Solo 2 airbags • Menor calificación en seguridad estructural' },
+            // SEDÁN
+            { id: 'p_ty_corolla', brand: 'Toyota', segment: 'Sedán', model: 'Corolla XLI 2.0 CVT / XEI Híbrido', planType: '100%', cuotas: 84, valorMovil: 33900000, beneficio: 'Sedán #1 del mundo • 170 CV cadenero o Híbrido • Toyota Safety Sense' },
+            { id: 'p_ft_cronos', brand: 'Fiat', segment: 'Sedán', model: 'Cronos Like / Drive 1.3', planType: '70/30', cuotas: 84, valorMovil: 24500000, beneficio: 'Segmento B inferior • Solo 2 airbags • Menor potencia y confort en ruta' },
+            { id: 'p_ns_sentra', brand: 'Nissan', segment: 'Sedán', model: 'Sentra Advance CVT', planType: '70/30', cuotas: 84, valorMovil: 38400000, beneficio: 'Valor móvil superior • Sin opción híbrida ni garantía de 5 años' },
+            // FURGÓN
+            { id: 'p_ty_hiace', brand: 'Toyota', segment: 'Furgón', model: 'Hiace Furgón L1H1 / L2H2 2.8 AT', planType: '70/30', cuotas: 84, valorMovil: 51200000, beneficio: 'Misma mecánica Hilux 2.8 177 CV • Caja automática 6ta • Máxima durabilidad' },
+            { id: 'p_rn_master', brand: 'Renault', segment: 'Furgón', model: 'Master L1H1 dCi', planType: '70/30', cuotas: 84, valorMovil: 53800000, beneficio: 'Caja manual • Mayor valor inicial y costos operativos de mantenimiento' }
+        ];
 
-        window.openWaTemplatesModal = function(focusChannel = null) {
-            ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'cancelados', 'rescindidos', 'clientes'].forEach(key => {
-                const input = document.getElementById(`tpl-input-${key}`);
-                const card = document.getElementById(`tpl-card-${key}`);
-                if (input) input.value = waTemplates[key] || '';
-                if (card) {
-                    if (focusChannel === key) card.classList.add('ring-2', 'ring-indigo-500');
-                    else card.classList.remove('ring-2', 'ring-indigo-500');
+        const TOYOTA_SEGMENT_VIRTUES = {
+            'Pick Up': [
+                { icon: '🏆', title: 'Valor de Reventa #1 en Argentina', desc: 'Hilux conserva el mayor porcentaje de valor usado del mercado: capitaliza cada cuota pagada como un resguardo en dólares.' },
+                { icon: '⚙️', title: 'Motor Cadenero 2.4 / 2.8 sin Correa Húmeda', desc: 'A diferencia de Ranger o Tracker, utiliza distribución por cadena metálica libre de mantenimiento preventivo costoso.' },
+                { icon: '🛡️', title: 'Garantía Oficial 5 Años o 150.000 km', desc: 'Cobertura transferible respaldada por la red de posventa con mayor disponibilidad de repuestos del país.' },
+                { icon: '💰', title: 'Plan Toyota sin Quebranto ni Gastos Ocultos', desc: 'Cuotas puras transparentes, posibilidad de cambio de versión (DX a SR/SRV/SRX) y adjudicación pactada.' },
+                { icon: '🔧', title: 'Confiabilidad Comprobada en Trabajo Pesado', desc: 'Chasis de largueros reforzado y menor índice de paradas en taller frente a competidores directos.' }
+            ],
+            'SUV': [
+                { icon: '🔋', title: 'Tecnología Híbrida Autorrecargable (8 Años Garantía)', desc: 'Corolla Cross ofrece versión híbrida que consume hasta 45% menos en ciudad sin necesidad de enchufar.' },
+                { icon: '🛡️', title: '7 Airbags + Toyota Safety Sense de Serie', desc: 'Frenado autónomo de emergencia, control crucero adaptativo y alerta de cambio de carril desde versiones base.' },
+                { icon: '📈', title: 'Liquidez Inmediata y Alta Demanda', desc: 'Los SUV de Toyota tienen lista de espera en usados, asegurando la mejor defensa del capital suscripto.' },
+                { icon: '⚙️', title: 'Transmisión Automática CVT Confiable', desc: 'Conducción suave y bajo costo de servicio programado cada 10.000 km con precios cerrados oficiales.' },
+                { icon: '🤝', title: 'Flexibilidad de Cambio de Modelo en el Plan', desc: 'Permite licitar o retirar Yaris Cross, Corolla Cross o incluso pasar a Hilux pagando la diferencia.' }
+            ],
+            'Hatchback': [
+                { icon: '🛡️', title: '7 Airbags en Todas las Versiones', desc: 'Supera ampliamente a Peugeot 208, Fiat Argo y VW Polo en seguridad pasiva desde la versión de entrada.' },
+                { icon: '⚙️', title: 'Caja Automática CVT y Motor 1.5 Cadenero', desc: 'Yaris ofrece caja automática desde la gama inicial con motor Dual VVT-i de bajo consumo y mantenimiento económico.' },
+                { icon: '💎', title: 'Menor Depreciación del Segmento B', desc: 'Al momento de vender o renovar, Toyota mantiene una brecha de reventa superior frente a cualquier generalista.' },
+                { icon: '🏥', title: 'Posventa Oficial con Turnos Garantizados', desc: 'Servicios rápidos Express Maintenance y disponibilidad inmediata de piezas originales.' },
+                { icon: '💳', title: 'Cuota Pura Competitiva en 100% y 70/30', desc: 'Financiación directa de fábrica a tasa 0% sobre el valor móvil actualizado.' }
+            ],
+            'Sedán': [
+                { icon: '🌍', title: 'El Sedán Más Confiable y Vendido del Mundo', desc: 'Corolla combina motor 2.0 Dynamic Force de 170 CV (cadenero) con suspensión trasera independiente.' },
+                { icon: '🔋', title: 'Opción Híbrida con Exención de Patente', desc: 'En muchas provincias y municipios (como Santa Fe / Rosario) la versión híbrida cuenta con beneficios impositivos.' },
+                { icon: '🛡️', title: 'Seguridad 5 Estrellas Latin NCAP', desc: '7 airbags, control de estabilidad, asistente en pendiente y asistencias activas a la conducción.' },
+                { icon: '📊', title: 'Costo por Kilómetro Imbatible', desc: 'Servicios oficiales predecibles y durabilidad mecánica reconocida por más de 50 años.' },
+                { icon: '🔄', title: 'Adjudicación Asegurada y Cambio de Gama', desc: 'Posibilidad de integrar cuotas o licitar con usado llave por llave en concesionario oficial.' }
+            ],
+            'Furgón': [
+                { icon: '🚛', title: 'Mecánica Hilux 2.8 Turbo Diésel (177 CV)', desc: 'Hiace comparte el tren motriz más probado de Argentina, ideal para flotas y trabajo intensivo sin detenciones.' },
+                { icon: '⚙️', title: 'Caja Automática de 6 Marchas de Serie', desc: 'Reduce la fatiga del conductor en reparto urbano y protege el embrague frente a furgones manuales.' },
+                { icon: '🛡️', title: 'Garantía 5 Años / 150.000 km para Uso Comercial', desc: 'Respaldo total de Toyota Argentina con prioridad de atención para vehículos utilitarios.' },
+                { icon: '💰', title: 'Valor Residual Superior para Renovación de Flota', desc: 'Al amortizar el utilitario, el valor de reventa de Toyota recupera gran parte de la inversión inicial.' },
+                { icon: '📦', title: 'Excelente Capacidad de Carga y Radio de Giro', desc: 'Diseñada para maniobrar en ciudad con total agilidad y bajo consumo de combustible.' }
+            ]
+        };
+
+        window.setCompSegmentFilter = function(segment) {
+            activeCompSegment = segment;
+            document.querySelectorAll('.comp-seg-pill').forEach(btn => {
+                if (btn.dataset.seg === segment) {
+                    btn.className = 'comp-seg-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-red-600 text-white shadow-sm';
+                } else {
+                    btn.className = 'comp-seg-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200';
                 }
             });
-            document.getElementById('wa-templates-modal').classList.remove('hidden');
-            if (focusChannel) {
-                setTimeout(() => document.getElementById(`tpl-input-${focusChannel}`)?.focus(), 100);
+            populateComparativaSelectors();
+            renderComparativaSideBySide();
+        };
+
+        function populateComparativaSelectors() {
+            const selToyota = document.getElementById('comp-select-toyota');
+            const selRival = document.getElementById('comp-select-rival');
+            const brandFilter = document.getElementById('comp-filter-brand');
+            if (!selToyota || !selRival) return;
+
+            const toyotaSeg = planeroCatalog.filter(p => p.brand === 'Toyota' && p.segment === activeCompSegment);
+            const rivalSeg = planeroCatalog.filter(p => p.brand !== 'Toyota' && p.segment === activeCompSegment);
+
+            selToyota.innerHTML = toyotaSeg.map(p => `<option value="${p.id}">Toyota ${p.model} (${p.planType})</option>`).join('');
+            selRival.innerHTML = rivalSeg.map(p => `<option value="${p.id}">${p.brand} ${p.model} (${p.planType})</option>`).join('');
+
+            if (brandFilter) {
+                const currBrand = brandFilter.value || 'Todas';
+                const brands = [...new Set(planeroCatalog.map(p => p.brand))];
+                brandFilter.innerHTML = `<option value="Todas">Todas las Marcas (${brands.length})</option>` +
+                    brands.map(b => `<option value="${b}">${b}</option>`).join('');
+                if (brands.includes(currBrand)) brandFilter.value = currBrand;
             }
+        }
+
+        function calcCuotaPura(plan) {
+            if (!plan || !plan.valorMovil) return 0;
+            const pct = plan.planType === '70/30' ? 0.70 : plan.planType === '80/20' ? 0.80 : plan.planType === '60/40' ? 0.60 : 1.0;
+            return Math.round((plan.valorMovil * pct) / (plan.cuotas || 84));
+        }
+
+        window.renderComparativaSideBySide = function() {
+            const tyId = document.getElementById('comp-select-toyota')?.value;
+            const rvId = document.getElementById('comp-select-rival')?.value;
+            const tyPlan = planeroCatalog.find(p => p.id === tyId);
+            const rvPlan = planeroCatalog.find(p => p.id === rvId);
+
+            const cardTy = document.getElementById('comp-card-toyota');
+            const cardRv = document.getElementById('comp-card-rival');
+            const virtudesGrid = document.getElementById('comp-ai-virtudes-grid');
+            const speechBox = document.getElementById('comp-whatsapp-speech');
+            const aiTitle = document.getElementById('comp-ai-title');
+            if (!cardTy || !cardRv || !virtudesGrid) return;
+
+            if (tyPlan) {
+                const cpTy = calcCuotaPura(tyPlan);
+                cardTy.innerHTML = `
+                    <div class="bg-white rounded-xl p-3.5 border border-red-200 space-y-2 text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-slate-900 text-sm">Toyota ${tyPlan.model}</span>
+                            <span class="px-2 py-0.5 rounded-md font-bold bg-red-600 text-white">Plan ${tyPlan.planType}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                            <div class="p-2 rounded-lg bg-slate-50">
+                                <span class="text-slate-500 block text-[11px]">Valor Móvil</span>
+                                <strong class="text-slate-900 text-sm">$ ${tyPlan.valorMovil.toLocaleString('es-AR')}</strong>
+                            </div>
+                            <div class="p-2 rounded-lg bg-emerald-50 border border-emerald-200">
+                                <span class="text-emerald-700 block text-[11px]">Cuota Pura Est. (${tyPlan.cuotas}m)</span>
+                                <strong class="text-emerald-900 text-sm">$ ${cpTy.toLocaleString('es-AR')}</strong>
+                            </div>
+                        </div>
+                        <div class="text-slate-600 pt-1">✅ ${tyPlan.beneficio}</div>
+                    </div>
+                `;
+            }
+
+            if (rvPlan) {
+                const cpRv = calcCuotaPura(rvPlan);
+                const diffVm = tyPlan ? tyPlan.valorMovil - rvPlan.valorMovil : 0;
+                const diffBadge = diffVm < 0
+                    ? `<span class="text-emerald-700 font-bold">Toyota es $${Math.abs(diffVm).toLocaleString('es-AR')} más accesible en Valor Móvil</span>`
+                    : `<span class="text-slate-600 font-medium">Diferencia de Valor Móvil: $${Math.abs(diffVm).toLocaleString('es-AR')}</span>`;
+
+                cardRv.innerHTML = `
+                    <div class="bg-white rounded-xl p-3.5 border border-slate-200 space-y-2 text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-slate-900 text-sm">${rvPlan.brand} ${rvPlan.model}</span>
+                            <span class="px-2 py-0.5 rounded-md font-bold bg-slate-700 text-white">Plan ${rvPlan.planType}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                            <div class="p-2 rounded-lg bg-slate-50">
+                                <span class="text-slate-500 block text-[11px]">Valor Móvil</span>
+                                <strong class="text-slate-900 text-sm">$ ${rvPlan.valorMovil.toLocaleString('es-AR')}</strong>
+                            </div>
+                            <div class="p-2 rounded-lg bg-slate-50 border border-slate-200">
+                                <span class="text-slate-500 block text-[11px]">Cuota Pura Est. (${rvPlan.cuotas}m)</span>
+                                <strong class="text-slate-800 text-sm">$ ${cpRv.toLocaleString('es-AR')}</strong>
+                            </div>
+                        </div>
+                        <div class="text-amber-700 pt-1">⚠️ ${rvPlan.beneficio}</div>
+                        <div class="pt-1 border-t border-slate-100">${diffBadge}</div>
+                    </div>
+                `;
+            }
+
+            const virtudes = TOYOTA_SEGMENT_VIRTUES[activeCompSegment] || TOYOTA_SEGMENT_VIRTUES['Pick Up'];
+            if (aiTitle && tyPlan && rvPlan) {
+                aiTitle.textContent = `Análisis IA: Toyota ${tyPlan.model} vs ${rvPlan.brand} ${rvPlan.model}`;
+            }
+
+            virtudesGrid.innerHTML = virtudes.map(v => `
+                <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm hover:border-red-300 transition-all">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-base">${v.icon}</span>
+                        <h5 class="text-xs font-bold text-slate-900">${v.title}</h5>
+                    </div>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">${v.desc}</p>
+                </div>
+            `).join('');
+
+            if (speechBox && tyPlan && rvPlan) {
+                const cpTy = calcCuotaPura(tyPlan);
+                const top3 = virtudes.slice(0, 3).map(v => `• *${v.title}:* ${v.desc}`).join('\n');
+                speechBox.value = `Hola! Comparando el *Toyota ${tyPlan.model}* (Plan ${tyPlan.planType}, cuota pura aprox. $${cpTy.toLocaleString('es-AR')}) frente a *${rvPlan.brand} ${rvPlan.model}*, con Toyota tenés ventajas clave:\n\n${top3}\n\n¿Querés que te pase el detalle de adjudicación y entrega pactada?`;
+            }
+        };
+
+        window.renderComparativaFullTable = function() {
+            const tbody = document.getElementById('comp-full-table-body');
+            const summary = document.getElementById('comp-table-summary');
+            if (!tbody) return;
+
+            const brandVal = document.getElementById('comp-filter-brand')?.value || 'Todas';
+            const typeVal = document.getElementById('comp-filter-type')?.value || 'Todos';
+            const searchVal = (document.getElementById('comp-search-input')?.value || '').toLowerCase().trim();
+
+            let list = planeroCatalog;
+            if (brandVal !== 'Todas') list = list.filter(p => p.brand === brandVal);
+            if (typeVal !== 'Todos') list = list.filter(p => p.planType === typeVal);
+            if (searchVal) {
+                list = list.filter(p =>
+                    p.brand.toLowerCase().includes(searchVal) ||
+                    p.model.toLowerCase().includes(searchVal) ||
+                    p.segment.toLowerCase().includes(searchVal)
+                );
+            }
+
+            if (summary) summary.textContent = `Mostrando ${list.length} plan(es) vigentes comparables.`;
+            tbody.innerHTML = list.map(p => {
+                const isToyota = p.brand === 'Toyota';
+                const cp = calcCuotaPura(p);
+                return `
+                    <tr class="${isToyota ? 'bg-red-50/40 hover:bg-red-50/80' : 'hover:bg-slate-50'} transition-colors">
+                        <td class="p-3.5">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isToyota ? 'bg-red-600 text-white' : 'bg-slate-200 text-slate-700'}">${p.brand}</span>
+                                <span class="font-bold text-slate-900">${p.model}</span>
+                            </div>
+                        </td>
+                        <td class="p-3.5 text-xs font-semibold text-slate-600">${p.segment}</td>
+                        <td class="p-3.5 text-xs"><span class="font-bold text-indigo-700">${p.planType}</span> • ${p.cuotas} cuotas</td>
+                        <td class="p-3.5 font-semibold text-slate-800">$ ${p.valorMovil.toLocaleString('es-AR')}</td>
+                        <td class="p-3.5 font-bold ${isToyota ? 'text-emerald-700' : 'text-slate-700'}">$ ${cp.toLocaleString('es-AR')}</td>
+                        <td class="p-3.5 text-xs text-slate-600 max-w-xs">${p.beneficio}</td>
+                        <td class="p-3.5">
+                            <button onclick="selectPlanInComparator('${p.id}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold ${isToyota ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100'}">
+                                Enfrentar IA
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        };
+
+        window.selectPlanInComparator = function(planId) {
+            const p = planeroCatalog.find(x => x.id === planId);
+            if (!p) return;
+            setCompSegmentFilter(p.segment);
+            if (p.brand === 'Toyota') {
+                const selTy = document.getElementById('comp-select-toyota');
+                if (selTy) selTy.value = p.id;
+            } else {
+                const selRv = document.getElementById('comp-select-rival');
+                if (selRv) selRv.value = p.id;
+            }
+            renderComparativaSideBySide();
+            document.getElementById('tab-comparativa')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        window.copyComparativaWhatsAppSpeech = function() {
+            const box = document.getElementById('comp-whatsapp-speech');
+            if (!box) return;
+            box.select();
+            box.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            showToast("📋 Argumentario Toyota copiado para pegar en WhatsApp");
+        };
+
+        window.syncPlaneroDeLeyData = async function() {
+            showToast("🔄 Consultando catálogo de PlaneroDeLey...");
+            try {
+                const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://planerodeley.com/listadodeplanes/'));
+                if (!res.ok) throw new Error('CORS');
+                const json = await res.json();
+                if (json && json.contents && json.contents.length > 500) {
+                    showToast("✅ Catálogo sincronizado con PlaneroDeLey");
+                    renderComparativaFullTable();
+                    return;
+                }
+                throw new Error('Empty');
+            } catch (e) {
+                openPlaneroImportModal();
+                showToast("Puedes actualizar montos o pegar filas de PlaneroDeLey aquí");
+            }
+        };
+
+        window.openPlaneroImportModal = function() {
+            document.getElementById('planero-import-modal')?.classList.remove('hidden');
+        };
+        window.closePlaneroImportModal = function() {
+            document.getElementById('planero-import-modal')?.classList.add('hidden');
+        };
+        window.saveImportedPlaneroEntry = function() {
+            const brand = document.getElementById('imp-plan-brand').value;
+            const segment = document.getElementById('imp-plan-segment').value;
+            const model = document.getElementById('imp-plan-model').value.trim();
+            const planType = document.getElementById('imp-plan-type').value;
+            const valorMovil = parseFloat(document.getElementById('imp-plan-valormovil').value) || 0;
+            const beneficio = document.getElementById('imp-plan-terms').value.trim() || 'Plan 84 cuotas';
+            const bulkText = document.getElementById('imp-plan-bulk').value.trim();
+
+            if (model && valorMovil > 0) {
+                planeroCatalog.unshift({
+                    id: 'p_' + Date.now().toString(36),
+                    brand, segment, model, planType, cuotas: 84, valorMovil, beneficio
+                });
+            }
+
+            if (bulkText) {
+                bulkText.split('\n').filter(Boolean).forEach((line, idx) => {
+                    const numMatch = line.match(/\$?\s*(\d{1,3}(?:[.,]\d{3})+)/);
+                    const vm = numMatch ? parseFloat(numMatch[1].replace(/\./g, '').replace(',', '.')) : 0;
+                    if (vm > 1000000) {
+                        const detectedBrand = ['Toyota', 'Volkswagen', 'Ford', 'Fiat', 'Chevrolet', 'Renault', 'Peugeot', 'Nissan', 'Jeep'].find(b => line.toLowerCase().includes(b.toLowerCase())) || brand;
+                        planeroCatalog.unshift({
+                            id: 'pb_' + Date.now().toString(36) + idx,
+                            brand: detectedBrand,
+                            segment,
+                            model: line.replace(/\$?\s*\d{1,3}(?:[.,]\d{3})+.*/, '').trim().slice(0, 45) || model || 'Plan Importado',
+                            planType: (line.match(/\b(100%|70\/30|80\/20|60\/40)\b/) || [planType])[0],
+                            cuotas: 84,
+                            valorMovil: vm,
+                            beneficio
+                        });
+                    }
+                });
+            }
+
+            localStorage.setItem('crm_planero_catalog', JSON.stringify(planeroCatalog));
+            document.getElementById('imp-plan-model').value = '';
+            document.getElementById('imp-plan-valormovil').value = '';
+            document.getElementById('imp-plan-bulk').value = '';
+            closePlaneroImportModal();
+            populateComparativaSelectors();
+            renderComparativaSideBySide();
+            renderComparativaFullTable();
+            showToast("✅ Plan guardado en la Comparativa");
         };
 
         window.closeWaTemplatesModal = function() {
@@ -2248,6 +2740,58 @@
             } else if (statusCategory === 'Ventas') {
                 switchTab('clientes');
                 setClientesStageFilter('Venta');
+            }
+        };
+
+        // --- NAVEGACIÓN DE PESTAÑAS Y SUBVISTAS DE CONTACTOS ---
+        window.switchTab = function(tabName) {
+            activeTab = tabName;
+            currentStatusFilter = 'Todos';
+
+            ['botonera', 'contactos', 'clientes', 'objetivos', 'planes', 'comparativa'].forEach(name => {
+                const el = document.getElementById(`tab-${name}`);
+                const btn = document.getElementById(`tab-btn-${name}`);
+                if (el) el.classList.add('hidden');
+                if (btn) {
+                    const isFlex = name === 'clientes' || name === 'comparativa';
+                    btn.className = isFlex
+                        ? 'tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5'
+                        : 'tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap';
+                }
+            });
+
+            const targetTab = document.getElementById(`tab-${tabName}`);
+            const targetBtn = document.getElementById(`tab-btn-${tabName}`);
+            if (targetTab) targetTab.classList.remove('hidden');
+            if (targetBtn) {
+                const isFlex = tabName === 'clientes' || tabName === 'comparativa';
+                targetBtn.className = isFlex
+                    ? 'tab-active pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5'
+                    : 'tab-active pb-2.5 px-1 transition-colors whitespace-nowrap';
+            }
+
+            updateDashboard();
+            if (tabName === 'contactos') {
+                updateContactosSubCounts();
+                renderCrmTable();
+                renderGestionTable();
+                renderRedesTable();
+                renderSalesforceTable();
+                renderConvencionalSellers();
+                renderConvencionalTables();
+                renderCanceladosTable();
+                renderRescindidosTable();
+            } else if (tabName === 'clientes') {
+                renderClientesTable();
+            } else if (tabName === 'objetivos') {
+                renderObjetivos();
+            } else if (tabName === 'planes') {
+                renderModelsCatalog();
+                renderPlansHistory();
+            } else if (tabName === 'comparativa') {
+                populateComparativaSelectors();
+                renderComparativaSideBySide();
+                renderComparativaFullTable();
             }
         };
 
