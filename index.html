@@ -1076,11 +1076,11 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">1. Segmento del Vehículo</label>
                     <select id="comp-segment-select" onchange="onCompSegmentChange()" class="w-full px-3 py-2 text-sm font-semibold border border-slate-300 rounded-xl bg-white outline-none focus:ring-2 focus:ring-red-500">
-                        <option value="Pick Up">Pick Up (Hilux vs Amarok / Ranger / Frontier / Toro)</option>
-                        <option value="SUV">SUV (Corolla Cross / Yaris Cross vs 2008 / Tracker / Renegade)</option>
+                        <option value="Pick Up">Pick Up (Hilux vs Ranger / Maverick / Amarok / Frontier / Toro)</option>
+                        <option value="SUV">SUV (Corolla Cross / Yaris Cross vs Territory / Bronco Sport / 2008 / Tracker)</option>
                         <option value="Hatchback">Hatchback (Yaris vs Peugeot 208 / Polo / Onix / Argo)</option>
                         <option value="Sedán">Sedán (Corolla vs Fiat Cronos / Nissan Versa / Virtus)</option>
-                        <option value="Furgón">Furgón / Utilitario (Hiace vs Kangoo / Partner / Boxer)</option>
+                        <option value="Furgón">Furgón / Utilitario (Hiace vs Ford Transit / Kangoo / Partner / Boxer)</option>
                     </select>
                 </div>
                 <div>
@@ -1098,6 +1098,9 @@
 
             <!-- Bloque IA: Virtudes Diferenciales de Toyota ante este Competidor -->
             <div id="comp-ai-virtues-box" class="rounded-2xl border-2 border-red-200 bg-gradient-to-br from-red-50/70 via-white to-amber-50/40 p-4 sm:p-5"></div>
+
+            <!-- Bloque IA: Puntos Clave para Sacar la Venta (Estrategia de Cierre) -->
+            <div id="comp-ai-sales-hooks-box" class="mt-4 rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/40 p-4 sm:p-5"></div>
         </div>
 
         <!-- Tabla Completa del Catálogo -->
@@ -1576,7 +1579,9 @@
             { id: 'pdl_t1', brand: 'Toyota', model: 'Hilux 4x2 DX MT', segment: 'Pick Up', planType: '70/30', price: 49621000, cuotaPura: 351466, condition: '84 cuotas • Entrega pactada cuota 4 • Chasis largueros + 7 airbags' },
             { id: 'pdl_t2', brand: 'Toyota', model: 'Hilux 4x4 DX AT', segment: 'Pick Up', planType: '100%', price: 59739000, cuotaPura: 711178, condition: '84 cuotas • 100% financiado • Cadena de distribución + Bloqueo dif.' },
             { id: 'pdl_c1', brand: 'Volkswagen', model: 'Amarok Trendline 4x2', segment: 'Pick Up', planType: '60/40', price: 53133050, cuotaPura: 379522, condition: '84 cuotas • Motor con correa dentada • Garantía menor a Toyota' },
-            { id: 'pdl_c2', brand: 'Ford', model: 'Ranger XL 4x2', segment: 'Pick Up', planType: '80/20', price: 45484213, cuotaPura: 433183, condition: '84 cuotas • Cuota pura más alta que Hilux 70/30 • Menor reventa' },
+            { id: 'pdl_c2', brand: 'Ford', model: 'Ranger XL 4x2', segment: 'Pick Up', planType: '80/20', price: 45484213, cuotaPura: 433183, condition: '84 cuotas • Cuota pura $81.700 más alta que Hilux 70/30 • Menor reventa' },
+            { id: 'pdl_c2b', brand: 'Ford', model: 'Ranger XLS V6 4x4 AT', segment: 'Pick Up', planType: '80/20', price: 66950000, cuotaPura: 637619, condition: '84 cuotas • Mayor consumo V6 y costo de seguro/mantenimiento que Hilux' },
+            { id: 'pdl_c2c', brand: 'Ford', model: 'Maverick XLT 2.0 EcoBoost', segment: 'Pick Up', planType: '70/30', price: 47890000, cuotaPura: 399083, condition: '84 cuotas • Estructura monocasco (no chasis) • Motor nafta turbo alto consumo' },
             { id: 'pdl_c3', brand: 'Fiat', model: 'Toro Freedom 1.8', segment: 'Pick Up', planType: '70/30', price: 57410000, cuotaPura: 478417, condition: '84 cuotas • Estructura monocasco (no chasis) • Menor capacidad carga' },
             { id: 'pdl_c4', brand: 'Nissan', model: 'Frontier S 4x2', segment: 'Pick Up', planType: '70/30', price: 45624222, cuotaPura: 380202, condition: '84 cuotas • Red de concesionarios y repuestos más acotada' },
             // SUV
@@ -1586,6 +1591,8 @@
             { id: 'pdl_c5', brand: 'Peugeot', model: '2008 Active', segment: 'SUV', planType: '70/30', price: 51610000, cuotaPura: 430083, condition: '84 cuotas • Motor PureTech correa bañada en aceite • Menor reventa' },
             { id: 'pdl_c6', brand: 'Chevrolet', model: 'Tracker 1.2T AT', segment: 'SUV', planType: '70/30', price: 41436900, cuotaPura: 345307, condition: '84 cuotas • Motor 3 cilindros turbo con correa húmeda' },
             { id: 'pdl_c7', brand: 'Jeep', model: 'Renegade Sport 1.8', segment: 'SUV', planType: '70/30', price: 45050400, cuotaPura: 375420, condition: '84 cuotas • Mayor consumo urbano y costo de mantenimiento' },
+            { id: 'pdl_c7b', brand: 'Ford', model: 'Territory SEL 1.8T', segment: 'SUV', planType: '70/30', price: 49980000, cuotaPura: 416500, condition: '84 cuotas • Origen China • Menor valor de reventa y red posventa frente a Corolla Cross' },
+            { id: 'pdl_c7c', brand: 'Ford', model: 'Bronco Sport Big Bend 1.5T', segment: 'SUV', planType: '70/30', price: 54620000, cuotaPura: 455167, condition: '84 cuotas • Motor 3 cilindros turbo • Cuota pura más alta que Corolla Cross' },
             // HATCHBACK
             { id: 'pdl_t6', brand: 'Toyota', model: 'Yaris XS CVT (70/30)', segment: 'Hatchback', planType: '70/30', price: 36315000, cuotaPura: 257231, condition: '84 cuotas • Automático CVT de serie + 7 airbags + Control estabilidad' },
             { id: 'pdl_t7', brand: 'Toyota', model: 'Yaris XS CVT (100%)', segment: 'Hatchback', planType: '100%', price: 36315000, cuotaPura: 432321, condition: '84 cuotas • 100% financiado • El más buscado en reventa usada' },
@@ -1598,16 +1605,30 @@
             { id: 'pdl_c12', brand: 'Nissan', model: 'Versa Sense CVT', segment: 'Sedán', planType: '70/30', price: 41800000, cuotaPura: 348333, condition: '84 cuotas • Menor potencia (118 CV vs 171 CV de Corolla)' },
             // FURGÓN
             { id: 'pdl_t9', brand: 'Toyota', model: 'Hiace Furgón L2H2', segment: 'Furgón', planType: '100%', price: 72077000, cuotaPura: 858060, condition: '84 cuotas • Mecánica Hilux 2.8 TD + Caja Automática 6 vel. de serie' },
-            { id: 'pdl_c13', brand: 'Renault', model: 'Master L1H1', segment: 'Furgón', planType: '70/30', price: 66500000, cuotaPura: 554167, condition: '84 cuotas • Caja manual vs Automática de Hiace • Mayor desgaste embrague' },
-            { id: 'pdl_c14', brand: 'Peugeot', model: 'Boxer Confort', segment: 'Furgón', planType: '70/30', price: 68200000, cuotaPura: 568333, condition: '84 cuotas • Mayor costo de repuestos y menor disponibilidad' }
+            { id: 'pdl_c13', brand: 'Ford', model: 'Transit Van Mediana 2.0 TD', segment: 'Furgón', planType: '70/30', price: 74890000, cuotaPura: 624083, condition: '84 cuotas • $2,8M más cara que Hiace • Caja manual vs Automática de Hiace' },
+            { id: 'pdl_c14', brand: 'Renault', model: 'Master L1H1', segment: 'Furgón', planType: '70/30', price: 66500000, cuotaPura: 554167, condition: '84 cuotas • Caja manual vs Automática de Hiace • Mayor desgaste embrague' },
+            { id: 'pdl_c15', brand: 'Peugeot', model: 'Boxer Confort', segment: 'Furgón', planType: '70/30', price: 68200000, cuotaPura: 568333, condition: '84 cuotas • Mayor costo de repuestos y menor disponibilidad' }
         ];
         let pdlCatalog = [...DEFAULT_PDL_CATALOG];
         let pdlLastMonthSync = localStorage.getItem('crm_pdl_last_month') || '2026-11';
         let latestAiBattleSpeech = '';
 
+        function ensureDefaultPlansInCatalog() {
+            const existingIds = new Set(pdlCatalog.map(p => p.id));
+            let merged = false;
+            DEFAULT_PDL_CATALOG.forEach(defItem => {
+                if (!existingIds.has(defItem.id)) {
+                    pdlCatalog.push({ ...defItem });
+                    merged = true;
+                }
+            });
+            return merged;
+        }
+
         function getCurrentYearMonthKey() {
             const d = new Date();
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            return `${d.getFullYear()}-${m}`;
         }
 
         function getFormattedCurrentMonthYear() {
@@ -1811,9 +1832,74 @@ ${virtues.slice(0, 4).map(v => `• *${v.title}:* ${v.desc}`).join('\n')}
             return virtues;
         }
 
+        function generateToyotaAiSalesHooks(toyotaPlan, rivalPlan) {
+            const tCuota = toyotaPlan.cuotaPura || computeCuotaPuraFromPlan(toyotaPlan.price, toyotaPlan.planType);
+            const rCuota = rivalPlan.cuotaPura || computeCuotaPuraFromPlan(rivalPlan.price, rivalPlan.planType);
+            const priceDiff = rivalPlan.price - toyotaPlan.price;
+            const cuotaDiff = rCuota - tCuota;
+            const hooks = [];
+
+            if (priceDiff > 0) {
+                hooks.push({
+                    badge: 'PRECIO GANADOR',
+                    title: `Atacá directo por precio: Toyota es $${priceDiff.toLocaleString('es-AR')} más barato`,
+                    script: `"Fijate que hoy ${rivalPlan.brand} ${rivalPlan.model} está en $${rivalPlan.price.toLocaleString('es-AR')} y Toyota ${toyotaPlan.model} en $${toyotaPlan.price.toLocaleString('es-AR')}. Entrás a una marca superior poniendo menos capital."`
+                });
+            } else {
+                hooks.push({
+                    badge: 'CAPITALIZACIÓN',
+                    title: `Neutralizá la diferencia de precio con el Valor de Reventa Toyota`,
+                    script: `"La diferencia inicial se recupera sola al primer año: un Toyota usado vale entre 15% y 20% más que ${rivalPlan.brand} y se vende en días, no en meses."`
+                });
+            }
+
+            if (cuotaDiff > 0) {
+                hooks.push({
+                    badge: 'CUOTA MENSUAL',
+                    title: `Cierre por bolsillo: ahorra $${cuotaDiff.toLocaleString('es-AR')} por mes en cuota pura`,
+                    script: `"Pagando $${tCuota.toLocaleString('es-AR')} de cuota pura te capitalizás en Toyota en lugar de pagar $${rCuota.toLocaleString('es-AR')} en ${rivalPlan.brand}."`
+                });
+            } else if (toyotaPlan.planType === '100%' && rivalPlan.planType !== '100%') {
+                hooks.push({
+                    badge: 'SIN INTEGRACIÓN 30%',
+                    title: `Cierre financiero: Plan 100% sin tener que juntar el 30% al adjudicar`,
+                    script: `"En ${rivalPlan.brand} (${rivalPlan.planType}) cuando ganás la licitación tenés que poner el ${rivalPlan.planType.split('/')[1]}% de contado en el momento. Con Toyota 100% retirás sin descapitalizarte."`
+                });
+            }
+
+            if (/transit|sprinter|master|boxer|kangoo|partner/i.test(rivalPlan.model)) {
+                hooks.push({
+                    badge: 'HERRAMIENTA DE TRABAJO',
+                    title: 'Cierre para flotas/reparto: Caja Automática + Mecánica Hilux (Cero vehículo parado)',
+                    script: `"Para trabajar, un día el furgón parado en el taller es plata perdida. Hiace trae exactamente el motor 2.8 y la caja automática de Hilux: no quemàs embrague en ciudad y tenés repuestos en cualquier punto del país."`
+                });
+            } else if (/amarok|ranger|frontier|toro/i.test(rivalPlan.model)) {
+                hooks.push({
+                    badge: 'CONFIABILIDAD DIÉSEL',
+                    title: 'Cierre por durabilidad: Motor cadenero sin correa ni fallas de inyección',
+                    script: `"Quien compra pick-up la compra para trabajar o viajar tranquilo. Hilux tiene cadena de distribución y 5 años de garantía transferible; por eso es el cheque al portador del campo y la ciudad."`
+                });
+            } else if (/2008|208|tracker|onix|polo/i.test(rivalPlan.model)) {
+                hooks.push({
+                    badge: 'MECÁNICA SEGURA',
+                    title: 'Cierre técnico: Sin correa bañada en aceite ni cajas manuales básicas',
+                    script: `"A diferencia de los motores turbo con correa húmeda de la competencia que requieren cuidados críticos, Toyota te da mecánica cadenera japonesa y 7 airbags desde el inicio."`
+                });
+            } else {
+                hooks.push({
+                    badge: 'GARANTÍA & POSVENTA',
+                    title: 'Cierre por tranquilidad: 5 años / 150.000 km + Posventa #1 del país',
+                    script: `"Con Toyota tenés costos de service transparentes, disponibilidad total de repuestos y la garantía oficial más larga del mercado."`
+                });
+            }
+
+            return hooks;
+        }
+
         window.renderBattleComparison = function() {
             const cardsBox = document.getElementById('comp-battle-cards');
             const aiBox = document.getElementById('comp-ai-virtues-box');
+            const hooksBox = document.getElementById('comp-ai-sales-hooks-box');
             if (!cardsBox || !aiBox) return;
 
             const tId = document.getElementById('comp-toyota-select')?.value;
@@ -1824,6 +1910,7 @@ ${virtues.slice(0, 4).map(v => `• *${v.title}:* ${v.desc}`).join('\n')}
             if (!toyotaPlan || !rivalPlan) {
                 cardsBox.innerHTML = `<div class="col-span-full p-6 text-center text-slate-400 text-sm">Selecciona ambos planes arriba para ver la comparativa.</div>`;
                 aiBox.innerHTML = '';
+                if (hooksBox) hooksBox.innerHTML = '';
                 return;
             }
 
@@ -1871,6 +1958,30 @@ ${virtues.slice(0, 4).map(v => `• *${v.title}:* ${v.desc}`).join('\n')}
             `;
 
             const virtues = generateToyotaAiVirtues(toyotaPlan, rivalPlan);
+            const closingAngles = [];
+            if (rivalPlan.price > toyotaPlan.price) {
+                closingAngles.push({
+                    hook: `Gancho por Precio Final ($${(rivalPlan.price - toyotaPlan.price).toLocaleString('es-AR')} menos)`,
+                    pitch: `"Con Toyota arrancás sobre un valor móvil más bajo que ${rivalPlan.brand} ${rivalPlan.model}, pagando menos de gastos administrativos y seguro desde la cuota 1."`
+                });
+            }
+            if (rCuota > tCuota) {
+                closingAngles.push({
+                    hook: `Gancho por Cuota Pura Mensual ($${(rCuota - tCuota).toLocaleString('es-AR')}/mes de ahorro)`,
+                    pitch: `"En ${rivalPlan.brand} (${rivalPlan.planType}) la cuota pura te queda en $${rCuota.toLocaleString('es-AR')}, mientras que en Toyota (${toyotaPlan.planType}) pagás $${tCuota.toLocaleString('es-AR')} por mes."`
+                });
+            }
+            if (toyotaPlan.planType === '100%' && rivalPlan.planType !== '100%') {
+                closingAngles.push({
+                    hook: 'Gancho Sin Integración al Retirar (Plan 100%)',
+                    pitch: `"En ${rivalPlan.brand} (${rivalPlan.planType}) al licitar tenés que poner de tu bolsillo el ${rivalPlan.planType.split('/')[1]}% del valor del vehículo; en Toyota 100% no integrás nada."`
+                });
+            }
+            closingAngles.push({
+                hook: 'Cierre por Capitalización y Reventa Real',
+                pitch: `"Un plan de ahorro es un ahorro en ladrillos sobre ruedas: Toyota es la única marca donde al retirar o vender el usado recuperás el mayor porcentaje del mercado."`
+            });
+
             aiBox.innerHTML = `
                 <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                     <div class="flex items-center gap-2">
@@ -1879,7 +1990,7 @@ ${virtues.slice(0, 4).map(v => `• *${v.title}:* ${v.desc}`).join('\n')}
                     </div>
                     <span class="text-[11px] font-semibold text-slate-500">Segmento ${toyotaPlan.segment}</span>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
                     ${virtues.map(v => `
                         <div class="p-3 rounded-xl bg-white border border-red-100 shadow-sm">
                             <div class="text-xs sm:text-sm font-bold text-red-800 flex items-center gap-1.5">
@@ -1889,6 +2000,19 @@ ${virtues.slice(0, 4).map(v => `• *${v.title}:* ${v.desc}`).join('\n')}
                             <p class="text-xs text-slate-600 mt-1">${v.desc}</p>
                         </div>
                     `).join('')}
+                </div>
+                <div class="p-3.5 rounded-xl bg-amber-50/90 border border-amber-200">
+                    <div class="text-xs font-bold text-amber-950 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                        <span>🎯 Puntos Clave IA para Sacar la Venta (Argumentos de Cierre)</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                        ${closingAngles.map(a => `
+                            <div class="p-2.5 rounded-lg bg-white border border-amber-200/80 text-xs">
+                                <div class="font-bold text-amber-900">${a.hook}</div>
+                                <div class="text-slate-600 italic mt-0.5">${a.pitch}</div>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             `;
         };
@@ -2649,7 +2773,10 @@ ${virtues.slice(0, 4).map(v => `• *${v.title}:* ${v.desc}`).join('\n')}
             if (Array.isArray(data.convencionalSellers)) convencionalSellers = data.convencionalSellers;
             if (Array.isArray(data.predefinedModels)) predefinedModels = data.predefinedModels;
             if (data.waTemplates && typeof data.waTemplates === 'object') waTemplates = { ...waTemplates, ...data.waTemplates };
-            if (Array.isArray(data.pdlCatalog) && data.pdlCatalog.length > 0) pdlCatalog = data.pdlCatalog;
+            if (Array.isArray(data.pdlCatalog) && data.pdlCatalog.length > 0) {
+                pdlCatalog = data.pdlCatalog;
+                ensureDefaultPlansInCatalog();
+            }
             if (data.goals) goals = data.goals;
 
             if (Array.isArray(data.plansHistory)) {
@@ -2798,6 +2925,7 @@ ${virtues.slice(0, 4).map(v => `• *${v.title}:* ${v.desc}`).join('\n')}
                 if (savedTemplates) waTemplates = { ...waTemplates, ...JSON.parse(savedTemplates) };
                 const savedPdl = localStorage.getItem('crm_pdl_catalog');
                 if (savedPdl) pdlCatalog = JSON.parse(savedPdl);
+                ensureDefaultPlansInCatalog();
                 const savedGoals = localStorage.getItem('crm_goals');
                 if (savedGoals) goals = JSON.parse(savedGoals);
             } catch (e) {
