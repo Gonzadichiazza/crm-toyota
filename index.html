@@ -6,19 +6,19 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CRM Tracker">
-    <meta name="theme-color" content="#2563eb">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232563eb'/><text x='50' y='68' font-size='56' font-family='Arial, sans-serif' font-weight='bold' fill='white' text-anchor='middle'>C</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232563eb'/><text x='50' y='68' font-size='56' font-family='Arial, sans-serif' font-weight='bold' fill='white' text-anchor='middle'>C</text></svg>">
-    <title>CRM & KPI Tracker</title>
+    <meta name="apple-mobile-web-app-title" content="Crm Ginza Toyota">
+    <meta name="theme-color" content="#EB0A1E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23EB0A1E'/><ellipse cx='50' cy='50' rx='36' ry='23' fill='none' stroke='white' stroke-width='6'/><ellipse cx='50' cy='50' rx='12' ry='23' fill='none' stroke='white' stroke-width='5'/><ellipse cx='50' cy='38' rx='24' ry='10' fill='none' stroke='white' stroke-width='5'/></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23EB0A1E'/><ellipse cx='50' cy='50' rx='36' ry='23' fill='none' stroke='white' stroke-width='6'/><ellipse cx='50' cy='50' rx='12' ry='23' fill='none' stroke='white' stroke-width='5'/><ellipse cx='50' cy='38' rx='24' ry='10' fill='none' stroke='white' stroke-width='5'/></svg>">
+    <title>Crm Ginza Toyota — Gestión Comercial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .tab-active { border-bottom: 2px solid #2563eb; color: #2563eb; font-weight: 600; }
-        .tab-inactive { color: #64748b; font-weight: 500; }
-        .tab-inactive:hover { color: #334155; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; background-color: #f3f4f6; }
+        .tab-active { border-bottom: 3px solid #EB0A1E; color: #EB0A1E; font-weight: 700; }
+        .tab-inactive { color: #64748b; font-weight: 600; }
+        .tab-inactive:hover { color: #0f172a; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         @keyframes slideUp {
@@ -26,88 +26,117 @@
             to { transform: translateY(0); opacity: 1; }
         }
         .toast-animate { animation: slideUp 0.3s ease-out forwards; }
+        .toyota-glass { background: linear-gradient(135deg, #0f172a 0%, #1e1b24 55%, #3b0710 100%); }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 pb-10">
+<body class="min-h-screen text-slate-800 pb-12">
 
-    <!-- Navbar & Tabs -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <!-- Navbar & Tabs con Identidad Ginza Toyota -->
+    <nav class="bg-white/95 backdrop-blur-md border-b border-slate-200/90 sticky top-0 z-30 shadow-sm">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-14 sm:h-16 gap-2">
-                <div class="flex items-center gap-2 min-w-0">
-                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shrink-0">C</div>
-                    <span class="font-bold text-lg sm:text-xl tracking-tight text-slate-900 truncate">CRM Tracker</span>
-                    <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-700 rounded-full shrink-0">LIVE</span>
+            <div class="flex justify-between items-center h-16 sm:h-[70px] gap-2">
+                <div class="flex items-center gap-3 min-w-0">
+                    <!-- Emblema Oficial Toyota SVG -->
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#EB0A1E] to-[#99000d] flex items-center justify-center shadow-md shadow-red-600/20 shrink-0 ring-2 ring-red-100">
+                        <svg class="w-8 h-6 text-white" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="60" cy="40" rx="50" ry="32" stroke="currentColor" stroke-width="6.5"/>
+                            <ellipse cx="60" cy="40" rx="16" ry="32" stroke="currentColor" stroke-width="6"/>
+                            <ellipse cx="60" cy="24" rx="33" ry="13.5" stroke="currentColor" stroke-width="6"/>
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="font-extrabold text-base sm:text-xl tracking-tight text-slate-900 truncate">Crm Ginza Toyota</span>
+                            <span class="px-2 py-0.5 text-[10px] font-extrabold bg-red-50 text-[#EB0A1E] border border-red-200 rounded-full shrink-0 tracking-wide">PLAN DE AHORRO</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 hidden sm:block font-medium">Concesionario Oficial Toyota • Gestión Comercial & Comparativa IA</p>
+                    </div>
                 </div>
                 <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
                     <span id="cloud-status" class="px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-amber-100 text-amber-700 flex items-center gap-1.5">
                         <span id="cloud-dot" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
                         <span id="cloud-text">Conectando...</span>
                     </span>
-                    <button onclick="openWaTemplatesModal()" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition-colors flex items-center gap-1" title="Configurar Mensajes Predeterminados por Canal">
+                    <button onclick="openWaTemplatesModal()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm flex items-center gap-1.5" title="Configurar Mensajes Predeterminados por Canal">
                         <span>💬 Mensajes WA</span>
                     </button>
-                    <button onclick="openWaBridgeModal()" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors flex items-center gap-1" title="Conectar Celular WhatsApp Auto-Respuesta">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <button onclick="openWaBridgeModal()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition-all shadow-sm flex items-center gap-1.5" title="Conectar Celular WhatsApp Auto-Respuesta">
+                        <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
                         <span>Auto-WA Móvil</span>
                     </button>
-                    <button onclick="openBackupModal()" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors flex items-center gap-1" title="Respaldo y Sala">
+                    <button onclick="openBackupModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors flex items-center gap-1" title="Respaldo y Sala">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-                        <span class="hidden sm:inline">Respaldo</span>
+                        <span class="hidden md:inline">Respaldo</span>
                     </button>
                 </div>
             </div>
             <!-- Tabs -->
-            <div class="flex space-x-5 sm:space-x-7 mt-1 overflow-x-auto no-scrollbar text-sm">
-                <button id="tab-btn-botonera" class="tab-active pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('botonera')">Resumen KPIs</button>
-                <button id="tab-btn-contactos" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('contactos')">Base de Datos / Contactos</button>
-                <button id="tab-btn-clientes" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5" onclick="switchTab('clientes')">
-                    <span>Clientes</span>
-                    <span id="nav-clientes-badge" class="px-1.5 py-0.2 text-[10px] font-bold bg-emerald-100 text-emerald-700 rounded-full">0</span>
+            <div class="flex space-x-5 sm:space-x-7 mt-1 overflow-x-auto no-scrollbar text-xs sm:text-sm">
+                <button id="tab-btn-botonera" class="tab-active pb-3 px-1 transition-colors whitespace-nowrap" onclick="switchTab('botonera')">🏠 Panel Principal</button>
+                <button id="tab-btn-contactos" class="tab-inactive pb-3 px-1 transition-colors whitespace-nowrap" onclick="switchTab('contactos')">📋 Base de Datos / Contactos</button>
+                <button id="tab-btn-clientes" class="tab-inactive pb-3 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5" onclick="switchTab('clientes')">
+                    <span>🤝 Clientes</span>
+                    <span id="nav-clientes-badge" class="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-700 rounded-full">0</span>
                 </button>
-                <button id="tab-btn-objetivos" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('objetivos')">Objetivos</button>
-                <button id="tab-btn-planes" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('planes')">Planes</button>
-                <button id="tab-btn-comparativa" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5" onclick="switchTab('comparativa')">
+                <button id="tab-btn-objetivos" class="tab-inactive pb-3 px-1 transition-colors whitespace-nowrap" onclick="switchTab('objetivos')">🎯 Objetivos & IA</button>
+                <button id="tab-btn-planes" class="tab-inactive pb-3 px-1 transition-colors whitespace-nowrap" onclick="switchTab('planes')">📄 Planes PDF</button>
+                <button id="tab-btn-comparativa" class="tab-inactive pb-3 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5" onclick="switchTab('comparativa')">
                     <span>⚖️ Comparativa de Planes</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- DASHBOARD DE ESTADÍSTICAS -->
+    <!-- BARRA SUPERIOR DE KPIs + RASTREO WHATSAPP 48HS -->
     <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <button onclick="filterByStatus('Todos')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-400 transition-all text-left">
-                <span class="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase">Total Contactos</span>
-                <div class="text-xl sm:text-2xl font-bold text-slate-900 mt-1" id="stat-total">0</div>
+            <button onclick="filterByStatus('Todos')" class="group bg-white p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-400 transition-all text-left relative overflow-hidden">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Base</span>
+                    <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center text-sm font-bold group-hover:bg-slate-900 group-hover:text-white transition-colors">👥</span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1.5" id="stat-total">0</div>
+                <div class="text-[11px] text-slate-400 mt-0.5 font-medium">Todos los canales activos</div>
             </button>
-            <button onclick="filterByStatus('Interesados')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-400 transition-all text-left">
-                <span class="text-[11px] sm:text-xs font-semibold text-emerald-600 uppercase">Interesados</span>
-                <div class="text-xl sm:text-2xl font-bold text-emerald-700 mt-1" id="stat-interesados">0</div>
+            <button onclick="filterByStatus('Interesados')" class="group bg-white p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-emerald-400 transition-all text-left relative overflow-hidden">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Interesados</span>
+                    <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-bold group-hover:bg-emerald-600 group-hover:text-white transition-colors">🔥</span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1.5" id="stat-interesados">0</div>
+                <div class="text-[11px] text-emerald-600/80 mt-0.5 font-medium">En cartera + A futuro</div>
             </button>
-            <button onclick="filterByStatus('Entrevistas')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm hover:border-purple-400 transition-all text-left">
-                <span class="text-[11px] sm:text-xs font-semibold text-purple-600 uppercase">Entrevistas</span>
-                <div class="text-xl sm:text-2xl font-bold text-purple-700 mt-1" id="stat-entrevistas">0</div>
+            <button onclick="filterByStatus('Entrevistas')" class="group bg-white p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-purple-400 transition-all text-left relative overflow-hidden">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-purple-700 uppercase tracking-wider">Entrevistas</span>
+                    <span class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-sm font-bold group-hover:bg-purple-600 group-hover:text-white transition-colors">📅</span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-purple-700 mt-1.5" id="stat-entrevistas">0</div>
+                <div class="text-[11px] text-purple-600/80 mt-0.5 font-medium">Reuniones / Salón</div>
             </button>
-            <button onclick="filterByStatus('Ventas')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm hover:border-amber-400 transition-all text-left">
-                <span class="text-[11px] sm:text-xs font-semibold text-amber-600 uppercase">Ventas</span>
-                <div class="text-xl sm:text-2xl font-bold text-amber-700 mt-1" id="stat-ventas">0</div>
+            <button onclick="filterByStatus('Ventas')" class="group bg-gradient-to-br from-white to-red-50/40 p-4 rounded-2xl border border-red-200 shadow-sm hover:shadow-md hover:border-[#EB0A1E] transition-all text-left relative overflow-hidden">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-[#EB0A1E] uppercase tracking-wider">Suscripciones / Ventas</span>
+                    <span class="w-8 h-8 rounded-xl bg-red-50 text-[#EB0A1E] flex items-center justify-center text-sm font-bold group-hover:bg-[#EB0A1E] group-hover:text-white transition-colors">🏆</span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1.5" id="stat-ventas">0</div>
+                <div class="text-[11px] text-[#EB0A1E] mt-0.5 font-semibold">Operaciones cerradas</div>
             </button>
         </div>
 
         <!-- Barra de Seguimiento Automático WhatsApp 48hs -->
-        <div id="wa-tracker-banner" class="mt-3 bg-white border border-emerald-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div id="wa-tracker-banner" class="mt-3 bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="font-bold text-slate-800">Rastreo Inteligente WhatsApp (48 hs):</span>
+                <span class="font-bold text-slate-800">Rastreo WhatsApp (48 hs):</span>
                 <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera aparte • Auto-pasa a "No Compra" con fecha a las 48h.</span>
             </div>
             <div class="flex items-center gap-1.5 flex-wrap">
                 <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-semibold transition-colors" title="Enfocar o abrir la única pestaña de WhatsApp Web">
                     🟢 Pestaña WA Web
                 </button>
-                <button onclick="openWaTemplatesModal()" class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 font-semibold transition-colors">
-                    💬 Mensajes Predeterminados
+                <button onclick="openWaTemplatesModal()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 font-semibold transition-colors">
+                    💬 Plantillas WA
                 </button>
                 <button onclick="openWaBridgeModal()" class="px-2.5 py-1 rounded-lg bg-slate-900 text-white hover:bg-slate-800 font-semibold transition-colors">
                     📲 Vincular Celular
@@ -119,26 +148,93 @@
         </div>
     </section>
 
-    <!-- TAB 1: RESUMEN KPIS -->
-    <main id="tab-botonera" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-                <div>
-                    <h2 class="text-base sm:text-lg font-bold text-slate-800">Panel Automático de KPIs e Ingresos</h2>
-                    <p class="text-xs text-slate-500">Se calcula automáticamente con todos los registros sincronizados.</p>
+    <!-- TAB 1: PANEL PRINCIPAL GINZA TOYOTA (DISEÑO EJECUTIVO RENOVADO) -->
+    <main id="tab-botonera" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-6">
+        <!-- Hero Banner Ginza Toyota -->
+        <div class="toyota-glass rounded-3xl p-5 sm:p-7 text-white shadow-lg relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+                <svg class="w-64 h-44 text-white" viewBox="0 0 120 80" fill="none">
+                    <ellipse cx="60" cy="40" rx="50" ry="32" stroke="currentColor" stroke-width="6"/>
+                    <ellipse cx="60" cy="40" rx="16" ry="32" stroke="currentColor" stroke-width="5.5"/>
+                    <ellipse cx="60" cy="24" rx="33" ry="13.5" stroke="currentColor" stroke-width="5.5"/>
+                </svg>
+            </div>
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-red-200 mb-3">
+                        <span class="w-2 h-2 rounded-full bg-[#EB0A1E]"></span>
+                        <span id="home-date-label">Centro de Comando Comercial • Ginza Toyota</span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
+                        Gestión Comercial & Plan de Ahorro Toyota
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
+                        Controla tu prospección diaria, responde clientes en una sola ventana de WhatsApp Web y cierra operaciones comparando ventajas de Toyota con IA.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2.5">
+                        <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-red-600 text-white text-xs sm:text-sm font-bold shadow-md shadow-red-950/40 transition-all">
+                            📋 Ir a Prospección
+                        </button>
+                        <button onclick="switchTab('comparativa')" class="px-4 py-2.5 rounded-xl bg-white text-slate-900 hover:bg-slate-100 text-xs sm:text-sm font-bold shadow-sm transition-all">
+                            ⚖️ Comparar Planes con IA
+                        </button>
+                        <button onclick="switchTab('clientes')" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs sm:text-sm font-semibold transition-all">
+                            🤝 Ver Cartera Clientes
+                        </button>
+                    </div>
                 </div>
-                <div class="w-full sm:w-64">
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Localidad Actual (Código de área)</label>
-                    <input type="text" id="input-localidad" placeholder="Ej: Rosario, Córdoba, CABA..." class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+
+                <!-- Selector Rápido de Localidad -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 w-full lg:w-72 shrink-0">
+                    <label class="block text-[11px] font-bold text-slate-200 uppercase tracking-wider mb-1.5">Localidad Activa (Prefijo Tel.)</label>
+                    <input type="text" id="input-localidad" placeholder="Ej: Rosario, Córdoba, CABA..." class="w-full px-3.5 py-2 text-sm bg-white text-slate-900 rounded-xl border border-white/30 focus:ring-2 focus:ring-[#EB0A1E] outline-none font-medium">
+                    <p class="text-[11px] text-slate-300 mt-2">Formatea automáticamente los números nuevos a <b>+549...</b> según tu zona.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid Principal: Actividad + Embudo de Efectividad + Canales -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <!-- Columna 1: Actividad por Medio & Embudo -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200/90 p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Actividad de Contacto</h3>
+                        <span class="text-[11px] font-semibold text-slate-400">En vivo</span>
+                    </div>
+                    <div id="kpi-metrics-grid" class="grid grid-cols-2 gap-3 mb-5"></div>
+
+                    <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-3 pt-3 border-t border-slate-100">Efectividad del Embudo</h4>
+                    <div id="home-funnel-bars" class="space-y-3"></div>
+                </div>
+                <div class="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                    <span class="text-slate-500 font-medium">Calibración semanal IA</span>
+                    <button onclick="switchTab('objetivos')" class="text-[#EB0A1E] font-bold hover:underline">Ver Objetivos →</button>
                 </div>
             </div>
 
-            <div class="mt-5">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Actividad por Medio de Contacto</h3>
-                <div id="kpi-metrics-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6"></div>
+            <!-- Columna 2: Rendimiento por Canal / Base de Datos -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200/90 p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Pendientes por Canal</h3>
+                    <button onclick="switchTab('contactos')" class="text-xs font-bold text-[#EB0A1E] hover:underline">Abrir Bases →</button>
+                </div>
+                <div id="source-metrics-grid" class="space-y-2.5"></div>
+            </div>
 
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Ingresos por Canal / Ventana</h3>
-                <div id="source-metrics-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"></div>
+            <!-- Columna 3: Radar Operativo (Esperando 48h & Clientes Calientes) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200/90 p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Radar de Seguimiento</h3>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-700 border border-teal-200">Prioridad</span>
+                    </div>
+                    <div id="home-radar-list" class="space-y-2.5"></div>
+                </div>
+                <div class="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                    <span class="text-slate-500 font-medium">Gestión de cierres</span>
+                    <button onclick="switchTab('clientes')" class="text-emerald-700 font-bold hover:underline">Ir a Clientes →</button>
+                </div>
             </div>
         </div>
     </main>
@@ -3122,50 +3218,98 @@ ${virtues.slice(0, 4).map(v => `• *${v.title}:* ${v.desc}`).join('\n')}
         window.renderBotonera = function() {
             const kpiGrid = document.getElementById('kpi-metrics-grid');
             const sourceGrid = document.getElementById('source-metrics-grid');
+            const funnelBars = document.getElementById('home-funnel-bars');
+            const radarList = document.getElementById('home-radar-list');
+            const dateLabel = document.getElementById('home-date-label');
             if (!kpiGrid || !sourceGrid) return;
+
+            if (dateLabel) {
+                const now = new Date();
+                dateLabel.textContent = `Ginza Toyota • ${now.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })}`;
+            }
 
             const allContacts = [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts, ...canceladosContacts, ...rescindidosContacts];
             kpiGrid.innerHTML = '';
             kpis.forEach(kpi => {
                 const count = allContacts.filter(c => (c.method || '').toLowerCase() === kpi.name.toLowerCase()).length;
+                const isCall = kpi.name.toLowerCase().includes('llamada');
                 const card = document.createElement('div');
-                card.className = 'p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between';
+                card.className = `p-3.5 rounded-2xl border ${isCall ? 'bg-indigo-50/60 border-indigo-200' : 'bg-emerald-50/60 border-emerald-200'} flex items-center justify-between`;
                 card.innerHTML = `
                     <div>
-                        <span class="text-xs font-bold text-slate-500 uppercase">${kpi.name}</span>
-                        <div class="text-2xl font-bold text-slate-800 mt-0.5">${count}</div>
+                        <span class="text-[11px] font-bold ${isCall ? 'text-indigo-700' : 'text-emerald-700'} uppercase">${kpi.name}s</span>
+                        <div class="text-2xl font-extrabold text-slate-900 mt-0.5">${count}</div>
                     </div>
-                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
-                        ${kpi.name.charAt(0).toUpperCase()}
+                    <div class="w-9 h-9 rounded-xl ${isCall ? 'bg-indigo-600 text-white' : 'bg-emerald-600 text-white'} flex items-center justify-center text-sm shadow-sm">
+                        ${isCall ? '📞' : '💬'}
                     </div>
                 `;
                 kpiGrid.appendChild(card);
             });
 
+            if (funnelBars) {
+                const total = Math.max(1, allContacts.length);
+                const contacted = allContacts.filter(c => c.status !== 'Pendiente' && c.status !== 'Registrado').length;
+                const interested = allContacts.filter(c => c.status === 'Interesado' || c.status === 'Interesado a Futuro').length;
+                const interviews = allContacts.filter(c => c.status === 'Entrevista').length;
+                const sales = allContacts.filter(c => c.status === 'Venta').length;
+
+                const steps = [
+                    { label: 'Contactados', val: contacted, pct: Math.round((contacted / total) * 100), bar: 'bg-slate-800' },
+                    { label: 'Interesados', val: interested, pct: Math.round((interested / total) * 100), bar: 'bg-emerald-500' },
+                    { label: 'Entrevistas', val: interviews, pct: Math.round((interviews / total) * 100), bar: 'bg-purple-500' },
+                    { label: 'Ventas', val: sales, pct: Math.round((sales / total) * 100), bar: 'bg-[#EB0A1E]' }
+                ];
+                funnelBars.innerHTML = steps.map(st => `
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="text-slate-700">${st.label}</span>
+                            <span class="text-slate-900 font-bold">${st.val} <span class="text-slate-400 font-normal">(${st.pct}%)</span></span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="${st.bar} h-2 rounded-full transition-all duration-500" style="width: ${Math.min(100, st.pct)}%"></div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
             const sources = [
-                { label: 'No Compra', count: crmContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-slate-100 text-slate-700', sub: 'crm' },
-                { label: 'Gestión Personal', count: gestionContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-indigo-100 text-indigo-700', sub: 'gestion' },
-                { label: 'Redes Sociales', count: redesContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-pink-100 text-pink-700', sub: 'redes' },
-                { label: 'Salesforce', count: salesforceContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-sky-100 text-sky-700', sub: 'salesforce' },
-                { label: 'Convencional', count: convencionalContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-emerald-100 text-emerald-700', sub: 'convencional' },
-                { label: 'Cancelados', count: canceladosContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-orange-100 text-orange-700', sub: 'cancelados' },
-                { label: 'Rescindidos', count: rescindidosContacts.filter(c => !isClientStatus(c.status)).length, color: 'bg-purple-100 text-purple-700', sub: 'rescindidos' }
+                { label: '1. No Compra', count: crmContacts.filter(c => !isClientStatus(c.status)).length, dot: 'bg-slate-600', badge: 'bg-slate-100 text-slate-700', sub: 'crm' },
+                { label: '2. Gestión Personal', count: gestionContacts.filter(c => !isClientStatus(c.status)).length, dot: 'bg-indigo-600', badge: 'bg-indigo-50 text-indigo-700', sub: 'gestion' },
+                { label: '3. Redes Sociales', count: redesContacts.filter(c => !isClientStatus(c.status)).length, dot: 'bg-pink-600', badge: 'bg-pink-50 text-pink-700', sub: 'redes' },
+                { label: '4. Salesforce Leads', count: salesforceContacts.filter(c => !isClientStatus(c.status)).length, dot: 'bg-sky-600', badge: 'bg-sky-50 text-sky-700', sub: 'salesforce' },
+                { label: '5. Convencional', count: convencionalContacts.filter(c => !isClientStatus(c.status)).length, dot: 'bg-emerald-600', badge: 'bg-emerald-50 text-emerald-700', sub: 'convencional' },
+                { label: '6. Cancelados', count: canceladosContacts.filter(c => !isClientStatus(c.status)).length, dot: 'bg-orange-600', badge: 'bg-orange-50 text-orange-700', sub: 'cancelados' },
+                { label: '7. Rescindidos', count: rescindidosContacts.filter(c => !isClientStatus(c.status)).length, dot: 'bg-purple-600', badge: 'bg-purple-50 text-purple-700', sub: 'rescindidos' }
             ];
 
             sourceGrid.innerHTML = '';
             sources.forEach(src => {
-                const card = document.createElement('button');
-                card.onclick = () => openContactosSection(src.sub);
-                card.className = 'p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-400 transition-all flex items-center justify-between text-left shadow-sm';
-                card.innerHTML = `
-                    <div>
-                        <span class="text-xs font-bold text-slate-500 uppercase">${src.label}</span>
-                        <div class="text-2xl font-bold text-slate-900 mt-0.5">${src.count}</div>
+                const row = document.createElement('button');
+                row.onclick = () => openContactosSection(src.sub);
+                row.className = 'w-full p-3 rounded-xl bg-slate-50/70 hover:bg-red-50/40 border border-slate-200/80 hover:border-[#EB0A1E]/40 transition-all flex items-center justify-between text-left group';
+                row.innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-2.5 h-2.5 rounded-full ${src.dot}"></span>
+                        <span class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#EB0A1E] transition-colors">${src.label}</span>
                     </div>
-                    <span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${src.color}">Ver</span>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold ${src.badge}">${src.count}</span>
+                        <span class="text-slate-400 group-hover:text-[#EB0A1E] text-xs font-bold">→</span>
+                    </div>
                 `;
-                sourceGrid.appendChild(card);
+                sourceGrid.appendChild(row);
             });
+
+            if (radarList) {
+                const waiting48 = allContacts.filter(c => c.status === 'Mensaje Enviado (48h)');
+                const hotClients = allContacts.filter(c => c.status === 'Entrevista' || c.status === 'Interesado').slice(0, 4);
+                const items = [];
+
+                    radarList.innerHTML = items.length > 0
+                    ? items.join('')
+                    : `<div class="p-6 text-center text-xs text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">Aún no hay seguimientos activos. Empieza contactando desde <b>Base de Datos</b>.</div>`;
+            }
         };
 
         // --- RASTREO WHATSAPP 48HS & PUENTE CON CELULAR ---
