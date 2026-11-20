@@ -51,30 +51,30 @@
                     </div>
                 </div>
 
-                <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                    <span id="cloud-status" class="px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
+                <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 overflow-x-auto no-scrollbar">
+                    <span id="cloud-status" class="px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5 shrink-0">
                         <span id="cloud-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                         <span id="cloud-text">Conectando...</span>
                     </span>
-                    <button onclick="openWaTemplatesModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-white border border-white/15 hover:bg-white/20 transition-colors flex items-center gap-1" title="Mensajes Predeterminados por Canal">
+                    <button onclick="openWaTemplatesModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-white border border-white/15 hover:bg-white/20 transition-colors flex items-center gap-1 shrink-0" title="Mensajes Predeterminados por Canal">
                         <span>💬 Mensajes</span>
                     </button>
-                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm" title="Asistente IA Autónomo de WhatsApp (Solo datos reales del CRM)">
+                    <button onclick="openPdfPriceChatbotModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 transition-colors flex items-center gap-1 shadow-sm shrink-0" title="Corregir precios leídos de los PDFs por chat">
+                        <span>🛠️ Corregir Precio PDF</span>
+                    </button>
+                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Autónomo de WhatsApp (Modo Discreto: solo responde lo que el cliente pregunta)">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
                         <span id="nav-wa-ai-label">🤖 WA IA ON</span>
                     </button>
-                    <button onclick="openPdfPriceChatbotModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 transition-colors flex items-center gap-1 shadow-sm" title="Corregir o entrenar precios leídos de los PDFs por chat">
-                        <span>🛠️ Corregir Precio PDF</span>
-                    </button>
-                    <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm" title="Abrir Ventana de Calendario e IA">
+                    <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
                         <span id="nav-agenda-badge" class="px-1.5 py-0.2 text-[10px] font-extrabold bg-white text-purple-800 rounded-full">0</span>
                     </button>
-                    <button onclick="openWaBridgeModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors flex items-center gap-1" title="Conectar Celular WhatsApp Auto-Respuesta">
+                    <button onclick="openWaBridgeModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors flex items-center gap-1 shrink-0" title="Conectar Celular WhatsApp Auto-Respuesta">
                         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                         <span class="hidden md:inline">Auto-WA Móvil</span>
                     </button>
-                    <button onclick="openBackupModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-zinc-200 hover:bg-white/20 transition-colors flex items-center gap-1" title="Respaldo y Sala">
+                    <button onclick="openBackupModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-zinc-200 hover:bg-white/20 transition-colors flex items-center gap-1 shrink-0" title="Respaldo y Sala">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
                         <span class="hidden sm:inline">Respaldo</span>
                     </button>
@@ -158,9 +158,6 @@
                 <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">
                     🟢 Pestaña WA Web
                 </button>
-                <button onclick="openWaTemplatesModal()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">
-                    💬 Plantillas
-                </button>
                 <button onclick="checkWhatsApp48hTimeouts(true)" class="px-2.5 py-1 rounded-lg bg-red-50 text-[#EB0A1E] hover:bg-red-100 border border-red-200 font-semibold transition-colors">
                     Verificar 48h
                 </button>
@@ -178,20 +175,20 @@
                         <span id="hero-date-label">Centro de Comando Comercial • Ginza Toyota</span>
                     </div>
                     <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
-                        Gestión Comercial & Seguimiento Autónomo <span class="text-[#EB0A1E]">Toyota Plan</span>
+                        Gestión Comercial & Asesoramiento IA <span class="text-[#EB0A1E]">Toyota Plan</span>
                     </h1>
                     <p class="text-xs sm:text-sm text-zinc-300 mt-2 leading-relaxed">
-                        Envía tu primer mensaje y deja que la IA realice un seguimiento natural sin insistencia, responda con tus precios reales del CRM y agende entrevistas automáticamente en tu calendario.
+                        Tu IA domina las Condiciones Generales (Plan Tradicional y Plan Flexible IGJ 183/24) y tus listas reales sin cuota extraordinaria, respondiendo únicamente lo que el cliente pregunta.
                     </p>
                     <div class="flex flex-wrap gap-2.5 mt-4">
                         <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">
                             📋 Ir a Prospección (7 Canales)
                         </button>
                         <button onclick="openAgendaWindow()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">
-                            📅 Ventana Calendario & IA (<span id="hero-agenda-count">0</span>)
+                            📅 Ventana Calendario (<span id="hero-agenda-count">0</span>)
                         </button>
                         <button onclick="switchTab('comparativa')" class="px-4 py-2.5 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-xs sm:text-sm font-bold shadow-md transition-all">
-                            ⚖️ Comparar Planes con IA
+                            ⚖️ Comparar Planes
                         </button>
                     </div>
                 </div>
@@ -253,7 +250,7 @@
         </div>
     </main>
 
-    <!-- TAB 2: BASE DE DATOS / CONTACTOS (7 CANALES) -->
+    <!-- TAB 2: BASE DE DATOS / CONTACTOS (7 CANALES + LISTAS SEPARADAS 48HS) -->
     <main id="tab-contactos" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
@@ -349,6 +346,8 @@
                     </table>
                 </div>
                 <div id="crm-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay datos pendientes de envío en No Compra.</div>
+                <div id="crm-waiting-sublist"></div>
+                <div id="crm-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 2: GESTIÓN PERSONAL -->
@@ -398,6 +397,8 @@
                     </table>
                 </div>
                 <div id="gestion-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay datos pendientes de envío en Gestión Personal.</div>
+                <div id="gestion-waiting-sublist"></div>
+                <div id="gestion-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 3: REDES SOCIALES -->
@@ -439,6 +440,8 @@
                     </table>
                 </div>
                 <div id="redes-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay contactos pendientes de envío desde Redes Sociales.</div>
+                <div id="redes-waiting-sublist"></div>
+                <div id="redes-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 4: SALESFORCE -->
@@ -499,6 +502,8 @@
                     </table>
                 </div>
                 <div id="salesforce-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay leads de Salesforce pendientes de envío.</div>
+                <div id="salesforce-waiting-sublist"></div>
+                <div id="salesforce-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 5: DATOS CONVENCIONAL -->
@@ -600,6 +605,8 @@
                         <div id="conv-received-empty" class="p-6 text-center text-slate-400 text-xs">Sin datos recibidos pendientes.</div>
                     </div>
                 </div>
+                <div id="convencional-waiting-sublist"></div>
+                <div id="convencional-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 6: CANCELADOS -->
@@ -645,6 +652,8 @@
                     </table>
                 </div>
                 <div id="cancelados-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay contactos pendientes en Cancelados.</div>
+                <div id="cancelados-waiting-sublist"></div>
+                <div id="cancelados-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 7: RESCINDIDOS -->
@@ -690,6 +699,8 @@
                     </table>
                 </div>
                 <div id="rescindidos-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay contactos pendientes en Rescindidos.</div>
+                <div id="rescindidos-waiting-sublist"></div>
+                <div id="rescindidos-nocompra48-sublist"></div>
             </section>
         </div>
     </main>
@@ -986,7 +997,7 @@
         </div>
     </main>
 
-    <!-- TAB 5: OBJETIVOS SEMANALES Y MENSUALES (COMPLETA CON PROYECCIÓN HÁBIL Y COACH IA) -->
+    <!-- TAB 5: OBJETIVOS SEMANALES Y MENSUALES (PROYECCIÓN HÁBIL LUN-VIE + COACH IA) -->
     <main id="tab-objetivos" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
         <div class="bg-gradient-to-r from-zinc-950 via-neutral-900 to-zinc-800 text-white rounded-2xl shadow-sm p-4 sm:p-5 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
@@ -1036,7 +1047,7 @@
         </div>
     </main>
 
-    <!-- TAB 6: PLANES & PDF (PERSISTENCIA INDEXEDDB + GRÁFICO MES A MES + COMPARTIR JPG POR WHATSAPP) -->
+    <!-- TAB 6: PLANES & PDF (PERSISTENCIA INDEXEDDB + 4 TRAMOS SIN EXTRAORDINARIA + GRÁFICO MES A MES) -->
     <main id="tab-planes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 flex flex-col justify-between">
@@ -1045,12 +1056,12 @@
                         <h2 class="text-base sm:text-lg font-bold text-slate-900">Subir PDFs de Planes</h2>
                         <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">💾 IndexedDB Persistente</span>
                     </div>
-                    <p class="text-xs text-slate-500 mb-4">Sube el PDF del mes actual y los PDFs de meses anteriores. Se guardan permanentemente en tu PC para comparar valores móviles de vehículos, descargar PDF/JPG o enviarlos por WhatsApp.</p>
+                    <p class="text-xs text-slate-500 mb-4">Detecta modalidad (<b>70/30</b> o <b>100%</b>) y los 4 tramos ordinarios (<b>Cuota 1</b>, <b>1–18</b>, <b>19–24</b>, <b>25–84</b>), tomando la <b>cuota ordinaria más alta</b> (sin la extraordinaria).</p>
                     <div class="space-y-3">
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-3 gap-2">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Mes del PDF</label>
-                                <select id="plan-month-input" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Mes</label>
+                                <select id="plan-month-input" class="w-full px-2.5 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none">
                                     <option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option>
                                     <option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option>
                                     <option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option>
@@ -1059,7 +1070,15 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Año</label>
-                                <input type="number" id="plan-year-input" value="2026" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                                <input type="number" id="plan-year-input" value="2026" class="w-full px-2.5 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Plan</label>
+                                <select id="plan-modality-input" class="w-full px-2.5 py-2 text-xs sm:text-sm font-bold border border-slate-300 rounded-xl bg-white outline-none">
+                                    <option value="Auto">Auto (PDF)</option>
+                                    <option value="70/30">70/30</option>
+                                    <option value="100%">100%</option>
+                                </select>
                             </div>
                         </div>
                         <label class="cursor-pointer w-full bg-[#EB0A1E] hover:bg-red-700 text-white px-4 py-3 rounded-xl font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2">
@@ -1069,7 +1088,7 @@
                     </div>
                 </div>
                 <div id="pdf-processing-status" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-[#EB0A1E] font-medium text-center">
-                    Procesando PDF, extrayendo valor móvil del vehículo y guardando JPGs...
+                    Procesando PDF, extrayendo tramos ordinarios (sin cuota extraordinaria) y guardando JPGs...
                 </div>
             </div>
 
@@ -1083,18 +1102,18 @@
                 </div>
                 <div id="pdf-jpg-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[380px] overflow-y-auto p-1">
                     <div class="col-span-full py-10 text-center text-slate-400 text-sm border-2 border-dashed border-slate-200 rounded-xl">
-                        Sube un archivo PDF a la izquierda para calcular su valor móvil y compartir sus hojas JPG por WhatsApp.
+                        Sube un archivo PDF a la izquierda para calcular sus tramos ordinarios y compartir sus hojas JPG por WhatsApp.
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- GRÁFICO COMPARATIVO MES A MES (SOLO VALORES MÓVILES DE VEHÍCULOS VIGENTES) -->
+        <!-- GRÁFICO COMPARATIVO MES A MES (VALORES MÓVILES Y CUOTA ORDINARIA MÁS ALTA) -->
         <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm space-y-5">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                 <div>
-                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900">📊 Evolución Mes a Mes — Valores Móviles & Cuota Máxima de Referencia</h3>
-                    <p class="text-xs text-slate-500">Toma automáticamente el <b>valor más alto</b> de cuota y valor móvil detectado en cada PDF cargado.</p>
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900">📊 Evolución Mes a Mes — Valores Móviles & Tramos Ordinarios (70/30 vs 100%)</h3>
+                    <p class="text-xs text-slate-500">Desglosa <b>Cuota 1</b>, <b>1 a 18</b>, <b>19 a 24</b> y <b>25 a 84</b> y toma la <b>cuota ordinaria más alta</b> (excluyendo la extraordinaria).</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button onclick="openPdfPriceChatbotModal()" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">🛠️ Corregir Precio PDF</button>
@@ -1112,12 +1131,12 @@
                 <table class="w-full text-left border-collapse min-w-[820px]">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-200 text-[11px] uppercase tracking-wider text-slate-500">
-                            <th class="p-3.5">Período Actual</th>
-                            <th class="p-3.5">Vehículo / Plan</th>
-                            <th class="p-3.5">Precio Final (Valor Móvil)</th>
-                            <th class="p-3.5">Diferencia Precio Final</th>
-                            <th class="p-3.5">Cuota Referencia (Más Alta)</th>
-                            <th class="p-3.5">Diferencia Cuota Máx.</th>
+                            <th class="p-3.5">Período</th>
+                            <th class="p-3.5">Vehículo & Modalidad</th>
+                            <th class="p-3.5">Valor Móvil</th>
+                            <th class="p-3.5">Tramos (1 • 1-18 • 19-24 • 25-84)</th>
+                            <th class="p-3.5">Cuota Ordinaria Más Alta</th>
+                            <th class="p-3.5">Dif. Mes Anterior</th>
                             <th class="p-3.5">Acciones</th>
                         </tr>
                     </thead>
@@ -1128,6 +1147,55 @@
         </div>
     </main>
 
+    <!-- MODAL VISOR DE ARCHIVOS GUARDADOS (PDF + HOJAS JPG PARA COMPARTIR POR WA) -->
+    <div id="plan-files-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[65] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 sticky top-0 bg-white z-10">
+                <div>
+                    <h3 id="plan-files-modal-title" class="text-base font-extrabold text-slate-900">Archivos Guardados del Plan</h3>
+                    <p class="text-xs text-slate-500">Descarga el PDF original o comparte cualquier hoja JPG directo por WhatsApp.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div id="plan-files-modal-actions" class="flex flex-wrap gap-2"></div>
+                    <button onclick="closePlanFilesModal()" class="text-slate-400 hover:text-slate-600 text-lg px-2">✕</button>
+                </div>
+            </div>
+            <div class="p-5">
+                <div id="plan-files-modal-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SELECTOR DE CLIENTE PARA ENVIAR JPG POR WHATSAPP -->
+    <div id="share-jpg-wa-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900">📲 Compartir JPG por WhatsApp</h3>
+                    <p id="share-jpg-wa-filename" class="text-xs text-slate-500 truncate max-w-[280px]"></p>
+                </div>
+                <button onclick="closeShareJpgWaModal()" class="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
+                    La imagen JPG se copiará automáticamente al portapapeles. Al abrirse el chat en WhatsApp Web, solo presiona <b>Ctrl + V</b> y Enviar.
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Buscar Cliente o Contacto del CRM</label>
+                    <input type="text" id="share-jpg-search" oninput="renderShareJpgContactsList()" placeholder="Escribe nombre o teléfono..." class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                </div>
+                <div id="share-jpg-contacts-list" class="max-h-48 overflow-y-auto border border-slate-200 rounded-xl divide-y divide-slate-100"></div>
+                <div class="pt-2 border-t border-slate-100">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">O ingresar número manual:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="share-jpg-manual-phone" placeholder="Ej: 3415551234" class="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                        <button onclick="executeShareJpgToPhone(document.getElementById('share-jpg-manual-phone').value, 'Cliente')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shrink-0">Enviar WA</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL CHATBOT CORRECTOR DE PRECIOS PDF -->
     <div id="pdf-price-chatbot-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[72] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden border border-slate-200">
@@ -1136,7 +1204,7 @@
                     <div class="w-10 h-10 rounded-2xl bg-amber-500 text-zinc-950 flex items-center justify-center text-xl font-extrabold shadow">🛠️</div>
                     <div>
                         <h3 class="text-base font-extrabold">Chatbot Corrector de Precios PDF</h3>
-                        <p class="text-xs text-amber-200">Avísame si algún PDF leyó mal el valor móvil o la cuota más alta y lo corrijo al instante.</p>
+                        <p class="text-xs text-amber-200">Avísame si algún PDF leyó mal el valor móvil o los tramos ordinarios (sin cuota extraordinaria).</p>
                     </div>
                 </div>
                 <button onclick="closePdfPriceChatbotModal()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">✕ Cerrar</button>
@@ -1151,7 +1219,7 @@
 
             <div class="p-3.5 bg-white border-t border-slate-200 space-y-2">
                 <div class="text-[11px] text-slate-500">
-                    Ejemplo: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800 font-semibold">En Hilux el valor móvil es $49.621.000 y la cuota más alta $425.000</code>
+                    Ejemplos: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800 font-semibold">Hilux 70/30 cuota 1 $380.000, 1 a 18 $410.000, 19 a 24 $435.000, 25 a 84 $455.000</code>
                 </div>
                 <div class="flex gap-2">
                     <input type="text" id="pdf-chatbot-input" onkeydown="if(event.key==='Enter') sendPdfChatbotCorrection()" placeholder="Escribe el modelo y los valores correctos del PDF..." class="flex-1 px-3.5 py-2.5 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none focus:border-[#EB0A1E]">
@@ -1425,7 +1493,7 @@
         </div>
     </div>
 
-    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (PILOTO AUTOMÁTICO 24/7 + SEGUIMIENTO SUAVE 24H) -->
+    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (MODO CONSULTIVO DISCRETO + CONOCIMIENTO CONTRACTUAL OFICIAL) -->
     <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
             <div class="px-5 py-4 bg-gradient-to-r from-zinc-950 via-neutral-900 to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
@@ -1434,9 +1502,9 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <h3 class="text-base sm:text-lg font-extrabold">Asistente Autónomo WhatsApp — Ginza Toyota</h3>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">CERO INVENCIÓN • 100% DATOS CRM</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">MODO DISCRETO • SOLO LO PREGUNTADO</span>
                         </div>
-                        <p class="text-xs text-zinc-300">Hace el seguimiento por vos (1 toque cordial a las 24h sin insistir) y coordina entrevistas automáticamente.</p>
+                        <p class="text-xs text-zinc-300">No suelta precios ni cláusulas por adelantado a menos que el cliente pregunte.</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1449,7 +1517,7 @@
             </div>
 
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50/70">
-                <!-- Columna Izquierda: Conexión Android 1-Toque + Reglas Anti-Insistencia -->
+                <!-- Columna Izquierda: Conexión Android 1-Toque + Reglas -->
                 <div class="lg:col-span-5 space-y-4">
                     <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-3">
                         <div class="flex items-center justify-between">
@@ -1483,7 +1551,7 @@
                     </div>
 
                     <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3">
-                        <div class="text-xs font-extrabold uppercase text-slate-800">🛡️ Control Anti-Insistencia & Base Real</div>
+                        <div class="text-xs font-extrabold uppercase text-slate-800">🛡️ Base Real Autorizada</div>
                         <div id="wa-ai-kb-summary" class="space-y-1.5 text-xs text-slate-700"></div>
                         <div class="grid grid-cols-2 gap-2 pt-1">
                             <div>
@@ -1506,7 +1574,7 @@
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="wa-ai-allow-compare" checked class="accent-[#EB0A1E]">
-                                <span>Comparar contra rivales usando mi tabla real</span>
+                                <span>Comparar contra rivales solo cuando el cliente pregunte</span>
                             </label>
                         </div>
                         <button onclick="saveWaAiConfig()" class="w-full py-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl text-xs font-bold">💾 Guardar Preferencias</button>
@@ -1521,7 +1589,7 @@
                             <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
                         </div>
                         <button onclick="generateInitialOutreachWithAi()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
-                            ✨ Redactar 1er Mensaje Real
+                            ✨ Redactar Saludo Discreto
                         </button>
                     </div>
 
@@ -1529,7 +1597,7 @@
 
                     <div id="wa-ai-draft-box" class="hidden p-3 bg-emerald-50/90 border-t border-emerald-200 space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-[10px] font-extrabold uppercase text-emerald-900">Respuesta Verificada con Datos Reales CRM:</span>
+                            <span class="text-[10px] font-extrabold uppercase text-emerald-900">Respuesta Verificada (Solo lo preguntado):</span>
                             <span id="wa-ai-source-tag" class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold"></span>
                         </div>
                         <textarea id="wa-ai-draft-text" rows="3" class="w-full px-3 py-2 text-xs border border-emerald-300 rounded-xl bg-white outline-none resize-none"></textarea>
@@ -1540,7 +1608,7 @@
                     </div>
 
                     <div class="p-3 bg-white border-t border-slate-200 flex gap-2">
-                        <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Escribe o simula un mensaje de WhatsApp para probar..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
+                        <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Escribe o simula una pregunta del cliente por WhatsApp..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
                         <button id="btn-wa-ai-generate" onclick="runWaAiReply()" class="px-4 py-2 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs font-bold shrink-0">Responder</button>
                     </div>
                 </div>
@@ -1580,14 +1648,14 @@
         let currentPlanJpgs = [];
         let pendingShareJpgItem = null;
         let waTemplates = {
-            crm: "Hola {nombre}, ¿cómo estás? Te escribo de Ginza Toyota porque habías consultado anteriormente y quería comentarte las novedades de este mes.",
-            gestion: "Hola {nombre}, ¿cómo estás? Te contacto de Ginza Toyota para asesorarte con los planes vigentes.",
-            redes: "Hola {nombre}, ¿cómo estás? Te escribo de Ginza Toyota por tu consulta en redes sociales.",
-            salesforce: "Hola {nombre}, ¿cómo estás? Te contacto de concesionario oficial Ginza Toyota por tu consulta web.",
-            convencional: "Hola {nombre}, ¿cómo estás? Me pasó tu contacto mi compañero de salón de Ginza Toyota para asesorarte en Plan Toyota.",
-            cancelados: "Hola {nombre}, ¿cómo estás? Te escribo de Ginza Toyota respecto a tu plan cancelado porque tenemos una propuesta especial para vos.",
-            rescindidos: "Hola {nombre}, ¿cómo estás? Te contacto de Ginza Toyota respecto a tu suscripción rescindida para comentarte opciones vigentes.",
-            clientes: "Hola {nombre}, ¿cómo venís con la propuesta de Toyota que estuvimos viendo?"
+            crm: "Hola {nombre}, ¿cómo estás? Te escribo de Ginza Toyota porque habías consultado anteriormente. ¿Seguís evaluando renovar o sumar un vehículo?",
+            gestion: "Hola {nombre}, ¿cómo estás? Te contacto de Ginza Toyota por tu consulta. ¿Qué modelo estabas buscando?",
+            redes: "Hola {nombre}, ¿cómo estás? Te escribo de Ginza Toyota por tu consulta en redes sociales. ¿En qué vehículo estabas interesado?",
+            salesforce: "Hola {nombre}, ¿cómo estás? Te contacto de concesionario oficial Ginza Toyota por tu consulta web. ¿Qué modelo te interesaba conocer?",
+            convencional: "Hola {nombre}, ¿cómo estás? Me pasó tu contacto mi compañero de salón de Ginza Toyota. ¿Qué modelo estabas evaluando?",
+            cancelados: "Hola {nombre}, ¿cómo estás? Te escribo de Ginza Toyota por tu plan anterior. ¿Te gustaría que revisemos opciones vigentes?",
+            rescindidos: "Hola {nombre}, ¿cómo estás? Te contacto de Ginza Toyota respecto a tu suscripción anterior. ¿Querés que veamos alternativas actuales?",
+            clientes: "Hola {nombre}, ¿cómo venís con lo que estuvimos viendo en Ginza Toyota?"
         };
         let goals = {
             weekly: { llamadas: 100, mensajes: 150, interesados: 25, entrevistas: 10, ventas: 5 },
@@ -1618,6 +1686,20 @@
             branchName: 'Ginza Toyota'
         }));
         let waAiConversationLogs = JSON.parse(localStorage.getItem('crm_wa_ai_chats') || '{}');
+
+        // --- BASE CONTRACTUAL OFICIAL TOYOTA PLAN ARGENTINA S.A. (CONDICIONES GENERALES + PLAN FLEXIBLE IGJ 183/24) ---
+        const TOYOTA_PLAN_CONTRACT_KNOWLEDGE = {
+            administradora: "Toyota Plan Argentina S.A. de Ahorro para Fines Determinados (garantizada solidariamente por Toyota Argentina S.A.). Controlada por IGJ.",
+            planFlexibleRes183_24: "El Plan Flexible (Res. IGJ N° 183/2024) adjudica una suma de dinero (Certificado equivalente al Valor Móvil) que permite elegir un Automotor 0 km de la lista Toyota o un Automotor Usado Certificado Toyota con Garantía Extendida (hasta 4 años de antigüedad en www.toyotausados.com.ar).",
+            modalidades: "Planes de hasta 84 o 120 meses: Plan 100% (sin cuota complementaria) y Planes Especiales con Cuota Pura Reducida y Cuota Complementaria al adjudicar (70/30, 80/20, 60/40, 50/50, 75/25, 90/10). Integración mínima según plazo (24 cuotas en planes de 84 meses, 36 cuotas en planes de 96 a 120 meses).",
+            cargosYAranceles: "Derecho de Adhesión y Permanencia: 3% del Valor Móvil (contado o prorrateado hasta 24 cuotas). Derecho de Adjudicación: 1% del Valor Móvil por única vez al adjudicar. Vencimiento mensual del 1 al 10 de cada mes.",
+            adjudicacion: "Actos mensuales entre los días 12 y 20 de cada mes por Sorteo y Licitación (presencial o Licitación Electrónica en web). Oferta mínima: 1 Cuota Pura. Ganador por licitación integra oferta dentro de los 4 días hábiles; aceptación de sorteo dentro de los 10 días corridos.",
+            plazosEntrega: "0 km de Lista: máximo 75 días corridos desde firmado el pedido y cumplidos requisitos (hasta +60 días si es 0 km fuera de lista). Usado con Garantía Extendida (Plan Flexible): máximo 60 días corridos desde firmado el pedido. Demora injustificada devenga intereses tasa activa BNA.",
+            cambioDeModelo: "Al pedir la unidad se puede elegir otro modelo Toyota de mayor valor (pagando la diferencia al Valor Móvil vigente) o de menor valor (imputando la diferencia a cancelación anticipada de Cuotas Puras).",
+            arrepentimientoYRescision: "Derecho de arrepentimiento: devolución del 100% dentro de los 10 días corridos de los pagos iniciales (y devolución de Cuota Pura entre días 11 y 60 si aún no fue agrupado). Renuncia tiene penalidad del 2% sobre el haber y rescisión (3 cuotas impagas) del 4%, reintegrándose al liquidar el grupo o al ser sustituido.",
+            cancelacionYCesion: "Cancelación anticipada total o parcial permitida en cualquier momento a valor de Cuota Pura vigente (sin cargos administrativos). Cesión/transferencia del plan permitida sin cobro de comisión por parte de Toyota Plan (requiere firmas certificadas por escribano y aprobación dentro de 30 días).",
+            seguroVida: "Seguro Colectivo de Vida sobre saldos deudores obligatorio para personas humanas (edad máxima de suscripción 75 años; cubre fallecimiento o invalidez total y permanente cancelando cuotas puras a vencer)."
+        };
 
         // --- CATÁLOGO DE PLANES ACTUALIZADO ---
         const DEFAULT_MARKET_PLANS = [
@@ -1666,7 +1748,8 @@
                 sel.innerHTML = `<option value="">Seleccionar modelo Toyota...</option>`;
                 FIXED_INTEREST_MODELS.forEach(m => {
                     const opt = document.createElement('option');
-                    opt.value = m; opt.textContent = m;
+                    opt.value = m;
+                    opt.textContent = m;
                     sel.appendChild(opt);
                 });
                 if (prev) sel.value = prev;
@@ -1726,13 +1809,13 @@
             if (!badge || !label) return;
             label.textContent = text;
             if (state === 'ok') {
-                badge.className = 'px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5';
+                badge.className = 'px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
             } else if (state === 'syncing') {
-                badge.className = 'px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center gap-1.5';
+                badge.className = 'px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center gap-1.5 shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-blue-400 animate-ping';
             } else {
-                badge.className = 'px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/30 flex items-center gap-1.5';
+                badge.className = 'px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/30 flex items-center gap-1.5 shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-red-400';
             }
         }
@@ -2154,8 +2237,7 @@
                     c.aiFollowUpAt = Date.now();
 
                     const rawName = (c.name && !['sin nombre', 'lead salesforce'].includes(c.name.toLowerCase())) ? c.name.split(' ')[0] : '';
-                    const modelTxt = c.interestModel ? ` por ${c.interestModel}` : '';
-                    const calmMsg = `${rawName ? `Hola ${rawName}, ` : 'Hola, '}¿cómo va? Te dejo mi contacto por acá sin compromiso por si en algún momento querés ver números${modelTxt} o pasar un ratito por ${waAiConfig.branchName || 'Ginza Toyota'}. ¡Saludos!`;
+                    const calmMsg = `${rawName ? `Hola ${rawName}, ` : 'Hola, '}¿cómo va? Te dejo mi contacto por acá sin compromiso por si en algún momento querés consultarme algo o pasar un ratito por ${waAiConfig.branchName || 'Ginza Toyota'}. ¡Saludos!`;
 
                     await queueAutoReplyToMobile(c, calmMsg, '');
                     triggered++;
@@ -2406,7 +2488,7 @@
             const s = contact.status;
             const safeCh = String(channelKey || 'gestion').replace(/'/g, "\\'");
             let buttons = `<button onclick="openEditModal('${contact.id}')" class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium hover:bg-slate-200">Editar</button>`;
-            buttons += `<button onclick="openWaAiForContact('${contact.id}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold hover:bg-emerald-100" title="Responder con Asistente IA usando datos reales del CRM">🤖 IA</button>`;
+            buttons += `<button onclick="openWaAiForContact('${contact.id}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold hover:bg-emerald-100" title="Responder con Asistente IA (Modo Discreto)">🤖 IA</button>`;
             if (s === 'Pendiente' || s === 'Registrado') {
                 buttons += `<button onclick="executeStatusUpdate('${contact.id}', 'Llamada Realizada', 'Llamada')" class="px-2.5 py-1 bg-zinc-900 text-white rounded-lg text-xs font-semibold">📞 Llamar</button>`;
                 buttons += `<button onclick="openWhatsAppSingleTab('${formatPhoneAR(contact.phone).replace(/\D/g, '')}', '${contact.id}', '${safeCh}', '${(contact.name||'').replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-semibold">💬 Mensaje</button>`;
@@ -2868,7 +2950,7 @@
             const month = now.getMonth();
             const todayDate = now.getDate();
 
-            const dayOfWeek = now.getDay(); // 0=Dom, 1=Lun..5=Vie, 6=Sab
+            const dayOfWeek = now.getDay();
             const weekElapsed = dayOfWeek === 0 ? 5 : Math.min(5, Math.max(1, dayOfWeek));
             const weekRemaining = Math.max(1, 5 - weekElapsed + (dayOfWeek >= 1 && dayOfWeek <= 5 ? 1 : 0));
 
@@ -2911,7 +2993,6 @@
             if (mesActualLabel) mesActualLabel.textContent = `Período: ${biz.monthName} (${biz.monthTotalBiz} días hábiles)`;
             if (diasHabilesBadge) diasHabilesBadge.textContent = `${biz.monthRemainingBiz} días hábiles rest.`;
 
-            // Coach IA: Tasas reales de conversión y diagnóstico
             const rateInt = Math.round((act.interesados / act.totalContactados) * 100);
             const rateEnt = act.interesados > 0 ? Math.round((act.entrevistas / act.interesados) * 100) : 0;
             const rateVen = act.entrevistas > 0 ? Math.round((act.ventas / act.entrevistas) * 100) : 0;
@@ -2936,7 +3017,6 @@
                     </div>`;
             }
 
-            // Recalibración sugerida por IA según embudo real
             const targetVentasW = Math.max(2, goals.weekly.ventas || 5);
             const effVenRate = Math.max(0.25, rateVen / 100);
             const effEntRate = Math.max(0.30, rateEnt / 100);
@@ -2954,19 +3034,13 @@
 
             const insightsEl = document.getElementById('ai-coach-insights-list');
             if (insightsEl) {
-                const insights = [];
-                if ((act.llamadas + act.mensajes) < 20) {
-                    insights.push(`📣 <b>Volumen inicial de prospección:</b> Tienes ${act.llamadas + act.mensajes} contactos gestionados. Para asegurar ${targetVentasW} ventas semanales, la IA recomienda sostener ${latestAiSuggestedWeekly.mensajes} mensajes y ${latestAiSuggestedWeekly.llamadas} llamadas por semana.`);
-                } else if (rateInt < 15) {
-                    insights.push(`💬 <b>Optimización de apertura (${rateInt}% a Interesado):</b> Activa el Piloto Automático WA IA con cotizaciones directas de cuota pura para elevar la respuesta en las primeras 24h.`);
-                } else {
-                    insights.push(`✅ <b>Buena tracción de apertura (${rateInt}% a Interesado):</b> Tu embudo convierte bien en primer contacto; prioriza pasar interesados a Entrevista en salón o videollamada.`);
-                }
-                insights.push(`🎯 <b>Calibración IA sugerida para esta semana:</b> ${latestAiSuggestedWeekly.llamadas} llamadas • ${latestAiSuggestedWeekly.mensajes} mensajes → ${latestAiSuggestedWeekly.interesados} interesados → ${latestAiSuggestedWeekly.entrevistas} entrevistas → <b>${latestAiSuggestedWeekly.ventas} ventas</b>.`);
+                const insights = [
+                    `📣 <b>Volumen de prospección:</b> Tienes ${act.llamadas + act.mensajes} contactos gestionados. Para asegurar ${targetVentasW} ventas semanales, la IA recomienda sostener ${latestAiSuggestedWeekly.mensajes} mensajes y ${latestAiSuggestedWeekly.llamadas} llamadas por semana.`,
+                    `🎯 <b>Calibración IA sugerida:</b> ${latestAiSuggestedWeekly.llamadas} llamadas • ${latestAiSuggestedWeekly.mensajes} mensajes → ${latestAiSuggestedWeekly.interesados} interesados → ${latestAiSuggestedWeekly.entrevistas} entrevistas → <b>${latestAiSuggestedWeekly.ventas} ventas</b>.`
+                ];
                 insightsEl.innerHTML = insights.map(txt => `<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 leading-relaxed">${txt}</div>`).join('');
             }
 
-            // Render Columna 1: Objetivos Semanales (Lun-Vie)
             const metricDefs = [
                 { key: 'llamadas', label: 'Llamadas Realizadas', actual: act.llamadas, color: 'bg-zinc-900' },
                 { key: 'mensajes', label: 'Mensajes WhatsApp', actual: act.mensajes, color: 'bg-emerald-600' },
@@ -3001,7 +3075,6 @@
                 }).join('');
             }
 
-            // Render Columna 2: Objetivos Mensuales & Ritmo Diario
             const monthlyBox = document.getElementById('monthly-goals-container');
             if (monthlyBox) {
                 monthlyBox.innerHTML = metricDefs.map(m => {
@@ -3051,7 +3124,7 @@
             showToast("✨ Metas calibradas con IA aplicadas a tu semana y mes");
         };
 
-        // --- PESTAÑA 6: PLANES & PDF (INDEXEDDB PERSISTENTE + JPG + COMPARTIR WA + GRÁFICO MES A MES) ---
+        // --- PESTAÑA 6: PLANES & PDF (INDEXEDDB PERSISTENTE + 4 TRAMOS ORDINARIOS SIN EXTRAORDINARIA) ---
         const PLAN_IDB_NAME = 'CrmGinzaToyotaPlanesDB';
         const PLAN_IDB_STORE = 'planFiles';
 
@@ -3105,20 +3178,55 @@
                 const latestWithJpg = plansHistory.find(p => Array.isArray(p.jpgPages) && p.jpgPages.length > 0);
                 if (latestWithJpg) {
                     currentPlanJpgs = latestWithJpg.jpgPages;
-                    renderCurrentJpgGallery(latestWithJpg.planName, latestWithJpg.period);
+                    renderCurrentJpgGallery(`${latestWithJpg.vehicleName || latestWithJpg.planName} (${latestWithJpg.modality || '70/30'})`, latestWithJpg.period);
                 }
             } catch (e) {}
         }
 
-        function parseNumbersFromPlanPdfText(fullText, fileName) {
-            const detectedModel = detectToyotaModelFromText(fullText) || detectToyotaModelFromText(fileName) || fileName.replace(/\.pdf$/i, '');
-            // Limpiar porcentajes (70/30, 80/20, 100%) y números de cuota (Cuota 1 a 84) para evitar falsos positivos
-            const cleanedText = String(fullText || '')
+        function parseNumbersFromPlanPdfText(fullText, fileName, forcedModality = 'Auto') {
+            const rawStr = String(fullText || '');
+            const combinedLabel = `${fileName} ${rawStr}`;
+            const detectedModel = detectToyotaModelFromText(combinedLabel) || fileName.replace(/\.pdf$/i, '');
+
+            let modality = forcedModality && forcedModality !== 'Auto' ? forcedModality : '';
+            if (!modality) {
+                if (/70\s*\/\s*30/.test(combinedLabel)) modality = '70/30';
+                else if (/100\s*%/.test(combinedLabel)) modality = '100%';
+                else {
+                    const refCat = marketPlansCatalog.find(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()));
+                    modality = refCat ? refCat.modality : '70/30';
+                }
+            }
+
+            // Extraer importes monetarios cercanos a cada tramo ordinario (1, 1 a 18, 19 a 24, 25 a 84), excluyendo cuota extraordinaria (30%)
+            const extractMaxNearPattern = (regex) => {
+                const vals = [];
+                let m;
+                while ((m = regex.exec(rawStr)) !== null) {
+                    const slice = rawStr.slice(m.index, m.index + 140)
+                        .replace(/extraordinaria[^\n$]{0,60}\$?\s*[\d.,]+/gi, ' ');
+                    const nums = Array.from(slice.matchAll(/\$?\s*([\d]{1,3}(?:\.[\d]{3})+)(?:,\d{2})?/g))
+                        .map(x => Number(x[1].replace(/\./g, '')))
+                        .filter(n => !isNaN(n) && n >= 80000 && n < 5000000);
+                    if (nums.length > 0) vals.push(Math.max(...nums));
+                }
+                return vals.length > 0 ? Math.max(...vals) : 0;
+            };
+
+            let c1 = extractMaxNearPattern(/\b(?:cuota\s*1(?!\d)|c\.?\s*1(?!\d)|1ra\s*cuota|suscripci[oó]n)\b/gi);
+            let c1_18 = extractMaxNearPattern(/\b(?:1\s*(?:a|al|-|\/)\s*18|2\s*(?:a|al|-|\/)\s*18)\b/gi);
+            let c19_24 = extractMaxNearPattern(/\b19\s*(?:a|al|-|\/)\s*24\b/gi);
+            let c25_84 = extractMaxNearPattern(/\b25\s*(?:a|al|-|\/)\s*84\b/gi);
+
+            // Limpiar porcentajes, números de tramo y menciones de cuota extraordinaria / integración 30%
+            const cleanedText = rawStr
+                .replace(/(?:cuota\s*)?extraordinaria[^\n$]{0,80}\$?\s*[\d]{1,3}(?:\.[\d]{3})+(?:,\d{2})?/gi, ' ')
+                .replace(/integraci[oó]n\s*30\s*%[^\n$]{0,80}\$?\s*[\d]{1,3}(?:\.[\d]{3})+(?:,\d{2})?/gi, ' ')
                 .replace(/\b\d{1,3}\s*\/\s*\d{1,3}\b/g, ' ')
                 .replace(/\b\d{1,3}\s*%/g, ' ')
+                .replace(/\b(?:1\s*(?:a|al|-)\s*18|2\s*(?:a|al|-)\s*18|19\s*(?:a|al|-)\s*24|25\s*(?:a|al|-)\s*84)\b/gi, ' ')
                 .replace(/\b(?:cuota|plan|grupo|orden|mes|meses|ano|año)\s*[:#-]?\s*\d{1,4}\b/gi, ' ');
 
-            // Extraer importes monetarios en formato argentino ($ 49.621.000 o $ 351.466,00)
             const dollarMatches = Array.from(cleanedText.matchAll(/\$\s*([\d]{1,3}(?:\.[\d]{3})+)(?:,\d{2})?/g))
                 .map(m => Number(m[1].replace(/\./g, '')))
                 .filter(n => !isNaN(n) && n >= 80000);
@@ -3129,21 +3237,37 @@
                     .map(m => Number(m[1].replace(/\./g, '')))
                     .filter(n => !isNaN(n) && n >= 80000);
 
-            // Tomar siempre el VALOR MÁS ALTO como referencia tanto para Valor Móvil como para Cuota
             const vehicleCandidates = plainMatches.filter(n => n >= 15000000 && n <= 200000000);
-            const installmentCandidates = plainMatches.filter(n => n >= 80000 && n < 15000000);
-
             let vehicleValue = vehicleCandidates.length > 0 ? Math.max(...vehicleCandidates) : 0;
-            let highestQuota = installmentCandidates.length > 0 ? Math.max(...installmentCandidates) : 0;
+
+            const maxOrdinaryCap = vehicleValue > 0 ? Math.round(vehicleValue * 0.12) : 5000000;
+            const installmentCandidates = plainMatches.filter(n => n >= 80000 && n <= maxOrdinaryCap);
+
+            const trancheValues = [c1, c1_18, c19_24, c25_84].filter(v => v > 0 && v <= maxOrdinaryCap);
+            let highestQuota = Math.max(
+                trancheValues.length > 0 ? Math.max(...trancheValues) : 0,
+                installmentCandidates.length > 0 ? Math.max(...installmentCandidates) : 0
+            );
 
             if (!vehicleValue || !highestQuota) {
-                const refPlan = marketPlansCatalog.find(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()));
+                const refPlan = marketPlansCatalog.find(p =>
+                    p.brand === 'Toyota' &&
+                    p.model.toLowerCase().includes(detectedModel.toLowerCase()) &&
+                    p.modality === modality
+                ) || marketPlansCatalog.find(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()));
                 if (refPlan) {
                     if (!vehicleValue) vehicleValue = refPlan.valorMovil;
                     if (!highestQuota) highestQuota = refPlan.cuotaPura;
                 }
             }
-            return { vehicleName: detectedModel, vehicleValue, price: highestQuota };
+
+            return {
+                vehicleName: detectedModel,
+                modality,
+                vehicleValue,
+                tranches: { c1, c1_18, c19_24, c25_84 },
+                price: highestQuota
+            };
         }
 
         function renderCurrentJpgGallery(planTitle = '', periodLabel = '') {
@@ -3155,7 +3279,7 @@
             if (titleEl && planTitle) titleEl.textContent = `Hojas JPG: ${planTitle} (${periodLabel})`;
             if (!currentPlanJpgs || currentPlanJpgs.length === 0) {
                 dlAllBtn?.classList.add('hidden');
-                gallery.innerHTML = `<div class="col-span-full py-10 text-center text-slate-400 text-sm border-2 border-dashed border-slate-200 rounded-xl">Sube un archivo PDF a la izquierda para calcular su valor móvil y compartir sus hojas JPG por WhatsApp.</div>`;
+                gallery.innerHTML = `<div class="col-span-full py-10 text-center text-slate-400 text-sm border-2 border-dashed border-slate-200 rounded-xl">Sube un archivo PDF a la izquierda para calcular sus tramos ordinarios y compartir sus hojas JPG por WhatsApp.</div>`;
                 return;
             }
 
@@ -3194,6 +3318,7 @@
 
             const monthVal = document.getElementById('plan-month-input')?.value || 'Noviembre';
             const yearVal = document.getElementById('plan-year-input')?.value || '2026';
+            const forcedModality = document.getElementById('plan-modality-input')?.value || 'Auto';
             const period = `${monthVal} ${yearVal}`;
 
             for (const file of files) {
@@ -3227,7 +3352,7 @@
                         });
                     }
 
-                    const parsed = parseNumbersFromPlanPdfText(fullText, file.name);
+                    const parsed = parseNumbersFromPlanPdfText(fullText, file.name, forcedModality);
                     const newPlan = {
                         id: Date.now().toString() + Math.random().toString(36).substr(2, 4),
                         period,
@@ -3235,7 +3360,9 @@
                         year: Number(yearVal),
                         planName: file.name.replace(/\.pdf$/i, ''),
                         vehicleName: parsed.vehicleName,
+                        modality: parsed.modality,
                         vehicleValue: parsed.vehicleValue,
+                        tranches: parsed.tranches,
                         price: parsed.price,
                         pagesCount: pages.length,
                         pdfDataUrl,
@@ -3246,16 +3373,15 @@
                     plansHistory.unshift(newPlan);
                     await savePlanBlobsToIndexedDB(newPlan.id, pdfDataUrl, pages);
                     currentPlanJpgs = pages;
-                    renderCurrentJpgGallery(newPlan.planName, period);
+                    renderCurrentJpgGallery(`${newPlan.vehicleName} (${newPlan.modality})`, period);
                 } catch (err) {
                     showToast(`Error al procesar ${file.name}`, 'error');
                 }
             }
-
-            statusBox?.classList.add('hidden');
+            if (statusBox) statusBox.classList.add('hidden');
             saveLocalData(true);
             renderPlansHistory();
-            showToast("💾 PDF guardado en IndexedDB, hojas JPG listas y cargado en la IA");
+            showToast(`✅ ${files.length} PDF(s) procesado(s) y guardado(s)`);
         };
 
         window.renderVehiclePriceEvolutionChart = function() {
@@ -3264,45 +3390,36 @@
             if (!chartBox || !modelSel) return;
 
             if (plansHistory.length === 0) {
-                chartBox.innerHTML = `<div class="text-center text-xs text-slate-400 py-6">Sube PDFs de distintos meses para visualizar la evolución comparativa de Valor Móvil y Cuota Promedio.</div>`;
+                modelSel.innerHTML = `<option value="">Sin modelos cargados</option>`;
+                chartBox.innerHTML = `<div class="text-center text-xs text-slate-400 py-6">Sube al menos un PDF para visualizar la evolución mes a mes.</div>`;
                 return;
             }
 
-            const models = Array.from(new Set(plansHistory.map(p => p.vehicleName || p.planName)));
+            const getPlanKey = (p) => `${p.vehicleName || p.planName} (${p.modality || '70/30'})`;
+            const models = Array.from(new Set(plansHistory.map(getPlanKey)));
             const prev = modelSel.value;
             modelSel.innerHTML = models.map(m => `<option value="${m}">${m}</option>`).join('');
             if (prev && models.includes(prev)) modelSel.value = prev;
 
-            const selectedModel = modelSel.value || models[0];
-            const series = plansHistory
-                .filter(p => (p.vehicleName || p.planName) === selectedModel)
-                .slice()
-                .reverse();
+            const chosen = modelSel.value || models[0];
+            const series = plansHistory.filter(p => getPlanKey(p) === chosen).slice().reverse();
+            const maxVal = Math.max(1, ...series.map(s => Number(s.price) || 0));
 
-            const maxVal = Math.max(1, ...series.map(s => Number(s.vehicleValue) || 0));
             chartBox.innerHTML = `
-                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                    <span class="text-xs font-extrabold text-slate-800 uppercase">Comparativa Mes a Mes: ${selectedModel}</span>
-                    <span class="text-[11px] text-slate-500">${series.length} período(s) cargado(s)</span>
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-extrabold uppercase text-slate-700">Evolución Cuota Ordinaria Más Alta — ${chosen}</span>
+                    <span class="text-[11px] text-slate-500">${series.length} período(s) registrado(s)</span>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${Math.min(4, Math.max(1, series.length))} gap-3">
-                    ${series.map((item, idx) => {
-                        const prevItem = idx > 0 ? series[idx - 1] : null;
-                        const diff = prevItem && prevItem.vehicleValue > 0 ? item.vehicleValue - prevItem.vehicleValue : 0;
-                        const diffPct = prevItem && prevItem.vehicleValue > 0 ? ((diff / prevItem.vehicleValue) * 100).toFixed(1) : null;
-                        const barPct = Math.max(12, Math.round(((Number(item.vehicleValue) || 0) / maxVal) * 100));
-                        return `<div class="p-3 rounded-xl bg-white border border-slate-200 flex flex-col justify-between">
-                            <div>
-                                <div class="flex items-center justify-between text-xs font-bold">
-                                    <span class="text-[#EB0A1E]">${item.period}</span>
-                                    ${diffPct !== null ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold ${diff > 0 ? 'bg-amber-50 text-amber-800' : 'bg-emerald-50 text-emerald-700'}">${diff > 0 ? '+' : ''}${diffPct}%</span>` : '<span class="text-[10px] text-slate-400">Base</span>'}
-                                </div>
-                                <div class="text-sm font-extrabold text-slate-900 mt-1">${item.vehicleValue > 0 ? '$' + Number(item.vehicleValue).toLocaleString('es-AR') : 'Sin valor detectado'}</div>
-                                <div class="text-[11px] text-slate-500">Cuota máx. ref.: <b>${item.price > 0 ? '$' + Number(item.price).toLocaleString('es-AR') : '-'}</b></div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 items-end">
+                    ${series.map(pt => {
+                        const val = Number(pt.price) || 0;
+                        const pct = Math.max(15, Math.round((val / maxVal) * 100));
+                        return `<div class="p-3 rounded-xl bg-white border border-slate-200 flex flex-col justify-between h-36">
+                            <div class="text-[11px] font-bold text-slate-500">${pt.period}</div>
+                            <div class="w-full bg-slate-100 rounded-lg h-16 flex items-end overflow-hidden p-1">
+                                <div class="w-full bg-[#EB0A1E] rounded-md transition-all" style="height: ${pct}%"></div>
                             </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2 mt-3 overflow-hidden">
-                                <div class="bg-[#EB0A1E] h-2 rounded-full" style="width: ${barPct}%"></div>
-                            </div>
+                            <div class="text-xs font-extrabold text-slate-900">$${val.toLocaleString('es-AR')}</div>
                         </div>`;
                     }).join('')}
                 </div>`;
@@ -3314,15 +3431,16 @@
             const filterSel = document.getElementById('plan-model-filter');
             if (!tbody) return;
 
+            const getPlanKey = (p) => `${p.vehicleName || p.planName} (${p.modality || '70/30'})`;
             if (filterSel) {
                 const prev = filterSel.value;
-                const uniqueNames = Array.from(new Set(plansHistory.map(p => p.vehicleName || p.planName)));
+                const uniqueNames = Array.from(new Set(plansHistory.map(getPlanKey)));
                 filterSel.innerHTML = `<option value="Todos">Todos los Planes Vigentes (${plansHistory.length})</option>` + uniqueNames.map(n => `<option value="${n}">${n}</option>`).join('');
                 if (prev && (prev === 'Todos' || uniqueNames.includes(prev))) filterSel.value = prev;
             }
 
             const chosenFilter = filterSel?.value || 'Todos';
-            const visiblePlans = chosenFilter === 'Todos' ? plansHistory : plansHistory.filter(p => (p.vehicleName || p.planName) === chosenFilter);
+            const visiblePlans = chosenFilter === 'Todos' ? plansHistory : plansHistory.filter(p => getPlanKey(p) === chosenFilter);
 
             if (visiblePlans.length === 0) {
                 tbody.innerHTML = '';
@@ -3330,19 +3448,35 @@
             } else {
                 emptyEl?.classList.add('hidden');
                 tbody.innerHTML = visiblePlans.map((p, idx) => {
-                    const prevSameModel = plansHistory.slice(idx + 1).find(x => (x.vehicleName || x.planName) === (p.vehicleName || p.planName));
-                    const diffVal = prevSameModel && p.vehicleValue > 0 && prevSameModel.vehicleValue > 0 ? p.vehicleValue - prevSameModel.vehicleValue : null;
+                    const prevSameModel = plansHistory.slice(idx + 1).find(x => getPlanKey(x) === getPlanKey(p));
                     const diffQuota = prevSameModel && p.price > 0 && prevSameModel.price > 0 ? p.price - prevSameModel.price : null;
-
-                    const diffValBadge = diffVal === null ? `<span class="text-xs text-slate-400">-</span>` : `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${diffVal > 0 ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">${diffVal > 0 ? '+' : ''}$${diffVal.toLocaleString('es-AR')}</span>`;
-                    const diffQuotaBadge = diffQuota === null ? `<span class="text-xs text-slate-400">-</span>` : `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${diffQuota > 0 ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">${diffQuota > 0 ? '+' : ''}$${diffQuota.toLocaleString('es-AR')}</span>`;
+                    const diffQuotaBadge = diffQuota === null
+                        ? `<span class="text-xs text-slate-400">Base</span>`
+                        : `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${diffQuota > 0 ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">${diffQuota > 0 ? '+' : ''}$${diffQuota.toLocaleString('es-AR')}</span>`;
+                    const t = p.tranches || {};
+                    const modBadge = (p.modality || '70/30') === '100%'
+                        ? `<span class="px-2 py-0.5 rounded bg-zinc-900 text-white text-[10px] font-extrabold">100%</span>`
+                        : `<span class="px-2 py-0.5 rounded bg-red-100 text-[#EB0A1E] text-[10px] font-extrabold">70/30</span>`;
 
                     return `<tr>
                         <td class="p-3.5 font-bold text-[#EB0A1E]">${p.period}</td>
-                        <td class="p-3.5"><div class="font-bold text-slate-900">${p.vehicleName || p.planName}</div><div class="text-[11px] text-slate-400">${p.planName}</div></td>
+                        <td class="p-3.5">
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-bold text-slate-900">${p.vehicleName || p.planName}</span>
+                                ${modBadge}
+                            </div>
+                            <div class="text-[11px] text-slate-400">${p.planName}</div>
+                        </td>
                         <td class="p-3.5 font-extrabold text-slate-900">${p.vehicleValue > 0 ? '$' + Number(p.vehicleValue).toLocaleString('es-AR') : '-'}</td>
-                        <td class="p-3.5">${diffValBadge}</td>
-                        <td class="p-3.5 font-bold text-emerald-700">${p.price > 0 ? '$' + Number(p.price).toLocaleString('es-AR') : '-'}</td>
+                        <td class="p-3.5 text-[11px] text-slate-700">
+                            <div class="grid grid-cols-2 gap-x-3 gap-y-0.5">
+                                <span><b>C.1:</b> ${t.c1 ? '$' + Number(t.c1).toLocaleString('es-AR') : '-'}</span>
+                                <span><b>1-18:</b> ${t.c1_18 ? '$' + Number(t.c1_18).toLocaleString('es-AR') : '-'}</span>
+                                <span><b>19-24:</b> ${t.c19_24 ? '$' + Number(t.c19_24).toLocaleString('es-AR') : '-'}</span>
+                                <span><b>25-84:</b> ${t.c25_84 ? '$' + Number(t.c25_84).toLocaleString('es-AR') : '-'}</span>
+                            </div>
+                        </td>
+                        <td class="p-3.5 font-extrabold text-emerald-700">${p.price > 0 ? '$' + Number(p.price).toLocaleString('es-AR') : '-'}</td>
                         <td class="p-3.5">${diffQuotaBadge}</td>
                         <td class="p-3.5">
                             <div class="flex flex-wrap gap-1.5">
@@ -3357,10 +3491,91 @@
             renderVehiclePriceEvolutionChart();
         };
 
+        window.deletePlanRecord = async function(id) {
+            plansHistory = plansHistory.filter(p => p.id !== id);
+            await deletePlanBlobsFromIndexedDB(id);
+            saveLocalData(true);
+            renderPlansHistory();
+            showToast("Plan eliminado del historial");
+        };
+
+        window.clearPlansHistory = async function() {
+            for (const p of plansHistory) await deletePlanBlobsFromIndexedDB(p.id);
+            plansHistory = [];
+            currentPlanJpgs = [];
+            renderCurrentJpgGallery();
+            saveLocalData(true);
+            renderPlansHistory();
+            showToast("Historial de PDFs vaciado");
+        };
+
+        window.openPlanFilesModal = function(planId) {
+            const p = plansHistory.find(x => x.id === planId);
+            if (!p) return;
+            document.getElementById('plan-files-modal-title').textContent = `${p.vehicleName || p.planName} — ${p.period}`;
+            const actionsBox = document.getElementById('plan-files-modal-actions');
+            const gridBox = document.getElementById('plan-files-modal-grid');
+            if (actionsBox) {
+                actionsBox.innerHTML = p.pdfDataUrl
+                    ? `<a href="${p.pdfDataUrl}" download="${p.planName}.pdf" class="px-3 py-1.5 rounded-xl bg-[#EB0A1E] text-white text-xs font-bold">⬇️ Descargar PDF Original</a>`
+                    : '';
+            }
+            if (gridBox) {
+                const pages = p.jpgPages || [];
+                currentPlanJpgs = pages;
+                gridBox.innerHTML = pages.length === 0
+                    ? `<div class="col-span-full text-center text-xs text-slate-400 py-8">Este registro no tiene hojas JPG almacenadas en este navegador.</div>`
+                    : pages.map((pg, idx) => `
+                        <div class="rounded-xl border border-slate-200 overflow-hidden bg-slate-50">
+                            <img src="${pg.dataUrl}" class="w-full h-44 object-contain bg-white border-b border-slate-100">
+                            <div class="p-2 flex justify-between items-center gap-1.5 bg-white">
+                                <button onclick="closePlanFilesModal(); openShareJpgWaModal(${idx});" class="flex-1 py-1.5 px-2 rounded-lg bg-emerald-600 text-white text-xs font-bold">📲 Enviar por WA</button>
+                                <a href="${pg.dataUrl}" download="${pg.fileName}" class="py-1.5 px-2 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold">⬇️ JPG</a>
+                            </div>
+                        </div>`).join('');
+            }
+            document.getElementById('plan-files-modal')?.classList.remove('hidden');
+        };
+        window.closePlanFilesModal = function() { document.getElementById('plan-files-modal')?.classList.add('hidden'); };
+
+        window.openShareJpgWaModal = function(jpgIndex) {
+            const item = currentPlanJpgs[jpgIndex];
+            if (!item) return;
+            pendingShareJpgItem = item;
+            document.getElementById('share-jpg-wa-filename').textContent = item.fileName;
+            renderShareJpgContactsList();
+            document.getElementById('share-jpg-wa-modal')?.classList.remove('hidden');
+        };
+        window.closeShareJpgWaModal = function() { document.getElementById('share-jpg-wa-modal')?.classList.add('hidden'); };
+        window.renderShareJpgContactsList = function() {
+            const box = document.getElementById('share-jpg-contacts-list');
+            if (!box) return;
+            const q = (document.getElementById('share-jpg-search')?.value || '').toLowerCase().trim();
+            const all = getAllListsCombined().filter(c => c.phone && (!q || (c.name || '').toLowerCase().includes(q) || (c.phone || '').includes(q))).slice(0, 20);
+            box.innerHTML = all.length === 0
+                ? `<div class="p-3 text-center text-xs text-slate-400">Sin contactos con teléfono.</div>`
+                : all.map(c => `<button onclick="executeShareJpgToPhone('${c.phone}', '${(c.name || '').replace(/'/g, "\\'")}', '${c.id}')" class="w-full p-2.5 text-left hover:bg-emerald-50 flex items-center justify-between text-xs"><span class="font-bold text-slate-900">${c.name || 'Sin Nombre'}</span><span class="text-emerald-700 font-semibold">${c.phone}</span></button>`).join('');
+        };
+        window.executeShareJpgToPhone = async function(rawPhone, clientName = 'Cliente', contactId = null) {
+            const formatted = formatPhoneAR(rawPhone);
+            if (!formatted) { showToast("Ingresa un número válido", "error"); return; }
+            if (pendingShareJpgItem && pendingShareJpgItem.dataUrl && navigator.clipboard && window.ClipboardItem) {
+                try {
+                    const resp = await fetch(pendingShareJpgItem.dataUrl);
+                    const blob = await resp.blob();
+                    await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+                    showToast("📋 Imagen JPG copiada. Pégala en WhatsApp Web con Ctrl+V");
+                } catch (e) {}
+            }
+            const waDigits = formatted.replace(/\D/g, '');
+            openWhatsAppSingleTab(waDigits, contactId, 'clientes', clientName);
+            closeShareJpgWaModal();
+        };
+
         // --- CHATBOT CORRECTOR DE PRECIOS PDF ---
         let pdfChatbotSelectedPlanId = '';
         let pdfChatbotHistory = [
-            { from: 'bot', text: 'Hola 👋 Soy el asistente de verificación de listas PDF de Ginza Toyota. Si algún PDF leyó mal el Valor Móvil o la Cuota más alta de referencia, dime qué modelo es y cuáles son los valores reales para corregirlo al instante.' }
+            { from: 'bot', text: 'Hola 👋 Soy el asistente de verificación de listas PDF de Ginza Toyota. Distingo planes 70/30 y 100% y los 4 tramos ordinarios (Cuota 1, 1 a 18, 19 a 24 y 25 a 84), excluyendo siempre la cuota extraordinaria. Dime qué plan quieres corregir.' }
         ];
 
         window.openPdfPriceChatbotModal = function(preselectPlanId = '') {
@@ -3379,9 +3594,10 @@
             pdfChatbotSelectedPlanId = planId;
             const p = plansHistory.find(x => x.id === planId);
             if (p) {
+                const t = p.tranches || {};
                 pdfChatbotHistory.push({
                     from: 'bot',
-                    text: `Seleccionaste "${p.vehicleName || p.planName}" (${p.period}). Actualmente tiene:\n• Valor Móvil: $${Number(p.vehicleValue || 0).toLocaleString('es-AR')}\n• Cuota Referencia (Más Alta): $${Number(p.price || 0).toLocaleString('es-AR')}\n\nEscríbeme los montos correctos.`
+                    text: `Seleccionaste "${p.vehicleName || p.planName}" [${p.modality || '70/30'}] (${p.period}):\n• Valor Móvil: $${Number(p.vehicleValue || 0).toLocaleString('es-AR')}\n• Cuota 1: $${Number(t.c1 || 0).toLocaleString('es-AR')} | 1–18: $${Number(t.c1_18 || 0).toLocaleString('es-AR')} | 19–24: $${Number(t.c19_24 || 0).toLocaleString('es-AR')} | 25–84: $${Number(t.c25_84 || 0).toLocaleString('es-AR')}\n• Cuota Ordinaria Más Alta (Ref.): $${Number(p.price || 0).toLocaleString('es-AR')}\n\nEscríbeme los montos o tramos correctos.`
                 });
             }
             renderPdfChatbotUI();
@@ -3393,7 +3609,7 @@
             if (pillsBox) {
                 pillsBox.innerHTML = plansHistory.length === 0
                     ? `<span class="text-xs text-slate-400">Aún no hay PDFs subidos en Planes & PDF.</span>`
-                    : plansHistory.map(p => `<button onclick="selectPdfForChatbot('${p.id}')" class="px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors ${pdfChatbotSelectedPlanId === p.id ? 'bg-[#EB0A1E] text-white border-[#EB0A1E]' : 'bg-white text-slate-700 border-slate-300 hover:border-slate-500'}">${p.vehicleName || p.planName} (${p.period})</button>`).join('');
+                    : plansHistory.map(p => `<button onclick="selectPdfForChatbot('${p.id}')" class="px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors ${pdfChatbotSelectedPlanId === p.id ? 'bg-[#EB0A1E] text-white border-[#EB0A1E]' : 'bg-white text-slate-700 border-slate-300 hover:border-slate-500'}">${p.vehicleName || p.planName} [${p.modality || '70/30'}] (${p.period})</button>`).join('');
             }
             if (msgsBox) {
                 msgsBox.innerHTML = pdfChatbotHistory.map(m => `
@@ -3421,27 +3637,54 @@
                 return;
             }
 
-            // Detectar si mencionó un modelo específico en el mensaje
             const mentionedModel = detectToyotaModelFromText(rawText);
+            const mentionedModality = /70\s*\/\s*30/.test(rawText) ? '70/30' : (/100\s*%/.test(rawText) ? '100%' : '');
             let targetPlan = mentionedModel
-                ? plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(mentionedModel.toLowerCase()))
+                ? plansHistory.find(p =>
+                    (p.vehicleName || p.planName || '').toLowerCase().includes(mentionedModel.toLowerCase()) &&
+                    (!mentionedModality || (p.modality || '70/30') === mentionedModality)
+                ) || plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(mentionedModel.toLowerCase()))
                 : null;
             if (!targetPlan) {
                 targetPlan = plansHistory.find(p => p.id === pdfChatbotSelectedPlanId) || plansHistory[0];
             }
 
-            // Extraer montos numéricos ingresados por el usuario (ej: $49.621.000, 49621000, $425.000, 425000)
-            const normNums = Array.from(rawText.replace(/\$|\s/g, '').matchAll(/(\d{1,3}(?:\.\d{3})+|\d{5,9})/g))
+            if (mentionedModality) targetPlan.modality = mentionedModality;
+            if (!targetPlan.tranches) targetPlan.tranches = { c1: 0, c1_18: 0, c19_24: 0, c25_84: 0 };
+
+            const extractTrancheFromMsg = (regex) => {
+                const m = rawText.match(regex);
+                if (!m) return 0;
+                const val = Number(m[1].replace(/\./g, ''));
+                return (!isNaN(val) && val >= 50000 && val < 5000000) ? val : 0;
+            };
+
+            const mC1 = extractTrancheFromMsg(/(?:cuota\s*1(?!\d)|c\.?\s*1(?!\d))[^\d$]{0,15}\$?\s*([\d]{1,3}(?:\.[\d]{3})+|\d{5,7})/i);
+            const m1_18 = extractTrancheFromMsg(/(?:1\s*(?:a|al|-)\s*18)[^\d$]{0,15}\$?\s*([\d]{1,3}(?:\.[\d]{3})+|\d{5,7})/i);
+            const m19_24 = extractTrancheFromMsg(/(?:19\s*(?:a|al|-)\s*24)[^\d$]{0,15}\$?\s*([\d]{1,3}(?:\.[\d]{3})+|\d{5,7})/i);
+            const m25_84 = extractTrancheFromMsg(/(?:25\s*(?:a|al|-)\s*84)[^\d$]{0,15}\$?\s*([\d]{1,3}(?:\.[\d]{3})+|\d{5,7})/i);
+
+            if (mC1) targetPlan.tranches.c1 = mC1;
+            if (m1_18) targetPlan.tranches.c1_18 = m1_18;
+            if (m19_24) targetPlan.tranches.c19_24 = m19_24;
+            if (m25_84) targetPlan.tranches.c25_84 = m25_84;
+
+            const sanitized = rawText
+                .replace(/\b(?:1\s*(?:a|al|-)\s*18|19\s*(?:a|al|-)\s*24|25\s*(?:a|al|-)\s*84)\b/gi, ' ')
+                .replace(/\$|\s/g, '');
+            const normNums = Array.from(sanitized.matchAll(/(\d{1,3}(?:\.\d{3})+|\d{5,9})/g))
                 .map(m => Number(m[1].replace(/\./g, '')))
                 .filter(n => !isNaN(n) && n >= 50000);
 
             const newVehicleVal = normNums.find(n => n >= 15000000 && n <= 250000000);
-            const newQuotaVal = normNums.find(n => n >= 50000 && n < 15000000);
+            const quotaCandidates = normNums.filter(n => n >= 50000 && n < 5000000);
+            const trancheMax = Math.max(targetPlan.tranches.c1 || 0, targetPlan.tranches.c1_18 || 0, targetPlan.tranches.c19_24 || 0, targetPlan.tranches.c25_84 || 0);
+            const newQuotaVal = Math.max(trancheMax, quotaCandidates.length > 0 ? Math.max(...quotaCandidates) : 0);
 
             if (!newVehicleVal && !newQuotaVal) {
                 pdfChatbotHistory.push({
                     from: 'bot',
-                    text: `No detecté ningún monto en pesos en tu mensaje. Indícame el valor móvil o la cuota más alta con números (por ejemplo: "Valor móvil $49.621.000 y cuota $425.000") para actualizar "${targetPlan.vehicleName || targetPlan.planName}".`
+                    text: `No detecté ningún monto en pesos. Puedes escribirme por ejemplo:\n"Hilux 70/30 cuota 1 $380.000, 1 a 18 $410.000, 19 a 24 $435.000, 25 a 84 $455.000"`
                 });
                 renderPdfChatbotUI();
                 return;
@@ -3451,8 +3694,11 @@
             if (newQuotaVal) targetPlan.price = newQuotaVal;
             pdfChatbotSelectedPlanId = targetPlan.id;
 
-            // Sincronizar también en el catálogo de referencia si coincide el modelo Toyota
-            const catMatch = marketPlansCatalog.find(p => p.brand === 'Toyota' && p.model.toLowerCase().includes((targetPlan.vehicleName || '').toLowerCase()));
+            const catMatch = marketPlansCatalog.find(p =>
+                p.brand === 'Toyota' &&
+                p.model.toLowerCase().includes((targetPlan.vehicleName || '').toLowerCase()) &&
+                p.modality === (targetPlan.modality || '70/30')
+            ) || marketPlansCatalog.find(p => p.brand === 'Toyota' && p.model.toLowerCase().includes((targetPlan.vehicleName || '').toLowerCase()));
             if (catMatch) {
                 if (newVehicleVal) catMatch.valorMovil = newVehicleVal;
                 if (newQuotaVal) catMatch.cuotaPura = newQuotaVal;
@@ -3462,217 +3708,27 @@
             renderPlansHistory();
             renderComparativaSelectors();
 
+            const t = targetPlan.tranches;
             pdfChatbotHistory.push({
                 from: 'bot',
-                text: `✅ ¡Listo! Actualicé "${targetPlan.vehicleName || targetPlan.planName}" (${targetPlan.period}):\n• Precio Final (Valor Móvil): $${Number(targetPlan.vehicleValue).toLocaleString('es-AR')}\n• Cuota Referencia (Más Alta): $${Number(targetPlan.price).toLocaleString('es-AR')}\n\nEl gráfico, la tabla comparativa y el Asistente IA de WhatsApp ya usan estos valores reales.`
+                text: `✅ ¡Actualizado "${targetPlan.vehicleName || targetPlan.planName}" [${targetPlan.modality || '70/30'}] (${targetPlan.period}):\n• Valor Móvil: $${Number(targetPlan.vehicleValue).toLocaleString('es-AR')}\n• Tramos: C.1 $${Number(t.c1 || 0).toLocaleString('es-AR')} | 1–18 $${Number(t.c1_18 || 0).toLocaleString('es-AR')} | 19–24 $${Number(t.c19_24 || 0).toLocaleString('es-AR')} | 25–84 $${Number(t.c25_84 || 0).toLocaleString('es-AR')}\n• Cuota Ordinaria Más Alta (Referencia): $${Number(targetPlan.price).toLocaleString('es-AR')}`
             });
             renderPdfChatbotUI();
-            showToast(`✅ Precio corregido para ${targetPlan.vehicleName || targetPlan.planName}`);
+            showToast(`✅ Tramos ordinarios actualizados (${targetPlan.modality || '70/30'})`);
         };
 
-        window.deletePlanRecord = async function(planId) {
-            plansHistory = plansHistory.filter(x => x.id !== planId);
-            await deletePlanBlobsFromIndexedDB(planId);
-            saveLocalData(true);
-            renderPlansHistory();
-            showToast("Plan eliminado del historial");
-        };
-
-        window.clearPlansHistory = async function() {
-            for (const p of plansHistory) await deletePlanBlobsFromIndexedDB(p.id);
-            plansHistory = [];
-            currentPlanJpgs = [];
-            saveLocalData(true);
-            renderCurrentJpgGallery();
-            renderPlansHistory();
-            showToast("Historial de PDFs vaciado");
-        };
-
-        window.openPlanFilesModal = function(planId) {
-            const plan = plansHistory.find(p => p.id === planId);
-            if (!plan) return;
-            currentPlanJpgs = plan.jpgPages || [];
-            document.getElementById('plan-files-modal-title').textContent = `${plan.planName} (${plan.period})`;
-            const actionsEl = document.getElementById('plan-files-modal-actions');
-            if (actionsEl) {
-                actionsEl.innerHTML = plan.pdfDataUrl
-                    ? `<a href="${plan.pdfDataUrl}" download="${plan.planName}.pdf" class="px-3 py-1.5 rounded-xl bg-[#EB0A1E] text-white text-xs font-bold">⬇️ Descargar PDF Original</a>`
-                    : '';
-            }
-            const gridEl = document.getElementById('plan-files-modal-grid');
-            if (gridEl) {
-                gridEl.innerHTML = currentPlanJpgs.length === 0
-                    ? `<div class="col-span-full text-center text-xs text-slate-400 py-8">No hay hojas JPG en memoria para este registro.</div>`
-                    : currentPlanJpgs.map((pg, idx) => `
-                        <div class="rounded-xl border border-slate-200 overflow-hidden bg-slate-50">
-                            <img src="${pg.dataUrl}" class="w-full h-44 object-contain bg-white border-b border-slate-100">
-                            <div class="p-2.5 flex items-center justify-between gap-2 bg-white">
-                                <span class="text-xs font-bold text-slate-700">Hoja ${pg.pageNum}</span>
-                                <div class="flex gap-1.5">
-                                    <button onclick="openShareJpgWaModal(${idx})" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-xs font-bold">📲 WA</button>
-                                    <a href="${pg.dataUrl}" download="${pg.fileName}" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold">⬇️ JPG</a>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-            }
-            document.getElementById('plan-files-modal').classList.remove('hidden');
-        };
-        window.closePlanFilesModal = function() { document.getElementById('plan-files-modal')?.classList.add('hidden'); };
-
-        window.openShareJpgWaModal = function(jpgIndex) {
-            pendingShareJpgItem = currentPlanJpgs[jpgIndex] || null;
-            if (!pendingShareJpgItem) return;
-            document.getElementById('share-jpg-wa-filename').textContent = pendingShareJpgItem.fileName;
-            document.getElementById('share-jpg-search').value = '';
-            renderShareJpgContactsList();
-            document.getElementById('share-jpg-wa-modal').classList.remove('hidden');
-        };
-        window.closeShareJpgWaModal = function() { document.getElementById('share-jpg-wa-modal')?.classList.add('hidden'); };
-        window.renderShareJpgContactsList = function() {
-            const box = document.getElementById('share-jpg-contacts-list');
-            if (!box) return;
-            const q = (document.getElementById('share-jpg-search')?.value || '').toLowerCase().trim();
-            const list = getAllListsCombined().filter(c => c.phone && (!q || (c.name || '').toLowerCase().includes(q) || c.phone.includes(q))).slice(0, 20);
-            box.innerHTML = list.length === 0
-                ? `<div class="p-3 text-center text-xs text-slate-400">Sin contactos coincidentes.</div>`
-                : list.map(c => `<button onclick="executeShareJpgToPhone('${c.phone}', '${(c.name || 'Cliente').replace(/'/g, "\\'")}')" class="w-full p-2.5 text-left hover:bg-emerald-50 flex items-center justify-between text-xs"><span class="font-bold text-slate-900">${c.name || 'Sin Nombre'}</span><span class="text-emerald-700 font-semibold">${formatPhoneAR(c.phone)}</span></button>`).join('');
-        };
-        window.executeShareJpgToPhone = async function(rawPhone, clientName = 'Cliente') {
-            const formatted = formatPhoneAR(rawPhone);
-            const waDigits = formatted.replace(/\D/g, '');
-            if (!waDigits) { showToast("Ingresa un teléfono válido", "error"); return; }
-
-            if (pendingShareJpgItem?.dataUrl && navigator.clipboard && window.ClipboardItem) {
-                try {
-                    const res = await fetch(pendingShareJpgItem.dataUrl);
-                    const blob = await res.blob();
-                    const pngBlob = blob.type === 'image/png' ? blob : await new Promise(resolve => {
-                        const img = new Image();
-                        img.onload = () => {
-                            const c = document.createElement('canvas');
-                            c.width = img.width; c.height = img.height;
-                            c.getContext('2d').drawImage(img, 0, 0);
-                            c.toBlob(resolve, 'image/png');
-                        };
-                        img.src = pendingShareJpgItem.dataUrl;
-                    });
-                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
-                    showToast("📋 Imagen JPG copiada al portapapeles: presiona Ctrl+V en WhatsApp Web");
-                } catch (e) {
-                    showToast("Abriendo chat en WhatsApp Web...");
-                }
-            }
-            const msg = `Hola ${clientName}, te comparto la lista oficial vigente de Toyota Plan (Ginza Toyota).`;
-            openWhatsAppSingleTab(waDigits, null, 'clientes', clientName);
-            const targetUrl = `https://web.whatsapp.com/send?phone=${waDigits}&text=${encodeURIComponent(msg)}`;
-            if (waTabRef && !waTabRef.closed) { try { waTabRef.location.href = targetUrl; waTabRef.focus(); } catch (e) {} }
-            closeShareJpgWaModal();
-        };
-
-        window.openBackupModal = function() { document.getElementById('sync-room-input').value = syncRoom; document.getElementById('backup-modal')?.classList.remove('hidden'); };
-        window.closeBackupModal = function() { document.getElementById('backup-modal')?.classList.add('hidden'); };
-        window.changeSyncRoom = async function() {
-            const val = document.getElementById('sync-room-input').value.trim();
-            if (!val) return;
-            syncRoom = val; localStorage.setItem('crm_sync_room', syncRoom);
-            await pullFromFirebase(true); closeBackupModal();
-        };
-        window.exportBackupFile = function() {
-            const blob = new Blob([JSON.stringify(buildSyncPayload(Date.now()), null, 2)], { type: 'application/json' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'crm_ginza_toyota.json'; a.click();
-        };
-        window.exportSectionCSV = function() { showToast("Exportando CSV..."); };
-        window.exportClientesCSV = function() { showToast("Exportando Cartera CSV..."); };
-        window.requestDeleteAll = function() { crmContacts = []; saveLocalData(true); renderAllTables(); updateDashboard(); };
-        window.showToast = function(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            if (!container) return;
-            const toast = document.createElement('div');
-            toast.className = `${type === 'success' ? 'bg-zinc-900 border border-zinc-700' : 'bg-[#EB0A1E]'} text-white px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-medium toast-animate max-w-xs sm:max-w-sm`;
-            toast.textContent = message;
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        };
-
-        // --- INICIALIZACIÓN ---
-        async function initApp() {
-            if (typeof pdfjsLib !== 'undefined') {
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-            }
-
-            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            const now = new Date();
-            const monthSelect = document.getElementById('plan-month-input');
-            const yearInput = document.getElementById('plan-year-input');
-            if (monthSelect) monthSelect.value = monthNames[now.getMonth()];
-            if (yearInput) yearInput.value = now.getFullYear();
-
-            const heroDate = document.getElementById('hero-date-label');
-            if (heroDate) heroDate.textContent = `${now.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })} • Ginza Toyota`;
-
-            loadLocalData();
-            mergeDefaultMarketPlans();
-            normalizeAllStoredPhones(true);
-            renderAllTables();
-            updateDashboard();
-            syncPlaneroDeLeyLive(false);
-
-            const searchInput = document.getElementById('search-crm');
-            if (searchInput) searchInput.addEventListener('input', renderCrmTable);
-            const csvInput = document.getElementById('csv-upload');
-            if (csvInput) csvInput.addEventListener('change', handleCsvUpload);
-
-            await pullFromFirebase(true);
-            await restoreSavedPlanBlobsFromIndexedDB();
-            renderPlansHistory();
-            updateWaAiNavBadge();
-            startFirebaseLiveListener();
-            startWaIncomingLiveListener();
-            startSfIncomingLiveListener();
-            checkWhatsApp48hTimeouts(false);
-            await runAutonomousAiFollowUps();
-            await pollIncomingWhatsAppEvents();
-            await pollIncomingSalesforceEvents(false);
-
-            setInterval(() => {
-                pullFromFirebase(false);
-                checkWhatsApp48hTimeouts(false);
-                runAutonomousAiFollowUps();
-                pollIncomingWhatsAppEvents();
-                pollIncomingSalesforceEvents(false);
-            }, 3000);
-        }
-
-        function renderAllTables() {
-            renderBotonera();
-            updateContactosSubCounts();
-            syncModelDropdowns();
-            renderCrmTable();
-            renderGestionTable();
-            renderRedesTable();
-            renderSalesforceTable();
-            renderConvencionalSellers();
-            renderConvencionalTables();
-            renderCanceladosTable();
-            renderRescindidosTable();
-            renderClientesTable();
-            renderObjetivos();
-            renderPlansHistory();
-        }
-
-        // --- ASISTENTE CONVERSACIONAL IA WHATSAPP (ESTRICTAMENTE BASADO EN DATOS REALES DEL CRM) ---
+        // --- ASISTENTE CONVERSACIONAL IA WHATSAPP (MODO DISCRETO: SOLO RESPONDE LO QUE EL CLIENTE PREGUNTA) ---
         function updateWaAiNavBadge() {
             const btn = document.getElementById('nav-wa-ai-btn');
             const dot = document.getElementById('nav-wa-ai-dot');
             const lbl = document.getElementById('nav-wa-ai-label');
             if (!btn || !lbl) return;
             if (waAiConfig.autoReplyMobile) {
-                btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm';
+                btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white animate-ping';
                 lbl.textContent = '🤖 WA IA ON';
             } else {
-                btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-[#EB0A1E] hover:bg-red-700 text-white border border-red-400/40 transition-colors flex items-center gap-1.5 shadow-sm';
+                btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-[#EB0A1E] hover:bg-red-700 text-white border border-red-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white/70';
                 lbl.textContent = '🤖 WA IA';
             }
@@ -3687,17 +3743,21 @@
         function buildCrmRealKnowledgeSnapshot(contact = null) {
             const toyotaPlans = marketPlansCatalog
                 .filter(p => p.brand === 'Toyota')
-                .map(p => `- ${p.model} (Segmento ${p.segment}, Modalidad ${p.modality}): Valor Móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | Cuota Pura Est. $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
+                .map(p => `- ${p.model} (Segmento ${p.segment}, Modalidad ${p.modality}): Valor Móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | Cuota Ordinaria Referencia $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
 
             const rivalPlans = waAiConfig.allowCompetitorCompare !== false
                 ? marketPlansCatalog
                     .filter(p => p.brand !== 'Toyota')
-                    .map(p => `- ${p.brand} ${p.model} (${p.segment}, ${p.modality}): Valor Móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | Cuota Pura $${Number(p.cuotaPura).toLocaleString('es-AR')}`)
+                    .map(p => `- ${p.brand} ${p.model} (${p.segment}, ${p.modality}): Valor Móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | Cuota $${Number(p.cuotaPura).toLocaleString('es-AR')}`)
                 : [];
 
-            const pdfPlans = plansHistory.slice(0, 15).map(p =>
-                `- PDF "${p.planName}" (${p.period}): ${p.vehicleValue > 0 ? 'Precio Final $' + Number(p.vehicleValue).toLocaleString('es-AR') : ''} ${p.price > 0 ? '| Cuota Referencia (Más Alta) $' + Number(p.price).toLocaleString('es-AR') : ''}`.trim()
-            );
+            const pdfPlans = plansHistory.slice(0, 15).map(p => {
+                const t = p.tranches || {};
+                const trTxt = (t.c1 || t.c1_18 || t.c19_24 || t.c25_84)
+                    ? ` | Tramos ordinarios: C.1 $${Number(t.c1||0).toLocaleString('es-AR')}, 1-18 $${Number(t.c1_18||0).toLocaleString('es-AR')}, 19-24 $${Number(t.c19_24||0).toLocaleString('es-AR')}, 25-84 $${Number(t.c25_84||0).toLocaleString('es-AR')}`
+                    : '';
+                return `- PDF "${p.planName}" [${p.modality || '70/30'}] (${p.period}): ${p.vehicleValue > 0 ? 'Valor Móvil $' + Number(p.vehicleValue).toLocaleString('es-AR') : ''} ${p.price > 0 ? '| Cuota Ordinaria Más Alta Ref. $' + Number(p.price).toLocaleString('es-AR') : ''}${trTxt}`.trim();
+            });
 
             const historyMsgs = contact && waAiConversationLogs[contact.id]
                 ? waAiConversationLogs[contact.id].slice(-8).map(m => `${m.from === 'ai' ? 'Asesor' : 'Cliente'}: ${m.text}`)
@@ -3719,6 +3779,7 @@
                 fechaHoy: new Date().toLocaleDateString('es-AR'),
                 concesionario: waAiConfig.branchName || 'Ginza Toyota',
                 asesor: waAiConfig.advisorName || 'Asesor Comercial',
+                baseLegalContractualToyotaPlan: TOYOTA_PLAN_CONTRACT_KNOWLEDGE,
                 planesToyotaVigentes: toyotaPlans,
                 comparativaCompetenciaAutorizada: rivalPlans,
                 pdfsAnalizadosEnCrm: pdfPlans,
@@ -3764,49 +3825,62 @@
             if (detectedModel && contact && !contact.interestModel) {
                 contact.interestModel = detectedModel;
             }
-            const matchedToyotaPlans = detectedModel
-                ? marketPlansCatalog.filter(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()))
-                : [];
-            const matchedPdf = detectedModel
-                ? plansHistory.find(p => (p.planName || '').toLowerCase().includes(detectedModel.toLowerCase()))
-                : null;
 
+            // REGLA ESTRICTA: En el primer mensaje o saludo sin pregunta puntual, NO soltar precios ni cláusulas por adelantado
             if (!userMessage.trim()) {
                 if (contact?.status === 'Entrevista' && contact?.scheduleDate) {
-                    return `${saludo} Soy ${advisor} de ${branch}. Te escribo para confirmar nuestra entrevista del ${formatDisplayISODate(contact.scheduleDate)}${contact.scheduleTime ? ` a las ${contact.scheduleTime} hs` : ''}${contact.interestModel ? ` por tu ${contact.interestModel}` : ''}. ¿Te queda bien ese horario?`;
+                    return `${saludo} Soy ${advisor} de ${branch}. Te escribo para confirmar nuestra entrevista del ${formatDisplayISODate(contact.scheduleDate)}${contact.scheduleTime ? ` a las ${contact.scheduleTime} hs` : ''}. ¿Te queda bien ese horario?`;
                 }
-                if (detectedModel && matchedToyotaPlans.length > 0) {
-                    const p = matchedToyotaPlans[0];
-                    return `${saludo} Soy ${advisor} de ${branch}. Vi tu consulta por ${detectedModel}. Actualmente tenemos el plan ${p.model} (modalidad ${p.modality}) con cuota pura desde $${Number(p.cuotaPura).toLocaleString('es-AR')} (valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')}). ¿Buscabas financiar el 100% o entregar un capital/usado?`;
+                if (detectedModel) {
+                    return `${saludo} Soy ${advisor} de ${branch}. Vi tu consulta por ${detectedModel}, ¿qué info estabas buscando así te ayudo?`;
                 }
-                return `${saludo} Soy ${advisor} de ${branch}. Te contacto por tu consulta sobre Toyota Plan. ¿Qué modelo estabas buscando así te paso los valores exactos vigentes?`;
+                return `${saludo} Soy ${advisor} de ${branch}. Te contacto por tu consulta sobre Toyota, ¿en qué vehículo estabas interesado?`;
             }
 
-            if (detectedModel && (matchedToyotaPlans.length > 0 || matchedPdf)) {
-                const lines = [];
-                matchedToyotaPlans.forEach(p => {
-                    lines.push(`• *${p.model}* (${p.modality}): Cuota pura $${Number(p.cuotaPura).toLocaleString('es-AR')} (Valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')})`);
-                });
-                if (matchedPdf && (matchedPdf.price > 0 || matchedPdf.vehicleValue > 0)) {
-                    lines.push(`• Según lista *${matchedPdf.planName}* (${matchedPdf.period}): ${matchedPdf.price > 0 ? 'Cuota ref. (más alta) $' + Number(matchedPdf.price).toLocaleString('es-AR') : ''} ${matchedPdf.vehicleValue > 0 ? '(Valor móvil $' + Number(matchedPdf.vehicleValue).toLocaleString('es-AR') + ')' : ''}`.trim());
+            // Consultas contractuales / legales específicas (solo si el cliente pregunta por ese tema)
+            if (/\b(flexible|usado|garantia extendida)\b/.test(msgNorm)) {
+                return `${saludo} Con el Plan Flexible (Res. IGJ 183/24) al adjudicar recibís un Certificado por el Valor Móvil que podés usar para retirar un 0 km o un Usado Certificado Toyota con Garantía Extendida de hasta 4 años.`;
+            }
+            if (/\b(adjudica|sorteo|licita|entrega|demora|plazo|dias)\b/.test(msgNorm)) {
+                return `${saludo} Los actos de adjudicación se hacen entre los días 12 y 20 de cada mes por sorteo o licitación (oferta mínima 1 cuota pura). Una vez cumplido el pedido, el plazo contractual de entrega es de hasta 75 días corridos para 0 km y 60 días para usados certificados.`;
+            }
+            if (/\b(arrepent|baja|renunc|rescind|devolucion|reintegro)\b/.test(msgNorm)) {
+                return `${saludo} Tenés derecho de arrepentimiento dentro de los 10 días corridos con devolución del 100% de lo abonado. Si renunciás más adelante, el haber se calcula por cuotas puras integradas menos 2% (o 4% en rescisión) y se reintegra al liquidar el grupo o al sustituirse el plan.`;
+            }
+            if (/\b(adelant|cancelar|transfer|ceder|cesion)\b/.test(msgNorm)) {
+                return `${saludo} Podés adelantar o cancelar cuotas en cualquier momento a valor de Cuota Pura (sin cargos administrativos), y también podés ceder el plan a un tercero sin que Toyota Plan cobre comisión por la transferencia.`;
+            }
+
+            // Consultas de precios / cuotas (SOLO si el cliente pregunta por precio, cuota, valor o monto)
+            const asksPrice = /\b(precio|cuota|valor|sale|cuesta|monto|plata|financ|70\/30|100%)\b/.test(msgNorm);
+            if (asksPrice) {
+                const matchedToyotaPlans = detectedModel
+                    ? marketPlansCatalog.filter(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()))
+                    : [];
+                const matchedPdf = detectedModel
+                    ? plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(detectedModel.toLowerCase()))
+                    : null;
+
+                if (detectedModel && (matchedToyotaPlans.length > 0 || matchedPdf)) {
+                    const lines = [];
+                    if (matchedPdf && matchedPdf.price > 0) {
+                        lines.push(`• *${matchedPdf.vehicleName || matchedPdf.planName}* (${matchedPdf.modality || '70/30'}): Valor móvil $${Number(matchedPdf.vehicleValue || 0).toLocaleString('es-AR')} — Cuota ordinaria de referencia $${Number(matchedPdf.price).toLocaleString('es-AR')}`);
+                    } else {
+                        matchedToyotaPlans.forEach(p => {
+                            lines.push(`• *${p.model}* (${p.modality}): Valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')} — Cuota ordinaria ref. $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
+                        });
+                    }
+                    return `${saludo} Te paso el detalle consultado para *Toyota ${detectedModel}*:\n\n${lines.join('\n')}\n\n¿Querés que veamos alguna otra opción o coordinamos una charla?`;
                 }
-                return `${saludo} Te paso los valores oficiales que tengo cargados hoy para *Toyota ${detectedModel}*:\n\n${lines.join('\n')}\n\n¿Te gustaría que lo repasemos en una llamada corta o coordinamos una visita en ${branch}?`;
+                return `${saludo} Decime qué modelo Toyota te interesa (Yaris, Yaris Cross, Corolla, Corolla Cross, Hilux o Hiace) y te paso el valor exacto.`;
             }
 
-            if (msgNorm.includes('precio') || msgNorm.includes('cuota') || msgNorm.includes('valor') || msgNorm.includes('plan')) {
-                const summaryTop = marketPlansCatalog
-                    .filter(p => p.brand === 'Toyota')
-                    .slice(0, 4)
-                    .map(p => `• ${p.model} (${p.modality}): cuota pura $${Number(p.cuotaPura).toLocaleString('es-AR')}`)
-                    .join('\n');
-                return `${saludo} Te comparto algunas referencias vigentes de Toyota Plan en ${branch}:\n\n${summaryTop}\n\nDecime qué modelo te interesa (Yaris, Yaris Cross, Corolla, Corolla Cross, Hilux o Hiace) y te paso el detalle exacto.`;
+            if (/\b(direccion|donde|ubicacion|horario|reunion|entrevista|pasar|visitar)\b/.test(msgNorm)) {
+                return `${saludo} Podemos vernos en ${branch} o hacer una videollamada cuando te quede cómodo. Decime qué día y horario preferís y te lo agendo.`;
             }
 
-            if (msgNorm.includes('direccion') || msgNorm.includes('donde') || msgNorm.includes('ubicacion') || msgNorm.includes('horario') || msgNorm.includes('reunion') || msgNorm.includes('entrevista')) {
-                return `${saludo} Podemos vernos en ${branch} o hacer una videollamada cuando te quede cómodo. Decime qué día y horario preferís y te lo dejo agendado.`;
-            }
-
-            return `${saludo} Para darte ese dato con total precisión y no pasarte información incorrecta, lo reviso directamente en sistema con vos. ¿Te parece si te llamo 2 minutos o coordinamos un horario?`;
+            // Si solo saluda o comenta sin preguntar un dato todavía, responde cordial y hace 1 pregunta abierta sin volcar información
+            return `${saludo} ¿Cómo te puedo ayudar con tu consulta${detectedModel ? ` sobre ${detectedModel}` : ''}?`;
         }
 
         async function generateGroundedWhatsAppReply(contact, userMessage = '') {
@@ -3819,14 +3893,15 @@
             try {
                 const apiKey = "";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-                const systemPrompt = `Eres ${kb.asesor}, asesor comercial real de ${kb.concesionario} conversando con naturalidad por WhatsApp en Argentina (voseo argentino: "vos", "tenés", "decime", cálido, profesional y cero desesperado o insistente).
-TIENES LIBERTAD PARA CONVERSAR, COMPARAR CONTRA RIVALES Y COORDINAR ENTREVISTAS, PERO CON ESTAS REGLAS INQUEBRANTABLES:
-1. NUNCA INVENTES DATOS: Todo precio, cuota pura, valor móvil, modalidad (70/30, 100%, 80/20), modelo o turno que menciones DEBE existir textualmente en DATOS_REALES_CRM.
-2. Si el cliente pregunta por un descuento, bonificación, plazo de entrega exacto o dato que NO esté en DATOS_REALES_CRM, dile con naturalidad que ese detalle fino lo revisás con él en una llamada rápida de 2 minutos o en el salón para no darle un número impreciso.
-3. Si se acaba de agendar una entrevista (${autoBooked ? `el ${autoBooked.date} a las ${autoBooked.time} hs` : 'ninguna nueva'}), confírmala con amabilidad.
-4. Mensajes claros, relajados y fáciles de leer en celular (3 a 5 líneas máximo).`;
 
-                const promptText = `DATOS_REALES_CRM:\n${JSON.stringify(kb, null, 2)}\n\nMENSAJE_DEL_CLIENTE: "${userMessage || '(Iniciar primer contacto comercial cordial con datos de su ficha)'}"\n\nRedacta únicamente el mensaje listo para enviar por WhatsApp:`;
+                const systemPrompt = `Eres ${kb.asesor}, asesor comercial real de ${kb.concesionario} conversando por WhatsApp en Argentina (voseo argentino: "vos", "tenés", "decime", cálido, natural y cero insistente).
+REGLAS INQUEBRANTABLES:
+1. NO DES INFORMACIÓN SI EL CLIENTE NO PREGUNTA: Nunca sueltes precios, cuotas, tramos ni cláusulas contractuales por adelantado si el cliente solo saludó o no preguntó por ese dato. Responde únicamente lo que el cliente preguntó y haz una pregunta breve para avanzar.
+2. NUNCA INVENTES DATOS: Todo precio, cuota, valor móvil o cláusula que menciones DEBE salir exclusivamente de DATOS_REALES_CRM (excluyendo siempre cualquier cuota extraordinaria; usa solo la cuota ordinaria más alta de referencia cuando pidan precios).
+3. Si se acaba de agendar una entrevista (${autoBooked ? `el ${autoBooked.date} a las ${autoBooked.time} hs` : 'ninguna nueva'}), confírmala con amabilidad.
+4. Mensajes breves y naturales (2 a 4 líneas máximo).`;
+
+                const promptText = `DATOS_REALES_CRM:\n${JSON.stringify(kb, null, 2)}\n\nMENSAJE_DEL_CLIENTE: "${userMessage || '(Saludo inicial cordial sin dar precios ni info no solicitada)'}"\n\nRedacta únicamente el mensaje listo para enviar por WhatsApp:`;
 
                 const res = await fetch(apiUrl, {
                     method: 'POST',
@@ -3840,11 +3915,11 @@ TIENES LIBERTAD PARA CONVERSAR, COMPARAR CONTRA RIVALES Y COORDINAR ENTREVISTAS,
                 const data = await res.json();
                 const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
                 if (aiText) {
-                    return { reply: aiText, source: autoBooked ? 'IA + Turno Agendado en CRM' : 'IA Libre + Datos Reales CRM' };
+                    return { reply: aiText, source: autoBooked ? 'IA + Turno Agendado en CRM' : 'IA Discreta + Datos Reales CRM' };
                 }
             } catch (e) {}
 
-            return { reply: fallbackReply, source: autoBooked ? 'Turno Agendado en CRM' : 'Motor Verificado CRM' };
+            return { reply: fallbackReply, source: autoBooked ? 'Turno Agendado en CRM' : 'Motor Discreto Verificado CRM' };
         }
 
         async function queueAutoReplyToMobile(contact, replyText, incomingText = '') {
@@ -3893,9 +3968,8 @@ TIENES LIBERTAD PARA CONVERSAR, COMPARAR CONTRA RIVALES Y COORDINAR ENTREVISTAS,
             const kbSummaryEl = document.getElementById('wa-ai-kb-summary');
             if (kbSummaryEl) {
                 kbSummaryEl.innerHTML = `
-                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Catálogo Toyota Vigente:</b> ${toyotaCount} planes con valores móviles y cuotas puras reales.</div>
-                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• PDFs Subidos en el CRM:</b> ${plansHistory.length} archivo(s) reales cargados.</div>
-                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Fichas de Clientes:</b> ${getAllListsCombined().length} contactos con etapa, modelo y turnos reales.</div>
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Modo Discreto Activo:</b> No da precios ni cláusulas hasta que el cliente pregunte.</div>
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Contratos & Precios Reales:</b> Condiciones Generales + Plan Flexible IGJ 183/24, ${toyotaCount} planes y ${plansHistory.length} PDF(s) sin cuota extraordinaria.</div>
                 `;
             }
 
@@ -3957,7 +4031,7 @@ TIENES LIBERTAD PARA CONVERSAR, COMPARAR CONTRA RIVALES Y COORDINAR ENTREVISTAS,
                 </div>
             `;
             if (logs.length === 0) {
-                chatBox.innerHTML = headerCard + `<div class="text-center text-xs text-slate-500 py-6">Escribe abajo lo que te preguntó el cliente o pulsa <b>"✨ Redactar 1er Mensaje Real"</b>.</div>`;
+                chatBox.innerHTML = headerCard + `<div class="text-center text-xs text-slate-500 py-6">Escribe abajo lo que preguntó el cliente o pulsa <b>"✨ Redactar Saludo Discreto"</b>.</div>`;
                 return;
             }
             chatBox.innerHTML = headerCard + logs.map(m => `
@@ -4038,7 +4112,101 @@ TIENES LIBERTAD PARA CONVERSAR, COMPARAR CONTRA RIVALES Y COORDINAR ENTREVISTAS,
             showToast("🟢 Abriendo chat en WhatsApp Web con la respuesta verificada");
         };
 
+        window.openBackupModal = function() { document.getElementById('sync-room-input').value = syncRoom; document.getElementById('backup-modal')?.classList.remove('hidden'); };
+        window.closeBackupModal = function() { document.getElementById('backup-modal')?.classList.add('hidden'); };
+        window.changeSyncRoom = async function() {
+            const val = document.getElementById('sync-room-input').value.trim();
+            if (!val) return;
+            syncRoom = val; localStorage.setItem('crm_sync_room', syncRoom);
+            await pullFromFirebase(true); closeBackupModal();
+        };
+        window.exportBackupFile = function() {
+            const blob = new Blob([JSON.stringify(buildSyncPayload(Date.now()), null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'crm_ginza_toyota.json'; a.click();
+        };
+        window.exportSectionCSV = function() { showToast("Exportando CSV..."); };
+        window.exportClientesCSV = function() { showToast("Exportando Cartera CSV..."); };
+        window.requestDeleteAll = function() { crmContacts = []; saveLocalData(true); renderAllTables(); updateDashboard(); };
+        window.showToast = function(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `${type === 'success' ? 'bg-zinc-900 border border-zinc-700' : 'bg-[#EB0A1E]'} text-white px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-medium toast-animate max-w-xs sm:max-w-sm`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        };
+
+        function renderAllTables() {
+            renderBotonera();
+            updateContactosSubCounts();
+            syncModelDropdowns();
+            renderCrmTable();
+            renderGestionTable();
+            renderRedesTable();
+            renderSalesforceTable();
+            renderConvencionalSellers();
+            renderConvencionalTables();
+            renderCanceladosTable();
+            renderRescindidosTable();
+            renderClientesTable();
+            renderObjetivos();
+            renderPlansHistory();
+        }
+
+        // --- INICIALIZACIÓN ---
+        async function initApp() {
+            if (typeof pdfjsLib !== 'undefined') {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            }
+
+            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            const now = new Date();
+            const monthSelect = document.getElementById('plan-month-input');
+            const yearInput = document.getElementById('plan-year-input');
+            if (monthSelect) monthSelect.value = monthNames[now.getMonth()];
+            if (yearInput) yearInput.value = now.getFullYear();
+
+            const heroDate = document.getElementById('hero-date-label');
+            if (heroDate) heroDate.textContent = `${now.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })} • Ginza Toyota`;
+
+            loadLocalData();
+            mergeDefaultMarketPlans();
+            normalizeAllStoredPhones(true);
+            renderAllTables();
+            updateDashboard();
+            syncPlaneroDeLeyLive(false);
+
+            const searchInput = document.getElementById('search-crm');
+            if (searchInput) searchInput.addEventListener('input', renderCrmTable);
+            const csvInput = document.getElementById('csv-upload');
+            if (csvInput) csvInput.addEventListener('change', handleCsvUpload);
+
+            await pullFromFirebase(true);
+            await restoreSavedPlanBlobsFromIndexedDB();
+            renderPlansHistory();
+            updateWaAiNavBadge();
+            startFirebaseLiveListener();
+            startWaIncomingLiveListener();
+            startSfIncomingLiveListener();
+            checkWhatsApp48hTimeouts(false);
+            await runAutonomousAiFollowUps();
+            await pollIncomingWhatsAppEvents(false);
+            await pollIncomingSalesforceEvents(false);
+
+            setInterval(() => {
+                pullFromFirebase(false);
+                checkWhatsApp48hTimeouts(false);
+                runAutonomousAiFollowUps();
+                pollIncomingWhatsAppEvents(false);
+                pollIncomingSalesforceEvents(false);
+            }, 3000);
+        }
+
         initApp();
+        if (new URLSearchParams(window.location.search).get('view') === 'agenda') {
+            setTimeout(() => openAgendaWindow(), 150);
+        }
     </script>
 </body>
 </html>
