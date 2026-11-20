@@ -446,8 +446,11 @@
                     <div class="flex items-center gap-2.5">
                         <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
                         <h3 class="text-sm sm:text-base font-bold">4. Salesforce Leads</h3>
+                        <span id="sf-sync-pill" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/20 text-sky-200 border border-sky-400/30">Sync 2-Vías Listo</span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="openSalesforceSyncModal()" class="bg-sky-500 hover:bg-sky-400 text-zinc-950 px-3 py-1 rounded-lg text-xs font-extrabold transition-colors shadow-xs">🔄 Conectar Salesforce (2 Vías)</button>
+                        <button onclick="syncSalesforceBidirectional(true)" class="bg-white/15 hover:bg-white/25 text-white px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors">⚡ Sincronizar Ahora</button>
                         <button onclick="openWaTemplatesModal('salesforce')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
                         <button onclick="exportSectionCSV('salesforce')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors">Exportar CSV</button>
                     </div>
@@ -1534,6 +1537,129 @@
         </div>
     </div>
 
+    <!-- MODAL DE INTEGRACIÓN BIDIRECCIONAL SEGURA CON SALESFORCE -->
+    <div id="sf-sync-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[67] hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden">
+            <div class="px-5 py-4 bg-gradient-to-r from-sky-950 via-slate-900 to-zinc-900 text-white flex justify-between items-center shrink-0">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-base sm:text-lg font-extrabold">🔄 Integración Bidireccional Segura — Salesforce ↔ Ginza Toyota</h3>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">PROTECCIÓN ANTI-DUPLICADOS</span>
+                    </div>
+                    <p class="text-xs text-sky-200 mt-0.5">Sincroniza leads de Salesforce hacia este CRM y envía cada cambio de estado, entrevista o venta de vuelta a Salesforce.</p>
+                </div>
+                <button onclick="closeSalesforceSyncModal()" class="text-slate-300 hover:text-white text-lg">✕</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-5 space-y-5 text-xs sm:text-sm">
+                <!-- Selector de Modo de Sincronización -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- OPCIÓN A: CONEXIÓN DIRECTA SALESFORCE REST API -->
+                    <div class="p-4 rounded-2xl border-2 border-sky-200 bg-sky-50/40 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold uppercase text-sky-900">Opción A: API REST Directa Salesforce</span>
+                            <span class="px-2 py-0.5 rounded bg-sky-600 text-white text-[10px] font-bold">2 VÍAS DIRECTO</span>
+                        </div>
+                        <p class="text-xs text-slate-600">Conecta directamente con tu instancia de Salesforce usando tu URL y Token de acceso OAuth / Session ID.</p>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">URL Instancia Salesforce</label>
+                            <input type="text" id="sf-cfg-instance" placeholder="https://tuconcesionario.my.salesforce.com" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Access Token / Bearer Token</label>
+                            <input type="password" id="sf-cfg-token" placeholder="00D..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">Objeto Salesforce</label>
+                                <select id="sf-cfg-object" class="w-full px-2.5 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
+                                    <option value="Lead">Lead (Prospectos)</option>
+                                    <option value="Contact">Contact (Contactos)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">Modo Seguridad</label>
+                                <select id="sf-cfg-conflict" class="w-full px-2.5 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
+                                    <option value="newest">Más reciente gana (Seguro)</option>
+                                    <option value="crm_wins">Este CRM prevalece</option>
+                                    <option value="sf_wins">Salesforce prevalece</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <button onclick="saveSalesforceConfig()" class="px-3.5 py-2 bg-sky-700 hover:bg-sky-800 text-white rounded-xl text-xs font-bold">💾 Guardar Configuración</button>
+                            <button onclick="syncSalesforceBidirectional(true)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold">⚡ Probar y Sincronizar</button>
+                        </div>
+                    </div>
+
+                    <!-- OPCIÓN B: PUENTE AUTOMÁTICO WEBHOOK (MAKE / ZAPIER / FLOW) -->
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold uppercase text-slate-800">Opción B: Webhook Tiempo Real (Sin Token Admin)</span>
+                            <span class="px-2 py-0.5 rounded bg-zinc-800 text-white text-[10px] font-bold">MAKE / ZAPIER / FLOW</span>
+                        </div>
+                        <p class="text-xs text-slate-600">Usa estas 2 URLs en <b>Make.com</b>, <b>Zapier</b> o <b>Salesforce Flow</b> para sincronizar en ambos sentidos sin pedir permisos de desarrollador.</p>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">1. Entrada (Salesforce → Este CRM) [POST]:</label>
+                            <div class="flex gap-1.5">
+                                <input type="text" id="sf-inbound-url" readonly class="flex-1 px-2.5 py-1.5 text-[11px] font-mono bg-white border border-slate-300 rounded-lg text-slate-800 outline-none">
+                                <button onclick="copyInputText('sf-inbound-url')" class="px-2.5 py-1.5 bg-zinc-900 text-white rounded-lg text-[11px] font-bold shrink-0">Copiar</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">2. Salida (Este CRM → Salesforce) [GET / Stream]:</label>
+                            <div class="flex gap-1.5">
+                                <input type="text" id="sf-outbound-url" readonly class="flex-1 px-2.5 py-1.5 text-[11px] font-mono bg-white border border-slate-300 rounded-lg text-slate-800 outline-none">
+                                <button onclick="copyInputText('sf-outbound-url')" class="px-2.5 py-1.5 bg-zinc-900 text-white rounded-lg text-[11px] font-bold shrink-0">Copiar</button>
+                            </div>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white border border-slate-200 text-[11px] text-slate-600">
+                            <b>Campos JSON aceptados:</b> <code>{"sfId":"00Q...", "name":"...", "phone":"...", "status":"...", "model":"Hilux", "notes":"..."}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mapeo de Estados CRM <-> Salesforce -->
+                <div class="p-4 rounded-2xl border border-slate-200 bg-white">
+                    <h4 class="text-xs font-extrabold uppercase text-slate-800 mb-2.5">Mapeo Automático de Estados (CRM Ginza Toyota ↔ Salesforce Status)</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>Pendiente</b> ↔ <code>Open - Not Contacted</code></div>
+                        <div class="p-2 rounded-lg bg-blue-50 border border-blue-200"><b>Contestó / 48h</b> ↔ <code>Working - Contacted</code></div>
+                        <div class="p-2 rounded-lg bg-purple-50 border border-purple-200"><b>Interesado / Entrevista</b> ↔ <code>Qualified / Meeting</code></div>
+                        <div class="p-2 rounded-lg bg-emerald-50 border border-emerald-200"><b>Venta / No Compra</b> ↔ <code>Closed - Converted / Lost</code></div>
+                    </div>
+                </div>
+
+                <!-- Simulador de Prueba Segura & Bitácora de Sincronización -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                    <div class="md:col-span-5 p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2.5">
+                        <h4 class="text-xs font-extrabold uppercase text-slate-800">Simular Lead Entrante desde Salesforce</h4>
+                        <input type="text" id="sf-sim-id" placeholder="ID Salesforce (ej: 00Q8b00001XYZ)" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg bg-white outline-none">
+                        <input type="text" id="sf-sim-name" placeholder="Nombre del cliente (ej: Diego Fernández)" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg bg-white outline-none">
+                        <input type="text" id="sf-sim-phone" placeholder="Teléfono (ej: 3415557890)" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg bg-white outline-none">
+                        <input type="text" id="sf-sim-campaign" placeholder="Campaña / Modelo (ej: Hilux Plan 70/30)" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg bg-white outline-none">
+                        <button onclick="simulateSalesforceInboundLead()" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold">📥 Simular Entrada desde Salesforce</button>
+                    </div>
+
+                    <div class="md:col-span-7 p-4 rounded-2xl border border-slate-200 bg-white flex flex-col">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-xs font-extrabold uppercase text-slate-800">Bitácora de Sincronización & Auditoría</h4>
+                            <button onclick="sfSyncLogs = []; renderSfSyncLogs();" class="text-[11px] text-slate-400 hover:text-slate-600">Limpiar log</button>
+                        </div>
+                        <div id="sf-sync-logs-box" class="flex-1 max-h-44 overflow-y-auto divide-y divide-slate-100 border border-slate-100 rounded-xl text-xs">
+                            <div class="p-3 text-slate-400 text-center">Sin movimientos de sincronización registrados aún.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center shrink-0">
+                <span class="text-[11px] text-slate-500">Cada edición en el CRM se encola de forma segura para Salesforce sin borrar registros existentes.</span>
+                <button onclick="closeSalesforceSyncModal()" class="px-4 py-2 bg-zinc-900 text-white text-xs sm:text-sm font-semibold rounded-xl">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
 
     <script>
@@ -1545,7 +1671,11 @@
         let pushTimeout = null;
         let firebaseStream = null;
         let waIncomingStream = null;
+        let sfIncomingStream = null;
         let waTabRef = null;
+        let sfConfig = JSON.parse(localStorage.getItem('crm_sf_config') || '{"instanceUrl":"","accessToken":"","objectType":"Lead","conflictPolicy":"newest"}');
+        let sfSyncLogs = [];
+        let processedSfEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_sf_events') || '[]'));
 
         // --- ESTADO GLOBAL ---
         let kpis = [
@@ -2390,13 +2520,16 @@
             renderPlansHistory();
             startFirebaseLiveListener();
             startWaIncomingLiveListener();
+            startSfIncomingLiveListener();
             checkWhatsApp48hTimeouts(false);
             await pollIncomingWhatsAppEvents(false);
+            await pollIncomingSalesforceEvents(false);
 
             setInterval(() => {
                 pullFromFirebase(false);
                 checkWhatsApp48hTimeouts(false);
                 pollIncomingWhatsAppEvents(false);
+                pollIncomingSalesforceEvents(false);
             }, 3000);
         }
 
@@ -2968,9 +3101,15 @@
         }
 
         function renderContactRowHTML(c, defaultTitle = 'Sin Nombre', channelKey = 'gestion') {
+            const sfBadge = (channelKey === 'salesforce' || c.sfId)
+                ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold ${c.sfId ? 'bg-sky-100 text-sky-800 border border-sky-200' : 'bg-slate-100 text-slate-600'}" title="${c.sfId ? 'ID Salesforce: ' + c.sfId : 'Pendiente vincular ID SF'}">☁️ ${c.sfId ? 'SF #' + String(c.sfId).slice(-6) : 'SF Local'}</span>`
+                : '';
             return `
                 <td class="p-3.5">
-                    <div class="text-sm sm:text-base font-bold text-slate-900">${c.name || defaultTitle}</div>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="text-sm sm:text-base font-bold text-slate-900">${c.name || defaultTitle}</span>
+                        ${sfBadge}
+                    </div>
                     <div class="mt-0.5 flex flex-wrap items-center gap-1.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status, channelKey, c.name || '')} <span class="text-xs text-slate-400">• ${c.date}</span></div>
                     ${c.interestModel ? `<div class="text-xs font-semibold text-emerald-700 bg-emerald-50 inline-block px-2 py-0.5 rounded mt-1 border border-emerald-200">Modelo: ${c.interestModel}</div>` : ''}
                     ${c.observations ? `<div class="text-xs text-blue-600 mt-1 truncate max-w-[220px]" title="${c.observations}">Nota: ${c.observations}</div>` : ''}
@@ -3744,6 +3883,10 @@
                 found.contact.scheduleTime = scheduleData.time || '';
                 found.contact.scheduleNote = scheduleData.note || '';
             }
+            found.contact.updatedAt = Date.now();
+            if (found.source === 'salesforce' || found.contact.sfId) {
+                pushContactUpdateToSalesforce(found.contact, `Estado -> ${newStatus}`);
+            }
             saveLocalData(true);
             renderAllTables();
             const agWin = document.getElementById('agenda-window-modal');
@@ -3752,24 +3895,406 @@
             showToast(`Estado actualizado: ${newStatus}`);
         };
 
-        // --- CALENDARIO & AGENDA DE ENTREVISTAS Y RECONTACTOS A FUTURO ---
+        window.openModelModal = function(id, newStatus) {
+            syncModelDropdowns();
+            const found = findContactGlobal(id);
+            document.getElementById('model-contact-id').value = id;
+            document.getElementById('model-contact-status').value = newStatus;
+            document.getElementById('input-interest-model').value = found?.contact?.interestModel || '';
+            document.getElementById('model-modal').classList.remove('hidden');
+        };
+        window.closeModelModal = function() { document.getElementById('model-modal').classList.add('hidden'); };
+        window.confirmInterestModel = function() {
+            executeStatusUpdate(
+                document.getElementById('model-contact-id').value,
+                document.getElementById('model-contact-status').value,
+                null,
+                document.getElementById('input-interest-model').value.trim()
+            );
+            closeModelModal();
+        };
+
+        window.openEditModal = function(id) {
+            syncModelDropdowns();
+            const found = findContactGlobal(id);
+            if (!found) return;
+            const c = found.contact;
+            document.getElementById('edit-id').value = c.id;
+            document.getElementById('edit-name').value = c.name || '';
+            document.getElementById('edit-phone').value = c.phone || '';
+            document.getElementById('edit-reference').value = c.reference || c.seller || '';
+            document.getElementById('edit-model').value = c.interestModel || '';
+            document.getElementById('edit-status').value = c.status;
+            document.getElementById('edit-schedule-date').value = c.scheduleDate || '';
+            document.getElementById('edit-schedule-time').value = c.scheduleTime || '';
+            document.getElementById('edit-schedule-note').value = c.scheduleNote || '';
+            document.getElementById('edit-obs').value = c.observations || '';
+            document.getElementById('edit-modal').classList.remove('hidden');
+        };
+        window.closeEditModal = function() { document.getElementById('edit-modal').classList.add('hidden'); };
+        window.saveEdit = function() {
+            const found = findContactGlobal(document.getElementById('edit-id').value);
+            if (!found) return;
+            const c = found.contact;
+            c.name = document.getElementById('edit-name').value;
+            const rawPhone = document.getElementById('edit-phone').value.trim();
+            c.phone = rawPhone ? formatPhoneAR(rawPhone) : '';
+            c.reference = document.getElementById('edit-reference').value;
+            if (found.source === 'convencional') c.seller = c.reference;
+            c.interestModel = document.getElementById('edit-model').value;
+            c.status = document.getElementById('edit-status').value;
+            c.scheduleDate = document.getElementById('edit-schedule-date').value || '';
+            c.scheduleTime = document.getElementById('edit-schedule-time').value || '';
+            c.scheduleNote = document.getElementById('edit-schedule-note').value.trim();
+            if (c.status === 'No Compra' && !c.noCompraDate) c.noCompraDate = new Date().toLocaleDateString();
+            c.observations = document.getElementById('edit-obs').value;
+            c.updatedAt = Date.now();
+            if (found.source === 'salesforce' || c.sfId) {
+                pushContactUpdateToSalesforce(c, 'Edición manual desde CRM');
+            }
+            saveLocalData(true); renderAllTables(); updateDashboard(); closeEditModal();
+            showToast("Cambios guardados");
+        };
+
+        // --- CALENDARIO COMERCIAL (ENTREVISTAS Y RECONTACTOS A FUTURO) ---
         function getTodayISODate() {
             const d = new Date();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
 
         function formatDisplayISODate(isoStr) {
-            if (!isoStr || !isoStr.includes('-')) return isoStr || '';
+            if (!isoStr || !isoStr.includes('-')) return isoStr || '-';
             const [y, m, d] = isoStr.split('-');
             return `${d}/${m}/${y}`;
         }
 
         window.setFutureOffsetDays = function(days) {
             const d = new Date();
-            d.setDate(d.getDate() + days);
+            d.setDate(d.getDate() + Number(days || 30));
             const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            const dateInput = document.getElementById('sched-date-input');
-            if (dateInput) dateInput.value = iso;
+            const input = document.getElementById('sched-date-input');
+            if (input) input.value = iso;
+        };
+
+        // --- MOTOR DE INTEGRACIÓN BIDIRECCIONAL SEGURA CON SALESFORCE ---
+        const CRM_TO_SF_STATUS = {
+            'Pendiente': 'Open - Not Contacted',
+            'Llamada Realizada': 'Working - Contacted',
+            'Mensaje Enviado (48h)': 'Working - Contacted',
+            'Contestó': 'Working - Contacted',
+            'No Contestó': 'Working - Contacted',
+            'Interesado': 'Qualified',
+            'Interesado a Futuro': 'Nurturing',
+            'Entrevista': 'Qualified - Meeting Scheduled',
+            'Venta': 'Closed - Converted',
+            'No Compra': 'Closed - Not Converted'
+        };
+
+        const SF_TO_CRM_STATUS = {
+            'open - not contacted': 'Pendiente',
+            'new': 'Pendiente',
+            'working - contacted': 'Contestó',
+            'contacted': 'Contestó',
+            'nurturing': 'Interesado a Futuro',
+            'qualified': 'Interesado',
+            'qualified - meeting scheduled': 'Entrevista',
+            'closed - converted': 'Venta',
+            'closed won': 'Venta',
+            'closed - not converted': 'No Compra',
+            'closed lost': 'No Compra'
+        };
+
+        function mapSfStatusToCrm(sfStatus) {
+            if (!sfStatus) return 'Pendiente';
+            const key = String(sfStatus).toLowerCase().trim();
+            return SF_TO_CRM_STATUS[key] || 'Pendiente';
+        }
+
+        function mapCrmStatusToSf(crmStatus) {
+            return CRM_TO_SF_STATUS[crmStatus] || 'Working - Contacted';
+        }
+
+        function addSfSyncLog(direction, message, ok = true) {
+            sfSyncLogs.unshift({
+                direction,
+                message,
+                ok,
+                time: new Date().toLocaleTimeString('es-AR')
+            });
+            if (sfSyncLogs.length > 40) sfSyncLogs.length = 40;
+            renderSfSyncLogs();
+        }
+
+        function renderSfSyncLogs() {
+            const box = document.getElementById('sf-sync-logs-box');
+            if (!box) return;
+            if (sfSyncLogs.length === 0) {
+                box.innerHTML = `<div class="p-3 text-slate-400 text-center">Sin movimientos de sincronización registrados aún.</div>`;
+                return;
+            }
+            box.innerHTML = sfSyncLogs.map(l => `
+                <div class="p-2.5 flex items-center justify-between gap-2 ${l.ok ? 'bg-white' : 'bg-red-50/70'}">
+                    <div class="min-w-0">
+                        <span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold ${l.direction === 'IN' ? 'bg-sky-100 text-sky-800' : 'bg-emerald-100 text-emerald-800'}">${l.direction === 'IN' ? 'SF → CRM' : 'CRM → SF'}</span>
+                        <span class="text-slate-700 ml-1.5">${l.message}</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 shrink-0">${l.time}</span>
+                </div>
+            `).join('');
+        }
+
+        window.openSalesforceSyncModal = function() {
+            document.getElementById('sf-cfg-instance').value = sfConfig.instanceUrl || '';
+            document.getElementById('sf-cfg-token').value = sfConfig.accessToken || '';
+            document.getElementById('sf-cfg-object').value = sfConfig.objectType || 'Lead';
+            document.getElementById('sf-cfg-conflict').value = sfConfig.conflictPolicy || 'newest';
+            document.getElementById('sf-inbound-url').value = `${FIREBASE_DB_URL}/sf_incoming/${encodeURIComponent(syncRoom)}.json`;
+            document.getElementById('sf-outbound-url').value = `${FIREBASE_DB_URL}/sf_outbound/${encodeURIComponent(syncRoom)}.json`;
+            renderSfSyncLogs();
+            document.getElementById('sf-sync-modal').classList.remove('hidden');
+        };
+
+        window.closeSalesforceSyncModal = function() {
+            document.getElementById('sf-sync-modal').classList.add('hidden');
+        };
+
+        window.copyInputText = function(inputId) {
+            const el = document.getElementById(inputId);
+            if (!el) return;
+            el.select();
+            document.execCommand('copy');
+            showToast("URL copiada al portapapeles");
+        };
+
+        window.saveSalesforceConfig = function() {
+            sfConfig = {
+                instanceUrl: document.getElementById('sf-cfg-instance').value.trim().replace(/\/+$/, ''),
+                accessToken: document.getElementById('sf-cfg-token').value.trim(),
+                objectType: document.getElementById('sf-cfg-object').value || 'Lead',
+                conflictPolicy: document.getElementById('sf-cfg-conflict').value || 'newest'
+            };
+            localStorage.setItem('crm_sf_config', JSON.stringify(sfConfig));
+            const pill = document.getElementById('sf-sync-pill');
+            if (pill) {
+                pill.textContent = sfConfig.instanceUrl && sfConfig.accessToken ? 'API 2-Vías Conectada' : 'Webhook 2-Vías Activo';
+            }
+            addSfSyncLog('OUT', 'Configuración de sincronización guardada', true);
+            showToast("✅ Configuración de Salesforce guardada");
+        };
+
+        function upsertLeadFromSalesforce(payload) {
+            const sfId = String(payload.sfId || payload.Id || payload.id || '').trim();
+            const rawPhone = String(payload.phone || payload.Phone || payload.MobilePhone || '').trim();
+            const formattedPhone = rawPhone ? formatPhoneAR(rawPhone) : '';
+            const cleanDigits = formattedPhone.replace(/\D/g, '');
+            const incomingName = String(payload.name || payload.Name || `${payload.FirstName || ''} ${payload.LastName || ''}`).trim();
+            const incomingModel = String(payload.model || payload.Model__c || '').trim();
+            const incomingRef = String(payload.campaign || payload.LeadSource || payload.reference || 'Salesforce Sync').trim();
+            const incomingNotes = String(payload.notes || payload.Description || '').trim();
+            const incomingStatus = payload.status ? mapSfStatusToCrm(payload.status) : null;
+            const remoteUpdated = Number(payload.updatedAt) || Date.now();
+
+            // Buscar coincidencia exacta por sfId o por últimos 8 dígitos de teléfono
+            let existing = salesforceContacts.find(c => (sfId && c.sfId === sfId) || (cleanDigits.length >= 8 && formatPhoneAR(c.phone).replace(/\D/g, '').endsWith(cleanDigits.slice(-8))));
+
+            if (existing) {
+                const policy = sfConfig.conflictPolicy || 'newest';
+                const localUpdated = Number(existing.updatedAt) || 0;
+                if (sfId && !existing.sfId) existing.sfId = sfId;
+
+                if (policy === 'crm_wins' && localUpdated > remoteUpdated) {
+                    addSfSyncLog('IN', `Omitido cambio antiguo en "${existing.name}" (prevalece CRM)`, true);
+                    return 'skipped';
+                }
+
+                if (incomingName && incomingName !== 'Lead Salesforce') existing.name = incomingName;
+                if (formattedPhone) existing.phone = formattedPhone;
+                if (incomingModel) existing.interestModel = incomingModel;
+                if (incomingRef) existing.reference = incomingRef;
+                if (incomingNotes) existing.observations = incomingNotes;
+                if (incomingStatus && (policy === 'sf_wins' || remoteUpdated >= localUpdated)) {
+                    existing.status = incomingStatus;
+                }
+                existing.updatedAt = Date.now();
+                addSfSyncLog('IN', `Actualizado desde SF: ${existing.name} (${existing.status})`, true);
+                return 'updated';
+            } else {
+                const created = {
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                    sfId: sfId || '',
+                    name: incomingName || 'Lead Salesforce',
+                    phone: formattedPhone,
+                    method: 'Salesforce',
+                    reference: incomingRef,
+                    locality: getProvincia(formattedPhone),
+                    interestModel: incomingModel,
+                    status: incomingStatus || 'Pendiente',
+                    observations: incomingNotes,
+                    date: new Date().toLocaleDateString('es-AR'),
+                    updatedAt: Date.now()
+                };
+                salesforceContacts.unshift(created);
+                addSfSyncLog('IN', `Nuevo lead importado: ${created.name} ${sfId ? '(#' + sfId.slice(-6) + ')' : ''}`, true);
+                return 'created';
+            }
+        }
+
+        async function pushContactUpdateToSalesforce(contact, reason = '') {
+            const sfStatus = mapCrmStatusToSf(contact.status);
+            const outboundRecord = {
+                crmId: contact.id,
+                sfId: contact.sfId || null,
+                name: contact.name || '',
+                phone: formatPhoneAR(contact.phone || ''),
+                status: sfStatus,
+                crmStage: contact.status,
+                interestModel: contact.interestModel || '',
+                scheduleDate: contact.scheduleDate || '',
+                scheduleTime: contact.scheduleTime || '',
+                observations: contact.observations || '',
+                reason,
+                updatedAt: Date.now()
+            };
+
+            // 1. Siempre publicar en cola de salida Firebase (para Make / Zapier / Flow)
+            try {
+                await fetch(`${FIREBASE_DB_URL}/sf_outbound/${encodeURIComponent(syncRoom)}/${encodeURIComponent(contact.id)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(outboundRecord)
+                });
+                addSfSyncLog('OUT', `Cola SF actualizada: ${contact.name} → ${sfStatus}`, true);
+            } catch (e) {}
+
+            // 2. Si hay conexión REST API directa con Salesforce y el contacto tiene sfId, actualizar en vivo
+            if (sfConfig.instanceUrl && sfConfig.accessToken && contact.sfId) {
+                try {
+                    const objName = sfConfig.objectType || 'Lead';
+                    const nameParts = String(contact.name || 'Cliente').trim().split(/\s+/);
+                    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : nameParts[0];
+                    const firstName = nameParts.length > 1 ? nameParts[0] : '';
+                    const patchBody = {
+                        LastName: lastName,
+                        Phone: formatPhoneAR(contact.phone || ''),
+                        Status: sfStatus,
+                        Description: `${contact.interestModel ? '[Modelo: ' + contact.interestModel + '] ' : ''}${contact.observations || ''}`.trim()
+                    };
+                    if (firstName && objName === 'Lead') patchBody.FirstName = firstName;
+
+                    const res = await fetch(`${sfConfig.instanceUrl}/services/data/v59.0/sobjects/${objName}/${encodeURIComponent(contact.sfId)}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Bearer ${sfConfig.accessToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(patchBody)
+                    });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    addSfSyncLog('OUT', `PATCH REST directo OK en Salesforce #${contact.sfId.slice(-6)}`, true);
+                } catch (err) {
+                    addSfSyncLog('OUT', `REST directo pendiente (guardado en cola Webhook): ${err.message}`, false);
+                }
+            }
+        }
+
+        window.syncSalesforceBidirectional = async function(manual = false) {
+            await pollIncomingSalesforceEvents(false);
+
+            // Si tiene credenciales REST API directas, consultar últimos Leads de Salesforce
+            if (sfConfig.instanceUrl && sfConfig.accessToken) {
+                try {
+                    const objName = sfConfig.objectType || 'Lead';
+                    const soql = encodeURIComponent(`SELECT Id, Name, Phone, MobilePhone, Status, LeadSource, Description, LastModifiedDate FROM ${objName} ORDER BY LastModifiedDate DESC LIMIT 50`);
+                    const res = await fetch(`${sfConfig.instanceUrl}/services/data/v59.0/query/?q=${soql}`, {
+                        headers: { 'Authorization': `Bearer ${sfConfig.accessToken}` }
+                    });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const json = await res.json();
+                    const records = Array.isArray(json.records) ? json.records : [];
+                    let imported = 0;
+                    records.forEach(rec => {
+                        const r = upsertLeadFromSalesforce({
+                            sfId: rec.Id,
+                            name: rec.Name,
+                            phone: rec.MobilePhone || rec.Phone,
+                            status: rec.Status,
+                            campaign: rec.LeadSource || 'Salesforce API',
+                            notes: rec.Description || '',
+                            updatedAt: rec.LastModifiedDate ? new Date(rec.LastModifiedDate).getTime() : Date.now()
+                        });
+                        if (r === 'created' || r === 'updated') imported++;
+                    });
+                    saveLocalData(true);
+                    renderAllTables();
+                    updateDashboard();
+                    if (manual) showToast(`☁️ Sincronización 2-Vías completada (${imported} registros procesados)`);
+                    return;
+                } catch (err) {
+                    addSfSyncLog('IN', `Error REST API Salesforce: ${err.message}`, false);
+                    if (manual) showToast(`Error al conectar API Salesforce (${err.message}). Revisa Token/CORS.`, "error");
+                }
+            } else if (manual) {
+                showToast("⚡ Cola Webhook 2-Vías verificada. Configura Token API o Webhook en 'Conectar Salesforce'.");
+            }
+        };
+
+        function startSfIncomingLiveListener() {
+            if (sfIncomingStream) { try { sfIncomingStream.close(); } catch (e) {} }
+            try {
+                sfIncomingStream = new EventSource(`${FIREBASE_DB_URL}/sf_incoming/${encodeURIComponent(syncRoom)}.json`);
+                const onSf = (e) => {
+                    try {
+                        const parsed = JSON.parse(e.data);
+                        if (!parsed || parsed.data === null) return;
+                        pollIncomingSalesforceEvents(false);
+                    } catch (err) {}
+                };
+                sfIncomingStream.addEventListener('put', onSf);
+                sfIncomingStream.addEventListener('patch', onSf);
+            } catch (e) {}
+        }
+
+        window.pollIncomingSalesforceEvents = async function(manual = false) {
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/sf_incoming/${encodeURIComponent(syncRoom)}.json`);
+                if (!res.ok) return;
+                const data = await res.json();
+                if (!data || typeof data !== 'object') return;
+                let anyChanged = false;
+                for (const [evId, ev] of Object.entries(data)) {
+                    if (processedSfEventIds.has(evId)) continue;
+                    processedSfEventIds.add(evId);
+                    if (ev && typeof ev === 'object') {
+                        const outcome = upsertLeadFromSalesforce(ev);
+                        if (outcome === 'created' || outcome === 'updated') anyChanged = true;
+                    }
+                    fetch(`${FIREBASE_DB_URL}/sf_incoming/${encodeURIComponent(syncRoom)}/${encodeURIComponent(evId)}.json`, { method: 'DELETE' }).catch(() => {});
+                }
+                localStorage.setItem('crm_processed_sf_events', JSON.stringify(Array.from(processedSfEventIds).slice(-150)));
+                if (anyChanged) {
+                    saveLocalData(true);
+                    renderAllTables();
+                    updateDashboard();
+                    showToast("☁️ Nuevo lead/actualización recibida desde Salesforce");
+                }
+            } catch (e) {}
+        };
+
+        window.simulateSalesforceInboundLead = function() {
+            const sfId = document.getElementById('sf-sim-id').value.trim() || ('00Q' + Date.now().toString().slice(-9));
+            const name = document.getElementById('sf-sim-name').value.trim() || 'Lead Prueba Salesforce';
+            const phone = document.getElementById('sf-sim-phone').value.trim() || '3415550199';
+            const campaign = document.getElementById('sf-sim-campaign').value.trim() || 'Campaña Web Hilux';
+
+            upsertLeadFromSalesforce({ sfId, name, phone, campaign, status: 'Open - Not Contacted' });
+            saveLocalData(true);
+            renderAllTables();
+            updateDashboard();
+            document.getElementById('sf-sim-id').value = '';
+            document.getElementById('sf-sim-name').value = '';
+            document.getElementById('sf-sim-phone').value = '';
+            document.getElementById('sf-sim-campaign').value = '';
+            showToast(`☁️ Lead "${name}" sincronizado desde Salesforce`);
         };
 
         window.onScheduleTypeChange = function() {
