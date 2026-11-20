@@ -59,6 +59,10 @@
                     <button onclick="openWaTemplatesModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-white border border-white/15 hover:bg-white/20 transition-colors flex items-center gap-1" title="Mensajes Predeterminados por Canal">
                         <span>💬 Mensajes</span>
                     </button>
+                    <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm" title="Abrir Ventana de Calendario e IA">
+                        <span>📅 Calendario IA</span>
+                        <span id="nav-agenda-badge" class="px-1.5 py-0.2 text-[10px] font-extrabold bg-white text-purple-800 rounded-full">0</span>
+                    </button>
                     <button onclick="openWaBridgeModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors flex items-center gap-1" title="Conectar Celular WhatsApp Auto-Respuesta">
                         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                         <span class="hidden md:inline">Auto-WA Móvil</span>
@@ -176,11 +180,11 @@
                         <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">
                             📋 Ir a Prospección (7 Canales)
                         </button>
+                        <button onclick="openAgendaWindow()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">
+                            📅 Ventana Calendario & IA (<span id="hero-agenda-count">0</span>)
+                        </button>
                         <button onclick="switchTab('comparativa')" class="px-4 py-2.5 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-xs sm:text-sm font-bold shadow-md transition-all">
                             ⚖️ Comparar Planes con IA
-                        </button>
-                        <button onclick="switchTab('planes')" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs sm:text-sm font-semibold transition-all">
-                            📄 Planes & Gráfico Mes a Mes
                         </button>
                     </div>
                 </div>
@@ -221,11 +225,22 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
                     <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
                         <div>
+                            <h2 class="text-base font-bold text-slate-900">📅 Próximas Entrevistas & Recontactos</h2>
+                            <p class="text-xs text-slate-500">Compromisos agendados para hoy y próximos días</p>
+                        </div>
+                        <button onclick="openAgendaWindow()" class="text-xs font-bold text-[#EB0A1E] hover:underline">Abrir Ventana →</button>
+                    </div>
+                    <div id="home-agenda-list" class="space-y-2 max-h-[220px] overflow-y-auto pr-1"></div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                    <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
+                        <div>
                             <h2 class="text-base font-bold text-slate-900">Radar de Oportunidades & Espera 48h</h2>
                             <p class="text-xs text-slate-500">Clientes calientes y mensajes aguardando respuesta</p>
                         </div>
                     </div>
-                    <div id="home-radar-list" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1"></div>
+                    <div id="home-radar-list" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1"></div>
                 </div>
             </div>
         </div>
@@ -834,6 +849,121 @@
         </div>
     </main>
 
+    <!-- VENTANA DEDICADA DE CALENDARIO COMERCIAL + ASISTENTE IA -->
+    <div id="agenda-window-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[55] hidden flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-7xl h-[94vh] flex flex-col overflow-hidden border border-slate-200">
+            <!-- Cabecera de la Ventana Calendario -->
+            <div class="px-4 sm:px-6 py-3.5 bg-gradient-to-r from-zinc-950 via-neutral-900 to-purple-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-purple-600 flex items-center justify-center text-lg shadow">📅</div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-base sm:text-lg font-extrabold tracking-tight">Ventana de Calendario Comercial & Copiloto IA</h2>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/30 text-purple-200 border border-purple-400/30">GINZA TOYOTA</span>
+                        </div>
+                        <p class="text-[11px] text-zinc-300 hidden sm:block">Coordina entrevistas, proyecta recontactos a futuro y genera mensajes IA personalizados con un clic.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openNewScheduleModal()" class="px-3.5 py-2 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs font-bold shadow-sm">
+                        + Nuevo Compromiso
+                    </button>
+                    <button onclick="openAgendaPopoutWindow()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs font-semibold hidden sm:inline-flex items-center gap-1" title="Abrir también en pestaña/ventana separada del navegador">
+                        ↗ Ventana Aparte
+                    </button>
+                    <button onclick="closeAgendaWindow()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">
+                        ✕ Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenido Scrolleable de la Ventana -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 bg-slate-50/60">
+                <!-- KPIs Rápidos de Agenda -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div class="p-3.5 rounded-2xl bg-white border border-rose-200 shadow-xs">
+                        <div class="text-[11px] font-bold text-rose-700 uppercase">Hoy / Vencidos</div>
+                        <div class="text-2xl font-extrabold text-rose-900 mt-0.5" id="ag-stat-today">0</div>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-white border border-purple-200 shadow-xs">
+                        <div class="text-[11px] font-bold text-purple-700 uppercase">Entrevistas Agendadas</div>
+                        <div class="text-2xl font-extrabold text-purple-900 mt-0.5" id="ag-stat-entrevistas">0</div>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-white border border-amber-200 shadow-xs">
+                        <div class="text-[11px] font-bold text-amber-700 uppercase">Recontactos a Futuro</div>
+                        <div class="text-2xl font-extrabold text-amber-900 mt-0.5" id="ag-stat-futuro">0</div>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+                        <div class="text-[11px] font-bold text-slate-600 uppercase">Próximos 7 Días</div>
+                        <div class="text-2xl font-extrabold text-slate-900 mt-0.5" id="ag-stat-week">0</div>
+                    </div>
+                </div>
+
+                <!-- Panel Copiloto IA de Agenda y Seguimiento Futuro -->
+                <div class="bg-gradient-to-r from-purple-950 via-zinc-900 to-zinc-900 text-white rounded-2xl p-4 sm:p-5 border border-purple-800/60 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded-md bg-purple-600 text-[10px] font-extrabold uppercase">✨ Copiloto IA</span>
+                            <h3 class="text-sm sm:text-base font-bold">Radar Inteligente de Entrevistas & Seguimiento a Futuro</h3>
+                        </div>
+                        <span class="text-[11px] text-purple-200" id="ai-agenda-summary-badge">Analizando agenda...</span>
+                    </div>
+                    <div id="ai-agenda-recommendations" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+                </div>
+
+                <!-- Calendario Mensual + Panel Lateral -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                    <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+                        <div class="flex items-center justify-between mb-4">
+                            <button onclick="changeAgendaMonth(-1)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold">◀ Anterior</button>
+                            <div class="text-center">
+                                <h3 id="agenda-month-title" class="text-sm sm:text-base font-extrabold text-slate-900 capitalize">Mes Año</h3>
+                                <button onclick="jumpAgendaToToday()" class="text-[11px] font-semibold text-[#EB0A1E] hover:underline">Ir a Hoy</button>
+                            </div>
+                            <button onclick="changeAgendaMonth(1)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold">Siguiente ▶</button>
+                        </div>
+
+                        <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-slate-500 uppercase mb-1.5">
+                            <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div class="text-slate-400">Sáb</div><div class="text-slate-400">Dom</div>
+                        </div>
+                        <div id="agenda-calendar-grid" class="grid grid-cols-7 gap-1.5"></div>
+
+                        <div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-4 text-[11px] text-slate-600">
+                            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> Entrevista</span>
+                            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Recontacto a Futuro</span>
+                            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#EB0A1E]"></span> Día Actual</span>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="bg-white rounded-2xl border-2 border-purple-200 p-4 shadow-xs">
+                            <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-slate-100">
+                                <div>
+                                    <span class="text-[10px] font-extrabold uppercase text-purple-700">Día Seleccionado</span>
+                                    <h4 id="agenda-selected-day-title" class="text-sm font-extrabold text-slate-900">-</h4>
+                                </div>
+                                <button onclick="openNewScheduleModal(selectedAgendaDate)" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold">+ Agendar aquí</button>
+                            </div>
+                            <div id="agenda-day-events-list" class="space-y-2.5 max-h-[260px] overflow-y-auto"></div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+                            <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-slate-100">
+                                <h4 class="text-sm font-extrabold text-slate-900">Próximos Compromisos (Cronológico)</h4>
+                                <select id="agenda-filter-type" onchange="renderAgendaTab()" class="text-xs border border-slate-300 rounded-lg px-2 py-1 bg-white outline-none">
+                                    <option value="Todos">Todos</option>
+                                    <option value="Entrevista">Solo Entrevistas</option>
+                                    <option value="Interesado a Futuro">Solo A Futuro</option>
+                                </select>
+                            </div>
+                            <div id="agenda-upcoming-list" class="space-y-2 max-h-[280px] overflow-y-auto"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TAB 4: COMPARATIVA DE PLANES (TOYOTA VS COMPETENCIA + ARGUMENTARIO IA DE CIERRE) -->
     <main id="tab-comparativa" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-6">
@@ -1025,15 +1155,16 @@
 
             <!-- Tabla Comparativa Completa -->
             <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                <table class="w-full text-left border-collapse min-w-[720px]">
+                <table class="w-full text-left border-collapse min-w-[820px]">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-200 text-[11px] uppercase tracking-wider text-slate-500">
                             <th class="p-3.5">Período Actual</th>
                             <th class="p-3.5">Vehículo / Plan</th>
-                            <th class="p-3.5">Valor Móvil Actual</th>
-                            <th class="p-3.5">Valor Mes Anterior</th>
-                            <th class="p-3.5">Diferencia Vehículo</th>
-                            <th class="p-3.5">Acciones (PDF / JPG / WA)</th>
+                            <th class="p-3.5">Precio Final (Valor Móvil)</th>
+                            <th class="p-3.5">Diferencia Precio Final</th>
+                            <th class="p-3.5">Valor Promedio Cuota</th>
+                            <th class="p-3.5">Diferencia Prom. Cuota</th>
+                            <th class="p-3.5">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="plans-history-body" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -1138,9 +1269,23 @@
                         <option value="No Compra">No Compra (Con fecha)</option>
                     </select>
                 </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3 rounded-xl bg-purple-50/70 border border-purple-200">
+                    <div>
+                        <label class="block text-[11px] font-bold text-purple-900 mb-1">Fecha Agenda / Recontacto</label>
+                        <input type="date" id="edit-schedule-date" class="w-full px-2.5 py-1.5 text-xs border border-purple-300 rounded-lg bg-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-purple-900 mb-1">Hora (Entrevista)</label>
+                        <input type="time" id="edit-schedule-time" class="w-full px-2.5 py-1.5 text-xs border border-purple-300 rounded-lg bg-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-purple-900 mb-1">Modalidad / Motivo</label>
+                        <input type="text" id="edit-schedule-note" placeholder="Ej: Salón Ginza / Llamar" class="w-full px-2.5 py-1.5 text-xs border border-purple-300 rounded-lg bg-white outline-none">
+                    </div>
+                </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-700 mb-1">Observaciones</label>
-                    <textarea id="edit-obs" rows="3" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none resize-none"></textarea>
+                    <textarea id="edit-obs" rows="2" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none resize-none"></textarea>
                 </div>
             </div>
             <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-between items-center gap-2">
@@ -1171,6 +1316,72 @@
             <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
                 <button onclick="closeModelModal()" class="px-4 py-2 text-slate-600 text-sm font-medium hover:bg-slate-200 rounded-xl">Cancelar</button>
                 <button onclick="confirmInterestModel()" class="px-5 py-2 bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 rounded-xl">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE AGENDAMIENTO DE ENTREVISTA O RECONTACTO A FUTURO -->
+    <div id="schedule-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[68] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-zinc-900 text-white">
+                <div>
+                    <h3 id="schedule-modal-title" class="text-base font-extrabold">📅 Coordinar Entrevista / Recontacto</h3>
+                    <p id="schedule-modal-subtitle" class="text-xs text-zinc-300">Selecciona fecha y detalles del compromiso</p>
+                </div>
+                <button onclick="closeScheduleModal()" class="text-zinc-400 hover:text-white">✕</button>
+            </div>
+            <div class="p-5 space-y-3.5">
+                <input type="hidden" id="sched-contact-id">
+                <div id="sched-client-picker-box" class="hidden">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Seleccionar Cliente / Contacto</label>
+                    <select id="sched-client-select" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Tipo de Compromiso</label>
+                    <select id="sched-type-select" onchange="onScheduleTypeChange()" class="w-full px-3 py-2 text-sm font-semibold border border-slate-300 rounded-xl bg-white outline-none">
+                        <option value="Entrevista">🟣 Entrevista con Cliente (Fecha y Hora)</option>
+                        <option value="Interesado a Futuro">🟡 Interesado a Futuro (Fecha aprox. de recontacto)</option>
+                    </select>
+                </div>
+
+                <!-- Atajos rápidos para "Interesado a Futuro" -->
+                <div id="sched-future-shortcuts" class="hidden">
+                    <label class="block text-[11px] font-bold text-amber-800 uppercase mb-1.5">Atajos de Fecha Aproximada:</label>
+                    <div class="grid grid-cols-4 gap-1.5">
+                        <button type="button" onclick="setFutureOffsetDays(15)" class="py-1.5 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold">+15 días</button>
+                        <button type="button" onclick="setFutureOffsetDays(30)" class="py-1.5 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold">+1 mes</button>
+                        <button type="button" onclick="setFutureOffsetDays(60)" class="py-1.5 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold">+2 meses</button>
+                        <button type="button" onclick="setFutureOffsetDays(90)" class="py-1.5 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold">+3 meses</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1" id="sched-date-label">Fecha de Entrevista</label>
+                        <input type="date" id="sched-date-input" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
+                    </div>
+                    <div id="sched-time-wrapper">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Hora</label>
+                        <input type="time" id="sched-time-input" value="10:30" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
+                    </div>
+                </div>
+                <div id="sched-ai-slot-hint" class="text-[11px] font-semibold text-purple-800 bg-purple-50 border border-purple-200 rounded-xl px-3 py-2"></div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Modelo Toyota de Interés</label>
+                    <select id="sched-model-select" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
+                        <option value="">Seleccionar modelo...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1" id="sched-note-label">Lugar / Modalidad / Motivo</label>
+                    <input type="text" id="sched-note-input" placeholder="Ej: Reunión en Salón Ginza / Llamar en quincena..." class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                </div>
+            </div>
+            <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                <button onclick="closeScheduleModal()" class="px-4 py-2 text-slate-600 text-sm font-medium hover:bg-slate-200 rounded-xl">Cancelar</button>
+                <button onclick="confirmScheduleCommitment()" class="px-5 py-2 bg-[#EB0A1E] hover:bg-red-700 text-white text-sm font-bold rounded-xl">Guardar en Calendario</button>
             </div>
         </div>
     </div>
@@ -1371,6 +1582,9 @@
         let currentClientesStage = 'Todos';
         let currentCrmFolder = 'Todas';
         let latestAiSuggestedWeekly = null;
+        let agendaViewYear = new Date().getFullYear();
+        let agendaViewMonth = new Date().getMonth();
+        let selectedAgendaDate = new Date().toISOString().split('T')[0];
         let waIncomingLogs = [];
         let processedWaEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_wa_events') || '[]'));
 
@@ -1419,7 +1633,7 @@
         const FIXED_INTEREST_MODELS = ['Yaris', 'Yaris Cross', 'Corolla', 'Corolla Cross', 'Hilux', 'Hiace'];
 
         function syncModelDropdowns() {
-            ['cli-direct-model', 'input-interest-model', 'edit-model'].forEach(id => {
+            ['cli-direct-model', 'input-interest-model', 'edit-model', 'sched-model-select'].forEach(id => {
                 const sel = document.getElementById(id);
                 if (!sel) return;
                 const prev = sel.value;
@@ -2250,7 +2464,7 @@
         window.filterByStatus = function(statusCategory) {
             if (statusCategory === 'Todos') { switchTab('contactos'); setContactosSubView('all'); }
             else if (statusCategory === 'Interesados') { switchTab('clientes'); setClientesStageFilter('Interesado'); }
-            else if (statusCategory === 'Entrevistas') { switchTab('clientes'); setClientesStageFilter('Entrevista'); }
+            else if (statusCategory === 'Entrevistas') { switchTab('agenda'); }
             else if (statusCategory === 'Ventas') { switchTab('clientes'); setClientesStageFilter('Venta'); }
         };
 
@@ -2260,12 +2474,15 @@
             const intCount = allList.filter(c => c.status === 'Interesado' || c.status === 'Interesado a Futuro').length;
             const entCount = allList.filter(c => c.status === 'Entrevista').length;
             const venCount = allList.filter(c => c.status === 'Venta').length;
+            const scheduledCount = allList.filter(c => (c.status === 'Entrevista' || c.status === 'Interesado a Futuro') && c.scheduleDate).length;
 
             const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
             setTxt('stat-total', total);
             setTxt('stat-interesados', intCount);
             setTxt('stat-entrevistas', entCount);
             setTxt('stat-ventas', venCount);
+            setTxt('nav-agenda-badge', scheduledCount);
+            setTxt('hero-agenda-count', scheduledCount);
             setTxt('stat-rate-interes', total > 0 ? `${Math.round((intCount / total) * 100)}%` : '0%');
             setTxt('stat-rate-entrevista', intCount > 0 ? `${Math.round((entCount / intCount) * 100)}%` : '0%');
             setTxt('stat-rate-venta', entCount > 0 ? `${Math.round((venCount / entCount) * 100)}%` : '0%');
@@ -2277,6 +2494,7 @@
             const kpiGrid = document.getElementById('kpi-metrics-grid');
             const sourceGrid = document.getElementById('source-metrics-grid');
             const radarList = document.getElementById('home-radar-list');
+            const homeAgendaList = document.getElementById('home-agenda-list');
             if (!kpiGrid || !sourceGrid) return;
 
             const allContacts = getAllListsCombined();
@@ -2326,6 +2544,37 @@
                 `;
                 sourceGrid.appendChild(btn);
             });
+
+            if (homeAgendaList) {
+                const todayISO = getTodayISODate();
+                const upcoming = allContacts
+                    .filter(c => (c.status === 'Entrevista' || c.status === 'Interesado a Futuro') && c.scheduleDate)
+                    .sort((a, b) => (a.scheduleDate + (a.scheduleTime || '')).localeCompare(b.scheduleDate + (b.scheduleTime || '')))
+                    .slice(0, 6);
+
+                if (upcoming.length === 0) {
+                    homeAgendaList.innerHTML = `<div class="p-4 text-center text-slate-400 text-xs border border-dashed border-slate-200 rounded-xl">Sin entrevistas ni recontactos agendados aún.</div>`;
+                } else {
+                    homeAgendaList.innerHTML = upcoming.map(c => {
+                        const isOverdueOrToday = c.scheduleDate <= todayISO;
+                        const isEnt = c.status === 'Entrevista';
+                        return `
+                            <div class="p-2.5 rounded-xl border ${isOverdueOrToday ? 'border-rose-300 bg-rose-50/60' : 'border-slate-200 bg-slate-50/70'} flex items-center justify-between gap-2">
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-slate-900 truncate">${c.name || 'Sin Nombre'}</span>
+                                        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${isEnt ? 'bg-purple-100 text-purple-800' : 'bg-amber-100 text-amber-800'}">${isEnt ? 'Entrevista' : 'A Futuro'}</span>
+                                    </div>
+                                    <div class="text-[11px] text-slate-600 mt-0.5">
+                                        📅 <b>${formatDisplayISODate(c.scheduleDate)}</b> ${c.scheduleTime ? `• 🕒 ${c.scheduleTime}` : ''} ${c.scheduleNote ? `• ${c.scheduleNote}` : ''}
+                                    </div>
+                                </div>
+                                <button onclick="openScheduleModalForContact('${c.id}', '${c.status}')" class="px-2 py-1 rounded-lg bg-white border border-slate-300 text-[11px] font-semibold text-slate-700 hover:bg-slate-100 shrink-0">Reprogramar</button>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
 
             if (radarList) {
                 const hotItems = allContacts.filter(c => c.status === 'Entrevista' || c.status === 'Interesado' || c.status === 'Mensaje Enviado (48h)').slice(0, 8);
@@ -2578,6 +2827,10 @@
 
         // --- NAVEGACIÓN DE PESTAÑAS ---
         window.switchTab = function(tabName) {
+            if (tabName === 'agenda') {
+                openAgendaWindow();
+                return;
+            }
             activeTab = tabName;
             ['botonera', 'contactos', 'clientes', 'comparativa', 'objetivos', 'planes'].forEach(name => {
                 const el = document.getElementById(`tab-${name}`);
@@ -2601,6 +2854,26 @@
             else if (tabName === 'comparativa') renderComparativaSelectors();
             else if (tabName === 'objetivos') renderObjetivos();
             else if (tabName === 'planes') renderPlansHistory();
+        };
+
+        window.openAgendaWindow = function() {
+            const modal = document.getElementById('agenda-window-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            renderAgendaTab();
+        };
+
+        window.closeAgendaWindow = function() {
+            const modal = document.getElementById('agenda-window-modal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.openAgendaPopoutWindow = function() {
+            const url = new URL(window.location.href);
+            url.searchParams.set('view', 'agenda');
+            const win = window.open(url.toString(), 'ginza_toyota_agenda_win', 'width=1240,height=840,resizable=yes,scrollbars=yes');
+            if (win) win.focus();
+            else showToast("Ventana emergente bloqueada por el navegador; usa la ventana integrada.", "error");
         };
 
         window.setContactosSubView = function(subView) {
@@ -3352,16 +3625,21 @@
                     tr.className = 'hover:bg-slate-50';
                     let stageActions = `<button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium hover:bg-slate-200">Editar</button>`;
                     if (c.status !== 'Interesado') stageActions += `<button onclick="executeStatusUpdate('${c.id}', 'Interesado')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-medium border border-emerald-200">Interesado</button>`;
-                    if (c.status !== 'Interesado a Futuro') stageActions += `<button onclick="executeStatusUpdate('${c.id}', 'Interesado a Futuro')" class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-medium border border-amber-200">A Futuro</button>`;
-                    if (c.status !== 'Entrevista') stageActions += `<button onclick="executeStatusUpdate('${c.id}', 'Entrevista')" class="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-lg text-xs font-medium border border-purple-200">Entrevista</button>`;
+                    stageActions += `<button onclick="updateStatus('${c.id}', 'Interesado a Futuro')" class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-medium border border-amber-200">${c.status === 'Interesado a Futuro' ? '📅 Fecha Futuro' : 'A Futuro'}</button>`;
+                    stageActions += `<button onclick="updateStatus('${c.id}', 'Entrevista')" class="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-lg text-xs font-medium border border-purple-200">${c.status === 'Entrevista' ? '📅 Reprogramar' : 'Entrevista'}</button>`;
                     if (c.status !== 'Venta') stageActions += `<button onclick="executeStatusUpdate('${c.id}', 'Venta')" class="px-2.5 py-1 bg-yellow-400 text-yellow-900 rounded-lg text-xs font-bold">¡Venta!</button>`;
                     stageActions += `<button onclick="executeStatusUpdate('${c.id}', 'No Compra')" class="px-2.5 py-1 bg-rose-50 text-rose-700 rounded-lg text-xs font-semibold border border-rose-200">No Compra</button>`;
                     stageActions += `<button onclick="deleteContact('${c.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100" title="Eliminar Cliente">🗑️</button>`;
+
+                    const schedBadge = c.scheduleDate
+                        ? `<div class="text-[11px] font-bold ${c.status === 'Entrevista' ? 'text-purple-700 bg-purple-50 border-purple-200' : 'text-amber-800 bg-amber-50 border-amber-200'} inline-flex items-center gap-1 px-2 py-0.5 rounded mt-1 border">📅 ${formatDisplayISODate(c.scheduleDate)}${c.scheduleTime ? ` • ${c.scheduleTime}` : ''}${c.scheduleNote ? ` (${c.scheduleNote})` : ''}</div>`
+                        : '';
 
                     tr.innerHTML = `
                         <td class="p-3.5">
                             <div class="text-sm sm:text-base font-bold text-slate-900">${c.name || 'Sin Nombre'}</div>
                             <div class="mt-0.5 flex flex-wrap items-center gap-1.5">${renderWhatsAppLink(c.phone, null, null, c.status, 'clientes', c.name || '')} <span class="text-xs text-slate-400">• ${c.date}</span></div>
+                            ${schedBadge}
                             ${c.observations ? `<div class="text-xs text-blue-600 mt-1">Nota: ${c.observations}</div>` : ''}
                         </td>
                         <td class="p-3.5"><span class="inline-block px-2.5 py-1 rounded-lg text-xs font-semibold border ${c.badgeClass}">${c.sourceLabel}</span></td>
@@ -3447,11 +3725,12 @@
         };
 
         window.updateStatus = function(id, newStatus) {
-            if (newStatus === 'Interesado' || newStatus === 'Interesado a Futuro') openModelModal(id, newStatus);
+            if (newStatus === 'Interesado') openModelModal(id, newStatus);
+            else if (newStatus === 'Entrevista' || newStatus === 'Interesado a Futuro') openScheduleModalForContact(id, newStatus);
             else executeStatusUpdate(id, newStatus);
         };
 
-        window.executeStatusUpdate = function(id, newStatus, methodName = null, interestModel = null) {
+        window.executeStatusUpdate = function(id, newStatus, methodName = null, interestModel = null, scheduleData = null) {
             const found = findContactGlobal(id);
             if (!found) return;
             found.contact.status = newStatus;
@@ -3460,64 +3739,439 @@
             else if (newStatus !== 'No Compra') delete found.contact.noCompraDate;
             if (methodName) found.contact.method = methodName;
             if (interestModel !== null) found.contact.interestModel = interestModel;
+            if (scheduleData) {
+                found.contact.scheduleDate = scheduleData.date || '';
+                found.contact.scheduleTime = scheduleData.time || '';
+                found.contact.scheduleNote = scheduleData.note || '';
+            }
             saveLocalData(true);
             renderAllTables();
+            const agWin = document.getElementById('agenda-window-modal');
+            if (agWin && !agWin.classList.contains('hidden')) renderAgendaTab();
             updateDashboard();
             showToast(`Estado actualizado: ${newStatus}`);
         };
 
-        window.openModelModal = function(id, newStatus) {
-            syncModelDropdowns();
-            const found = findContactGlobal(id);
-            document.getElementById('model-contact-id').value = id;
-            document.getElementById('model-contact-status').value = newStatus;
-            document.getElementById('input-interest-model').value = found?.contact?.interestModel || '';
-            document.getElementById('model-modal').classList.remove('hidden');
+        // --- CALENDARIO & AGENDA DE ENTREVISTAS Y RECONTACTOS A FUTURO ---
+        function getTodayISODate() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function formatDisplayISODate(isoStr) {
+            if (!isoStr || !isoStr.includes('-')) return isoStr || '';
+            const [y, m, d] = isoStr.split('-');
+            return `${d}/${m}/${y}`;
+        }
+
+        window.setFutureOffsetDays = function(days) {
+            const d = new Date();
+            d.setDate(d.getDate() + days);
+            const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            const dateInput = document.getElementById('sched-date-input');
+            if (dateInput) dateInput.value = iso;
         };
-        window.closeModelModal = function() { document.getElementById('model-modal').classList.add('hidden'); };
-        window.confirmInterestModel = function() {
+
+        window.onScheduleTypeChange = function() {
+            const type = document.getElementById('sched-type-select')?.value || 'Entrevista';
+            const shortcuts = document.getElementById('sched-future-shortcuts');
+            const timeWrap = document.getElementById('sched-time-wrapper');
+            const dateLabel = document.getElementById('sched-date-label');
+            const noteLabel = document.getElementById('sched-note-label');
+            if (type === 'Interesado a Futuro') {
+                if (shortcuts) shortcuts.classList.remove('hidden');
+                if (timeWrap) timeWrap.classList.add('opacity-60');
+                if (dateLabel) dateLabel.textContent = 'Fecha Aprox. de Recontacto';
+                if (noteLabel) noteLabel.textContent = 'Motivo / Cuándo volver a llamar';
+            } else {
+                if (shortcuts) shortcuts.classList.add('hidden');
+                if (timeWrap) timeWrap.classList.remove('opacity-60');
+                if (dateLabel) dateLabel.textContent = 'Fecha de Entrevista';
+                if (noteLabel) noteLabel.textContent = 'Lugar / Modalidad de Reunión';
+            }
+        };
+
+        window.openScheduleModalForContact = function(contactId, targetType = 'Entrevista') {
+            syncModelDropdowns();
+            const found = findContactGlobal(contactId);
+            if (!found) return;
+            const c = found.contact;
+
+            document.getElementById('sched-client-picker-box').classList.add('hidden');
+            document.getElementById('sched-contact-id').value = c.id;
+            document.getElementById('schedule-modal-title').textContent = targetType === 'Entrevista'
+                ? `🟣 Coordinar Entrevista — ${c.name || c.phone}`
+                : `🟡 Recontacto a Futuro — ${c.name || c.phone}`;
+            document.getElementById('schedule-modal-subtitle').textContent = `${c.phone || ''} ${c.interestModel ? `• ${c.interestModel}` : ''}`;
+
+            const typeSel = document.getElementById('sched-type-select');
+            typeSel.value = targetType;
+            onScheduleTypeChange();
+
+            const defaultDate = c.scheduleDate || (() => {
+                const d = new Date();
+                if (targetType === 'Interesado a Futuro') d.setDate(d.getDate() + 30);
+                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            })();
+
+            document.getElementById('sched-date-input').value = defaultDate;
+            document.getElementById('sched-time-input').value = c.scheduleTime || (targetType === 'Entrevista' ? '10:30' : '');
+            document.getElementById('sched-model-select').value = c.interestModel || '';
+            document.getElementById('sched-note-input').value = c.scheduleNote || (targetType === 'Entrevista' ? 'Salón Ginza Toyota' : '');
+            updateAiSlotSuggestion(defaultDate, targetType);
+            document.getElementById('sched-date-input').onchange = (e) => updateAiSlotSuggestion(e.target.value, document.getElementById('sched-type-select').value);
+            document.getElementById('schedule-modal').classList.remove('hidden');
+        };
+
+        window.openNewScheduleModal = function(preselectedDateISO = null) {
+            syncModelDropdowns();
+            const all = getAllListsCombined();
+            const pickerBox = document.getElementById('sched-client-picker-box');
+            const sel = document.getElementById('sched-client-select');
+            pickerBox.classList.remove('hidden');
+            document.getElementById('sched-contact-id').value = '';
+            document.getElementById('schedule-modal-title').textContent = '📅 Agendar Entrevista o Recontacto';
+            document.getElementById('schedule-modal-subtitle').textContent = 'Elige el cliente y la fecha del compromiso';
+
+            sel.innerHTML = all.length > 0
+                ? all.map(c => `<option value="${c.id}">${c.name || 'Sin Nombre'} (${c.phone || 'Sin tel'}) — ${c.status}</option>`).join('')
+                : `<option value="">Primero carga un contacto o cliente</option>`;
+
+            const initDate = preselectedDateISO || getTodayISODate();
+            document.getElementById('sched-type-select').value = 'Entrevista';
+            onScheduleTypeChange();
+            document.getElementById('sched-date-input').value = initDate;
+            document.getElementById('sched-time-input').value = '10:30';
+            document.getElementById('sched-note-input').value = 'Salón Ginza Toyota';
+            updateAiSlotSuggestion(initDate, 'Entrevista');
+            document.getElementById('sched-date-input').onchange = (e) => updateAiSlotSuggestion(e.target.value, document.getElementById('sched-type-select').value);
+            document.getElementById('schedule-modal').classList.remove('hidden');
+        };
+
+        function updateAiSlotSuggestion(isoDate, type) {
+            const hintBox = document.getElementById('sched-ai-slot-hint');
+            if (!hintBox || !isoDate) return;
+            const dayItems = getAllListsCombined().filter(c => (c.status === 'Entrevista' || c.status === 'Interesado a Futuro') && c.scheduleDate === isoDate);
+            if (type === 'Interesado a Futuro') {
+                hintBox.innerHTML = `✨ <b>Sugerencia IA:</b> Agenda entre el 1 y el 10 del mes (fecha de cobro) y activa un recordatorio de WhatsApp con valores actualizados.`;
+                return;
+            }
+            const usedTimes = new Set(dayItems.map(i => i.scheduleTime).filter(Boolean));
+            const candidateSlots = ['09:30', '10:30', '11:30', '15:30', '16:30', '17:30'];
+            const freeSlot = candidateSlots.find(s => !usedTimes.has(s)) || '18:00';
+            const timeInput = document.getElementById('sched-time-input');
+            if (timeInput && usedTimes.has(timeInput.value)) timeInput.value = freeSlot;
+            hintBox.innerHTML = dayItems.length === 0
+                ? `✨ <b>Disponibilidad IA:</b> Día libre. Horario recomendado: <b>${freeSlot} hs</b>.`
+                : `✨ <b>Disponibilidad IA:</b> Ya tienes ${dayItems.length} compromiso(s) ese día. Próximo turno libre sugerido: <b>${freeSlot} hs</b>.`;
+        }
+
+        window.closeScheduleModal = function() {
+            const m = document.getElementById('schedule-modal');
+            if (m) m.classList.add('hidden');
+        };
+
+        window.confirmScheduleCommitment = function() {
+            const directId = document.getElementById('sched-contact-id').value;
+            const pickedId = document.getElementById('sched-client-select')?.value;
+            const targetId = directId || pickedId;
+            if (!targetId) {
+                showToast("Selecciona un contacto o cliente primero", "error");
+                return;
+            }
+            const type = document.getElementById('sched-type-select').value || 'Entrevista';
+            const date = document.getElementById('sched-date-input').value;
+            const time = document.getElementById('sched-time-input').value;
+            const model = document.getElementById('sched-model-select').value;
+            const note = document.getElementById('sched-note-input').value.trim();
+
+            if (!date) {
+                showToast("Selecciona una fecha en el calendario", "error");
+                return;
+            }
+
+            selectedAgendaDate = date;
+            const [y, m] = date.split('-');
+            if (y && m) {
+                agendaViewYear = parseInt(y, 10);
+                agendaViewMonth = parseInt(m, 10) - 1;
+            }
+
             executeStatusUpdate(
-                document.getElementById('model-contact-id').value,
-                document.getElementById('model-contact-status').value,
+                targetId,
+                type,
                 null,
-                document.getElementById('input-interest-model').value.trim()
+                model || null,
+                { date, time: type === 'Entrevista' ? time : '', note }
             );
-            closeModelModal();
+            closeScheduleModal();
         };
 
-        window.openEditModal = function(id) {
-            syncModelDropdowns();
-            const found = findContactGlobal(id);
-            if (!found) return;
-            const c = found.contact;
-            document.getElementById('edit-id').value = c.id;
-            document.getElementById('edit-name').value = c.name || '';
-            document.getElementById('edit-phone').value = c.phone || '';
-            document.getElementById('edit-reference').value = c.reference || c.seller || '';
-            document.getElementById('edit-model').value = c.interestModel || '';
-            document.getElementById('edit-status').value = c.status;
-            document.getElementById('edit-obs').value = c.observations || '';
-            document.getElementById('edit-modal').classList.remove('hidden');
-        };
-        window.closeEditModal = function() { document.getElementById('edit-modal').classList.add('hidden'); };
-        window.saveEdit = function() {
-            const found = findContactGlobal(document.getElementById('edit-id').value);
-            if (!found) return;
-            const c = found.contact;
-            c.name = document.getElementById('edit-name').value;
-            const rawPhone = document.getElementById('edit-phone').value.trim();
-            c.phone = rawPhone ? formatPhoneAR(rawPhone) : '';
-            c.reference = document.getElementById('edit-reference').value;
-            if (found.source === 'convencional') c.seller = c.reference;
-            c.interestModel = document.getElementById('edit-model').value;
-            c.status = document.getElementById('edit-status').value;
-            if (c.status === 'No Compra' && !c.noCompraDate) c.noCompraDate = new Date().toLocaleDateString();
-            c.observations = document.getElementById('edit-obs').value;
-            saveLocalData(true); renderAllTables(); updateDashboard(); closeEditModal();
-            showToast("Cambios guardados");
+        window.changeAgendaMonth = function(delta) {
+            agendaViewMonth += delta;
+            if (agendaViewMonth < 0) { agendaViewMonth = 11; agendaViewYear--; }
+            else if (agendaViewMonth > 11) { agendaViewMonth = 0; agendaViewYear++; }
+            renderAgendaTab();
         };
 
-        // --- PLANES PDF A JPG CON PERSISTENCIA EN INDEXEDDB, GRÁFICO MES A MES Y COMPARTIR JPG POR WHATSAPP ---
+        window.jumpAgendaToToday = function() {
+            const now = new Date();
+            agendaViewYear = now.getFullYear();
+            agendaViewMonth = now.getMonth();
+            selectedAgendaDate = getTodayISODate();
+            renderAgendaTab();
+        };
+
+        window.selectAgendaDay = function(isoDate) {
+            selectedAgendaDate = isoDate;
+            renderAgendaTab();
+        };
+
+        window.renderAgendaTab = function() {
+            const grid = document.getElementById('agenda-calendar-grid');
+            const monthTitle = document.getElementById('agenda-month-title');
+            if (!grid) return;
+
+            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            if (monthTitle) monthTitle.textContent = `${monthNames[agendaViewMonth]} ${agendaViewYear}`;
+
+            const todayISO = getTodayISODate();
+            const allScheduled = getAllListsCombined().filter(c => (c.status === 'Entrevista' || c.status === 'Interesado a Futuro') && c.scheduleDate);
+
+            const todayOrOverdueCount = allScheduled.filter(c => c.scheduleDate <= todayISO).length;
+            const entTotal = allScheduled.filter(c => c.status === 'Entrevista').length;
+            const futTotal = allScheduled.filter(c => c.status === 'Interesado a Futuro').length;
+            const in7Days = new Date();
+            in7Days.setDate(in7Days.getDate() + 7);
+            const in7ISO = `${in7Days.getFullYear()}-${String(in7Days.getMonth() + 1).padStart(2, '0')}-${String(in7Days.getDate()).padStart(2, '0')}`;
+            const weekCount = allScheduled.filter(c => c.scheduleDate >= todayISO && c.scheduleDate <= in7ISO).length;
+
+            const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            setTxt('ag-stat-today', todayOrOverdueCount);
+            setTxt('ag-stat-entrevistas', entTotal);
+            setTxt('ag-stat-futuro', futTotal);
+            setTxt('ag-stat-week', weekCount);
+
+            const eventsByDate = {};
+            allScheduled.forEach(c => {
+                if (!eventsByDate[c.scheduleDate]) eventsByDate[c.scheduleDate] = [];
+                eventsByDate[c.scheduleDate].push(c);
+            });
+
+            const firstDayDow = new Date(agendaViewYear, agendaViewMonth, 1).getDay();
+            const startBlank = firstDayDow === 0 ? 6 : firstDayDow - 1;
+            const daysInMonth = new Date(agendaViewYear, agendaViewMonth + 1, 0).getDate();
+
+            let cellsHTML = '';
+            for (let b = 0; b < startBlank; b++) {
+                cellsHTML += `<div class="h-16 sm:h-20 rounded-xl bg-slate-100/60 border border-slate-100"></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const iso = `${agendaViewYear}-${String(agendaViewMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayEvents = eventsByDate[iso] || [];
+                const entCount = dayEvents.filter(e => e.status === 'Entrevista').length;
+                const futCount = dayEvents.filter(e => e.status === 'Interesado a Futuro').length;
+                const isToday = iso === todayISO;
+                const isSelected = iso === selectedAgendaDate;
+
+                cellsHTML += `
+                    <button onclick="selectAgendaDay('${iso}')" class="h-16 sm:h-20 p-1.5 rounded-xl border text-left flex flex-col justify-between transition-all ${isSelected ? 'border-[#EB0A1E] bg-red-50/70 ring-2 ring-red-200' : isToday ? 'border-zinc-900 bg-white' : 'border-slate-200 bg-white hover:border-slate-400'}">
+                        <div class="flex items-center justify-between w-full">
+                            <span class="text-xs font-extrabold ${isToday ? 'px-1.5 py-0.5 rounded-md bg-[#EB0A1E] text-white' : 'text-slate-800'}">${day}</span>
+                            ${dayEvents.length > 0 ? `<span class="text-[10px] font-bold text-slate-500">${dayEvents.length}</span>` : ''}
+                        </div>
+                        <div class="space-y-0.5 w-full overflow-hidden">
+                            ${entCount > 0 ? `<div class="px-1 py-0.2 rounded bg-purple-100 text-purple-800 text-[9px] font-bold truncate">🟣 ${entCount} Entrev.</div>` : ''}
+                            ${futCount > 0 ? `<div class="px-1 py-0.2 rounded bg-amber-100 text-amber-800 text-[9px] font-bold truncate">🟡 ${futCount} Futuro</div>` : ''}
+                        </div>
+                    </button>
+                `;
+            }
+            grid.innerHTML = cellsHTML;
+
+            // Renderizar eventos del día seleccionado
+            const dayTitle = document.getElementById('agenda-selected-day-title');
+            const dayList = document.getElementById('agenda-day-events-list');
+            if (dayTitle) dayTitle.textContent = `${formatDisplayISODate(selectedAgendaDate)} ${selectedAgendaDate === todayISO ? '(HOY)' : ''}`;
+            const selectedEvents = (eventsByDate[selectedAgendaDate] || []).sort((a, b) => (a.scheduleTime || '').localeCompare(b.scheduleTime || ''));
+
+            if (dayList) {
+                if (selectedEvents.length === 0) {
+                    dayList.innerHTML = `<div class="p-5 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">Sin entrevistas ni recontactos en esta fecha.</div>`;
+                } else {
+                    dayList.innerHTML = selectedEvents.map(c => {
+                        const isEnt = c.status === 'Entrevista';
+                        return `
+                            <div class="p-3 rounded-xl border ${isEnt ? 'border-purple-200 bg-purple-50/40' : 'border-amber-200 bg-amber-50/40'} space-y-1.5">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="text-xs font-extrabold text-slate-900">${c.name || 'Sin Nombre'}</span>
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isEnt ? 'bg-purple-600 text-white' : 'bg-amber-500 text-white'}">${isEnt ? 'Entrevista' : 'A Futuro'}</span>
+                                </div>
+                                <div class="text-xs text-slate-600">
+                                    ${c.scheduleTime ? `🕒 <b>${c.scheduleTime} hs</b> • ` : ''}${c.interestModel ? `🚗 <b>${c.interestModel}</b> • ` : ''}${c.scheduleNote || ''}
+                                </div>
+                                <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                                    <button onclick="sendAiAgendaWhatsApp('${c.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold">✨ Mensaje IA WA</button>
+                                    <button onclick="openScheduleModalForContact('${c.id}', '${c.status}')" class="px-2 py-1 rounded-lg bg-white border border-slate-300 text-[11px] font-semibold text-slate-700 hover:bg-slate-100">Reprogramar</button>
+                                    <button onclick="executeStatusUpdate('${c.id}', 'Venta')" class="px-2 py-1 rounded-lg bg-yellow-400 text-yellow-950 text-[11px] font-bold">¡Venta!</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            renderAgendaAiCopilot(allScheduled, todayISO);
+            const upcomingBox = document.getElementById('agenda-upcoming-list');
+            const filterType = document.getElementById('agenda-filter-type')?.value || 'Todos';
+            if (upcomingBox) {
+                let list = allScheduled.sort((a, b) => (a.scheduleDate + (a.scheduleTime || '')).localeCompare(b.scheduleDate + (b.scheduleTime || '')));
+                if (filterType !== 'Todos') list = list.filter(c => c.status === filterType);
+
+                if (list.length === 0) {
+                    upcomingBox.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">No hay compromisos programados en esta categoría.</div>`;
+                } else {
+                    upcomingBox.innerHTML = list.map(c => {
+                        const isOverdue = c.scheduleDate < todayISO;
+                        const isToday = c.scheduleDate === todayISO;
+                        const isEnt = c.status === 'Entrevista';
+                        return `
+                            <div onclick="selectAgendaDay('${c.scheduleDate}')" class="p-2.5 rounded-xl border ${isOverdue ? 'border-rose-300 bg-rose-50/60' : isToday ? 'border-emerald-300 bg-emerald-50/50' : 'border-slate-200 hover:bg-slate-50'} cursor-pointer flex items-center justify-between gap-2">
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-slate-900 truncate">${c.name || 'Sin Nombre'}</span>
+                                        <span class="px-1.5 py-0.2 rounded text-[10px] font-bold ${isEnt ? 'bg-purple-100 text-purple-800' : 'bg-amber-100 text-amber-800'}">${isEnt ? 'Entrevista' : 'A Futuro'}</span>
+                                    </div>
+                                    <div class="text-[11px] text-slate-600 mt-0.5">
+                                        📅 <b>${formatDisplayISODate(c.scheduleDate)}</b> ${c.scheduleTime ? `• ${c.scheduleTime}h` : ''} ${c.scheduleNote ? `• ${c.scheduleNote}` : ''}
+                                    </div>
+                                </div>
+                                <span class="text-[10px] font-extrabold shrink-0 ${isOverdue ? 'text-rose-700' : isToday ? 'text-emerald-700' : 'text-slate-400'}">
+                                    ${isOverdue ? 'VENCIDO' : isToday ? 'HOY' : 'PRÓXIMO'}
+                                </span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        };
+
+        function buildAiAgendaWhatsAppText(c) {
+            const name = (c.name && c.name !== 'Sin Nombre') ? c.name : '';
+            const saludo = name ? `Hola ${name}, ¿cómo estás?` : `Hola, ¿cómo estás?`;
+            const modelTxt = c.interestModel ? ` por tu *Toyota ${c.interestModel}*` : ` por tu *Plan Toyota*`;
+            if (c.status === 'Entrevista') {
+                const fecha = formatDisplayISODate(c.scheduleDate);
+                const hora = c.scheduleTime ? ` a las *${c.scheduleTime} hs*` : '';
+                const lugar = c.scheduleNote ? ` (${c.scheduleNote})` : ` en *Ginza Toyota*`;
+                return `${saludo} Te escribo de *Ginza Toyota* para confirmar nuestra reunión del *${fecha}*${hora}${lugar}${modelTxt}. ¿Te queda bien ese horario?`;
+            }
+            const motivo = c.scheduleNote ? ` (${c.scheduleNote})` : '';
+            return `${saludo} Te contacto nuevamente desde *Ginza Toyota* tal como habíamos acordado${motivo}. Ya tenemos los valores actualizados de este mes${modelTxt} con cupos vigentes. ¿Lo repasamos?`;
+        }
+
+        window.sendAiAgendaWhatsApp = function(contactId) {
+            const found = findContactGlobal(contactId);
+            if (!found || !found.contact.phone) {
+                showToast("Este contacto no tiene teléfono cargado", "error");
+                return;
+            }
+            const c = found.contact;
+            const waDigits = formatPhoneAR(c.phone).replace(/\D/g, '');
+            const msg = buildAiAgendaWhatsAppText(c);
+            const targetUrl = `https://web.whatsapp.com/send?phone=${waDigits}&text=${encodeURIComponent(msg)}`;
+            if (waTabRef && !waTabRef.closed) {
+                try { waTabRef.location.href = targetUrl; waTabRef.focus(); } catch (e) { waTabRef = window.open(targetUrl, 'crm_whatsapp_web_singleton'); }
+            } else {
+                waTabRef = window.open(targetUrl, 'crm_whatsapp_web_singleton');
+            }
+            showToast("✨ Mensaje IA cargado en WhatsApp Web");
+        };
+
+        function renderAgendaAiCopilot(allScheduled, todayISO) {
+            const box = document.getElementById('ai-agenda-recommendations');
+            const badge = document.getElementById('ai-agenda-summary-badge');
+            if (!box) return;
+
+            const unscheduledFuture = getAllListsCombined().filter(c => (c.status === 'Entrevista' || c.status === 'Interesado a Futuro') && !c.scheduleDate);
+            const urgentToday = allScheduled.filter(c => c.scheduleDate <= todayISO);
+            const upcomingFuture = allScheduled.filter(c => c.status === 'Interesado a Futuro' && c.scheduleDate >= todayISO);
+
+            if (badge) badge.textContent = `${urgentToday.length} prioritario(s) hoy • ${upcomingFuture.length} a futuro programado(s)`;
+
+            const cards = [];
+
+            if (urgentToday.length > 0) {
+                const top = urgentToday[0];
+                cards.push(`
+                    <div class="p-3.5 rounded-xl bg-white/10 border border-rose-400/40 flex flex-col justify-between gap-2">
+                        <div>
+                            <div class="text-[10px] font-extrabold uppercase text-rose-300">🔥 Prioridad Inmediata (${urgentToday.length})</div>
+                            <div class="text-xs font-bold text-white mt-1">${top.name || top.phone} — ${formatDisplayISODate(top.scheduleDate)} ${top.scheduleTime || ''}</div>
+                            <p class="text-[11px] text-zinc-300 mt-1">Envía confirmación ahora para evitar ausencias o reactivar el cierre.</p>
+                        </div>
+                        <button onclick="sendAiAgendaWhatsApp('${top.id}')" class="w-full py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">✨ Enviar Confirmación IA</button>
+                    </div>
+                `);
+            } else {
+                cards.push(`
+                    <div class="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                        <div class="text-[10px] font-extrabold uppercase text-emerald-300">✅ Agenda al Día</div>
+                        <div class="text-xs font-bold text-white mt-1">Sin entrevistas ni recontactos vencidos</div>
+                        <p class="text-[11px] text-zinc-300 mt-1">Aprovecha los bloques libres para mover interesados a entrevista presencial.</p>
+                    </div>
+                `);
+            }
+
+            if (upcomingFuture.length > 0) {
+                const nextF = upcomingFuture[0];
+                cards.push(`
+                    <div class="p-3.5 rounded-xl bg-white/10 border border-amber-400/40 flex flex-col justify-between gap-2">
+                        <div>
+                            <div class="text-[10px] font-extrabold uppercase text-amber-300">⏳ Seguimiento a Futuro (${upcomingFuture.length})</div>
+                            <div class="text-xs font-bold text-white mt-1">${nextF.name || nextF.phone} • ${formatDisplayISODate(nextF.scheduleDate)}</div>
+                            <p class="text-[11px] text-zinc-300 mt-1">${nextF.scheduleNote || 'Listo para recontactar con lista actualizada del mes.'}</p>
+                        </div>
+                        <button onclick="sendAiAgendaWhatsApp('${nextF.id}')" class="w-full py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs font-extrabold">✨ Reactivar con Mensaje IA</button>
+                    </div>
+                `);
+            } else {
+                cards.push(`
+                    <div class="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                        <div class="text-[10px] font-extrabold uppercase text-amber-300">🔮 Proyección a Futuro</div>
+                        <div class="text-xs font-bold text-white mt-1">Programa clientes que compran más adelante</div>
+                        <p class="text-[11px] text-zinc-300 mt-1">Usa los atajos de +15, +30, +60 o +90 días para no perder ninguna venta diferida.</p>
+                    </div>
+                `);
+            }
+
+            if (unscheduledFuture.length > 0) {
+                const un = unscheduledFuture[0];
+                cards.push(`
+                    <div class="p-3.5 rounded-xl bg-white/10 border border-purple-400/40 flex flex-col justify-between gap-2">
+                        <div>
+                            <div class="text-[10px] font-extrabold uppercase text-purple-300">⚠️ Sin Fecha Asignada (${unscheduledFuture.length})</div>
+                            <div class="text-xs font-bold text-white mt-1">${un.name || un.phone} (${un.status})</div>
+                            <p class="text-[11px] text-zinc-300 mt-1">Tiene estado activo pero todavía no tiene día en el calendario.</p>
+                        </div>
+                        <button onclick="openScheduleModalForContact('${un.id}', '${un.status}')" class="w-full py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold">📅 Asignar Fecha Ahora</button>
+                    </div>
+                `);
+            } else {
+                cards.push(`
+                    <div class="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                        <div class="text-[10px] font-extrabold uppercase text-purple-300">🎯 Cobertura 100%</div>
+                        <div class="text-xs font-bold text-white mt-1">Todos tus clientes activos tienen fecha</div>
+                        <p class="text-[11px] text-zinc-300 mt-1">El 100% de tus entrevistas y clientes a futuro están calendarizados.</p>
+                    </div>
+                `);
+            }
+
+            box.innerHTML = cards.join('');
+        }
+
+        // --- PERSISTENCIA BLINDADA EN INDEXEDDB + COMPARATIVA MES A MES DE PLANES ---
         const PLAN_IDB_NAME = 'CrmGinzaToyotaPlansDB_v2';
         const PLAN_IDB_STORE = 'planFiles';
         const MONTH_ORDER_MAP = {
@@ -3672,7 +4326,8 @@
                 .filter(n => !isNaN(n));
 
             const vehiclePrices = allNums.filter(n => n >= 20000000 && n <= 180000000);
-            const quotaPrices = allNums.filter(n => n >= 120000 && n <= 2500000);
+            // Filtrar valores de cuotas típicas de plan de ahorro (entre $180.000 y $1.600.000)
+            const quotaPrices = allNums.filter(n => n >= 180000 && n <= 1600000);
 
             let vehicleValue = 0;
             if (vehiclePrices.length > 0) {
@@ -3688,9 +4343,13 @@
                 else if (lower.includes('hiace')) vehicleValue = 72077000;
             }
 
-            const avgQuota = quotaPrices.length > 0
-                ? Math.round(quotaPrices.reduce((a, b) => a + b, 0) / quotaPrices.length)
-                : 0;
+            let avgQuota = 0;
+            if (quotaPrices.length > 0) {
+                avgQuota = Math.round(quotaPrices.reduce((a, b) => a + b, 0) / quotaPrices.length);
+            } else if (vehicleValue > 0) {
+                // Estimación base 84 cuotas (70/30) si el PDF es escaneado sin texto seleccionable
+                avgQuota = Math.round((vehicleValue * 0.70) / 84);
+            }
 
             return { vehicleValue, avgQuota };
         }
@@ -3955,14 +4614,29 @@
             const item = plansHistory.find(p => p.id === planId);
             if (!item) return;
             const currentVal = item.vehicleValue || 0;
-            const input = prompt(`Valor Móvil del vehículo para "${item.planName}" (${item.period}) en pesos (solo números):`, currentVal || '');
+            const input = prompt(`Precio Final (Valor Móvil) para "${item.planName}" (${item.period}) en pesos (solo números):`, currentVal || '');
             if (input === null) return;
             const numeric = parseInt(String(input).replace(/\D/g, ''), 10);
             if (!isNaN(numeric) && numeric > 0) {
                 item.vehicleValue = numeric;
                 saveLocalData(true);
                 renderPlansHistory();
-                showToast(`Valor del vehículo actualizado a $${numeric.toLocaleString('es-AR')}`);
+                showToast(`Precio final actualizado a $${numeric.toLocaleString('es-AR')}`);
+            }
+        };
+
+        window.editPlanAvgQuota = function(planId) {
+            const item = plansHistory.find(p => p.id === planId);
+            if (!item) return;
+            const currentVal = item.price || 0;
+            const input = prompt(`Valor Promedio de Cuota para "${item.planName}" (${item.period}) en pesos (solo números):`, currentVal || '');
+            if (input === null) return;
+            const numeric = parseInt(String(input).replace(/\D/g, ''), 10);
+            if (!isNaN(numeric) && numeric > 0) {
+                item.price = numeric;
+                saveLocalData(true);
+                renderPlansHistory();
+                showToast(`Promedio de cuota actualizado a $${numeric.toLocaleString('es-AR')}`);
             }
         };
 
@@ -3974,13 +4648,27 @@
             showToast("Registro del plan eliminado");
         };
 
+        function formatDiffBadgeHTML(currVal, prevVal, prevPeriodLabel = '') {
+            if (!prevPeriodLabel) return '<span class="text-slate-400 text-xs">Sin mes anterior</span>';
+            if (!(currVal > 0 && prevVal > 0)) return `<span class="text-slate-400 text-xs">vs ${prevPeriodLabel}: s/d</span>`;
+            const diff = currVal - prevVal;
+            const pct = ((diff / prevVal) * 100).toFixed(1);
+            const isUp = diff > 0;
+            return `
+                <div class="text-[11px] text-slate-500 mb-0.5">Ant. (${prevPeriodLabel}): <b>$${prevVal.toLocaleString('es-AR')}</b></div>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold ${isUp ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}">
+                    ${isUp ? '+' : ''}$${diff.toLocaleString('es-AR')} (${isUp ? '+' : ''}${pct}%)
+                </span>
+            `;
+        }
+
         window.renderVehiclePriceEvolutionChart = function() {
             const box = document.getElementById('vehicle-price-chart-box');
             const modelSel = document.getElementById('plan-chart-model-select');
             if (!box || !modelSel) return;
 
             if (plansHistory.length === 0) {
-                box.innerHTML = `<div class="text-xs text-slate-400 text-center py-6">Sube los PDFs de este mes y de meses anteriores para visualizar el gráfico comparativo de valores móviles.</div>`;
+                box.innerHTML = `<div class="text-xs text-slate-400 text-center py-6">Sube los PDFs de este mes y de meses anteriores para visualizar el gráfico comparativo de Precio Final y Promedio de Cuota.</div>`;
                 return;
             }
 
@@ -4006,38 +4694,62 @@
             }
 
             const maxVal = Math.max(1, ...series.map(s => Number(s.vehicleValue) || 0));
-            const firstVal = Number(series[0].vehicleValue) || 0;
-            const lastVal = Number(series[series.length - 1].vehicleValue) || 0;
-            const totalDiff = lastVal - firstVal;
-            const totalPct = firstVal > 0 ? ((totalDiff / firstVal) * 100).toFixed(1) : '0.0';
+            const firstFinal = Number(series[0].vehicleValue) || 0;
+            const lastFinal = Number(series[series.length - 1].vehicleValue) || 0;
+            const diffFinalTotal = lastFinal - firstFinal;
+            const pctFinalTotal = firstFinal > 0 ? ((diffFinalTotal / firstFinal) * 100).toFixed(1) : '0.0';
+
+            const firstQuota = Number(series[0].price) || 0;
+            const lastQuota = Number(series[series.length - 1].price) || 0;
+            const diffQuotaTotal = lastQuota - firstQuota;
+            const pctQuotaTotal = firstQuota > 0 ? ((diffQuotaTotal / firstQuota) * 100).toFixed(1) : '0.0';
 
             box.innerHTML = `
                 <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <div>
-                        <span class="text-xs font-extrabold uppercase text-[#EB0A1E]">Comparativa de Valor Móvil del Vehículo</span>
+                        <span class="text-xs font-extrabold uppercase text-[#EB0A1E]">Evolución Mes a Mes (Precio Final y Promedio de Cuota)</span>
                         <h4 class="text-sm font-black text-slate-900">${series[series.length - 1].planName}</h4>
                     </div>
-                    ${series.length > 1 && firstVal > 0 && lastVal > 0 ? `
-                        <div class="px-3 py-1 rounded-xl text-xs font-extrabold ${totalDiff >= 0 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800'}">
-                            Variación acumulada (${series[0].period} → ${series[series.length - 1].period}): ${totalDiff >= 0 ? '+' : ''}$${totalDiff.toLocaleString('es-AR')} (${totalDiff >= 0 ? '+' : ''}${totalPct}%)
+                    ${series.length > 1 ? `
+                        <div class="flex flex-wrap gap-2">
+                            ${firstFinal > 0 && lastFinal > 0 ? `
+                                <div class="px-3 py-1 rounded-xl text-xs font-extrabold ${diffFinalTotal >= 0 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800'}">
+                                    Precio Final: ${diffFinalTotal >= 0 ? '+' : ''}$${diffFinalTotal.toLocaleString('es-AR')} (${diffFinalTotal >= 0 ? '+' : ''}${pctFinalTotal}%)
+                                </div>
+                            ` : ''}
+                            ${firstQuota > 0 && lastQuota > 0 ? `
+                                <div class="px-3 py-1 rounded-xl text-xs font-extrabold bg-zinc-900 text-white">
+                                    Prom. Cuota: ${diffQuotaTotal >= 0 ? '+' : ''}$${diffQuotaTotal.toLocaleString('es-AR')} (${diffQuotaTotal >= 0 ? '+' : ''}${pctQuotaTotal}%)
+                                </div>
+                            ` : ''}
                         </div>
                     ` : ''}
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 items-end pt-2">
                     ${series.map((pt, i) => {
                         const val = Number(pt.vehicleValue) || 0;
+                        const qVal = Number(pt.price) || 0;
                         const heightPct = val > 0 ? Math.max(18, Math.round((val / maxVal) * 100)) : 14;
-                        const prevPt = i > 0 ? (Number(series[i - 1].vehicleValue) || 0) : 0;
-                        const stepDiff = (i > 0 && val > 0 && prevPt > 0) ? (val - prevPt) : 0;
-                        const stepPct = (i > 0 && val > 0 && prevPt > 0) ? ((stepDiff / prevPt) * 100).toFixed(1) : null;
+                        const prevPt = i > 0 ? series[i - 1] : null;
+                        const prevFinal = Number(prevPt?.vehicleValue) || 0;
+                        const prevQuota = Number(prevPt?.price) || 0;
+
+                        const stepFinalDiff = (i > 0 && val > 0 && prevFinal > 0) ? (val - prevFinal) : 0;
+                        const stepFinalPct = (i > 0 && val > 0 && prevFinal > 0) ? ((stepFinalDiff / prevFinal) * 100).toFixed(1) : null;
+
+                        const stepQuotaDiff = (i > 0 && qVal > 0 && prevQuota > 0) ? (qVal - prevQuota) : 0;
+                        const stepQuotaPct = (i > 0 && qVal > 0 && prevQuota > 0) ? ((stepQuotaDiff / prevQuota) * 100).toFixed(1) : null;
+
                         const isLatest = pt.period === latestPeriod;
 
                         return `
-                            <div class="bg-white rounded-xl border ${isLatest ? 'border-[#EB0A1E] ring-1 ring-red-200' : 'border-slate-200'} p-3 flex flex-col justify-between h-52">
-                                <div class="text-center">
+                            <div class="bg-white rounded-xl border ${isLatest ? 'border-[#EB0A1E] ring-1 ring-red-200' : 'border-slate-200'} p-3 flex flex-col justify-between h-64">
+                                <div class="text-center space-y-0.5">
                                     <div class="text-[11px] font-extrabold ${isLatest ? 'text-[#EB0A1E]' : 'text-slate-600'}">${pt.period}</div>
-                                    <div class="text-xs sm:text-sm font-black text-slate-900 mt-0.5">${val > 0 ? '$' + val.toLocaleString('es-AR') : 'Sin valor'}</div>
-                                    ${stepPct !== null ? `<div class="text-[10px] font-bold ${stepDiff >= 0 ? 'text-amber-700' : 'text-emerald-700'}">${stepDiff >= 0 ? '+' : ''}$${stepDiff.toLocaleString('es-AR')} (${stepDiff >= 0 ? '+' : ''}${stepPct}%)</div>` : `<div class="text-[10px] text-slate-400">Base inicial</div>`}
+                                    <div class="text-xs sm:text-sm font-black text-slate-900">Final: ${val > 0 ? '$' + val.toLocaleString('es-AR') : 's/d'}</div>
+                                    ${stepFinalPct !== null ? `<div class="text-[10px] font-bold ${stepFinalDiff >= 0 ? 'text-amber-700' : 'text-emerald-700'}">${stepFinalDiff >= 0 ? '+' : ''}$${stepFinalDiff.toLocaleString('es-AR')} (${stepFinalDiff >= 0 ? '+' : ''}${stepFinalPct}%)</div>` : ''}
+                                    <div class="text-[11px] font-bold text-indigo-700 pt-1">Cuota Prom: ${qVal > 0 ? '$' + qVal.toLocaleString('es-AR') : 's/d'}</div>
+                                    ${stepQuotaPct !== null ? `<div class="text-[10px] font-bold ${stepQuotaDiff >= 0 ? 'text-amber-700' : 'text-emerald-700'}">${stepQuotaDiff >= 0 ? '+' : ''}$${stepQuotaDiff.toLocaleString('es-AR')} (${stepQuotaDiff >= 0 ? '+' : ''}${stepQuotaPct}%)</div>` : ''}
                                 </div>
                                 <div class="flex-1 flex items-end justify-center pt-3">
                                     <div class="w-12 rounded-t-xl transition-all ${isLatest ? 'bg-gradient-to-t from-[#99000d] to-[#EB0A1E]' : 'bg-gradient-to-t from-zinc-700 to-zinc-500'}" style="height: ${heightPct}%;"></div>
@@ -4093,31 +4805,16 @@
                     .sort((a, b) => parsePeriodSortValue(b.period) - parsePeriodSortValue(a.period));
 
                 const prev = previousVersions[0] || null;
-                const currVal = Number(curr.vehicleValue) || 0;
-                const prevVal = Number(prev?.vehicleValue) || 0;
+                const currFinal = Number(curr.vehicleValue) || 0;
+                const prevFinal = Number(prev?.vehicleValue) || 0;
+                const currQuota = Number(curr.price) || 0;
+                const prevQuota = Number(prev?.price) || 0;
 
-                let prevText = '<span class="text-slate-400 text-xs">Sin mes anterior</span>';
-                let diffBadge = '<span class="text-slate-400 text-xs">-</span>';
-
-                if (prev) {
-                    prevText = prevVal > 0
-                        ? `<div class="font-bold text-slate-700">$${prevVal.toLocaleString('es-AR')}</div><div class="text-[11px] text-slate-400">${prev.period}</div>`
-                        : `<div class="text-xs text-slate-500">${prev.period}</div>`;
-
-                    if (currVal > 0 && prevVal > 0) {
-                        const diff = currVal - prevVal;
-                        const pct = ((diff / prevVal) * 100).toFixed(1);
-                        const isUp = diff > 0;
-                        diffBadge = `
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold ${isUp ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}">
-                                ${isUp ? '+' : ''}$${diff.toLocaleString('es-AR')} (${isUp ? '+' : ''}${pct}%)
-                            </span>
-                        `;
-                    }
-                }
+                const diffFinalHTML = formatDiffBadgeHTML(currFinal, prevFinal, prev?.period || '');
+                const diffQuotaHTML = formatDiffBadgeHTML(currQuota, prevQuota, prev?.period || '');
 
                 const historyChips = previousVersions.length > 0
-                    ? `<div class="mt-1 flex flex-wrap gap-1">${previousVersions.map(pv => `<button onclick="openSavedPlanFilesModal('${pv.id}')" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-[10px] font-semibold text-slate-600" title="Ver PDF/JPG de ${pv.period}">📁 ${pv.period}${pv.vehicleValue > 0 ? `: $${Number(pv.vehicleValue).toLocaleString('es-AR')}` : ''}</button>`).join('')}</div>`
+                    ? `<div class="mt-1 flex flex-wrap gap-1">${previousVersions.map(pv => `<button onclick="openSavedPlanFilesModal('${pv.id}')" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-[10px] font-semibold text-slate-600" title="Ver PDF/JPG de ${pv.period}">📁 ${pv.period} (Final: $${Number(pv.vehicleValue || 0).toLocaleString('es-AR')} • Cuota: $${Number(pv.price || 0).toLocaleString('es-AR')})</button>`).join('')}</div>`
                     : '';
 
                 const tr = document.createElement('tr');
@@ -4132,12 +4829,18 @@
                     </td>
                     <td class="p-3.5">
                         <div class="flex items-center gap-1.5">
-                            <span class="font-extrabold text-slate-900">${currVal > 0 ? '$' + currVal.toLocaleString('es-AR') : 'Sin detectar'}</span>
-                            <button onclick="editPlanVehicleValue('${curr.id}')" class="text-xs text-slate-400 hover:text-[#EB0A1E]" title="Editar valor vehículo">✏️</button>
+                            <span class="font-extrabold text-slate-900">${currFinal > 0 ? '$' + currFinal.toLocaleString('es-AR') : 'Sin detectar'}</span>
+                            <button onclick="editPlanVehicleValue('${curr.id}')" class="text-xs text-slate-400 hover:text-[#EB0A1E]" title="Editar Precio Final">✏️</button>
                         </div>
                     </td>
-                    <td class="p-3.5">${prevText}</td>
-                    <td class="p-3.5">${diffBadge}</td>
+                    <td class="p-3.5">${diffFinalHTML}</td>
+                    <td class="p-3.5">
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-extrabold text-indigo-700">${currQuota > 0 ? '$' + currQuota.toLocaleString('es-AR') : 'Sin detectar'}</span>
+                            <button onclick="editPlanAvgQuota('${curr.id}')" class="text-xs text-slate-400 hover:text-indigo-700" title="Editar Promedio de Cuota">✏️</button>
+                        </div>
+                    </td>
+                    <td class="p-3.5">${diffQuotaHTML}</td>
                     <td class="p-3.5">
                         <div class="flex flex-wrap items-center gap-1.5">
                             <button onclick="downloadSavedPlanPdf('${curr.id}')" class="px-2.5 py-1 bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg text-xs font-semibold">📄 PDF</button>
@@ -4246,6 +4949,9 @@
         };
 
         initApp();
+        if (new URLSearchParams(window.location.search).get('view') === 'agenda') {
+            setTimeout(() => openAgendaWindow(), 150);
+        }
     </script>
 </body>
 </html>
