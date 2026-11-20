@@ -159,7 +159,6 @@
 
     <!-- TAB 1: PANEL PRINCIPAL EJECUTIVO GINZA TOYOTA -->
     <main id="tab-botonera" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-6">
-        <!-- Hero Ejecutivo Ginza Toyota -->
         <div class="bg-gradient-to-br from-zinc-950 via-neutral-900 to-zinc-800 rounded-3xl p-5 sm:p-7 text-white shadow-lg relative overflow-hidden border border-zinc-800">
             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                 <div class="max-w-2xl">
@@ -180,13 +179,12 @@
                         <button onclick="switchTab('comparativa')" class="px-4 py-2.5 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-xs sm:text-sm font-bold shadow-md transition-all">
                             ⚖️ Comparar Planes con IA
                         </button>
-                        <button onclick="switchTab('clientes')" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs sm:text-sm font-semibold transition-all">
-                            👥 Ver Cartera Clientes
+                        <button onclick="switchTab('planes')" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs sm:text-sm font-semibold transition-all">
+                            📄 Planes & Gráfico Mes a Mes
                         </button>
                     </div>
                 </div>
 
-                <!-- Configurador rápido de Localidad -->
                 <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 w-full lg:w-72 shrink-0">
                     <label class="block text-[11px] font-bold text-zinc-300 uppercase tracking-wider mb-1.5">Localidad / Prefijo Automático</label>
                     <input type="text" id="input-localidad" value="Rosario" placeholder="Ej: Rosario, Córdoba, CABA..." class="w-full px-3 py-2 text-sm bg-zinc-900/90 border border-zinc-700 text-white rounded-xl focus:ring-2 focus:ring-[#EB0A1E] outline-none">
@@ -195,9 +193,7 @@
             </div>
         </div>
 
-        <!-- Grid Principal: Actividad + Distribución por Canal + Radar de Seguimiento -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-            <!-- Columna Izquierda (7 cols): Actividad de Contacto y Canales -->
             <div class="lg:col-span-7 space-y-5">
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
                     <div class="flex items-center justify-between mb-4">
@@ -221,7 +217,6 @@
                 </div>
             </div>
 
-            <!-- Columna Derecha (5 cols): Radar de Seguimiento y Alertas 48h -->
             <div class="lg:col-span-5 space-y-5">
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
                     <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
@@ -956,17 +951,20 @@
         </div>
     </main>
 
-    <!-- TAB 6: PLANES & PDF -->
-    <main id="tab-planes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+    <!-- TAB 6: PLANES & PDF (PERSISTENCIA INDEXEDDB + GRÁFICO MES A MES + COMPARTIR JPG POR WHATSAPP) -->
+    <main id="tab-planes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 flex flex-col justify-between">
                 <div>
-                    <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-1">Analizar PDF de Planes Toyota</h2>
-                    <p class="text-xs text-slate-500 mb-4">Calcula la cuota promedio por variante y convierte cada hoja en JPG listo para WhatsApp.</p>
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900">Subir PDFs de Planes</h2>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">💾 IndexedDB Persistente</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4">Sube el PDF del mes actual y los PDFs de meses anteriores. Se guardan permanentemente en tu PC para comparar valores móviles de vehículos, descargar PDF/JPG o enviarlos por WhatsApp.</p>
                     <div class="space-y-3">
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Mes</label>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Mes del PDF</label>
                                 <select id="plan-month-input" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
                                     <option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option>
                                     <option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option>
@@ -980,60 +978,119 @@
                             </div>
                         </div>
                         <label class="cursor-pointer w-full bg-[#EB0A1E] hover:bg-red-700 text-white px-4 py-3 rounded-xl font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2">
-                            Subir PDFs del Mes
+                            <span>📂 Subir PDFs del Período</span>
                             <input type="file" id="plan-pdf-upload" accept="application/pdf" multiple class="hidden" onchange="handlePlanPdfUpload(event)">
                         </label>
                     </div>
                 </div>
                 <div id="pdf-processing-status" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-[#EB0A1E] font-medium text-center">
-                    Procesando PDF y generando imágenes JPG...
+                    Procesando PDF, extrayendo valor móvil del vehículo y guardando JPGs...
                 </div>
             </div>
 
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
                 <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
-                    <h2 class="text-base sm:text-lg font-bold text-slate-800" id="jpg-preview-title">Hojas en JPG Listas para WhatsApp</h2>
-                    <button id="btn-download-all-jpg" onclick="downloadAllPlanJpgs()" class="hidden bg-emerald-600 text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-emerald-700">Descargar Todas (.JPG)</button>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-800" id="jpg-preview-title">Hojas en JPG Guardadas y Listas para WhatsApp</h2>
+                        <p class="text-xs text-slate-500">Se conservan al cerrar el navegador o reiniciar la computadora.</p>
+                    </div>
+                    <button id="btn-download-all-jpg" onclick="downloadAllPlanJpgs()" class="hidden bg-zinc-900 text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-zinc-800">Descargar Todas (.JPG)</button>
                 </div>
-                <div id="pdf-jpg-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[360px] overflow-y-auto p-1">
+                <div id="pdf-jpg-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[380px] overflow-y-auto p-1">
                     <div class="col-span-full py-10 text-center text-slate-400 text-sm border-2 border-dashed border-slate-200 rounded-xl">
-                        Sube un archivo PDF a la izquierda para calcular las cuotas promedio y descargar sus hojas en JPG.
+                        Sube un archivo PDF a la izquierda para calcular su valor móvil y compartir sus hojas JPG por WhatsApp.
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="p-4 sm:p-5 border-b border-slate-200 bg-slate-50 flex flex-wrap justify-between items-center gap-3">
+        <!-- GRÁFICO COMPARATIVO MES A MES (SOLO VALORES MÓVILES DE VEHÍCULOS VIGENTES) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm space-y-5">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                 <div>
-                    <h3 class="text-base font-bold text-slate-800">Evolución de Cuota Promedio por Modelo</h3>
-                    <p class="text-xs text-slate-500" id="plans-avg-summary">Comparativa frente al mes anterior.</p>
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900">📊 Evolución Mes a Mes — Valores Móviles de Vehículos Vigentes</h3>
+                    <p class="text-xs text-slate-500">Compara únicamente los modelos vigentes en el mes más reciente frente a los PDFs cargados de meses anteriores.</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <select id="plan-model-filter" onchange="renderPlansHistory()" class="px-3 py-1.5 text-xs font-medium border border-slate-300 rounded-xl bg-white outline-none">
-                        <option value="Todos">Todos los Modelos</option>
+                <div class="flex flex-wrap items-center gap-2">
+                    <select id="plan-chart-model-select" onchange="renderVehiclePriceEvolutionChart()" class="rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold bg-white outline-none"></select>
+                    <select id="plan-model-filter" onchange="renderPlansHistory()" class="rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold bg-white outline-none">
+                        <option value="Todos">Todos los Planes Vigentes</option>
                     </select>
-                    <button onclick="clearPlansHistory()" class="bg-red-50 border border-red-200 text-red-700 px-3 py-1.5 rounded-xl font-medium text-xs">Limpiar</button>
+                    <button onclick="clearPlansHistory()" class="px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold">Vaciar Historial</button>
                 </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse min-w-[650px]">
+
+            <!-- Lienzo del Gráfico Visual -->
+            <div id="vehicle-price-chart-box" class="p-4 rounded-2xl bg-slate-50 border border-slate-200"></div>
+
+            <!-- Tabla Comparativa Completa -->
+            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                <table class="w-full text-left border-collapse min-w-[720px]">
                     <thead>
-                        <tr class="bg-white border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase">
-                            <th class="p-3.5">Período</th>
-                            <th class="p-3.5">Modelo / Plan</th>
-                            <th class="p-3.5">Cuota Promedio</th>
-                            <th class="p-3.5">Mes Anterior</th>
-                            <th class="p-3.5">Variación</th>
-                            <th class="p-3.5">Acciones</th>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-[11px] uppercase tracking-wider text-slate-500">
+                            <th class="p-3.5">Período Actual</th>
+                            <th class="p-3.5">Vehículo / Plan</th>
+                            <th class="p-3.5">Valor Móvil Actual</th>
+                            <th class="p-3.5">Valor Mes Anterior</th>
+                            <th class="p-3.5">Diferencia Vehículo</th>
+                            <th class="p-3.5">Acciones (PDF / JPG / WA)</th>
                         </tr>
                     </thead>
                     <tbody id="plans-history-body" class="divide-y divide-slate-100 text-sm"></tbody>
                 </table>
             </div>
-            <div id="plans-empty-state" class="p-8 text-center text-slate-500 text-sm">Aún no hay planes analizados.</div>
+            <div id="plans-empty-state" class="hidden p-8 text-center text-slate-400 text-xs">Aún no hay PDFs cargados. Sube el PDF del mes actual y los de meses anteriores para ver el gráfico comparativo.</div>
         </div>
     </main>
+
+    <!-- MODAL VISOR DE ARCHIVOS GUARDADOS (PDF + HOJAS JPG PARA COMPARTIR POR WA) -->
+    <div id="plan-files-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[65] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 sticky top-0 bg-white z-10">
+                <div>
+                    <h3 id="plan-files-modal-title" class="text-base font-extrabold text-slate-900">Archivos Guardados del Plan</h3>
+                    <p class="text-xs text-slate-500">Descarga el PDF original o comparte cualquier hoja JPG directo por WhatsApp.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div id="plan-files-modal-actions" class="flex flex-wrap gap-2"></div>
+                    <button onclick="closePlanFilesModal()" class="text-slate-400 hover:text-slate-600 text-lg px-2">✕</button>
+                </div>
+            </div>
+            <div class="p-5">
+                <div id="plan-files-modal-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SELECTOR DE CLIENTE PARA ENVIAR JPG POR WHATSAPP -->
+    <div id="share-jpg-wa-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900">📲 Compartir JPG por WhatsApp</h3>
+                    <p id="share-jpg-wa-filename" class="text-xs text-slate-500 truncate max-w-[280px]"></p>
+                </div>
+                <button onclick="closeShareJpgWaModal()" class="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
+                    La imagen JPG se copiará automáticamente al portapapeles (y en celular abrirá la hoja para compartir). Al abrirse el chat en WhatsApp Web, solo presiona <b>Ctrl + V</b> y Enviar.
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Buscar Cliente o Contacto del CRM</label>
+                    <input type="text" id="share-jpg-search" oninput="renderShareJpgContactsList()" placeholder="Escribe nombre o teléfono..." class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                </div>
+                <div id="share-jpg-contacts-list" class="max-h-48 overflow-y-auto border border-slate-200 rounded-xl divide-y divide-slate-100"></div>
+                <div class="pt-2 border-t border-slate-100">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">O ingresar número manual:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="share-jpg-manual-phone" placeholder="Ej: 3415551234" class="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                        <button onclick="executeShareJpgToPhone(document.getElementById('share-jpg-manual-phone').value, 'Cliente')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shrink-0">Enviar WA</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL DE EDICIÓN -->
     <div id="edit-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
@@ -1304,6 +1361,7 @@
             clientes: "Hola {nombre}, ¿cómo venís con la propuesta de Toyota que estuvimos viendo?"
         };
         let currentPlanJpgs = [];
+        let pendingShareJpgItem = null;
         let goals = {
             weekly: { llamadas: 100, mensajes: 150, interesados: 25, entrevistas: 10, ventas: 5 },
             monthly: { llamadas: 400, mensajes: 600, interesados: 100, entrevistas: 40, ventas: 20 }
@@ -1316,9 +1374,8 @@
         let waIncomingLogs = [];
         let processedWaEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_wa_events') || '[]'));
 
-        // --- CATÁLOGO DE PLANES ACTUALIZADO (TOYOTA VS COMPETENCIA INCLUYENDO FORD TRANSIT Y GAMA COMPLETA) ---
+        // --- CATÁLOGO DE PLANES (TOYOTA VS COMPETENCIA INCLUYENDO FORD TRANSIT Y GAMA COMPLETA) ---
         const DEFAULT_MARKET_PLANS = [
-            // TOYOTA
             { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 351466 },
             { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 711178 },
             { id: 'ty-yariscross-xli', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XLI CVT', modality: '70/30', valorMovil: 41464000, cuotaPura: 293703 },
@@ -1329,7 +1386,6 @@
             { id: 'ty-corolla-xli', brand: 'Toyota', segment: 'Sedán', model: 'Corolla XLI CVT', modality: '70/30', valorMovil: 44082000, cuotaPura: 312247 },
             { id: 'ty-hiace-l2h2', brand: 'Toyota', segment: 'Furgón', model: 'Hiace Furgón L2H2 AT', modality: '100%', valorMovil: 72077000, cuotaPura: 858059 },
 
-            // FORD (GAMA COMPLETA + FORD TRANSIT)
             { id: 'fd-transit', brand: 'Ford', segment: 'Furgón', model: 'Ford Transit Van Mediana Techo Elevado', modality: '100%', valorMovil: 74890000, cuotaPura: 891547 },
             { id: 'fd-ranger-xl', brand: 'Ford', segment: 'Pick Up', model: 'Ford Ranger XL 4x2', modality: '70/30', valorMovil: 45484213, cuotaPura: 322180 },
             { id: 'fd-ranger-xls', brand: 'Ford', segment: 'Pick Up', model: 'Ford Ranger XLS V6 4x4 AT', modality: '80/20', valorMovil: 66950000, cuotaPura: 637619 },
@@ -1337,7 +1393,6 @@
             { id: 'fd-territory', brand: 'Ford', segment: 'SUV', model: 'Ford Territory SEL AT', modality: '70/30', valorMovil: 52850000, cuotaPura: 374354 },
             { id: 'fd-bronco', brand: 'Ford', segment: 'SUV', model: 'Ford Bronco Sport Big Bend 4WD', modality: '80/20', valorMovil: 57900000, cuotaPura: 551428 },
 
-            // OTROS COMPETIDORES POR SEGMENTO
             { id: 'vw-amarok', brand: 'Volkswagen', segment: 'Pick Up', model: 'Amarok Trendline 4x2', modality: '70/30', valorMovil: 53133050, cuotaPura: 376359 },
             { id: 'ns-frontier', brand: 'Nissan', segment: 'Pick Up', model: 'Frontier S 4x2', modality: '70/30', valorMovil: 45624222, cuotaPura: 323171 },
             { id: 'ft-toro', brand: 'Fiat', segment: 'Pick Up', model: 'Toro Freedom AT', modality: '70/30', valorMovil: 57410000, cuotaPura: 406654 },
@@ -1353,11 +1408,6 @@
             { id: 'pg-boxer', brand: 'Peugeot', segment: 'Furgón', model: 'Boxer 330M', modality: '100%', valorMovil: 69950000, cuotaPura: 832738 }
         ];
         let marketPlansCatalog = [...DEFAULT_MARKET_PLANS];
-
-        function getCurrentYearMonthKey() {
-            const d = new Date();
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        }
 
         function mergeDefaultMarketPlans() {
             const existingIds = new Set(marketPlansCatalog.map(p => p.id));
@@ -1425,12 +1475,12 @@
         function generateToyotaAiSalesHooks(tyPlan, rvPlan) {
             const diffValor = rvPlan.valorMovil - tyPlan.valorMovil;
             const diffCuota = rvPlan.cuotaPura - tyPlan.cuotaPura;
-            const ventajas = [];
+            const ventajas = [
+                "Garantía oficial Toyota de 5 años o 150.000 km transferible (y 8 años / 160.000 km en sistema híbrido), líder en confiabilidad mecánica.",
+                "Mayor valor de reventa del mercado argentino: al momento de licitar o cambiar la unidad, Toyota conserva mejor su capital que cualquier rival.",
+                "Distribución por cadena metálica libre de mantenimiento y servicios programados cada 10.000 km con precio transparente en red Ginza."
+            ];
             const puntosCierre = [];
-
-            ventajas.push("Garantía oficial Toyota de 5 años o 150.000 km transferible (y 8 años / 160.000 km en sistema híbrido), líder en confiabilidad mecánica.");
-            ventajas.push("Mayor valor de reventa del mercado argentino: al momento de licitar o cambiar la unidad, Toyota conserva mejor su capital que cualquier rival.");
-            ventajas.push("Distribución por cadena metálica libre de mantenimiento y servicios programados cada 10.000 km con precio transparente en red Ginza.");
 
             if (tyPlan.segment === 'Pick Up') {
                 ventajas.push("Chasis de largueros reforzado y caja automática/manual probada para trabajo pesado sin perder confort en ruta.");
@@ -1531,7 +1581,7 @@
                                 </button>
                             </div>
                             <div class="space-y-2">
-                                ${puntosCierre.map(pt => `<div class="p-2.5 rounded-xl bg-white border border-red-100 text-xs text-slate-800 font-medium shadow-xs">💡 ${pt}</div>`).join('')}
+                                ${puntosCierre.map(pt => `<div class="p-2.5 rounded-xl bg-white border border-red-100 text-xs text-slate-800 font-medium">💡 ${pt}</div>`).join('')}
                             </div>
                         </div>
 
@@ -1936,7 +1986,7 @@
         }
 
         function buildSyncPayload(ts) {
-            const lightPlans = plansHistory.map(({ jpgPages, ...rest }) => rest);
+            const lightPlans = plansHistory.map(({ jpgPages, pdfDataUrl, ...rest }) => rest);
             return {
                 updatedAt: ts,
                 kpis, crmContacts, gestionContacts, redesContacts, salesforceContacts,
@@ -1965,7 +2015,10 @@
             if (Array.isArray(data.convencionalSellers)) convencionalSellers = data.convencionalSellers;
             if (data.waTemplates) waTemplates = { ...waTemplates, ...data.waTemplates };
             if (data.goals) goals = data.goals;
-            if (Array.isArray(data.plansHistory)) plansHistory = data.plansHistory;
+            if (Array.isArray(data.plansHistory)) {
+                const prevBlobs = new Map(plansHistory.map(p => [p.id, { jpgPages: p.jpgPages, pdfDataUrl: p.pdfDataUrl, hasLocalFiles: p.hasLocalFiles }]));
+                plansHistory = data.plansHistory.map(item => ({ ...item, ...(prevBlobs.get(item.id) || {}) }));
+            }
 
             persistToLocalStorageOnly();
             renderAllTables();
@@ -2076,7 +2129,7 @@
                 localStorage.setItem('convencional_sellers', JSON.stringify(convencionalSellers));
                 localStorage.setItem('crm_wa_templates', JSON.stringify(waTemplates));
                 localStorage.setItem('crm_goals', JSON.stringify(goals));
-                localStorage.setItem('plans_history', JSON.stringify(plansHistory.map(({ jpgPages, ...rest }) => rest)));
+                localStorage.setItem('plans_history', JSON.stringify(plansHistory.map(({ jpgPages, pdfDataUrl, ...rest }) => rest)));
             } catch (e) {}
         }
 
@@ -2106,6 +2159,7 @@
             if (heroDate) heroDate.textContent = `${now.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })} • Ginza Toyota`;
 
             loadLocalData();
+            await restoreSavedPlanBlobsFromIndexedDB();
             mergeDefaultMarketPlans();
             normalizeAllStoredPhones(true);
             renderAllTables();
@@ -2118,6 +2172,8 @@
             if (csvInput) csvInput.addEventListener('change', handleCsvUpload);
 
             await pullFromFirebase(true);
+            await restoreSavedPlanBlobsFromIndexedDB();
+            renderPlansHistory();
             startFirebaseLiveListener();
             startWaIncomingLiveListener();
             checkWhatsApp48hTimeouts(false);
@@ -2736,7 +2792,7 @@
             }
         }
 
-        // --- ACCIONES DE CONTACTO (LLAMAR / MENSAJE -> CONTESTÓ / NO CONTESTÓ -> ENVIAR MENSAJE 48H) ---
+        // --- ACCIONES DE CONTACTO ---
         window.startCallFlow = function(id) {
             const found = findContactGlobal(id);
             if (!found) return;
@@ -3461,7 +3517,193 @@
             showToast("Cambios guardados");
         };
 
-        // --- PLANES PDF A JPG ---
+        // --- PLANES PDF A JPG CON PERSISTENCIA EN INDEXEDDB, GRÁFICO MES A MES Y COMPARTIR JPG POR WHATSAPP ---
+        const PLAN_IDB_NAME = 'CrmGinzaToyotaPlansDB_v2';
+        const PLAN_IDB_STORE = 'planFiles';
+        const MONTH_ORDER_MAP = {
+            'Enero': 1, 'Febrero': 2, 'Marzo': 3, 'Abril': 4, 'Mayo': 5, 'Junio': 6,
+            'Julio': 7, 'Agosto': 8, 'Septiembre': 9, 'Octubre': 10, 'Noviembre': 11, 'Diciembre': 12
+        };
+
+        async function requestPersistentBrowserStorage() {
+            try {
+                if (navigator.storage && navigator.storage.persist) {
+                    await navigator.storage.persist();
+                }
+            } catch (e) {}
+        }
+
+        function openPlansIndexedDB() {
+            return new Promise((resolve, reject) => {
+                if (!window.indexedDB) return reject(new Error('IndexedDB no soportado'));
+                const req = indexedDB.open(PLAN_IDB_NAME, 2);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(PLAN_IDB_STORE)) {
+                        db.createObjectStore(PLAN_IDB_STORE, { keyPath: 'id' });
+                    }
+                };
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function savePlanFilesToIndexedDB(planId, pdfDataUrl, jpgPages, fileName) {
+            try {
+                await requestPersistentBrowserStorage();
+                const db = await openPlansIndexedDB();
+                await new Promise((resolve, reject) => {
+                    const tx = db.transaction(PLAN_IDB_STORE, 'readwrite');
+                    tx.objectStore(PLAN_IDB_STORE).put({
+                        id: planId,
+                        pdfDataUrl,
+                        jpgPages,
+                        fileName,
+                        savedAt: Date.now()
+                    });
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => reject(tx.error);
+                });
+            } catch (e) {}
+        }
+
+        async function getPlanFilesFromIndexedDB(planId) {
+            try {
+                const db = await openPlansIndexedDB();
+                return await new Promise((resolve, reject) => {
+                    const tx = db.transaction(PLAN_IDB_STORE, 'readonly');
+                    const req = tx.objectStore(PLAN_IDB_STORE).get(planId);
+                    req.onsuccess = () => resolve(req.result || null);
+                    req.onerror = () => reject(req.error);
+                });
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function getAllPlanFilesFromIndexedDB() {
+            try {
+                const db = await openPlansIndexedDB();
+                return await new Promise((resolve, reject) => {
+                    const tx = db.transaction(PLAN_IDB_STORE, 'readonly');
+                    const req = tx.objectStore(PLAN_IDB_STORE).getAll();
+                    req.onsuccess = () => resolve(req.result || []);
+                    req.onerror = () => reject(req.error);
+                });
+            } catch (e) {
+                return [];
+            }
+        }
+
+        async function deletePlanFilesFromIndexedDB(planId) {
+            try {
+                const db = await openPlansIndexedDB();
+                await new Promise((resolve) => {
+                    const tx = db.transaction(PLAN_IDB_STORE, 'readwrite');
+                    tx.objectStore(PLAN_IDB_STORE).delete(planId);
+                    tx.oncomplete = () => resolve();
+                });
+            } catch (e) {}
+        }
+
+        async function restoreSavedPlanBlobsFromIndexedDB() {
+            const allStored = await getAllPlanFilesFromIndexedDB();
+            const mapById = new Map(allStored.map(r => [r.id, r]));
+            for (const item of plansHistory) {
+                const stored = mapById.get(item.id);
+                if (stored) {
+                    item.hasLocalFiles = true;
+                    item.jpgPages = stored.jpgPages || [];
+                    item.pdfDataUrl = stored.pdfDataUrl || '';
+                }
+            }
+            const latestWithJpg = [...plansHistory]
+                .sort((a, b) => parsePeriodSortValue(b.period) - parsePeriodSortValue(a.period))
+                .find(p => Array.isArray(p.jpgPages) && p.jpgPages.length > 0);
+            if (latestWithJpg) {
+                currentPlanJpgs = latestWithJpg.jpgPages;
+                renderCurrentJpgGallery();
+            }
+        }
+
+        function renderCurrentJpgGallery() {
+            const gallery = document.getElementById('pdf-jpg-gallery');
+            const btnAll = document.getElementById('btn-download-all-jpg');
+            if (!gallery) return;
+            if (!currentPlanJpgs || currentPlanJpgs.length === 0) {
+                if (btnAll) btnAll.classList.add('hidden');
+                gallery.innerHTML = `<div class="col-span-full py-10 text-center text-slate-400 text-sm border-2 border-dashed border-slate-200 rounded-xl">Sube un archivo PDF a la izquierda para calcular su valor móvil y compartir sus hojas JPG por WhatsApp.</div>`;
+                return;
+            }
+            if (btnAll) btnAll.classList.remove('hidden');
+            gallery.innerHTML = currentPlanJpgs.map((item, idx) => `
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-2 flex flex-col justify-between gap-1.5">
+                    <img src="${item.dataUrl}" class="max-h-40 w-auto object-contain mx-auto mb-1 rounded">
+                    <div class="text-[11px] font-semibold text-slate-600 truncate text-center">${item.fileName}</div>
+                    <button onclick="openSendCurrentJpgWaModal(${idx})" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-1.5 rounded-lg text-xs font-bold">📲 Compartir por WhatsApp</button>
+                    <a href="${item.dataUrl}" download="${item.fileName}" class="text-center bg-[#EB0A1E] hover:bg-red-700 text-white py-1 rounded-lg text-xs font-semibold">Descargar JPG</a>
+                </div>
+            `).join('');
+        }
+
+        function parsePeriodSortValue(periodStr) {
+            if (!periodStr) return 0;
+            const parts = String(periodStr).trim().split(/\s+/);
+            const m = MONTH_ORDER_MAP[parts[0]] || 0;
+            const y = parseInt(parts[1], 10) || 0;
+            return y * 100 + m;
+        }
+
+        function normalizePlanCanonicalKey(rawName) {
+            const clean = String(rawName || '')
+                .replace(/\.pdf$/i, '')
+                .replace(/^(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)[\s\-_]*\d{0,4}[\s\-_]*/i, '')
+                .replace(/[\s\-_]*(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)[\s\-_]*\d{0,4}$/i, '')
+                .replace(/[_-]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+            return clean.toLowerCase();
+        }
+
+        function extractVehicleValuesFromPdfText(fullText, planName = '') {
+            const matches = fullText.match(/\$?\s*\d{1,3}(?:\.\d{3}){2,3}(?:,\d{2})?/g) || [];
+            const allNums = matches
+                .map(m => parseFloat(m.replace(/[^\d,]/g, '').replace(',', '.')))
+                .filter(n => !isNaN(n));
+
+            const vehiclePrices = allNums.filter(n => n >= 20000000 && n <= 180000000);
+            const quotaPrices = allNums.filter(n => n >= 120000 && n <= 2500000);
+
+            let vehicleValue = 0;
+            if (vehiclePrices.length > 0) {
+                vehicleValue = Math.round(vehiclePrices.reduce((a, b) => a + b, 0) / vehiclePrices.length);
+            } else {
+                const lower = planName.toLowerCase();
+                if (lower.includes('hilux') && lower.includes('4x4')) vehicleValue = 59739000;
+                else if (lower.includes('hilux')) vehicleValue = 49621000;
+                else if (lower.includes('yaris cross')) vehicleValue = 41464000;
+                else if (lower.includes('corolla cross')) vehicleValue = 51918000;
+                else if (lower.includes('yaris')) vehicleValue = 36315000;
+                else if (lower.includes('corolla')) vehicleValue = 44082000;
+                else if (lower.includes('hiace')) vehicleValue = 72077000;
+            }
+
+            const avgQuota = quotaPrices.length > 0
+                ? Math.round(quotaPrices.reduce((a, b) => a + b, 0) / quotaPrices.length)
+                : 0;
+
+            return { vehicleValue, avgQuota };
+        }
+
+        function fileToDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(reader.error);
+                reader.readAsDataURL(file);
+            });
+        }
+
         window.handlePlanPdfUpload = async function(event) {
             const files = Array.from(event.target.files || []);
             if (files.length === 0 || typeof pdfjsLib === 'undefined') return;
@@ -3471,10 +3713,18 @@
                 currentPlanJpgs = [];
                 const periodLabel = `${document.getElementById('plan-month-input').value} ${document.getElementById('plan-year-input').value}`;
                 for (const file of files) {
+                    const pdfDataUrl = await fileToDataURL(file);
                     const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
                     const fileJpgPages = [];
+                    let extractedText = '';
+
                     for (let p = 1; p <= pdf.numPages; p++) {
                         const page = await pdf.getPage(p);
+                        try {
+                            const textContent = await page.getTextContent();
+                            extractedText += ' ' + textContent.items.map(it => it.str).join(' ');
+                        } catch (e) {}
+
                         const viewport = page.getViewport({ scale: 1.5 });
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
@@ -3486,29 +3736,34 @@
                         fileJpgPages.push(item);
                         currentPlanJpgs.push(item);
                     }
+
+                    const cleanPlanName = file.name.replace(/\.pdf$/i, '').replace(/[_-]+/g, ' ').trim();
+                    const { vehicleValue, avgQuota } = extractVehicleValuesFromPdfText(extractedText, cleanPlanName);
+                    const planId = Date.now().toString() + Math.random().toString(36).substr(2, 4);
+                    const canonicalKey = normalizePlanCanonicalKey(cleanPlanName);
+
+                    await savePlanFilesToIndexedDB(planId, pdfDataUrl, fileJpgPages, file.name);
+
+                    plansHistory = plansHistory.filter(p => !(p.period === periodLabel && normalizePlanCanonicalKey(p.planName) === canonicalKey));
                     plansHistory.unshift({
-                        id: Date.now().toString(),
+                        id: planId,
                         period: periodLabel,
-                        date: new Date().toLocaleDateString(),
-                        planName: file.name.replace(/\.pdf$/i, ''),
+                        date: new Date().toLocaleDateString('es-AR'),
+                        planName: cleanPlanName,
+                        canonicalKey,
                         fileName: file.name,
-                        price: 0, prevPrice: 0, diffAmount: 0, diffPercent: 0,
-                        jpgPages: fileJpgPages
+                        vehicleValue,
+                        price: avgQuota,
+                        hasLocalFiles: true,
+                        jpgPages: fileJpgPages,
+                        pdfDataUrl
                     });
                 }
-                saveLocalData(); renderPlansHistory();
-                const gallery = document.getElementById('pdf-jpg-gallery');
-                const btnAll = document.getElementById('btn-download-all-jpg');
-                if (gallery && currentPlanJpgs.length > 0) {
-                    btnAll.classList.remove('hidden');
-                    gallery.innerHTML = currentPlanJpgs.map(item => `
-                        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-2 flex flex-col justify-between">
-                            <img src="${item.dataUrl}" class="max-h-40 w-auto object-contain mx-auto mb-2">
-                            <a href="${item.dataUrl}" download="${item.fileName}" class="text-center bg-[#EB0A1E] text-white py-1 rounded-lg text-xs font-semibold">Descargar JPG</a>
-                        </div>
-                    `).join('');
-                }
-                showToast(`PDF convertido a ${currentPlanJpgs.length} imagen(es) JPG`);
+
+                saveLocalData(true);
+                renderPlansHistory();
+                renderCurrentJpgGallery();
+                showToast(`✅ PDF y ${currentPlanJpgs.length} JPG(s) guardados permanentemente en esta PC`);
             } finally {
                 statusBox.classList.add('hidden');
                 event.target.value = '';
@@ -3519,28 +3774,393 @@
             currentPlanJpgs.forEach((item, idx) => setTimeout(() => { const a = document.createElement('a'); a.href = item.dataUrl; a.download = item.fileName; a.click(); }, idx * 250));
         };
 
+        window.downloadSavedPlanPdf = async function(planId) {
+            let item = plansHistory.find(p => p.id === planId);
+            let pdfDataUrl = item?.pdfDataUrl || '';
+            if (!pdfDataUrl) {
+                const stored = await getPlanFilesFromIndexedDB(planId);
+                pdfDataUrl = stored?.pdfDataUrl || '';
+            }
+            if (!pdfDataUrl) {
+                showToast("El PDF original no se encuentra en esta PC", "error");
+                return;
+            }
+            const a = document.createElement('a');
+            a.href = pdfDataUrl;
+            a.download = item?.fileName || 'Plan_Toyota.pdf';
+            a.click();
+            showToast("📄 Descargando PDF original...");
+        };
+
+        window.openSavedPlanFilesModal = async function(planId) {
+            const item = plansHistory.find(p => p.id === planId);
+            if (!item) return;
+            let jpgPages = item.jpgPages || [];
+            let pdfDataUrl = item.pdfDataUrl || '';
+            if (jpgPages.length === 0 || !pdfDataUrl) {
+                const stored = await getPlanFilesFromIndexedDB(planId);
+                if (stored) {
+                    jpgPages = stored.jpgPages || [];
+                    pdfDataUrl = stored.pdfDataUrl || '';
+                    item.jpgPages = jpgPages;
+                    item.pdfDataUrl = pdfDataUrl;
+                }
+            }
+            window._modalActivePlanJpgs = jpgPages;
+            document.getElementById('plan-files-modal-title').textContent = `${item.planName} (${item.period})`;
+            const actionsBox = document.getElementById('plan-files-modal-actions');
+            actionsBox.innerHTML = pdfDataUrl
+                ? `<button onclick="downloadSavedPlanPdf('${planId}')" class="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl text-xs font-semibold">📄 Descargar PDF</button>`
+                : '';
+
+            const grid = document.getElementById('plan-files-modal-grid');
+            if (jpgPages.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-slate-400">No hay imágenes JPG locales para este registro.</div>`;
+            } else {
+                grid.innerHTML = jpgPages.map((pg, idx) => `
+                    <div class="border border-slate-200 rounded-xl p-2.5 bg-slate-50 flex flex-col justify-between gap-2">
+                        <img src="${pg.dataUrl}" class="max-h-48 w-auto object-contain mx-auto rounded">
+                        <div class="text-[11px] font-semibold text-slate-600 truncate text-center">${pg.fileName}</div>
+                        <button onclick="openSendModalJpgWaModal(${idx})" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-1.5 rounded-lg text-xs font-bold">📲 Compartir por WhatsApp</button>
+                        <a href="${pg.dataUrl}" download="${pg.fileName}" class="text-center bg-[#EB0A1E] hover:bg-red-700 text-white py-1 rounded-lg text-xs font-semibold">Descargar JPG</a>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('plan-files-modal').classList.remove('hidden');
+        };
+
+        window.closePlanFilesModal = function() {
+            document.getElementById('plan-files-modal').classList.add('hidden');
+        };
+
+        // --- COMPARTIR JPG POR WHATSAPP ---
+        window.openSendCurrentJpgWaModal = function(idx) {
+            const item = currentPlanJpgs[idx];
+            if (item) openShareJpgWaModal(item);
+        };
+
+        window.openSendModalJpgWaModal = function(idx) {
+            const list = window._modalActivePlanJpgs || [];
+            if (list[idx]) openShareJpgWaModal(list[idx]);
+        };
+
+        window.openShareJpgWaModal = function(jpgItem) {
+            pendingShareJpgItem = jpgItem;
+            document.getElementById('share-jpg-wa-filename').textContent = jpgItem.fileName || 'Plan_Toyota.jpg';
+            document.getElementById('share-jpg-search').value = '';
+            document.getElementById('share-jpg-manual-phone').value = '';
+            renderShareJpgContactsList();
+            document.getElementById('share-jpg-wa-modal').classList.remove('hidden');
+        };
+
+        window.closeShareJpgWaModal = function() {
+            document.getElementById('share-jpg-wa-modal').classList.add('hidden');
+        };
+
+        window.renderShareJpgContactsList = function() {
+            const box = document.getElementById('share-jpg-contacts-list');
+            if (!box) return;
+            const term = (document.getElementById('share-jpg-search')?.value || '').toLowerCase().trim();
+            const allWithPhone = getAllListsCombined().filter(c => c.phone);
+            const filtered = term
+                ? allWithPhone.filter(c => (c.name || '').toLowerCase().includes(term) || (c.phone || '').includes(term))
+                : allWithPhone.slice(0, 20);
+
+            if (filtered.length === 0) {
+                box.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">No hay contactos con teléfono que coincidan.</div>`;
+                return;
+            }
+            box.innerHTML = filtered.slice(0, 25).map(c => {
+                const safePhone = formatPhoneAR(c.phone).replace(/'/g, "\\'");
+                const safeName = (c.name || 'Cliente').replace(/'/g, "\\'");
+                return `
+                    <button onclick="executeShareJpgToPhone('${safePhone}', '${safeName}', '${c.id}')" class="w-full px-3.5 py-2.5 text-left hover:bg-emerald-50 flex items-center justify-between gap-2 transition-colors">
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-slate-900 truncate">${c.name || 'Sin Nombre'}</div>
+                            <div class="text-[11px] text-slate-500">${formatPhoneAR(c.phone)} ${c.interestModel ? `• ${c.interestModel}` : ''}</div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[11px] font-bold shrink-0">Enviar 📲</span>
+                    </button>
+                `;
+            }).join('');
+        };
+
+        async function copyDataUrlImageToClipboard(dataUrl) {
+            try {
+                const res = await fetch(dataUrl);
+                const jpgBlob = await res.blob();
+                // Convertir a PNG Blob para máxima compatibilidad con ClipboardItem en navegadores PC
+                const img = new Image();
+                await new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = reject;
+                    img.src = dataUrl;
+                });
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                const pngBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                if (navigator.clipboard && window.ClipboardItem && pngBlob) {
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        window.executeShareJpgToPhone = async function(rawPhone, clientName = 'Cliente', contactId = null) {
+            const formatted = formatPhoneAR(rawPhone);
+            const waDigits = formatted.replace(/\D/g, '');
+            if (!waDigits || waDigits.length < 10) {
+                showToast("Ingresa un teléfono válido", "error");
+                return;
+            }
+            if (!pendingShareJpgItem) return;
+
+            // Intentar Web Share API nativo con archivo en móviles compatibles
+            try {
+                const resp = await fetch(pendingShareJpgItem.dataUrl);
+                const blob = await resp.blob();
+                const file = new File([blob], pendingShareJpgItem.fileName || 'Plan_Toyota.jpg', { type: 'image/jpeg' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Plan Toyota Ginza',
+                        text: `Hola ${clientName}, te envío el detalle del plan Toyota.`
+                    });
+                    if (contactId) trackWhatsAppMessageSent(contactId);
+                    closeShareJpgWaModal();
+                    return;
+                }
+            } catch (e) {}
+
+            // En PC: copiar imagen al portapapeles y abrir WhatsApp Web en el chat del cliente
+            const copied = await copyDataUrlImageToClipboard(pendingShareJpgItem.dataUrl);
+            if (contactId) trackWhatsAppMessageSent(contactId);
+            const msg = `Hola ${clientName}, te comparto la ficha del plan Toyota vigente:`;
+            const targetUrl = `https://web.whatsapp.com/send?phone=${waDigits}&text=${encodeURIComponent(msg)}`;
+            if (waTabRef && !waTabRef.closed) {
+                try { waTabRef.location.href = targetUrl; waTabRef.focus(); } catch (err) { waTabRef = window.open(targetUrl, 'crm_whatsapp_web_singleton'); }
+            } else {
+                waTabRef = window.open(targetUrl, 'crm_whatsapp_web_singleton');
+            }
+            closeShareJpgWaModal();
+            showToast(copied ? "📋 JPG copiado: presiona Ctrl + V en WhatsApp Web para pegarlo" : "Abriendo WhatsApp Web...");
+        };
+
+        window.editPlanVehicleValue = function(planId) {
+            const item = plansHistory.find(p => p.id === planId);
+            if (!item) return;
+            const currentVal = item.vehicleValue || 0;
+            const input = prompt(`Valor Móvil del vehículo para "${item.planName}" (${item.period}) en pesos (solo números):`, currentVal || '');
+            if (input === null) return;
+            const numeric = parseInt(String(input).replace(/\D/g, ''), 10);
+            if (!isNaN(numeric) && numeric > 0) {
+                item.vehicleValue = numeric;
+                saveLocalData(true);
+                renderPlansHistory();
+                showToast(`Valor del vehículo actualizado a $${numeric.toLocaleString('es-AR')}`);
+            }
+        };
+
+        window.deletePlanRecord = async function(planId) {
+            await deletePlanFilesFromIndexedDB(planId);
+            plansHistory = plansHistory.filter(p => p.id !== planId);
+            saveLocalData(true);
+            renderPlansHistory();
+            showToast("Registro del plan eliminado");
+        };
+
+        window.renderVehiclePriceEvolutionChart = function() {
+            const box = document.getElementById('vehicle-price-chart-box');
+            const modelSel = document.getElementById('plan-chart-model-select');
+            if (!box || !modelSel) return;
+
+            if (plansHistory.length === 0) {
+                box.innerHTML = `<div class="text-xs text-slate-400 text-center py-6">Sube los PDFs de este mes y de meses anteriores para visualizar el gráfico comparativo de valores móviles.</div>`;
+                return;
+            }
+
+            const sortedAll = [...plansHistory].sort((a, b) => parsePeriodSortValue(b.period) - parsePeriodSortValue(a.period));
+            const latestPeriod = sortedAll[0].period;
+            const activeCurrentItems = sortedAll.filter(p => p.period === latestPeriod);
+
+            const prevChoice = modelSel.value;
+            modelSel.innerHTML = activeCurrentItems.map(p => {
+                const key = p.canonicalKey || normalizePlanCanonicalKey(p.planName);
+                return `<option value="${key}">Gráfico: ${p.planName}</option>`;
+            }).join('');
+            if ([...modelSel.options].some(o => o.value === prevChoice)) modelSel.value = prevChoice;
+
+            const targetKey = modelSel.value || (activeCurrentItems[0]?.canonicalKey || normalizePlanCanonicalKey(activeCurrentItems[0]?.planName || ''));
+            const series = sortedAll
+                .filter(p => (p.canonicalKey || normalizePlanCanonicalKey(p.planName)) === targetKey)
+                .sort((a, b) => parsePeriodSortValue(a.period) - parsePeriodSortValue(b.period));
+
+            if (series.length === 0) {
+                box.innerHTML = `<div class="text-xs text-slate-400 text-center py-4">Sin datos suficientes para graficar.</div>`;
+                return;
+            }
+
+            const maxVal = Math.max(1, ...series.map(s => Number(s.vehicleValue) || 0));
+            const firstVal = Number(series[0].vehicleValue) || 0;
+            const lastVal = Number(series[series.length - 1].vehicleValue) || 0;
+            const totalDiff = lastVal - firstVal;
+            const totalPct = firstVal > 0 ? ((totalDiff / firstVal) * 100).toFixed(1) : '0.0';
+
+            box.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase text-[#EB0A1E]">Comparativa de Valor Móvil del Vehículo</span>
+                        <h4 class="text-sm font-black text-slate-900">${series[series.length - 1].planName}</h4>
+                    </div>
+                    ${series.length > 1 && firstVal > 0 && lastVal > 0 ? `
+                        <div class="px-3 py-1 rounded-xl text-xs font-extrabold ${totalDiff >= 0 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800'}">
+                            Variación acumulada (${series[0].period} → ${series[series.length - 1].period}): ${totalDiff >= 0 ? '+' : ''}$${totalDiff.toLocaleString('es-AR')} (${totalDiff >= 0 ? '+' : ''}${totalPct}%)
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 items-end pt-2">
+                    ${series.map((pt, i) => {
+                        const val = Number(pt.vehicleValue) || 0;
+                        const heightPct = val > 0 ? Math.max(18, Math.round((val / maxVal) * 100)) : 14;
+                        const prevPt = i > 0 ? (Number(series[i - 1].vehicleValue) || 0) : 0;
+                        const stepDiff = (i > 0 && val > 0 && prevPt > 0) ? (val - prevPt) : 0;
+                        const stepPct = (i > 0 && val > 0 && prevPt > 0) ? ((stepDiff / prevPt) * 100).toFixed(1) : null;
+                        const isLatest = pt.period === latestPeriod;
+
+                        return `
+                            <div class="bg-white rounded-xl border ${isLatest ? 'border-[#EB0A1E] ring-1 ring-red-200' : 'border-slate-200'} p-3 flex flex-col justify-between h-52">
+                                <div class="text-center">
+                                    <div class="text-[11px] font-extrabold ${isLatest ? 'text-[#EB0A1E]' : 'text-slate-600'}">${pt.period}</div>
+                                    <div class="text-xs sm:text-sm font-black text-slate-900 mt-0.5">${val > 0 ? '$' + val.toLocaleString('es-AR') : 'Sin valor'}</div>
+                                    ${stepPct !== null ? `<div class="text-[10px] font-bold ${stepDiff >= 0 ? 'text-amber-700' : 'text-emerald-700'}">${stepDiff >= 0 ? '+' : ''}$${stepDiff.toLocaleString('es-AR')} (${stepDiff >= 0 ? '+' : ''}${stepPct}%)</div>` : `<div class="text-[10px] text-slate-400">Base inicial</div>`}
+                                </div>
+                                <div class="flex-1 flex items-end justify-center pt-3">
+                                    <div class="w-12 rounded-t-xl transition-all ${isLatest ? 'bg-gradient-to-t from-[#99000d] to-[#EB0A1E]' : 'bg-gradient-to-t from-zinc-700 to-zinc-500'}" style="height: ${heightPct}%;"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        };
+
         window.renderPlansHistory = function() {
             const tbody = document.getElementById('plans-history-body');
             const emptyState = document.getElementById('plans-empty-state');
+            const filterSel = document.getElementById('plan-model-filter');
             if (!tbody) return;
+
             tbody.innerHTML = '';
-            if (plansHistory.length === 0) { emptyState.classList.remove('hidden'); return; }
+            if (plansHistory.length === 0) {
+                emptyState.classList.remove('hidden');
+                renderVehiclePriceEvolutionChart();
+                return;
+            }
             emptyState.classList.add('hidden');
-            plansHistory.forEach(item => {
+
+            const sortedAll = [...plansHistory].sort((a, b) => parsePeriodSortValue(b.period) - parsePeriodSortValue(a.period));
+            const latestPeriod = sortedAll[0].period;
+            const latestPeriodVal = parsePeriodSortValue(latestPeriod);
+            const activeCurrentItems = sortedAll.filter(p => p.period === latestPeriod);
+
+            if (filterSel) {
+                const prevFilter = filterSel.value;
+                filterSel.innerHTML = `<option value="Todos">Todos los Planes Vigentes (${latestPeriod})</option>`;
+                activeCurrentItems.forEach(p => {
+                    const key = p.canonicalKey || normalizePlanCanonicalKey(p.planName);
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.textContent = p.planName;
+                    filterSel.appendChild(opt);
+                });
+                if ([...filterSel.options].some(o => o.value === prevFilter)) filterSel.value = prevFilter;
+            }
+
+            const selectedKey = filterSel?.value || 'Todos';
+            const visibleCurrentItems = selectedKey === 'Todos'
+                ? activeCurrentItems
+                : activeCurrentItems.filter(p => (p.canonicalKey || normalizePlanCanonicalKey(p.planName)) === selectedKey);
+
+            visibleCurrentItems.forEach(curr => {
+                const cKey = curr.canonicalKey || normalizePlanCanonicalKey(curr.planName);
+                const previousVersions = sortedAll
+                    .filter(p => (p.canonicalKey || normalizePlanCanonicalKey(p.planName)) === cKey && parsePeriodSortValue(p.period) < latestPeriodVal)
+                    .sort((a, b) => parsePeriodSortValue(b.period) - parsePeriodSortValue(a.period));
+
+                const prev = previousVersions[0] || null;
+                const currVal = Number(curr.vehicleValue) || 0;
+                const prevVal = Number(prev?.vehicleValue) || 0;
+
+                let prevText = '<span class="text-slate-400 text-xs">Sin mes anterior</span>';
+                let diffBadge = '<span class="text-slate-400 text-xs">-</span>';
+
+                if (prev) {
+                    prevText = prevVal > 0
+                        ? `<div class="font-bold text-slate-700">$${prevVal.toLocaleString('es-AR')}</div><div class="text-[11px] text-slate-400">${prev.period}</div>`
+                        : `<div class="text-xs text-slate-500">${prev.period}</div>`;
+
+                    if (currVal > 0 && prevVal > 0) {
+                        const diff = currVal - prevVal;
+                        const pct = ((diff / prevVal) * 100).toFixed(1);
+                        const isUp = diff > 0;
+                        diffBadge = `
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold ${isUp ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}">
+                                ${isUp ? '+' : ''}$${diff.toLocaleString('es-AR')} (${isUp ? '+' : ''}${pct}%)
+                            </span>
+                        `;
+                    }
+                }
+
+                const historyChips = previousVersions.length > 0
+                    ? `<div class="mt-1 flex flex-wrap gap-1">${previousVersions.map(pv => `<button onclick="openSavedPlanFilesModal('${pv.id}')" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-[10px] font-semibold text-slate-600" title="Ver PDF/JPG de ${pv.period}">📁 ${pv.period}${pv.vehicleValue > 0 ? `: $${Number(pv.vehicleValue).toLocaleString('es-AR')}` : ''}</button>`).join('')}</div>`
+                    : '';
+
                 const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition-colors';
                 tr.innerHTML = `
-                    <td class="p-3.5 font-bold text-[#EB0A1E]">${item.period}</td>
-                    <td class="p-3.5 font-bold text-slate-900">${item.planName}</td>
-                    <td class="p-3.5">${item.price > 0 ? '$' + item.price.toLocaleString('es-AR') : 'JPG listo'}</td>
-                    <td class="p-3.5">-</td>
-                    <td class="p-3.5">-</td>
-                    <td class="p-3.5"><button onclick="plansHistory = plansHistory.filter(p => p.id !== '${item.id}'); saveLocalData(); renderPlansHistory();" class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg text-xs">Eliminar</button></td>
+                    <td class="p-3.5">
+                        <span class="px-2.5 py-1 rounded-lg bg-red-50 text-[#EB0A1E] border border-red-200 text-xs font-extrabold">${curr.period}</span>
+                    </td>
+                    <td class="p-3.5">
+                        <div class="font-bold text-slate-900">${curr.planName}</div>
+                        ${historyChips}
+                    </td>
+                    <td class="p-3.5">
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-extrabold text-slate-900">${currVal > 0 ? '$' + currVal.toLocaleString('es-AR') : 'Sin detectar'}</span>
+                            <button onclick="editPlanVehicleValue('${curr.id}')" class="text-xs text-slate-400 hover:text-[#EB0A1E]" title="Editar valor vehículo">✏️</button>
+                        </div>
+                    </td>
+                    <td class="p-3.5">${prevText}</td>
+                    <td class="p-3.5">${diffBadge}</td>
+                    <td class="p-3.5">
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button onclick="downloadSavedPlanPdf('${curr.id}')" class="px-2.5 py-1 bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg text-xs font-semibold">📄 PDF</button>
+                            <button onclick="openSavedPlanFilesModal('${curr.id}')" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-semibold">🖼️ JPGs / WA</button>
+                            <button onclick="deletePlanRecord('${curr.id}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs" title="Eliminar">🗑️</button>
+                        </div>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            renderVehiclePriceEvolutionChart();
         };
 
-        window.clearPlansHistory = function() { plansHistory = []; saveLocalData(); renderPlansHistory(); };
+        window.clearPlansHistory = async function() {
+            for (const p of plansHistory) await deletePlanFilesFromIndexedDB(p.id);
+            plansHistory = [];
+            currentPlanJpgs = [];
+            saveLocalData(true);
+            renderPlansHistory();
+            renderCurrentJpgGallery();
+            showToast("Historial de planes vaciado");
+        };
 
         // --- EXPORTACIÓN CSV Y MODALES DE CONFIRMACIÓN ---
         window.exportSectionCSV = function(section) {
