@@ -63,6 +63,9 @@
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
                         <span id="nav-wa-ai-label">🤖 WA IA ON</span>
                     </button>
+                    <button onclick="openPdfPriceChatbotModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 transition-colors flex items-center gap-1 shadow-sm" title="Corregir o entrenar precios leídos de los PDFs por chat">
+                        <span>🛠️ Corregir Precio PDF</span>
+                    </button>
                     <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
                         <span id="nav-agenda-badge" class="px-1.5 py-0.2 text-[10px] font-extrabold bg-white text-purple-800 rounded-full">0</span>
@@ -1090,10 +1093,11 @@
         <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm space-y-5">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                 <div>
-                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900">📊 Evolución Mes a Mes — Valores Móviles de Vehículos Vigentes</h3>
-                    <p class="text-xs text-slate-500">Compara únicamente los modelos vigentes en el mes más reciente frente a los PDFs cargados de meses anteriores.</p>
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900">📊 Evolución Mes a Mes — Valores Móviles & Cuota Máxima de Referencia</h3>
+                    <p class="text-xs text-slate-500">Toma automáticamente el <b>valor más alto</b> de cuota y valor móvil detectado en cada PDF cargado.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="openPdfPriceChatbotModal()" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold">🛠️ Corregir Precio PDF</button>
                     <select id="plan-chart-model-select" onchange="renderVehiclePriceEvolutionChart()" class="rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold bg-white outline-none"></select>
                     <select id="plan-model-filter" onchange="renderPlansHistory()" class="rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold bg-white outline-none">
                         <option value="Todos">Todos los Planes Vigentes</option>
@@ -1112,8 +1116,8 @@
                             <th class="p-3.5">Vehículo / Plan</th>
                             <th class="p-3.5">Precio Final (Valor Móvil)</th>
                             <th class="p-3.5">Diferencia Precio Final</th>
-                            <th class="p-3.5">Valor Promedio Cuota</th>
-                            <th class="p-3.5">Diferencia Prom. Cuota</th>
+                            <th class="p-3.5">Cuota Referencia (Más Alta)</th>
+                            <th class="p-3.5">Diferencia Cuota Máx.</th>
                             <th class="p-3.5">Acciones</th>
                         </tr>
                     </thead>
@@ -1124,50 +1128,34 @@
         </div>
     </main>
 
-    <!-- MODAL VISOR DE ARCHIVOS GUARDADOS (PDF + HOJAS JPG PARA COMPARTIR POR WA) -->
-    <div id="plan-files-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[65] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <div class="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 sticky top-0 bg-white z-10">
-                <div>
-                    <h3 id="plan-files-modal-title" class="text-base font-extrabold text-slate-900">Archivos Guardados del Plan</h3>
-                    <p class="text-xs text-slate-500">Descarga el PDF original o comparte cualquier hoja JPG directo por WhatsApp.</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <div id="plan-files-modal-actions" class="flex flex-wrap gap-2"></div>
-                    <button onclick="closePlanFilesModal()" class="text-slate-400 hover:text-slate-600 text-lg px-2">✕</button>
-                </div>
-            </div>
-            <div class="p-5">
-                <div id="plan-files-modal-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL SELECTOR DE CLIENTE PARA ENVIAR JPG POR WHATSAPP -->
-    <div id="share-jpg-wa-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
-                <div>
-                    <h3 class="text-base font-extrabold text-slate-900">📲 Compartir JPG por WhatsApp</h3>
-                    <p id="share-jpg-wa-filename" class="text-xs text-slate-500 truncate max-w-[280px]"></p>
-                </div>
-                <button onclick="closeShareJpgWaModal()" class="text-slate-400 hover:text-slate-600">✕</button>
-            </div>
-            <div class="p-5 space-y-4">
-                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
-                    La imagen JPG se copiará automáticamente al portapapeles (y en celular abrirá la hoja para compartir). Al abrirse el chat en WhatsApp Web, solo presiona <b>Ctrl + V</b> y Enviar.
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Buscar Cliente o Contacto del CRM</label>
-                    <input type="text" id="share-jpg-search" oninput="renderShareJpgContactsList()" placeholder="Escribe nombre o teléfono..." class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
-                </div>
-                <div id="share-jpg-contacts-list" class="max-h-48 overflow-y-auto border border-slate-200 rounded-xl divide-y divide-slate-100"></div>
-                <div class="pt-2 border-t border-slate-100">
-                    <label class="block text-xs font-bold text-slate-700 mb-1">O ingresar número manual:</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="share-jpg-manual-phone" placeholder="Ej: 3415551234" class="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
-                        <button onclick="executeShareJpgToPhone(document.getElementById('share-jpg-manual-phone').value, 'Cliente')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shrink-0">Enviar WA</button>
+    <!-- MODAL CHATBOT CORRECTOR DE PRECIOS PDF -->
+    <div id="pdf-price-chatbot-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[72] hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden border border-slate-200">
+            <div class="px-5 py-4 bg-gradient-to-r from-zinc-950 via-neutral-900 to-amber-950 text-white flex items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-500 text-zinc-950 flex items-center justify-center text-xl font-extrabold shadow">🛠️</div>
+                    <div>
+                        <h3 class="text-base font-extrabold">Chatbot Corrector de Precios PDF</h3>
+                        <p class="text-xs text-amber-200">Avísame si algún PDF leyó mal el valor móvil o la cuota más alta y lo corrijo al instante.</p>
                     </div>
+                </div>
+                <button onclick="closePdfPriceChatbotModal()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">✕ Cerrar</button>
+            </div>
+
+            <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center gap-2">
+                <span class="text-[11px] font-bold text-slate-600 uppercase">PDFs cargados:</span>
+                <div id="pdf-chatbot-quick-pills" class="flex flex-wrap gap-1.5"></div>
+            </div>
+
+            <div id="pdf-chatbot-messages" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-slate-100/70 min-h-[240px] max-h-[340px]"></div>
+
+            <div class="p-3.5 bg-white border-t border-slate-200 space-y-2">
+                <div class="text-[11px] text-slate-500">
+                    Ejemplo: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800 font-semibold">En Hilux el valor móvil es $49.621.000 y la cuota más alta $425.000</code>
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="pdf-chatbot-input" onkeydown="if(event.key==='Enter') sendPdfChatbotCorrection()" placeholder="Escribe el modelo y los valores correctos del PDF..." class="flex-1 px-3.5 py-2.5 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none focus:border-[#EB0A1E]">
+                    <button onclick="sendPdfChatbotCorrection()" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs sm:text-sm font-bold shrink-0">Corregir</button>
                 </div>
             </div>
         </div>
@@ -3124,24 +3112,38 @@
 
         function parseNumbersFromPlanPdfText(fullText, fileName) {
             const detectedModel = detectToyotaModelFromText(fullText) || detectToyotaModelFromText(fileName) || fileName.replace(/\.pdf$/i, '');
-            const matches = Array.from(fullText.matchAll(/\$\s*([\d]{1,3}(?:\.[\d]{3})+)/g))
+            // Limpiar porcentajes (70/30, 80/20, 100%) y números de cuota (Cuota 1 a 84) para evitar falsos positivos
+            const cleanedText = String(fullText || '')
+                .replace(/\b\d{1,3}\s*\/\s*\d{1,3}\b/g, ' ')
+                .replace(/\b\d{1,3}\s*%/g, ' ')
+                .replace(/\b(?:cuota|plan|grupo|orden|mes|meses|ano|año)\s*[:#-]?\s*\d{1,4}\b/gi, ' ');
+
+            // Extraer importes monetarios en formato argentino ($ 49.621.000 o $ 351.466,00)
+            const dollarMatches = Array.from(cleanedText.matchAll(/\$\s*([\d]{1,3}(?:\.[\d]{3})+)(?:,\d{2})?/g))
                 .map(m => Number(m[1].replace(/\./g, '')))
                 .filter(n => !isNaN(n) && n >= 80000);
 
-            const vehicleCandidates = matches.filter(n => n >= 18000000 && n <= 160000000);
-            const quotaCandidates = matches.filter(n => n >= 120000 && n <= 2500000);
+            const plainMatches = dollarMatches.length > 0
+                ? dollarMatches
+                : Array.from(cleanedText.matchAll(/\b([\d]{1,3}(?:\.[\d]{3}){1,2})(?:,\d{2})?\b/g))
+                    .map(m => Number(m[1].replace(/\./g, '')))
+                    .filter(n => !isNaN(n) && n >= 80000);
 
-            let vehicleValue = vehicleCandidates.length > 0 ? vehicleCandidates[0] : 0;
-            let avgQuota = quotaCandidates.length > 0 ? Math.round(quotaCandidates.reduce((a, b) => a + b, 0) / quotaCandidates.length) : 0;
+            // Tomar siempre el VALOR MÁS ALTO como referencia tanto para Valor Móvil como para Cuota
+            const vehicleCandidates = plainMatches.filter(n => n >= 15000000 && n <= 200000000);
+            const installmentCandidates = plainMatches.filter(n => n >= 80000 && n < 15000000);
 
-            if (!vehicleValue || !avgQuota) {
+            let vehicleValue = vehicleCandidates.length > 0 ? Math.max(...vehicleCandidates) : 0;
+            let highestQuota = installmentCandidates.length > 0 ? Math.max(...installmentCandidates) : 0;
+
+            if (!vehicleValue || !highestQuota) {
                 const refPlan = marketPlansCatalog.find(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()));
                 if (refPlan) {
                     if (!vehicleValue) vehicleValue = refPlan.valorMovil;
-                    if (!avgQuota) avgQuota = refPlan.cuotaPura;
+                    if (!highestQuota) highestQuota = refPlan.cuotaPura;
                 }
             }
-            return { vehicleName: detectedModel, vehicleValue, price: avgQuota };
+            return { vehicleName: detectedModel, vehicleValue, price: highestQuota };
         }
 
         function renderCurrentJpgGallery(planTitle = '', periodLabel = '') {
@@ -3296,7 +3298,7 @@
                                     ${diffPct !== null ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold ${diff > 0 ? 'bg-amber-50 text-amber-800' : 'bg-emerald-50 text-emerald-700'}">${diff > 0 ? '+' : ''}${diffPct}%</span>` : '<span class="text-[10px] text-slate-400">Base</span>'}
                                 </div>
                                 <div class="text-sm font-extrabold text-slate-900 mt-1">${item.vehicleValue > 0 ? '$' + Number(item.vehicleValue).toLocaleString('es-AR') : 'Sin valor detectado'}</div>
-                                <div class="text-[11px] text-slate-500">Cuota prom.: <b>${item.price > 0 ? '$' + Number(item.price).toLocaleString('es-AR') : '-'}</b></div>
+                                <div class="text-[11px] text-slate-500">Cuota máx. ref.: <b>${item.price > 0 ? '$' + Number(item.price).toLocaleString('es-AR') : '-'}</b></div>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2 mt-3 overflow-hidden">
                                 <div class="bg-[#EB0A1E] h-2 rounded-full" style="width: ${barPct}%"></div>
@@ -3345,6 +3347,7 @@
                         <td class="p-3.5">
                             <div class="flex flex-wrap gap-1.5">
                                 <button onclick="openPlanFilesModal('${p.id}')" class="px-2.5 py-1 bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg text-xs font-bold">📂 Ver PDF y JPGs</button>
+                                <button onclick="openPdfPriceChatbotModal('${p.id}')" class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-lg text-xs font-bold">🛠️ Corregir</button>
                                 <button onclick="deletePlanRecord('${p.id}')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-semibold">Eliminar</button>
                             </div>
                         </td>
@@ -3352,6 +3355,119 @@
                 }).join('');
             }
             renderVehiclePriceEvolutionChart();
+        };
+
+        // --- CHATBOT CORRECTOR DE PRECIOS PDF ---
+        let pdfChatbotSelectedPlanId = '';
+        let pdfChatbotHistory = [
+            { from: 'bot', text: 'Hola 👋 Soy el asistente de verificación de listas PDF de Ginza Toyota. Si algún PDF leyó mal el Valor Móvil o la Cuota más alta de referencia, dime qué modelo es y cuáles son los valores reales para corregirlo al instante.' }
+        ];
+
+        window.openPdfPriceChatbotModal = function(preselectPlanId = '') {
+            if (preselectPlanId) pdfChatbotSelectedPlanId = preselectPlanId;
+            else if (!pdfChatbotSelectedPlanId && plansHistory.length > 0) pdfChatbotSelectedPlanId = plansHistory[0].id;
+            renderPdfChatbotUI();
+            document.getElementById('pdf-price-chatbot-modal')?.classList.remove('hidden');
+            document.getElementById('pdf-chatbot-input')?.focus();
+        };
+
+        window.closePdfPriceChatbotModal = function() {
+            document.getElementById('pdf-price-chatbot-modal')?.classList.add('hidden');
+        };
+
+        window.selectPdfForChatbot = function(planId) {
+            pdfChatbotSelectedPlanId = planId;
+            const p = plansHistory.find(x => x.id === planId);
+            if (p) {
+                pdfChatbotHistory.push({
+                    from: 'bot',
+                    text: `Seleccionaste "${p.vehicleName || p.planName}" (${p.period}). Actualmente tiene:\n• Valor Móvil: $${Number(p.vehicleValue || 0).toLocaleString('es-AR')}\n• Cuota Referencia (Más Alta): $${Number(p.price || 0).toLocaleString('es-AR')}\n\nEscríbeme los montos correctos.`
+                });
+            }
+            renderPdfChatbotUI();
+        };
+
+        function renderPdfChatbotUI() {
+            const pillsBox = document.getElementById('pdf-chatbot-quick-pills');
+            const msgsBox = document.getElementById('pdf-chatbot-messages');
+            if (pillsBox) {
+                pillsBox.innerHTML = plansHistory.length === 0
+                    ? `<span class="text-xs text-slate-400">Aún no hay PDFs subidos en Planes & PDF.</span>`
+                    : plansHistory.map(p => `<button onclick="selectPdfForChatbot('${p.id}')" class="px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors ${pdfChatbotSelectedPlanId === p.id ? 'bg-[#EB0A1E] text-white border-[#EB0A1E]' : 'bg-white text-slate-700 border-slate-300 hover:border-slate-500'}">${p.vehicleName || p.planName} (${p.period})</button>`).join('');
+            }
+            if (msgsBox) {
+                msgsBox.innerHTML = pdfChatbotHistory.map(m => `
+                    <div class="flex ${m.from === 'user' ? 'justify-end' : 'justify-start'}">
+                        <div class="max-w-[85%] px-3.5 py-2.5 rounded-2xl text-xs whitespace-pre-line shadow-2xs ${m.from === 'user' ? 'bg-zinc-900 text-white' : 'bg-white text-slate-800 border border-slate-200'}">
+                            ${m.text}
+                        </div>
+                    </div>
+                `).join('');
+                msgsBox.scrollTop = msgsBox.scrollHeight;
+            }
+        }
+
+        window.sendPdfChatbotCorrection = function() {
+            const inputEl = document.getElementById('pdf-chatbot-input');
+            const rawText = (inputEl?.value || '').trim();
+            if (!rawText) return;
+
+            pdfChatbotHistory.push({ from: 'user', text: rawText });
+            inputEl.value = '';
+
+            if (plansHistory.length === 0) {
+                pdfChatbotHistory.push({ from: 'bot', text: 'Primero sube al menos un PDF en la pestaña "Planes & PDF" para poder corregir sus valores.' });
+                renderPdfChatbotUI();
+                return;
+            }
+
+            // Detectar si mencionó un modelo específico en el mensaje
+            const mentionedModel = detectToyotaModelFromText(rawText);
+            let targetPlan = mentionedModel
+                ? plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(mentionedModel.toLowerCase()))
+                : null;
+            if (!targetPlan) {
+                targetPlan = plansHistory.find(p => p.id === pdfChatbotSelectedPlanId) || plansHistory[0];
+            }
+
+            // Extraer montos numéricos ingresados por el usuario (ej: $49.621.000, 49621000, $425.000, 425000)
+            const normNums = Array.from(rawText.replace(/\$|\s/g, '').matchAll(/(\d{1,3}(?:\.\d{3})+|\d{5,9})/g))
+                .map(m => Number(m[1].replace(/\./g, '')))
+                .filter(n => !isNaN(n) && n >= 50000);
+
+            const newVehicleVal = normNums.find(n => n >= 15000000 && n <= 250000000);
+            const newQuotaVal = normNums.find(n => n >= 50000 && n < 15000000);
+
+            if (!newVehicleVal && !newQuotaVal) {
+                pdfChatbotHistory.push({
+                    from: 'bot',
+                    text: `No detecté ningún monto en pesos en tu mensaje. Indícame el valor móvil o la cuota más alta con números (por ejemplo: "Valor móvil $49.621.000 y cuota $425.000") para actualizar "${targetPlan.vehicleName || targetPlan.planName}".`
+                });
+                renderPdfChatbotUI();
+                return;
+            }
+
+            if (newVehicleVal) targetPlan.vehicleValue = newVehicleVal;
+            if (newQuotaVal) targetPlan.price = newQuotaVal;
+            pdfChatbotSelectedPlanId = targetPlan.id;
+
+            // Sincronizar también en el catálogo de referencia si coincide el modelo Toyota
+            const catMatch = marketPlansCatalog.find(p => p.brand === 'Toyota' && p.model.toLowerCase().includes((targetPlan.vehicleName || '').toLowerCase()));
+            if (catMatch) {
+                if (newVehicleVal) catMatch.valorMovil = newVehicleVal;
+                if (newQuotaVal) catMatch.cuotaPura = newQuotaVal;
+            }
+
+            saveLocalData(true);
+            renderPlansHistory();
+            renderComparativaSelectors();
+
+            pdfChatbotHistory.push({
+                from: 'bot',
+                text: `✅ ¡Listo! Actualicé "${targetPlan.vehicleName || targetPlan.planName}" (${targetPlan.period}):\n• Precio Final (Valor Móvil): $${Number(targetPlan.vehicleValue).toLocaleString('es-AR')}\n• Cuota Referencia (Más Alta): $${Number(targetPlan.price).toLocaleString('es-AR')}\n\nEl gráfico, la tabla comparativa y el Asistente IA de WhatsApp ya usan estos valores reales.`
+            });
+            renderPdfChatbotUI();
+            showToast(`✅ Precio corregido para ${targetPlan.vehicleName || targetPlan.planName}`);
         };
 
         window.deletePlanRecord = async function(planId) {
@@ -3580,7 +3696,7 @@
                 : [];
 
             const pdfPlans = plansHistory.slice(0, 15).map(p =>
-                `- PDF "${p.planName}" (${p.period}): ${p.vehicleValue > 0 ? 'Precio Final $' + Number(p.vehicleValue).toLocaleString('es-AR') : ''} ${p.price > 0 ? '| Cuota Promedio $' + Number(p.price).toLocaleString('es-AR') : ''}`.trim()
+                `- PDF "${p.planName}" (${p.period}): ${p.vehicleValue > 0 ? 'Precio Final $' + Number(p.vehicleValue).toLocaleString('es-AR') : ''} ${p.price > 0 ? '| Cuota Referencia (Más Alta) $' + Number(p.price).toLocaleString('es-AR') : ''}`.trim()
             );
 
             const historyMsgs = contact && waAiConversationLogs[contact.id]
@@ -3672,7 +3788,7 @@
                     lines.push(`• *${p.model}* (${p.modality}): Cuota pura $${Number(p.cuotaPura).toLocaleString('es-AR')} (Valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')})`);
                 });
                 if (matchedPdf && (matchedPdf.price > 0 || matchedPdf.vehicleValue > 0)) {
-                    lines.push(`• Según lista *${matchedPdf.planName}* (${matchedPdf.period}): ${matchedPdf.price > 0 ? 'Cuota promedio $' + Number(matchedPdf.price).toLocaleString('es-AR') : ''} ${matchedPdf.vehicleValue > 0 ? '(Precio final $' + Number(matchedPdf.vehicleValue).toLocaleString('es-AR') + ')' : ''}`.trim());
+                    lines.push(`• Según lista *${matchedPdf.planName}* (${matchedPdf.period}): ${matchedPdf.price > 0 ? 'Cuota ref. (más alta) $' + Number(matchedPdf.price).toLocaleString('es-AR') : ''} ${matchedPdf.vehicleValue > 0 ? '(Valor móvil $' + Number(matchedPdf.vehicleValue).toLocaleString('es-AR') + ')' : ''}`.trim());
                 }
                 return `${saludo} Te paso los valores oficiales que tengo cargados hoy para *Toyota ${detectedModel}*:\n\n${lines.join('\n')}\n\n¿Te gustaría que lo repasemos en una llamada corta o coordinamos una visita en ${branch}?`;
             }
