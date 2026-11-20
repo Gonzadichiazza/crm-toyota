@@ -59,9 +59,9 @@
                     <button onclick="openWaTemplatesModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-white border border-white/15 hover:bg-white/20 transition-colors flex items-center gap-1" title="Mensajes Predeterminados por Canal">
                         <span>💬 Mensajes</span>
                     </button>
-                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-[#EB0A1E] hover:bg-red-700 text-white border border-red-400/40 transition-colors flex items-center gap-1.5 shadow-sm" title="Asistente IA Autónomo de WhatsApp (Solo datos reales del CRM)">
-                        <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white/70"></span>
-                        <span id="nav-wa-ai-label">🤖 WA IA</span>
+                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm" title="Asistente IA Autónomo de WhatsApp (Solo datos reales del CRM)">
+                        <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                        <span id="nav-wa-ai-label">🤖 WA IA ON</span>
                     </button>
                     <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
@@ -141,22 +141,22 @@
             </button>
         </div>
 
-        <!-- Barra de Seguimiento Automático WhatsApp 48hs -->
+        <!-- Barra de Seguimiento Automático WhatsApp 24hs IA + 48hs -->
         <div id="wa-tracker-banner" class="mt-3 bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#EB0A1E] animate-pulse"></span>
-                <span class="font-bold text-slate-900">Control Automático WhatsApp (48 hs):</span>
-                <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en lista de espera aparte • Auto-pasa a "No Compra" con fecha a las 48h.</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="font-bold text-slate-900">Seguimiento Autónomo IA (24h suave / 48h cierre):</span>
+                <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h sin insistir.</span>
             </div>
             <div class="flex items-center gap-1.5 flex-wrap">
-                <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-semibold transition-colors">
+                <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">
+                    🤖 Piloto IA 24/7
+                </button>
+                <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">
                     🟢 Pestaña WA Web
                 </button>
                 <button onclick="openWaTemplatesModal()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">
                     💬 Plantillas
-                </button>
-                <button onclick="openWaBridgeModal()" class="px-2.5 py-1 rounded-lg bg-zinc-900 text-white hover:bg-zinc-800 font-semibold transition-colors">
-                    📲 Vincular Celular
                 </button>
                 <button onclick="checkWhatsApp48hTimeouts(true)" class="px-2.5 py-1 rounded-lg bg-red-50 text-[#EB0A1E] hover:bg-red-100 border border-red-200 font-semibold transition-colors">
                     Verificar 48h
@@ -175,10 +175,10 @@
                         <span id="hero-date-label">Centro de Comando Comercial • Ginza Toyota</span>
                     </div>
                     <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
-                        Gestión Comercial & Comparador Inteligente <span class="text-[#EB0A1E]">Toyota Plan</span>
+                        Gestión Comercial & Seguimiento Autónomo <span class="text-[#EB0A1E]">Toyota Plan</span>
                     </h1>
                     <p class="text-xs sm:text-sm text-zinc-300 mt-2 leading-relaxed">
-                        Controla tus 7 bases de prospección con listas separadas de espera (48 hs), gestiona tu cartera de clientes y utiliza el comparador IA para ganar cada cierre frente a la competencia.
+                        Envía tu primer mensaje y deja que la IA realice un seguimiento natural sin insistencia, responda con tus precios reales del CRM y agende entrevistas automáticamente en tu calendario.
                     </p>
                     <div class="flex flex-wrap gap-2.5 mt-4">
                         <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">
@@ -240,8 +240,8 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
                     <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
                         <div>
-                            <h2 class="text-base font-bold text-slate-900">Radar de Oportunidades & Espera 48h</h2>
-                            <p class="text-xs text-slate-500">Clientes calientes y mensajes aguardando respuesta</p>
+                            <h2 class="text-base font-bold text-slate-900">Radar de Oportunidades & Espera</h2>
+                            <p class="text-xs text-slate-500">Clientes calientes y mensajes en seguimiento IA</p>
                         </div>
                     </div>
                     <div id="home-radar-list" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1"></div>
@@ -250,13 +250,13 @@
         </div>
     </main>
 
-    <!-- TAB 2: BASE DE DATOS / CONTACTOS (7 CANALES + LISTAS SEPARADAS 48HS + NO COMPRA CON FECHA) -->
+    <!-- TAB 2: BASE DE DATOS / CONTACTOS (7 CANALES) -->
     <main id="tab-contactos" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
                 <div>
                     <h2 class="text-base sm:text-lg font-bold text-slate-900">Base de Datos de Prospección (7 Canales)</h2>
-                    <p class="text-xs text-slate-500">Al enviar un mensaje pasa a su <b>lista aparte de espera (48 hs)</b>. Si no responde en 48 hs pasa a <b>No Compra con fecha</b> en la misma ventana.</p>
+                    <p class="text-xs text-slate-500">Al enviar un mensaje pasa a <b>espera (48 hs)</b>. La IA hace <b>1 seguimiento suave a las 24 hs</b> sin insistir y agenda entrevistas automáticamente.</p>
                 </div>
                 <button onclick="switchTab('clientes')" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-red-50 text-[#EB0A1E] border border-red-200 hover:bg-red-100 transition-colors self-start sm:self-auto">
                     <span>Ver derivados en Clientes:</span>
@@ -346,8 +346,6 @@
                     </table>
                 </div>
                 <div id="crm-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay datos pendientes de envío en No Compra.</div>
-                <div id="crm-waiting-sublist"></div>
-                <div id="crm-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 2: GESTIÓN PERSONAL -->
@@ -397,8 +395,6 @@
                     </table>
                 </div>
                 <div id="gestion-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay datos pendientes de envío en Gestión Personal.</div>
-                <div id="gestion-waiting-sublist"></div>
-                <div id="gestion-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 3: REDES SOCIALES -->
@@ -440,8 +436,6 @@
                     </table>
                 </div>
                 <div id="redes-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay contactos pendientes de envío desde Redes Sociales.</div>
-                <div id="redes-waiting-sublist"></div>
-                <div id="redes-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 4: SALESFORCE -->
@@ -453,7 +447,7 @@
                         <span id="sf-sync-pill" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/20 text-sky-200 border border-sky-400/30">Sync 2-Vías Listo</span>
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
-                        <button onclick="openSalesforceSyncModal()" class="bg-sky-500 hover:bg-sky-400 text-zinc-950 px-3 py-1 rounded-lg text-xs font-extrabold transition-colors shadow-xs">🔄 Conectar Salesforce (2 Vías)</button>
+                        <button onclick="openSalesforceSyncModal()" class="bg-sky-500 hover:bg-sky-400 text-zinc-950 px-3 py-1 rounded-lg text-xs font-extrabold transition-colors">🔄 Conectar Salesforce (2 Vías)</button>
                         <button onclick="syncSalesforceBidirectional(true)" class="bg-white/15 hover:bg-white/25 text-white px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors">⚡ Sincronizar Ahora</button>
                         <button onclick="openWaTemplatesModal('salesforce')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
                         <button onclick="exportSectionCSV('salesforce')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors">Exportar CSV</button>
@@ -462,13 +456,7 @@
                 <div class="p-4 sm:p-6 border-b border-slate-200 bg-slate-50/70 grid grid-cols-1 lg:grid-cols-2 gap-5">
                     <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
                         <div>
-                            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                                <h4 class="text-sm font-bold text-slate-800">Integrar Leads de Salesforce (Masivo / CSV)</h4>
-                                <label class="cursor-pointer bg-sky-50 border border-sky-200 text-sky-700 hover:bg-sky-100 px-3 py-1 rounded-lg font-medium text-xs">
-                                    Subir CSVs SF
-                                    <input type="file" id="sf-csv-upload" accept=".csv" multiple class="hidden" onchange="handleSalesforceCsvUpload(event)">
-                                </label>
-                            </div>
+                            <h4 class="text-sm font-bold text-slate-800 mb-2">Integrar Leads de Salesforce (Pegado Rápido)</h4>
                             <textarea id="sf-paste-input" rows="3" placeholder="Pega aquí los datos de Salesforce..." class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none resize-none"></textarea>
                         </div>
                         <div class="mt-3 flex justify-end">
@@ -486,10 +474,6 @@
                                 <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">Teléfono</label>
                                     <input type="text" id="sf-phone" placeholder="Ej: 3413456789" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
-                                </div>
-                                <div class="sm:col-span-2">
-                                    <label class="block text-xs font-medium text-slate-700 mb-1">Campaña / Referencia SF</label>
-                                    <input type="text" id="sf-reference" placeholder="Ej: Campaña Digital..." class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
                                 </div>
                             </div>
                         </div>
@@ -512,8 +496,6 @@
                     </table>
                 </div>
                 <div id="salesforce-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay leads de Salesforce pendientes de envío.</div>
-                <div id="salesforce-waiting-sublist"></div>
-                <div id="salesforce-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 5: DATOS CONVENCIONAL -->
@@ -584,7 +566,8 @@
                                     <tr class="bg-white border-b border-slate-200 text-xs font-semibold text-slate-600">
                                         <th class="p-3">Cliente</th>
                                         <th class="p-3">Vendedor</th>
-                                        <th class="p-3">Estado / Acción</th>
+                                        <th class="p-3">Estado</th>
+                                        <th class="p-3">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody id="conv-sent-body" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -604,7 +587,8 @@
                                     <tr class="bg-white border-b border-slate-200 text-xs font-semibold text-slate-600">
                                         <th class="p-3">Cliente</th>
                                         <th class="p-3">Vendedor</th>
-                                        <th class="p-3">Estado / Acción</th>
+                                        <th class="p-3">Estado</th>
+                                        <th class="p-3">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody id="conv-received-body" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -613,8 +597,6 @@
                         <div id="conv-received-empty" class="p-6 text-center text-slate-400 text-xs">Sin datos recibidos pendientes.</div>
                     </div>
                 </div>
-                <div id="convencional-waiting-sublist"></div>
-                <div id="convencional-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 6: CANCELADOS -->
@@ -626,10 +608,6 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="openWaTemplatesModal('cancelados')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
-                        <label class="cursor-pointer bg-amber-600 hover:bg-amber-700 text-white px-3 py-1 rounded-lg text-xs font-semibold">
-                            Subir CSV
-                            <input type="file" accept=".csv" multiple class="hidden" onchange="handleGroupCsvUpload(event, 'cancelados')">
-                        </label>
                         <button onclick="exportSectionCSV('cancelados')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-lg text-xs font-medium">Exportar CSV</button>
                     </div>
                 </div>
@@ -664,8 +642,6 @@
                     </table>
                 </div>
                 <div id="cancelados-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay contactos pendientes en Cancelados.</div>
-                <div id="cancelados-waiting-sublist"></div>
-                <div id="cancelados-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 7: RESCINDIDOS -->
@@ -677,10 +653,6 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="openWaTemplatesModal('rescindidos')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
-                        <label class="cursor-pointer bg-rose-600 hover:bg-rose-700 text-white px-3 py-1 rounded-lg text-xs font-semibold">
-                            Subir CSV
-                            <input type="file" accept=".csv" multiple class="hidden" onchange="handleGroupCsvUpload(event, 'rescindidos')">
-                        </label>
                         <button onclick="exportSectionCSV('rescindidos')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-lg text-xs font-medium">Exportar CSV</button>
                     </div>
                 </div>
@@ -715,8 +687,6 @@
                     </table>
                 </div>
                 <div id="rescindidos-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay contactos pendientes en Rescindidos.</div>
-                <div id="rescindidos-waiting-sublist"></div>
-                <div id="rescindidos-nocompra48-sublist"></div>
             </section>
         </div>
     </main>
@@ -859,7 +829,6 @@
     <!-- VENTANA DEDICADA DE CALENDARIO COMERCIAL + ASISTENTE IA -->
     <div id="agenda-window-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[55] hidden flex items-center justify-center p-2 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-7xl h-[94vh] flex flex-col overflow-hidden border border-slate-200">
-            <!-- Cabecera de la Ventana Calendario -->
             <div class="px-4 sm:px-6 py-3.5 bg-gradient-to-r from-zinc-950 via-neutral-900 to-purple-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-purple-600 flex items-center justify-center text-lg shadow">📅</div>
@@ -868,15 +837,12 @@
                             <h2 class="text-base sm:text-lg font-extrabold tracking-tight">Ventana de Calendario Comercial & Copiloto IA</h2>
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/30 text-purple-200 border border-purple-400/30">GINZA TOYOTA</span>
                         </div>
-                        <p class="text-[11px] text-zinc-300 hidden sm:block">Coordina entrevistas, proyecta recontactos a futuro y genera mensajes IA personalizados con un clic.</p>
+                        <p class="text-[11px] text-zinc-300 hidden sm:block">Coordina entrevistas, proyecta recontactos a futuro y revisa turnos agendados automáticamente por WhatsApp IA.</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="openNewScheduleModal()" class="px-3.5 py-2 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs font-bold shadow-sm">
                         + Nuevo Compromiso
-                    </button>
-                    <button onclick="openAgendaPopoutWindow()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs font-semibold hidden sm:inline-flex items-center gap-1" title="Abrir también en pestaña/ventana separada del navegador">
-                        ↗ Ventana Aparte
                     </button>
                     <button onclick="closeAgendaWindow()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">
                         ✕ Cerrar
@@ -884,9 +850,7 @@
                 </div>
             </div>
 
-            <!-- Contenido Scrolleable de la Ventana -->
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 bg-slate-50/60">
-                <!-- KPIs Rápidos de Agenda -->
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                     <div class="p-3.5 rounded-2xl bg-white border border-rose-200 shadow-xs">
                         <div class="text-[11px] font-bold text-rose-700 uppercase">Hoy / Vencidos</div>
@@ -906,19 +870,6 @@
                     </div>
                 </div>
 
-                <!-- Panel Copiloto IA de Agenda y Seguimiento Futuro -->
-                <div class="bg-gradient-to-r from-purple-950 via-zinc-900 to-zinc-900 text-white rounded-2xl p-4 sm:p-5 border border-purple-800/60 shadow-sm">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2 py-0.5 rounded-md bg-purple-600 text-[10px] font-extrabold uppercase">✨ Copiloto IA</span>
-                            <h3 class="text-sm sm:text-base font-bold">Radar Inteligente de Entrevistas & Seguimiento a Futuro</h3>
-                        </div>
-                        <span class="text-[11px] text-purple-200" id="ai-agenda-summary-badge">Analizando agenda...</span>
-                    </div>
-                    <div id="ai-agenda-recommendations" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
-                </div>
-
-                <!-- Calendario Mensual + Panel Lateral -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
                     <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
                         <div class="flex items-center justify-between mb-4">
@@ -934,12 +885,6 @@
                             <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div class="text-slate-400">Sáb</div><div class="text-slate-400">Dom</div>
                         </div>
                         <div id="agenda-calendar-grid" class="grid grid-cols-7 gap-1.5"></div>
-
-                        <div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-4 text-[11px] text-slate-600">
-                            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> Entrevista</span>
-                            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Recontacto a Futuro</span>
-                            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#EB0A1E]"></span> Día Actual</span>
-                        </div>
                     </div>
 
                     <div class="lg:col-span-5 space-y-4">
@@ -989,7 +934,6 @@
                 </div>
             </div>
 
-            <!-- Selectores de Comparación Lado a Lado -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">1. Segmento</label>
@@ -1013,11 +957,9 @@
                 </div>
             </div>
 
-            <!-- Tarjetas Cara a Cara + Bloque IA de Ventajas y Cierre -->
             <div id="comp-head-to-head" class="grid grid-cols-1 lg:grid-cols-12 gap-5"></div>
         </div>
 
-        <!-- Tabla Completa del Segmento -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-4 sm:px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
                 <h3 class="text-sm sm:text-base font-bold text-slate-800">Listado Completo del Segmento Seleccionado</h3>
@@ -1041,7 +983,7 @@
         </div>
     </main>
 
-    <!-- TAB 5: OBJETIVOS SEMANALES Y MENSUALES -->
+    <!-- TAB 5: OBJETIVOS SEMANALES Y MENSUALES (COMPLETA CON PROYECCIÓN HÁBIL Y COACH IA) -->
     <main id="tab-objetivos" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
         <div class="bg-gradient-to-r from-zinc-950 via-neutral-900 to-zinc-800 text-white rounded-2xl shadow-sm p-4 sm:p-5 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
@@ -1058,7 +1000,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-100">
                 <div>
                     <h3 class="text-sm sm:text-base font-bold text-slate-900">Coach IA de Rendimiento y Calibración de Metas</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Evalúa tus tasas reales de conversión y recalibra tus metas semanales.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Evalúa tus tasas reales de conversión y recalibra tus metas semanales y mensuales automáticamente.</p>
                 </div>
                 <button onclick="applyAiSuggestedGoals()" class="bg-[#EB0A1E] hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm shrink-0">✨ Aplicar Metas IA</button>
             </div>
@@ -1069,7 +1011,10 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
                 <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
-                    <h2 class="text-base sm:text-lg font-bold text-slate-800">Objetivos Semanales (Lun-Vie)</h2>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-800">Objetivos Semanales (Lun-Vie)</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Progreso acumulado y ritmo diario necesario</p>
+                    </div>
                     <button onclick="saveGoalsConfig()" class="bg-zinc-900 text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-zinc-800">Guardar Metas</button>
                 </div>
                 <div id="weekly-goals-container" class="space-y-4"></div>
@@ -1157,10 +1102,8 @@
                 </div>
             </div>
 
-            <!-- Lienzo del Gráfico Visual -->
             <div id="vehicle-price-chart-box" class="p-4 rounded-2xl bg-slate-50 border border-slate-200"></div>
 
-            <!-- Tabla Comparativa Completa -->
             <div class="overflow-x-auto border border-slate-200 rounded-xl">
                 <table class="w-full text-left border-collapse min-w-[820px]">
                     <thead>
@@ -1266,7 +1209,7 @@
                     <select id="edit-status" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
                         <option value="Pendiente">Pendiente (Para enviar)</option>
                         <option value="Llamada Realizada">Llamada Realizada</option>
-                        <option value="Mensaje Enviado (48h)">Mensaje Enviado (Lista espera 48h)</option>
+                        <option value="Mensaje Enviado (48h)">Mensaje Enviado (Seguimiento IA 24h / 48h)</option>
                         <option value="Contestó">Contestó</option>
                         <option value="No Contestó">No Contestó</option>
                         <option value="Interesado">Interesado (Clientes)</option>
@@ -1331,10 +1274,7 @@
     <div id="schedule-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[68] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-zinc-900 text-white">
-                <div>
-                    <h3 id="schedule-modal-title" class="text-base font-extrabold">📅 Coordinar Entrevista / Recontacto</h3>
-                    <p id="schedule-modal-subtitle" class="text-xs text-zinc-300">Selecciona fecha y detalles del compromiso</p>
-                </div>
+                <h3 class="text-base font-extrabold">📅 Coordinar Entrevista / Recontacto</h3>
                 <button onclick="closeScheduleModal()" class="text-zinc-400 hover:text-white">✕</button>
             </div>
             <div class="p-5 space-y-3.5">
@@ -1345,45 +1285,24 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Tipo de Compromiso</label>
-                    <select id="sched-type-select" onchange="onScheduleTypeChange()" class="w-full px-3 py-2 text-sm font-semibold border border-slate-300 rounded-xl bg-white outline-none">
+                    <select id="sched-type-select" class="w-full px-3 py-2 text-sm font-semibold border border-slate-300 rounded-xl bg-white outline-none">
                         <option value="Entrevista">🟣 Entrevista con Cliente (Fecha y Hora)</option>
-                        <option value="Interesado a Futuro">🟡 Interesado a Futuro (Fecha aprox. de recontacto)</option>
+                        <option value="Interesado a Futuro">🟡 Interesado a Futuro (Recontacto)</option>
                     </select>
                 </div>
-
-                <!-- Atajos rápidos para "Interesado a Futuro" -->
-                <div id="sched-future-shortcuts" class="hidden">
-                    <label class="block text-[11px] font-bold text-amber-800 uppercase mb-1.5">Atajos de Fecha Aproximada:</label>
-                    <div class="grid grid-cols-4 gap-1.5">
-                        <button type="button" onclick="setFutureOffsetDays(15)" class="py-1.5 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold">+15 días</button>
-                        <button type="button" onclick="setFutureOffsetDays(30)" class="py-1.5 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold">+1 mes</button>
-                        <button type="button" onclick="setFutureOffsetDays(60)" class="py-1.5 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold">+2 meses</button>
-                        <button type="button" onclick="setFutureOffsetDays(90)" class="py-1.5 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold">+3 meses</button>
-                    </div>
-                </div>
-
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1" id="sched-date-label">Fecha de Entrevista</label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Fecha</label>
                         <input type="date" id="sched-date-input" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
                     </div>
-                    <div id="sched-time-wrapper">
+                    <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Hora</label>
                         <input type="time" id="sched-time-input" value="10:30" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
                     </div>
                 </div>
-                <div id="sched-ai-slot-hint" class="text-[11px] font-semibold text-purple-800 bg-purple-50 border border-purple-200 rounded-xl px-3 py-2"></div>
-
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Modelo Toyota de Interés</label>
-                    <select id="sched-model-select" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none">
-                        <option value="">Seleccionar modelo...</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1" id="sched-note-label">Lugar / Modalidad / Motivo</label>
-                    <input type="text" id="sched-note-input" placeholder="Ej: Reunión en Salón Ginza / Llamar en quincena..." class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Lugar / Modalidad</label>
+                    <input type="text" id="sched-note-input" placeholder="Ej: Reunión en Salón Ginza" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl outline-none">
                 </div>
             </div>
             <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
@@ -1399,71 +1318,23 @@
             <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10">
                 <div>
                     <h3 class="text-base sm:text-lg font-bold text-slate-800">Mensajes Predeterminados de WhatsApp por Canal</h3>
-                    <p class="text-xs text-slate-500">Usa <code class="bg-red-50 text-[#EB0A1E] px-1.5 py-0.5 rounded font-bold">{nombre}</code> para insertar automáticamente el nombre del contacto.</p>
+                    <p class="text-xs text-slate-500">Usa <code class="bg-red-50 text-[#EB0A1E] px-1.5 py-0.5 rounded font-bold">{nombre}</code> para insertar el nombre automáticamente.</p>
                 </div>
                 <button onclick="closeWaTemplatesModal()" class="text-slate-400 hover:text-slate-600">✕</button>
             </div>
             <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60" id="tpl-card-crm">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-xs font-bold text-slate-800 uppercase">1. Base No Compra</label>
-                        <button type="button" onclick="insertNamePlaceholder('tpl-input-crm')" class="text-[11px] font-semibold text-[#EB0A1E] hover:underline">+ {nombre}</button>
-                    </div>
-                    <textarea id="tpl-input-crm" rows="3" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                </div>
-                <div class="p-3.5 rounded-xl border border-indigo-200 bg-indigo-50/40" id="tpl-card-gestion">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-xs font-bold text-indigo-900 uppercase">2. Gestión Personal</label>
-                        <button type="button" onclick="insertNamePlaceholder('tpl-input-gestion')" class="text-[11px] font-semibold text-[#EB0A1E] hover:underline">+ {nombre}</button>
-                    </div>
-                    <textarea id="tpl-input-gestion" rows="3" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                </div>
-                <div class="p-3.5 rounded-xl border border-pink-200 bg-pink-50/40" id="tpl-card-redes">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-xs font-bold text-pink-900 uppercase">3. Redes Sociales</label>
-                        <button type="button" onclick="insertNamePlaceholder('tpl-input-redes')" class="text-[11px] font-semibold text-[#EB0A1E] hover:underline">+ {nombre}</button>
-                    </div>
-                    <textarea id="tpl-input-redes" rows="3" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                </div>
-                <div class="p-3.5 rounded-xl border border-sky-200 bg-sky-50/40" id="tpl-card-salesforce">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-xs font-bold text-sky-900 uppercase">4. Salesforce Leads</label>
-                        <button type="button" onclick="insertNamePlaceholder('tpl-input-salesforce')" class="text-[11px] font-semibold text-[#EB0A1E] hover:underline">+ {nombre}</button>
-                    </div>
-                    <textarea id="tpl-input-salesforce" rows="3" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                </div>
-                <div class="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/40" id="tpl-card-convencional">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-xs font-bold text-emerald-900 uppercase">5. Datos Convencional</label>
-                        <button type="button" onclick="insertNamePlaceholder('tpl-input-convencional')" class="text-[11px] font-semibold text-[#EB0A1E] hover:underline">+ {nombre}</button>
-                    </div>
-                    <textarea id="tpl-input-convencional" rows="3" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                </div>
-                <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/40" id="tpl-card-cancelados">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-xs font-bold text-amber-900 uppercase">6. Cancelados</label>
-                        <button type="button" onclick="insertNamePlaceholder('tpl-input-cancelados')" class="text-[11px] font-semibold text-[#EB0A1E] hover:underline">+ {nombre}</button>
-                    </div>
-                    <textarea id="tpl-input-cancelados" rows="3" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                </div>
-                <div class="p-3.5 rounded-xl border border-rose-200 bg-rose-50/40" id="tpl-card-rescindidos">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-xs font-bold text-rose-900 uppercase">7. Rescindidos</label>
-                        <button type="button" onclick="insertNamePlaceholder('tpl-input-rescindidos')" class="text-[11px] font-semibold text-[#EB0A1E] hover:underline">+ {nombre}</button>
-                    </div>
-                    <textarea id="tpl-input-rescindidos" rows="3" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                </div>
-                <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60" id="tpl-card-clientes">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-xs font-bold text-slate-800 uppercase">8. Cartera Clientes</label>
-                        <button type="button" onclick="insertNamePlaceholder('tpl-input-clientes')" class="text-[11px] font-semibold text-[#EB0A1E] hover:underline">+ {nombre}</button>
-                    </div>
-                    <textarea id="tpl-input-clientes" rows="3" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                </div>
+                <div><label class="text-xs font-bold uppercase">1. Base No Compra</label><textarea id="tpl-input-crm" rows="2" class="w-full p-2 text-xs border rounded-xl mt-1"></textarea></div>
+                <div><label class="text-xs font-bold uppercase">2. Gestión Personal</label><textarea id="tpl-input-gestion" rows="2" class="w-full p-2 text-xs border rounded-xl mt-1"></textarea></div>
+                <div><label class="text-xs font-bold uppercase">3. Redes Sociales</label><textarea id="tpl-input-redes" rows="2" class="w-full p-2 text-xs border rounded-xl mt-1"></textarea></div>
+                <div><label class="text-xs font-bold uppercase">4. Salesforce Leads</label><textarea id="tpl-input-salesforce" rows="2" class="w-full p-2 text-xs border rounded-xl mt-1"></textarea></div>
+                <div><label class="text-xs font-bold uppercase">5. Datos Convencional</label><textarea id="tpl-input-convencional" rows="2" class="w-full p-2 text-xs border rounded-xl mt-1"></textarea></div>
+                <div><label class="text-xs font-bold uppercase">6. Cancelados</label><textarea id="tpl-input-cancelados" rows="2" class="w-full p-2 text-xs border rounded-xl mt-1"></textarea></div>
+                <div><label class="text-xs font-bold uppercase">7. Rescindidos</label><textarea id="tpl-input-rescindidos" rows="2" class="w-full p-2 text-xs border rounded-xl mt-1"></textarea></div>
+                <div><label class="text-xs font-bold uppercase">8. Cartera Clientes</label><textarea id="tpl-input-clientes" rows="2" class="w-full p-2 text-xs border rounded-xl mt-1"></textarea></div>
             </div>
             <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
-                <button onclick="closeWaTemplatesModal()" class="px-4 py-2 text-slate-600 text-sm font-medium hover:bg-slate-200 rounded-xl">Cancelar</button>
-                <button onclick="saveWaTemplates()" class="px-5 py-2 bg-[#EB0A1E] text-white text-sm font-semibold hover:bg-red-700 rounded-xl">Guardar Mensajes</button>
+                <button onclick="closeWaTemplatesModal()" class="px-4 py-2 text-slate-600 text-sm font-medium rounded-xl">Cancelar</button>
+                <button onclick="saveWaTemplates()" class="px-5 py-2 bg-[#EB0A1E] text-white text-sm font-semibold rounded-xl">Guardar Mensajes</button>
             </div>
         </div>
     </div>
@@ -1476,9 +1347,8 @@
                 <button onclick="closeBackupModal()" class="text-slate-400 hover:text-slate-600">✕</button>
             </div>
             <div class="p-5 space-y-4">
-                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800">
-                    <div class="font-bold">Conectado a Firebase Realtime Database</div>
-                    <div class="mt-0.5 text-emerald-700" id="firebase-sync-detail">Sincronización activa entre PC y celular.</div>
+                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 font-bold">
+                    Conectado a Firebase Realtime Database • Sala activa
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Código de Sala Compartida</label>
@@ -1487,16 +1357,12 @@
                         <button onclick="changeSyncRoom()" class="px-3.5 py-2 bg-[#EB0A1E] text-white rounded-xl text-xs font-semibold hover:bg-red-700">Aplicar</button>
                     </div>
                 </div>
-                <div class="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
-                    <button onclick="exportBackupFile()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold">Descargar Copia</button>
-                    <label class="cursor-pointer px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold text-center">
-                        Restaurar Copia
-                        <input type="file" accept=".json" onchange="importBackupFile(event)" class="hidden">
-                    </label>
+                <div class="pt-3 border-t border-slate-100 flex justify-end">
+                    <button onclick="exportBackupFile()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold">Descargar Copia JSON</button>
                 </div>
             </div>
             <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-end">
-                <button onclick="closeBackupModal()" class="px-4 py-2 text-slate-600 text-sm font-medium hover:bg-slate-200 rounded-xl">Cerrar</button>
+                <button onclick="closeBackupModal()" class="px-4 py-2 text-slate-600 text-sm font-medium rounded-xl">Cerrar</button>
             </div>
         </div>
     </div>
@@ -1516,53 +1382,6 @@
                         <button onclick="copyWaWebhookUrl()" class="px-3.5 py-2 bg-[#EB0A1E] hover:bg-red-700 text-white rounded-xl text-xs font-semibold shrink-0">Copiar URL</button>
                     </div>
                 </div>
-                <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50">
-                    <div class="font-bold text-slate-900 mb-1">Configuración MacroDroid (Android):</div>
-                    <ol class="list-decimal list-inside space-y-1 text-xs text-slate-600">
-                        <li><b>Disparador:</b> Notificación recibida → App: <b>WhatsApp / WhatsApp Business</b>.</li>
-                        <li><b>Acción:</b> <i>Solicitar HTTP</i> → Método <b>POST</b> → pega la URL de arriba.</li>
-                        <li><b>Cuerpo JSON:</b> <code class="bg-white px-1 py-0.5 rounded border text-[11px]">{"sender":"{not_title}","text":"{notification}"}</code></li>
-                    </ol>
-                </div>
-
-                <!-- CAPTURA AUTOMÁTICA DE LEADS DE PUBLICIDAD -->
-                <div class="p-4 rounded-xl border-2 border-pink-200 bg-pink-50/40 space-y-3">
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                        <div>
-                            <h4 class="font-extrabold text-pink-950 text-xs sm:text-sm">📣 Auto-Agendar Leads de Publicidad (Meta Ads / Instagram / Facebook)</h4>
-                            <p class="text-[11px] text-pink-800">Si entra un WhatsApp nuevo con texto de anuncio (o de un número desconocido), se agenda solo en tu CRM.</p>
-                        </div>
-                        <label class="inline-flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 rounded-xl border border-pink-200 text-xs font-bold text-pink-900">
-                            <input type="checkbox" id="wa-ads-capture-enabled" checked class="accent-[#EB0A1E] w-4 h-4">
-                            <span>Captura Activa</span>
-                        </label>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Modo de Detección</label>
-                            <select id="wa-ads-capture-mode" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
-                                <option value="keywords">Solo mensajes con frases de publicidad / modelos</option>
-                                <option value="all_new">Cualquier número nuevo que me escriba por 1ra vez</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Destino Automático en CRM</label>
-                            <select id="wa-ads-target-dest" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
-                                <option value="redes_interesado">3. Redes Sociales + Clientes (Interesado)</option>
-                                <option value="redes_pendiente">3. Redes Sociales (Pendiente de llamar)</option>
-                                <option value="gestion_interesado">2. Gestión Personal + Clientes (Interesado)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Palabras / Frases Clave de tus Anuncios (separadas por coma)</label>
-                        <input type="text" id="wa-ads-keywords" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
-                    </div>
-                    <div class="flex justify-end">
-                        <button onclick="saveWaAdsSettings()" class="px-3.5 py-1.5 bg-pink-700 hover:bg-pink-800 text-white rounded-xl text-xs font-bold">💾 Guardar Reglas de Publicidad</button>
-                    </div>
-                </div>
-
                 <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
                     <div class="font-bold text-slate-800 text-xs">Simular mensaje entrante (Respuesta o Lead de Publicidad):</div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
@@ -1583,122 +1402,42 @@
 
     <!-- MODAL DE INTEGRACIÓN BIDIRECCIONAL SEGURA CON SALESFORCE -->
     <div id="sf-sync-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[67] hidden flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden">
-            <div class="px-5 py-4 bg-gradient-to-r from-sky-950 via-slate-900 to-zinc-900 text-white flex justify-between items-center shrink-0">
-                <div>
-                    <div class="flex items-center gap-2">
-                        <h3 class="text-base sm:text-lg font-extrabold">🔄 Integración Bidireccional Segura — Salesforce ↔ Ginza Toyota</h3>
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">PROTECCIÓN ANTI-DUPLICADOS</span>
-                    </div>
-                    <p class="text-xs text-sky-200 mt-0.5">Sincroniza leads de Salesforce hacia este CRM y envía cada cambio de estado, entrevista o venta de vuelta a Salesforce.</p>
-                </div>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="px-5 py-4 bg-gradient-to-r from-sky-950 via-slate-900 to-zinc-900 text-white flex justify-between items-center">
+                <h3 class="text-base sm:text-lg font-extrabold">🔄 Integración Bidireccional Segura — Salesforce ↔ Ginza Toyota</h3>
                 <button onclick="closeSalesforceSyncModal()" class="text-slate-300 hover:text-white text-lg">✕</button>
             </div>
-
-            <div class="flex-1 overflow-y-auto p-5 space-y-5 text-xs sm:text-sm">
-                <!-- Selector de Modo de Sincronización -->
+            <div class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- OPCIÓN A: CONEXIÓN DIRECTA SALESFORCE REST API -->
-                    <div class="p-4 rounded-2xl border-2 border-sky-200 bg-sky-50/40 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold uppercase text-sky-900">Opción A: API REST Directa Salesforce</span>
-                            <span class="px-2 py-0.5 rounded bg-sky-600 text-white text-[10px] font-bold">2 VÍAS DIRECTO</span>
-                        </div>
-                        <p class="text-xs text-slate-600">Conecta directamente con tu instancia de Salesforce usando tu URL y Token de acceso OAuth / Session ID.</p>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">URL Instancia Salesforce</label>
-                            <input type="text" id="sf-cfg-instance" placeholder="https://tuconcesionario.my.salesforce.com" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Access Token / Bearer Token</label>
-                            <input type="password" id="sf-cfg-token" placeholder="00D..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-700 mb-1">Objeto Salesforce</label>
-                                <select id="sf-cfg-object" class="w-full px-2.5 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
-                                    <option value="Lead">Lead (Prospectos)</option>
-                                    <option value="Contact">Contact (Contactos)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-700 mb-1">Modo Seguridad</label>
-                                <select id="sf-cfg-conflict" class="w-full px-2.5 py-2 text-xs border border-slate-300 rounded-xl bg-white outline-none">
-                                    <option value="newest">Más reciente gana (Seguro)</option>
-                                    <option value="crm_wins">Este CRM prevalece</option>
-                                    <option value="sf_wins">Salesforce prevalece</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap gap-2 pt-1">
-                            <button onclick="saveSalesforceConfig()" class="px-3.5 py-2 bg-sky-700 hover:bg-sky-800 text-white rounded-xl text-xs font-bold">💾 Guardar Configuración</button>
-                            <button onclick="syncSalesforceBidirectional(true)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold">⚡ Probar y Sincronizar</button>
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+                        <div class="font-extrabold uppercase text-slate-800">1. Entrada (Salesforce → Este CRM) [POST]:</div>
+                        <div class="flex gap-1.5">
+                            <input type="text" id="sf-inbound-url" readonly class="flex-1 px-2.5 py-1.5 font-mono bg-white border border-slate-300 rounded-lg">
+                            <button onclick="copyInputText('sf-inbound-url')" class="px-2.5 py-1.5 bg-zinc-900 text-white rounded-lg font-bold">Copiar</button>
                         </div>
                     </div>
-
-                    <!-- OPCIÓN B: PUENTE AUTOMÁTICO WEBHOOK (MAKE / ZAPIER / FLOW) -->
-                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold uppercase text-slate-800">Opción B: Webhook Tiempo Real (Sin Token Admin)</span>
-                            <span class="px-2 py-0.5 rounded bg-zinc-800 text-white text-[10px] font-bold">MAKE / ZAPIER / FLOW</span>
-                        </div>
-                        <p class="text-xs text-slate-600">Usa estas 2 URLs en <b>Make.com</b>, <b>Zapier</b> o <b>Salesforce Flow</b> para sincronizar en ambos sentidos sin pedir permisos de desarrollador.</p>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">1. Entrada (Salesforce → Este CRM) [POST]:</label>
-                            <div class="flex gap-1.5">
-                                <input type="text" id="sf-inbound-url" readonly class="flex-1 px-2.5 py-1.5 text-[11px] font-mono bg-white border border-slate-300 rounded-lg text-slate-800 outline-none">
-                                <button onclick="copyInputText('sf-inbound-url')" class="px-2.5 py-1.5 bg-zinc-900 text-white rounded-lg text-[11px] font-bold shrink-0">Copiar</button>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">2. Salida (Este CRM → Salesforce) [GET / Stream]:</label>
-                            <div class="flex gap-1.5">
-                                <input type="text" id="sf-outbound-url" readonly class="flex-1 px-2.5 py-1.5 text-[11px] font-mono bg-white border border-slate-300 rounded-lg text-slate-800 outline-none">
-                                <button onclick="copyInputText('sf-outbound-url')" class="px-2.5 py-1.5 bg-zinc-900 text-white rounded-lg text-[11px] font-bold shrink-0">Copiar</button>
-                            </div>
-                        </div>
-                        <div class="p-2.5 rounded-xl bg-white border border-slate-200 text-[11px] text-slate-600">
-                            <b>Campos JSON aceptados:</b> <code>{"sfId":"00Q...", "name":"...", "phone":"...", "status":"...", "model":"Hilux", "notes":"..."}</code>
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+                        <div class="font-extrabold uppercase text-slate-800">2. Salida (Este CRM → Salesforce) [GET]:</div>
+                        <div class="flex gap-1.5">
+                            <input type="text" id="sf-outbound-url" readonly class="flex-1 px-2.5 py-1.5 font-mono bg-white border border-slate-300 rounded-lg">
+                            <button onclick="copyInputText('sf-outbound-url')" class="px-2.5 py-1.5 bg-zinc-900 text-white rounded-lg font-bold">Copiar</button>
                         </div>
                     </div>
                 </div>
-
-                <!-- Columna Derecha: Consola de Chat Autónomo & Simulador en Vivo -->
-                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col overflow-hidden min-h-[380px]">
-                    <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 flex-1 min-w-[200px]">
-                            <label class="text-[11px] font-bold text-slate-600 shrink-0">Cliente:</label>
-                            <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
-                        </div>
-                        <button onclick="generateInitialOutreachWithAi()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
-                            ✨ Redactar 1er Mensaje Real
-                        </button>
-                    </div>
-
-                    <div id="wa-ai-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[260px]"></div>
-
-                    <div id="wa-ai-draft-box" class="hidden p-3 bg-emerald-50/90 border-t border-emerald-200 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[10px] font-extrabold uppercase text-emerald-900">Borrador Verificado con Datos Reales CRM:</span>
-                            <span id="wa-ai-source-tag" class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold"></span>
-                        </div>
-                        <textarea id="wa-ai-draft-text" rows="3" class="w-full px-3 py-2 text-xs border border-emerald-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                        <div class="flex justify-end gap-2">
-                            <button onclick="copyWaAiDraft()" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-slate-800 text-xs font-bold hover:bg-slate-100">📋 Copiar</button>
-                            <button onclick="sendWaAiDraftToWhatsApp()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">🟢 Enviar por WhatsApp Web</button>
-                        </div>
-                    </div>
-
-                    <div class="p-3 bg-white border-t border-slate-200 flex gap-2">
-                        <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Simula o pega lo que te escribió el cliente por WhatsApp..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
-                        <button id="btn-wa-ai-generate" onclick="runWaAiReply()" class="px-4 py-2 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs font-bold shrink-0">Generar Respuesta</button>
+                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
+                    <div class="font-extrabold uppercase text-slate-800">🧪 Simular Lead Entrante desde Salesforce</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                        <input type="text" id="sf-sim-id" placeholder="ID SF (00Q8a0001)" class="px-3 py-2 border border-slate-300 rounded-xl bg-white">
+                        <input type="text" id="sf-sim-name" placeholder="Nombre del Lead" class="px-3 py-2 border border-slate-300 rounded-xl bg-white">
+                        <input type="text" id="sf-sim-phone" placeholder="Teléfono (3415551234)" class="px-3 py-2 border border-slate-300 rounded-xl bg-white">
+                        <button onclick="simulateSalesforceInboundLead()" class="px-4 py-2 bg-sky-700 hover:bg-sky-800 text-white rounded-xl font-bold">Simular Lead SF</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (PILOTO AUTOMÁTICO 24/7 + DESCARGA MACRO LISTA) -->
+    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (PILOTO AUTOMÁTICO 24/7 + SEGUIMIENTO SUAVE 24H) -->
     <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
             <div class="px-5 py-4 bg-gradient-to-r from-zinc-950 via-neutral-900 to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
@@ -1709,7 +1448,7 @@
                             <h3 class="text-base sm:text-lg font-extrabold">Asistente Autónomo WhatsApp — Ginza Toyota</h3>
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">CERO INVENCIÓN • 100% DATOS CRM</span>
                         </div>
-                        <p class="text-xs text-zinc-300">Responde con naturalidad humana usando únicamente tus precios, cuotas y fichas reales cargadas.</p>
+                        <p class="text-xs text-zinc-300">Hace el seguimiento por vos (1 toque cordial a las 24h sin insistir) y coordina entrevistas automáticamente.</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1722,31 +1461,31 @@
             </div>
 
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50/70">
-                <!-- Columna Izquierda: Instalación 1-Clic en Celular + Reglas Verificadas -->
+                <!-- Columna Izquierda: Conexión Android 1-Toque + Reglas Anti-Insistencia -->
                 <div class="lg:col-span-5 space-y-4">
                     <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold uppercase text-emerald-950">📲 Conexión Rápida con MacroDroid (3 Pasos)</span>
-                            <span class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold">SIN ERRORES</span>
+                            <span class="text-xs font-extrabold uppercase text-emerald-950">📲 Conexión Rápida Android (MacroDroid)</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold">3 PASOS</span>
                         </div>
-                        <p class="text-xs text-emerald-900">En MacroDroid crea una macro nueva llamada <b>CRM Toyota</b>, agrega el disparador <b>Notificación recibida (WhatsApp)</b> y pega estos 3 datos en <b>Acciones</b>:</p>
+                        <p class="text-xs text-emerald-900">En MacroDroid crea una macro <b>CRM Toyota</b>, elige disparador <b>Notificación recibida (WhatsApp)</b> y pega estos 3 datos:</p>
                         <div class="space-y-2 pt-1">
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-700 uppercase">1. Acción HTTP POST — URL Entrada:</label>
+                                <label class="block text-[10px] font-bold text-slate-700 uppercase">1. HTTP POST — URL Entrada:</label>
                                 <div class="flex gap-1">
                                     <input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-slate-300 rounded-lg">
                                     <button onclick="copyInputText('wa-ai-incoming-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-700 uppercase">2. Acción HTTP POST — Cuerpo JSON (Tipo: application/json):</label>
+                                <label class="block text-[10px] font-bold text-slate-700 uppercase">2. HTTP POST — Cuerpo JSON (application/json):</label>
                                 <div class="flex gap-1">
                                     <input type="text" id="wa-ai-post-body" readonly value='{"sender":"{not_title}","text":"{notification}"}' class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-slate-300 rounded-lg">
                                     <button onclick="copyInputText('wa-ai-post-body')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-700 uppercase">3. Esperar 4s → HTTP GET (Variable: ia) → Responder Notificación ({lv=ia}):</label>
+                                <label class="block text-[10px] font-bold text-slate-700 uppercase">3. Esperar 4s → HTTP GET (Variable: ia) → Responder ({lv=ia}):</label>
                                 <div class="flex gap-1">
                                     <input type="text" id="wa-ai-outgoing-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-slate-300 rounded-lg">
                                     <button onclick="copyInputText('wa-ai-outgoing-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
@@ -1756,7 +1495,7 @@
                     </div>
 
                     <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3">
-                        <div class="text-xs font-extrabold uppercase text-slate-800">🛡️ Base de Datos Real Autorizada</div>
+                        <div class="text-xs font-extrabold uppercase text-slate-800">🛡️ Control Anti-Insistencia & Base Real</div>
                         <div id="wa-ai-kb-summary" class="space-y-1.5 text-xs text-slate-700"></div>
                         <div class="grid grid-cols-2 gap-2 pt-1">
                             <div>
@@ -1769,6 +1508,10 @@
                             </div>
                         </div>
                         <div class="space-y-1.5 text-xs text-slate-700">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="wa-ai-auto-followup" checked class="accent-[#EB0A1E]">
+                                <span><b>Seguimiento IA suave a las 24h</b> (máx. 1 toque, 9:30–19:30h, sin insistir)</span>
+                            </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="wa-ai-allow-schedule" checked class="accent-[#EB0A1E]">
                                 <span>Agendar entrevistas automáticamente en mi Calendario</span>
@@ -1830,8 +1573,6 @@
         let waIncomingStream = null;
         let sfIncomingStream = null;
         let waTabRef = null;
-        let sfConfig = JSON.parse(localStorage.getItem('crm_sf_config') || '{"instanceUrl":"","accessToken":"","objectType":"Lead","conflictPolicy":"newest"}');
-        let sfSyncLogs = [];
         let processedSfEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_sf_events') || '[]'));
 
         // --- ESTADO GLOBAL ---
@@ -1848,6 +1589,8 @@
         let rescindidosContacts = [];
         let convencionalSellers = [];
         let plansHistory = [];
+        let currentPlanJpgs = [];
+        let pendingShareJpgItem = null;
         let waTemplates = {
             crm: "Hola {nombre}, ¿cómo estás? Te escribo de Ginza Toyota porque habías consultado anteriormente y quería comentarte las novedades de este mes.",
             gestion: "Hola {nombre}, ¿cómo estás? Te contacto de Ginza Toyota para asesorarte con los planes vigentes.",
@@ -1858,8 +1601,6 @@
             rescindidos: "Hola {nombre}, ¿cómo estás? Te contacto de Ginza Toyota respecto a tu suscripción rescindida para comentarte opciones vigentes.",
             clientes: "Hola {nombre}, ¿cómo venís con la propuesta de Toyota que estuvimos viendo?"
         };
-        let currentPlanJpgs = [];
-        let pendingShareJpgItem = null;
         let goals = {
             weekly: { llamadas: 100, mensajes: 150, interesados: 25, entrevistas: 10, ventas: 5 },
             monthly: { llamadas: 400, mensajes: 600, interesados: 100, entrevistas: 40, ventas: 20 }
@@ -1882,6 +1623,7 @@
         }));
         let waAiConfig = JSON.parse(localStorage.getItem('crm_wa_ai_config') || JSON.stringify({
             autoReplyMobile: true,
+            autoFollowUp24h: true,
             allowAutoSchedule: true,
             allowCompetitorCompare: true,
             advisorName: 'Gonzalo',
@@ -1889,7 +1631,7 @@
         }));
         let waAiConversationLogs = JSON.parse(localStorage.getItem('crm_wa_ai_chats') || '{}');
 
-        // --- CATÁLOGO DE PLANES ACTUALIZADO (TOYOTA VS COMPETENCIA INCLUYENDO FORD TRANSIT) ---
+        // --- CATÁLOGO DE PLANES ACTUALIZADO ---
         const DEFAULT_MARKET_PLANS = [
             { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 351466 },
             { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 711178 },
@@ -1929,7 +1671,7 @@
         }
 
         function syncModelDropdowns() {
-            ['cli-direct-model', 'input-interest-model', 'edit-model', 'sched-model-select'].forEach(id => {
+            ['cli-direct-model', 'input-interest-model', 'edit-model'].forEach(id => {
                 const sel = document.getElementById(id);
                 if (!sel) return;
                 const prev = sel.value;
@@ -2105,7 +1847,7 @@
                     try {
                         const parsed = JSON.parse(e.data);
                         if (!parsed || parsed.data === null) return;
-                        pollIncomingWhatsAppEvents(false);
+                        pollIncomingWhatsAppEvents();
                     } catch (err) {}
                 };
                 waIncomingStream.addEventListener('put', onWa);
@@ -2239,7 +1981,7 @@
             if (!el) return;
             el.select();
             document.execCommand('copy');
-            showToast("URL copiada al portapapeles");
+            showToast("Copiado al portapapeles");
         };
 
         // --- NAVEGACIÓN DE PESTAÑAS Y VENTANAS ---
@@ -2274,10 +2016,6 @@
         };
         window.closeAgendaWindow = function() {
             document.getElementById('agenda-window-modal')?.classList.add('hidden');
-        };
-        window.openAgendaPopoutWindow = function() {
-            const baseUrl = window.location.href.split('?')[0];
-            window.open(`${baseUrl}?view=agenda`, 'crm_ginza_agenda_popout', 'width=1200,height=820,resizable=yes,scrollbars=yes');
         };
 
         window.setContactosSubView = function(subView) {
@@ -2389,17 +2127,17 @@
             if (radarList) {
                 const hotItems = allContacts.filter(c => c.status === 'Entrevista' || c.status === 'Interesado' || c.status === 'Mensaje Enviado (48h)').slice(0, 8);
                 radarList.innerHTML = hotItems.length === 0
-                    ? `<div class="p-6 text-center text-slate-400 text-xs border border-dashed border-slate-200 rounded-xl">Aún no hay entrevistas, interesados ni mensajes en espera de 48 hs.</div>`
+                    ? `<div class="p-6 text-center text-slate-400 text-xs border border-dashed border-slate-200 rounded-xl">Aún no hay entrevistas, interesados ni mensajes en seguimiento IA.</div>`
                     : hotItems.map(c => `<div class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 flex items-center justify-between gap-2"><div class="min-w-0"><div class="text-xs font-bold text-slate-900 truncate">${c.name || 'Sin Nombre'}</div><div class="text-[11px] text-slate-500">${c.phone || ''} ${c.interestModel ? `• ${c.interestModel}` : ''}</div></div><span class="px-2 py-0.5 rounded-full text-[10px] shrink-0 ${getStatusBadgeClass(c.status)}">${c.status}</span></div>`).join('');
             }
         };
 
-        // --- WHATSAPP 48HS, PLANTILLAS Y CAPTURA DE PUBLICIDAD ---
+        // --- WHATSAPP 24H SEGUIMIENTO IA ANTI-INSISTENCIA + 48HS ---
         function updateWaBannerSummary() {
             const summaryEl = document.getElementById('wa-tracker-summary');
             if (!summaryEl) return;
             const waitingCount = getAllListsCombined().filter(c => c.status === 'Mensaje Enviado (48h)').length;
-            summaryEl.innerHTML = `<b>${waitingCount}</b> mensaje(s) en lista de espera aparte • Auto-pasa a "No Compra" con fecha a las 48h.`;
+            summaryEl.innerHTML = `<b>${waitingCount}</b> mensaje(s) en espera • 1 único toque cordial IA a las 24h sin insistir.`;
         }
         window.trackWhatsAppMessageSent = function(id) {
             const found = findContactGlobal(id);
@@ -2407,8 +2145,37 @@
             const c = found.contact;
             if (!isClientStatus(c.status) && c.status !== 'Contestó') {
                 c.status = 'Mensaje Enviado (48h)'; c.method = 'Mensaje'; c.waSentAt = Date.now();
+                c.aiFollowUpCount = c.aiFollowUpCount || 0;
                 saveLocalData(true); renderAllTables(); updateDashboard();
-                showToast(`⏳ Movido a lista de espera 48h: ${c.name || c.phone}`);
+                showToast(`🤖 Seguimiento IA programado (24h suave, sin insistir): ${c.name || c.phone}`);
+            }
+        };
+        window.runAutonomousAiFollowUps = async function() {
+            if (!waAiConfig.autoReplyMobile || waAiConfig.autoFollowUp24h === false) return;
+            const now = new Date();
+            const hour = now.getHours() + now.getMinutes() / 60;
+            if (hour < 9.5 || hour > 19.5) return;
+
+            const wait24hMs = 24 * 3600 * 1000;
+            let triggered = 0;
+
+            for (const c of getAllListsCombined()) {
+                if (c.status === 'Mensaje Enviado (48h)' && c.waSentAt && (Date.now() - Number(c.waSentAt) >= wait24hMs)) {
+                    if ((c.aiFollowUpCount || 0) >= 1) continue;
+                    c.aiFollowUpCount = 1;
+                    c.aiFollowUpAt = Date.now();
+
+                    const rawName = (c.name && !['sin nombre', 'lead salesforce'].includes(c.name.toLowerCase())) ? c.name.split(' ')[0] : '';
+                    const modelTxt = c.interestModel ? ` por ${c.interestModel}` : '';
+                    const calmMsg = `${rawName ? `Hola ${rawName}, ` : 'Hola, '}¿cómo va? Te dejo mi contacto por acá sin compromiso por si en algún momento querés ver números${modelTxt} o pasar un ratito por ${waAiConfig.branchName || 'Ginza Toyota'}. ¡Saludos!`;
+
+                    await queueAutoReplyToMobile(c, calmMsg, '');
+                    triggered++;
+                }
+            }
+            if (triggered > 0) {
+                saveLocalData(true);
+                showToast(`🤖 IA envió ${triggered} seguimiento(s) cordial(es) de 24h (sin insistencia)`);
             }
         };
         window.checkWhatsApp48hTimeouts = function(manual = false) {
@@ -2435,7 +2202,7 @@
             }
             return rawTpl.replace(/\{nombre\}/gi, cleanName).trim();
         }
-        window.openWaTemplatesModal = function(focusChannel = null) {
+        window.openWaTemplatesModal = function() {
             ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'cancelados', 'rescindidos', 'clientes'].forEach(key => {
                 const input = document.getElementById(`tpl-input-${key}`);
                 if (input) input.value = waTemplates[key] || '';
@@ -2443,12 +2210,6 @@
             document.getElementById('wa-templates-modal')?.classList.remove('hidden');
         };
         window.closeWaTemplatesModal = function() { document.getElementById('wa-templates-modal')?.classList.add('hidden'); };
-        window.insertNamePlaceholder = function(textareaId) {
-            const el = document.getElementById(textareaId);
-            if (!el) return;
-            el.value += ' {nombre}';
-            el.focus();
-        };
         window.saveWaTemplates = function() {
             ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'cancelados', 'rescindidos', 'clientes'].forEach(key => {
                 const input = document.getElementById(`tpl-input-${key}`);
@@ -2482,29 +2243,11 @@
         window.openWaBridgeModal = function() {
             const urlInput = document.getElementById('wa-webhook-url');
             if (urlInput) urlInput.value = `${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`;
-            const enEl = document.getElementById('wa-ads-capture-enabled');
-            const mdEl = document.getElementById('wa-ads-capture-mode');
-            const dsEl = document.getElementById('wa-ads-target-dest');
-            const kwEl = document.getElementById('wa-ads-keywords');
-            if (enEl) enEl.checked = Boolean(waAdsSettings.enabled);
-            if (mdEl) mdEl.value = waAdsSettings.mode || 'keywords';
-            if (dsEl) dsEl.value = waAdsSettings.destination || 'redes_interesado';
-            if (kwEl) kwEl.value = waAdsSettings.keywords || '';
             renderWaIncomingLogs();
             document.getElementById('wa-bridge-modal')?.classList.remove('hidden');
         };
         window.closeWaBridgeModal = function() { document.getElementById('wa-bridge-modal')?.classList.add('hidden'); };
         window.copyWaWebhookUrl = function() { copyInputText('wa-webhook-url'); };
-        window.saveWaAdsSettings = function() {
-            waAdsSettings = {
-                enabled: Boolean(document.getElementById('wa-ads-capture-enabled')?.checked),
-                mode: document.getElementById('wa-ads-capture-mode')?.value || 'keywords',
-                destination: document.getElementById('wa-ads-target-dest')?.value || 'redes_interesado',
-                keywords: document.getElementById('wa-ads-keywords')?.value.trim() || ''
-            };
-            localStorage.setItem('crm_wa_ads_settings', JSON.stringify(waAdsSettings));
-            showToast("📣 Reglas de captura de publicidad guardadas");
-        };
         function renderWaIncomingLogs() {
             const box = document.getElementById('wa-incoming-logs');
             if (!box) return;
@@ -2535,7 +2278,6 @@
             if (waAdsSettings.enabled && senderDigits.length >= 6) {
                 const formattedPhone = formatPhoneAR(senderDigits);
                 const modelDetected = detectToyotaModelFromText(textClean);
-                const isInteresado = (waAdsSettings.destination || '').includes('interesado');
                 const newLead = {
                     id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
                     name: senderDigits.length >= 6 && normName.replace(/\d/g, '').trim().length < 2 ? `Lead Publicidad (${formattedPhone.slice(-4)})` : sender,
@@ -2544,12 +2286,11 @@
                     reference: 'Publicidad WhatsApp',
                     locality: getProvincia(formattedPhone),
                     interestModel: modelDetected,
-                    status: isInteresado ? 'Interesado' : 'Pendiente',
+                    status: 'Interesado',
                     observations: textClean ? `Consulta WA: "${textClean}"` : 'Ingresó por publicidad WA',
                     date: new Date().toLocaleDateString()
                 };
-                if ((waAdsSettings.destination || '').startsWith('gestion')) gestionContacts.unshift(newLead);
-                else redesContacts.unshift(newLead);
+                redesContacts.unshift(newLead);
                 return { contact: newLead, type: 'new_ad' };
             }
             return null;
@@ -2618,27 +2359,47 @@
             tyEl.innerHTML = toyotaList.map(p => `<option value="${p.id}">${p.model} (${p.modality}) — $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
             rvEl.innerHTML = rivalList.map(p => `<option value="${p.id}">${p.brand} ${p.model} (${p.modality}) — $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
             renderComparativaResult();
+            const countEl = document.getElementById('comp-table-count');
+            if (countEl) countEl.textContent = `${segPlans.length} planes en segmento ${seg}`;
             const tbody = document.getElementById('comp-segment-table-body');
             if (tbody) {
-                tbody.innerHTML = segPlans.map(p => `<tr class="${p.brand === 'Toyota' ? 'bg-red-50/50 font-semibold' : ''}"><td class="p-3.5">${p.brand}</td><td class="p-3.5">${p.model}</td><td class="p-3.5">${p.modality}</td><td class="p-3.5">$${p.valorMovil.toLocaleString('es-AR')}</td><td class="p-3.5 text-emerald-700 font-bold">$${p.cuotaPura.toLocaleString('es-AR')}</td><td class="p-3.5">-</td></tr>`).join('');
+                tbody.innerHTML = segPlans.map(p => `<tr class="${p.brand === 'Toyota' ? 'bg-red-50/50 font-semibold' : ''}"><td class="p-3.5">${p.brand}</td><td class="p-3.5">${p.model}</td><td class="p-3.5">${p.modality}</td><td class="p-3.5">$${p.valorMovil.toLocaleString('es-AR')}</td><td class="p-3.5 text-emerald-700 font-bold">$${p.cuotaPura.toLocaleString('es-AR')}</td><td class="p-3.5"><button onclick="selectPlanForComparison('${p.id}', '${p.brand}')" class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-semibold">Comparar</button></td></tr>`).join('');
             }
         }
+        window.selectPlanForComparison = function(id, brand) {
+            const targetId = brand === 'Toyota' ? 'comp-toyota-select' : 'comp-rival-select';
+            const el = document.getElementById(targetId);
+            if (el) { el.value = id; renderComparativaResult(); }
+        };
         window.renderComparativaResult = function() {
             const container = document.getElementById('comp-head-to-head');
             const ty = marketPlansCatalog.find(p => p.id === document.getElementById('comp-toyota-select')?.value);
             const rv = marketPlansCatalog.find(p => p.id === document.getElementById('comp-rival-select')?.value);
             if (!container || !ty || !rv) return;
             const diffValor = rv.valorMovil - ty.valorMovil;
+            const diffCuota = rv.cuotaPura - ty.cuotaPura;
             container.innerHTML = `
-                <div class="lg:col-span-6 p-4 rounded-2xl bg-zinc-900 text-white border-2 border-[#EB0A1E]">
+                <div class="lg:col-span-4 p-4 rounded-2xl bg-zinc-900 text-white border-2 border-[#EB0A1E]">
                     <span class="px-2 py-0.5 rounded bg-[#EB0A1E] text-[10px] font-bold">TOYOTA ${ty.modality}</span>
                     <h3 class="text-lg font-extrabold mt-2">${ty.model}</h3>
-                    <p class="text-sm mt-2">Valor Móvil: <b>$${ty.valorMovil.toLocaleString('es-AR')}</b> • Cuota Pura: <b class="text-emerald-400">$${ty.cuotaPura.toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm mt-2">Valor Móvil: <b>$${ty.valorMovil.toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm mt-1">Cuota Pura: <b class="text-emerald-400">$${ty.cuotaPura.toLocaleString('es-AR')}</b></p>
                 </div>
-                <div class="lg:col-span-6 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <div class="lg:col-span-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">${rv.brand} ${rv.modality}</span>
                     <h3 class="text-lg font-bold text-slate-900 mt-2">${rv.model}</h3>
-                    <p class="text-sm text-slate-700 mt-2">Valor Móvil: <b>$${rv.valorMovil.toLocaleString('es-AR')}</b> • Diferencia: <b>$${Math.abs(diffValor).toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm text-slate-700 mt-2">Valor Móvil: <b>$${rv.valorMovil.toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm text-slate-700 mt-1">Cuota Pura: <b>$${rv.cuotaPura.toLocaleString('es-AR')}</b></p>
+                </div>
+                <div class="lg:col-span-4 p-4 rounded-2xl bg-red-50/70 border border-red-200 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[11px] font-extrabold uppercase text-[#EB0A1E]">✨ Argumento Comercial Ginza</span>
+                        <p class="text-xs text-slate-800 mt-2 leading-relaxed">
+                            ${diffValor >= 0
+                                ? `Toyota <b>${ty.model}</b> tiene un valor móvil <b>$${diffValor.toLocaleString('es-AR')} más conveniente</b> y cuota pura $${Math.abs(diffCuota).toLocaleString('es-AR')} ${diffCuota >= 0 ? 'más baja' : 'competitiva'}, sumado al mayor valor de reventa del mercado.`
+                                : `Con una diferencia de capital de $${Math.abs(diffValor).toLocaleString('es-AR')}, el cliente accede a la confiabilidad, garantía oficial de 5 años / 150.000 km y valor de reventa líder de <b>Toyota ${ty.model}</b>.`}
+                        </p>
+                    </div>
                 </div>`;
         };
 
@@ -2688,16 +2449,85 @@
                 tbody.appendChild(tr);
             });
         }
-        window.renderCrmTable = function() { renderSimpleChannelTable(crmContacts, 'crm-table-body', 'crm-empty-state', 'crm'); };
+        window.renderCrmTable = function() {
+            const foldersBox = document.getElementById('crm-folders-container');
+            const pendingCrm = crmContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            if (foldersBox) {
+                const counts = { Todas: pendingCrm.length };
+                pendingCrm.forEach(c => { const loc = c.locality || 'Rosario'; counts[loc] = (counts[loc] || 0) + 1; });
+                foldersBox.innerHTML = Object.entries(counts).map(([loc, cnt]) => `<button onclick="currentCrmFolder='${loc}'; renderCrmTable();" class="px-3 py-1 rounded-xl text-xs font-bold border ${currentCrmFolder === loc ? 'bg-[#EB0A1E] text-white border-[#EB0A1E]' : 'bg-white text-slate-700 border-slate-300'}">${loc} (${cnt})</button>`).join('');
+            }
+            const query = (document.getElementById('search-crm')?.value || '').toLowerCase().trim();
+            const filtered = crmContacts.filter(c => {
+                if (currentCrmFolder !== 'Todas' && (c.locality || 'Rosario') !== currentCrmFolder) return false;
+                if (query && !(c.name || '').toLowerCase().includes(query) && !(c.phone || '').includes(query)) return false;
+                return true;
+            });
+            renderSimpleChannelTable(filtered, 'crm-table-body', 'crm-empty-state', 'crm');
+        };
         window.renderGestionTable = function() { renderSimpleChannelTable(gestionContacts, 'gestion-table-body', 'gestion-empty-state', 'gestion'); };
         window.renderRedesTable = function() { renderSimpleChannelTable(redesContacts, 'redes-table-body', 'redes-empty-state', 'redes'); };
         window.renderSalesforceTable = function() { renderSimpleChannelTable(salesforceContacts, 'salesforce-table-body', 'salesforce-empty-state', 'salesforce'); };
         window.renderCanceladosTable = function() { renderSimpleChannelTable(canceladosContacts, 'cancelados-table-body', 'cancelados-empty-state', 'cancelados'); };
         window.renderRescindidosTable = function() { renderSimpleChannelTable(rescindidosContacts, 'rescindidos-table-body', 'rescindidos-empty-state', 'rescindidos'); };
-        window.renderConvencionalSellers = function() {};
+
+        window.addConvencionalSeller = function() {
+            const inp = document.getElementById('conv-new-seller');
+            const name = inp?.value.trim();
+            if (!name) return;
+            if (!convencionalSellers.includes(name)) convencionalSellers.push(name);
+            inp.value = '';
+            saveLocalData(); renderConvencionalSellers();
+        };
+        window.removeConvencionalSeller = function(name) {
+            convencionalSellers = convencionalSellers.filter(s => s !== name);
+            saveLocalData(); renderConvencionalSellers();
+        };
+        window.renderConvencionalSellers = function() {
+            const listEl = document.getElementById('conv-sellers-list');
+            const selEl = document.getElementById('conv-seller-select');
+            const filterEl = document.getElementById('conv-filter-seller');
+            if (listEl) {
+                listEl.innerHTML = convencionalSellers.length === 0
+                    ? `<span class="text-xs text-slate-400">Sin vendedores cargados aún.</span>`
+                    : convencionalSellers.map(s => `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-900">${s} <button onclick="removeConvencionalSeller('${s}')" class="text-rose-600 hover:text-rose-800">✕</button></span>`).join('');
+            }
+            if (selEl) {
+                const prev = selEl.value;
+                selEl.innerHTML = `<option value="">Seleccionar vendedor...</option>` + convencionalSellers.map(s => `<option value="${s}">${s}</option>`).join('');
+                if (prev) selEl.value = prev;
+            }
+            if (filterEl) {
+                const prev = filterEl.value;
+                filterEl.innerHTML = `<option value="Todos" class="text-slate-800">Todos los Vendedores</option>` + convencionalSellers.map(s => `<option value="${s}" class="text-slate-800">${s}</option>`).join('');
+                if (prev) filterEl.value = prev;
+            }
+        };
         window.renderConvencionalTables = function() {
-            renderSimpleChannelTable(convencionalContacts.filter(c => c.direction !== 'recibido'), 'conv-sent-body', 'conv-sent-empty', 'convencional');
-            renderSimpleChannelTable(convencionalContacts.filter(c => c.direction === 'recibido'), 'conv-received-body', 'conv-received-empty', 'convencional');
+            const filterSeller = document.getElementById('conv-filter-seller')?.value || 'Todos';
+            const applyFilter = (arr) => arr.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)' && (filterSeller === 'Todos' || c.seller === filterSeller));
+            const sentList = applyFilter(convencionalContacts.filter(c => c.direction !== 'recibido'));
+            const recList = applyFilter(convencionalContacts.filter(c => c.direction === 'recibido'));
+            const scEl = document.getElementById('conv-sent-count');
+            const rcEl = document.getElementById('conv-received-count');
+            if (scEl) scEl.textContent = sentList.length;
+            if (rcEl) rcEl.textContent = recList.length;
+
+            const renderRows = (items, tbodyId, emptyId) => {
+                const tbody = document.getElementById(tbodyId);
+                const empty = document.getElementById(emptyId);
+                if (!tbody) return;
+                tbody.innerHTML = '';
+                if (items.length === 0) { empty?.classList.remove('hidden'); return; }
+                empty?.classList.add('hidden');
+                items.forEach(c => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td class="p-3"><div class="text-xs font-bold text-slate-900">${c.name}</div><div class="mt-0.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status, 'convencional', c.name)}</div></td><td class="p-3 text-xs font-semibold text-slate-700">${c.seller || '-'}</td><td class="p-3"><span class="px-2 py-0.5 rounded-full text-[11px] ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3">${renderActions(c, 'convencional')}</td>`;
+                    tbody.appendChild(tr);
+                });
+            };
+            renderRows(sentList, 'conv-sent-body', 'conv-sent-empty');
+            renderRows(recList, 'conv-received-body', 'conv-received-empty');
         };
 
         window.handleCsvUpload = async function(event) {
@@ -2717,8 +2547,9 @@
         };
         window.addGestionContact = function() {
             const name = document.getElementById('gestion-name').value.trim(), phone = formatPhoneAR(document.getElementById('gestion-phone').value.trim());
+            const ref = document.getElementById('gestion-reference')?.value.trim() || '';
             if (!name && !phone) return;
-            gestionContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Gestión Personal', locality: getProvincia(phone), status: 'Pendiente', date: new Date().toLocaleDateString() });
+            gestionContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Gestión Personal', reference: ref, locality: getProvincia(phone), status: 'Pendiente', date: new Date().toLocaleDateString() });
             saveLocalData(); renderAllTables(); updateDashboard();
         };
         window.addRedesContact = function() {
@@ -2745,50 +2576,94 @@
         };
         window.addConvencionalContact = function() {
             const name = document.getElementById('conv-client-name').value.trim(), phone = formatPhoneAR(document.getElementById('conv-client-phone').value.trim());
+            const dir = document.getElementById('conv-direction-select')?.value || 'enviado';
+            const seller = document.getElementById('conv-seller-select')?.value || '';
+            const note = document.getElementById('conv-client-note')?.value.trim() || '';
             if (!name && !phone) return;
-            convencionalContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Convencional', status: 'Pendiente', date: new Date().toLocaleDateString() });
+            convencionalContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Convencional', direction: dir, seller, observations: note, status: 'Pendiente', date: new Date().toLocaleDateString() });
             saveLocalData(); renderAllTables(); updateDashboard();
         };
         window.addCanceladoContact = function() {
             const name = document.getElementById('cancelados-name').value.trim(), phone = formatPhoneAR(document.getElementById('cancelados-phone').value.trim());
+            const ref = document.getElementById('cancelados-reference')?.value.trim() || '';
             if (!name && !phone) return;
-            canceladosContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Cancelado', status: 'Pendiente', date: new Date().toLocaleDateString() });
+            canceladosContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Cancelado', reference: ref, status: 'Pendiente', date: new Date().toLocaleDateString() });
             saveLocalData(); renderAllTables(); updateDashboard();
         };
         window.addRescindidoContact = function() {
             const name = document.getElementById('rescindidos-name').value.trim(), phone = formatPhoneAR(document.getElementById('rescindidos-phone').value.trim());
+            const ref = document.getElementById('rescindidos-reference')?.value.trim() || '';
             if (!name && !phone) return;
-            rescindidosContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Rescindido', status: 'Pendiente', date: new Date().toLocaleDateString() });
+            rescindidosContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Rescindido', reference: ref, status: 'Pendiente', date: new Date().toLocaleDateString() });
             saveLocalData(); renderAllTables(); updateDashboard();
         };
 
         // --- CARTERA CLIENTES & EDICIÓN ---
         function getAllClientesWithSource() {
-            const tagList = (list, sourceKey, sourceLabel, badgeClass) => list.filter(c => isClientStatus(c.status)).map(c => ({ ...c, sourceKey, sourceLabel, badgeClass }));
+            const tagList = (list, sourceKey, sourceLabel) => list.filter(c => isClientStatus(c.status)).map(c => ({ ...c, sourceKey, sourceLabel }));
             return [
-                ...tagList(crmContacts, 'crm', 'No Compra (Base)', 'bg-slate-100 text-slate-700 border-slate-200'),
-                ...tagList(gestionContacts, 'gestion', 'Gestión Personal', 'bg-indigo-50 text-indigo-700 border-indigo-200'),
-                ...tagList(redesContacts, 'redes', 'Redes Sociales', 'bg-pink-50 text-pink-700 border-pink-200'),
-                ...tagList(salesforceContacts, 'salesforce', 'Salesforce', 'bg-sky-50 text-sky-700 border-sky-200'),
-                ...tagList(convencionalContacts, 'convencional', 'Convencional', 'bg-emerald-50 text-emerald-700 border-emerald-200'),
-                ...tagList(canceladosContacts, 'cancelados', 'Cancelados', 'bg-amber-50 text-amber-800 border-amber-200'),
-                ...tagList(rescindidosContacts, 'rescindidos', 'Rescindidos', 'bg-rose-50 text-rose-800 border-rose-200')
+                ...tagList(crmContacts, 'crm', 'No Compra (Base)'),
+                ...tagList(gestionContacts, 'gestion', 'Gestión Personal'),
+                ...tagList(redesContacts, 'redes', 'Redes Sociales'),
+                ...tagList(salesforceContacts, 'salesforce', 'Salesforce'),
+                ...tagList(convencionalContacts, 'convencional', 'Convencional'),
+                ...tagList(canceladosContacts, 'cancelados', 'Cancelados'),
+                ...tagList(rescindidosContacts, 'rescindidos', 'Rescindidos')
             ];
         }
         window.setClientesStageFilter = function(stage) { currentClientesStage = stage; renderClientesTable(); };
         window.addDirectCliente = function() {
             const name = document.getElementById('cli-direct-name').value.trim(), phone = formatPhoneAR(document.getElementById('cli-direct-phone').value.trim());
             const model = document.getElementById('cli-direct-model').value, status = document.getElementById('cli-direct-status').value || 'Interesado';
+            const channel = document.getElementById('cli-direct-channel')?.value || 'gestion';
             if (!name && !phone) return;
-            gestionContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Directo', interestModel: model, status, date: new Date().toLocaleDateString() });
+            const item = { id: Date.now().toString(), name: name || 'Sin Nombre', phone, method: 'Directo', interestModel: model, status, date: new Date().toLocaleDateString() };
+            if (channel === 'redes') redesContacts.unshift(item);
+            else if (channel === 'salesforce') salesforceContacts.unshift(item);
+            else if (channel === 'convencional') convencionalContacts.unshift(item);
+            else if (channel === 'cancelados') canceladosContacts.unshift(item);
+            else if (channel === 'rescindidos') rescindidosContacts.unshift(item);
+            else gestionContacts.unshift(item);
             saveLocalData(true); renderAllTables(); updateDashboard();
         };
         window.renderClientesTable = function() {
             const tbody = document.getElementById('clientes-table-body');
+            const emptyEl = document.getElementById('clientes-empty-state');
+            const noCompraBody = document.getElementById('clientes-nocompra-body');
+            const noCompraEmpty = document.getElementById('clientes-nocompra-empty');
             if (!tbody) return;
-            const active = getAllClientesWithSource().filter(c => c.status !== 'No Compra');
-            const filtered = currentClientesStage === 'Todos' ? active : active.filter(c => c.status === currentClientesStage);
-            tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold">${c.name} <div class="mt-0.5">${renderWhatsAppLink(c.phone, null, null, c.status, 'clientes', c.name)}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel || '-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><button onclick="openWaAiForContact('${c.id}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold">🤖 Responder IA</button> <button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button> <button onclick="deleteContact('${c.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-xs">🗑️</button></td></tr>`).join('');
+            const allClientes = getAllClientesWithSource();
+            const active = allClientes.filter(c => c.status !== 'No Compra');
+            const noCompraList = allClientes.filter(c => c.status === 'No Compra');
+
+            const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+            setTxt('cli-count-Todos', active.length);
+            setTxt('cli-count-Interesado', active.filter(c => c.status === 'Interesado').length);
+            setTxt('cli-count-Futuro', active.filter(c => c.status === 'Interesado a Futuro').length);
+            setTxt('cli-count-Entrevista', active.filter(c => c.status === 'Entrevista').length);
+            setTxt('cli-count-Venta', active.filter(c => c.status === 'Venta').length);
+            setTxt('cli-count-NoCompra', noCompraList.length);
+
+            const q = (document.getElementById('search-clientes')?.value || '').toLowerCase().trim();
+            const filtered = (currentClientesStage === 'Todos' ? active : active.filter(c => c.status === currentClientesStage)).filter(c =>
+                !q || (c.name || '').toLowerCase().includes(q) || (c.phone || '').includes(q) || (c.interestModel || '').toLowerCase().includes(q)
+            );
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyEl?.classList.remove('hidden');
+            } else {
+                emptyEl?.classList.add('hidden');
+                tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold">${c.name} <div class="mt-0.5">${renderWhatsAppLink(c.phone, null, null, c.status, 'clientes', c.name)}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel || '-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><button onclick="openWaAiForContact('${c.id}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold">🤖 Responder IA</button> <button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button> <button onclick="deleteContact('${c.id}')" class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg text-xs">🗑️</button></td></tr>`).join('');
+            }
+            if (noCompraBody) {
+                if (noCompraList.length === 0) {
+                    noCompraBody.innerHTML = '';
+                    noCompraEmpty?.classList.remove('hidden');
+                } else {
+                    noCompraEmpty?.classList.add('hidden');
+                    noCompraBody.innerHTML = noCompraList.map(c => `<tr><td class="p-3.5 font-bold">${c.name}</td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs">${c.interestModel || '-'} • ${c.noCompraDate || c.date || ''}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs bg-rose-100 text-rose-700 font-semibold">No Compra</span></td><td class="p-3.5"><button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button></td></tr>`).join('');
+                }
+            }
         };
         window.updateStatus = function(id, newStatus) {
             if (newStatus === 'Entrevista' || newStatus === 'Interesado a Futuro') openScheduleModal(id, newStatus);
@@ -2825,6 +2700,9 @@
             document.getElementById('edit-reference').value = c.reference || '';
             document.getElementById('edit-model').value = c.interestModel || '';
             document.getElementById('edit-status').value = c.status;
+            document.getElementById('edit-schedule-date').value = c.scheduleDate || '';
+            document.getElementById('edit-schedule-time').value = c.scheduleTime || '';
+            document.getElementById('edit-schedule-note').value = c.scheduleNote || '';
             document.getElementById('edit-obs').value = c.observations || '';
             document.getElementById('edit-modal').classList.remove('hidden');
         };
@@ -2835,8 +2713,12 @@
             const c = found.contact;
             c.name = document.getElementById('edit-name').value;
             c.phone = formatPhoneAR(document.getElementById('edit-phone').value);
+            c.reference = document.getElementById('edit-reference').value;
             c.interestModel = document.getElementById('edit-model').value;
             c.status = document.getElementById('edit-status').value;
+            c.scheduleDate = document.getElementById('edit-schedule-date').value;
+            c.scheduleTime = document.getElementById('edit-schedule-time').value;
+            c.scheduleNote = document.getElementById('edit-schedule-note').value;
             c.observations = document.getElementById('edit-obs').value;
             saveLocalData(true); renderAllTables(); updateDashboard(); closeEditModal();
         };
@@ -2852,34 +2734,102 @@
         };
         window.deleteContactFromModal = function() { const id = document.getElementById('edit-id').value; closeEditModal(); if (id) deleteContact(id); };
 
-        // --- AGENDA / CALENDARIO, SALESFORCE, OBJETIVOS, PLANES PDF & UTILIDADES ---
-        window.openScheduleModal = function(id, defaultType = 'Entrevista') {
-            syncModelDropdowns();
-            document.getElementById('sched-contact-id').value = id;
+        // --- AGENDA / CALENDARIO & SALESFORCE ---
+        window.openScheduleModal = function(id, defaultType = 'Entrevista', prefillDate = null) {
+            const pickerBox = document.getElementById('sched-client-picker-box');
+            const pickerSel = document.getElementById('sched-client-select');
+            if (!id && pickerBox && pickerSel) {
+                pickerBox.classList.remove('hidden');
+                const all = getAllListsCombined();
+                pickerSel.innerHTML = all.map(c => `<option value="${c.id}">${c.name || 'Sin Nombre'} (${c.phone || ''})</option>`).join('');
+            } else if (pickerBox) {
+                pickerBox.classList.add('hidden');
+            }
+            document.getElementById('sched-contact-id').value = id || '';
             document.getElementById('sched-type-select').value = defaultType;
-            document.getElementById('sched-date-input').value = getTodayISODate();
+            document.getElementById('sched-date-input').value = prefillDate || getTodayISODate();
             document.getElementById('schedule-modal').classList.remove('hidden');
         };
-        window.openNewScheduleModal = function(prefillDate = null) { openScheduleModal('', 'Entrevista'); if (prefillDate) document.getElementById('sched-date-input').value = prefillDate; };
+        window.openNewScheduleModal = function(prefillDate = null) { openScheduleModal('', 'Entrevista', prefillDate); };
         window.closeScheduleModal = function() { document.getElementById('schedule-modal').classList.add('hidden'); };
         window.confirmScheduleCommitment = function() {
-            const id = document.getElementById('sched-contact-id').value;
+            const id = document.getElementById('sched-contact-id').value || document.getElementById('sched-client-select')?.value;
             const found = findContactGlobal(id);
             if (found) {
                 found.contact.status = document.getElementById('sched-type-select').value;
                 found.contact.scheduleDate = document.getElementById('sched-date-input').value;
                 found.contact.scheduleTime = document.getElementById('sched-time-input').value;
                 found.contact.scheduleNote = document.getElementById('sched-note-input').value;
-                saveLocalData(true); renderAllTables(); updateDashboard();
+                saveLocalData(true); renderAllTables(); updateDashboard(); renderAgendaTab();
             }
             closeScheduleModal();
         };
         window.renderAgendaTab = function() {
+            const todayIso = getTodayISODate();
+            const allSched = getScheduledCommitments();
+            const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+            setTxt('ag-stat-today', allSched.filter(c => c.scheduleDate <= todayIso).length);
+            setTxt('ag-stat-entrevistas', allSched.filter(c => c.status === 'Entrevista').length);
+            setTxt('ag-stat-futuro', allSched.filter(c => c.status === 'Interesado a Futuro').length);
+            const weekLimit = new Date(); weekLimit.setDate(weekLimit.getDate() + 7);
+            const weekIso = weekLimit.toISOString().split('T')[0];
+            setTxt('ag-stat-week', allSched.filter(c => c.scheduleDate >= todayIso && c.scheduleDate <= weekIso).length);
+
             const titleEl = document.getElementById('agenda-month-title');
             if (titleEl) titleEl.textContent = new Date(agendaViewYear, agendaViewMonth, 1).toLocaleDateString('es-AR', { month: 'long', year: 'numeric' });
+
+            const gridEl = document.getElementById('agenda-calendar-grid');
+            if (gridEl) {
+                const firstDay = new Date(agendaViewYear, agendaViewMonth, 1);
+                const startOffset = (firstDay.getDay() + 6) % 7;
+                const daysInMonth = new Date(agendaViewYear, agendaViewMonth + 1, 0).getDate();
+                let html = '';
+                for (let i = 0; i < startOffset; i++) html += `<div class="h-14 rounded-xl bg-slate-50/50"></div>`;
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const iso = `${agendaViewYear}-${String(agendaViewMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    const dayItems = allSched.filter(c => c.scheduleDate === iso);
+                    const isSelected = iso === selectedAgendaDate;
+                    const isToday = iso === todayIso;
+                    html += `<button onclick="selectedAgendaDate='${iso}'; renderAgendaTab();" class="h-14 p-1.5 rounded-xl border text-left flex flex-col justify-between transition-all ${isSelected ? 'border-purple-600 bg-purple-50 ring-2 ring-purple-200' : isToday ? 'border-[#EB0A1E] bg-red-50/40' : 'border-slate-200 bg-white hover:border-slate-400'}">
+                        <span class="text-xs font-extrabold ${isToday ? 'text-[#EB0A1E]' : 'text-slate-800'}">${d}</span>
+                        <div class="flex gap-1">${dayItems.slice(0, 3).map(ev => `<span class="w-2 h-2 rounded-full ${ev.status === 'Entrevista' ? 'bg-purple-600' : 'bg-amber-500'}"></span>`).join('')}</div>
+                    </button>`;
+                }
+                gridEl.innerHTML = html;
+            }
+
+            const dayTitle = document.getElementById('agenda-selected-day-title');
+            if (dayTitle) dayTitle.textContent = formatDisplayISODate(selectedAgendaDate);
+            const dayList = document.getElementById('agenda-day-events-list');
+            if (dayList) {
+                const dayEvents = allSched.filter(c => c.scheduleDate === selectedAgendaDate);
+                dayList.innerHTML = dayEvents.length === 0
+                    ? `<div class="p-4 text-center text-slate-400 text-xs border border-dashed border-slate-200 rounded-xl">Sin compromisos este día.</div>`
+                    : dayEvents.map(c => `<div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2"><div><div class="text-xs font-bold text-slate-900">${c.name}</div><div class="text-[11px] text-slate-500">${c.scheduleTime || ''} hs • ${c.scheduleNote || c.interestModel || ''}</div></div><button onclick="openWaAiForContact('${c.id}')" class="px-2 py-1 rounded-lg bg-emerald-600 text-white text-[10px] font-bold">🤖 WA</button></div>`).join('');
+            }
+
+            const filterType = document.getElementById('agenda-filter-type')?.value || 'Todos';
+            const listEl = document.getElementById('agenda-upcoming-list');
+            if (listEl) {
+                const items = allSched.filter(c => filterType === 'Todos' || c.status === filterType);
+                listEl.innerHTML = items.length === 0
+                    ? `<div class="p-6 text-center text-slate-400 text-xs">No hay entrevistas ni recontactos agendados todavía.</div>`
+                    : items.map(c => `<div class="p-3 rounded-xl border border-slate-200 flex items-center justify-between"><div><div class="text-xs font-bold text-slate-900">${c.name} (${c.phone || ''})</div><div class="text-[11px] text-slate-500">${formatDisplayISODate(c.scheduleDate)} • ${c.scheduleTime || ''} • ${c.scheduleNote || ''}</div></div><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${c.status === 'Entrevista' ? 'bg-purple-100 text-purple-800' : 'bg-amber-100 text-amber-800'}">${c.status}</span></div>`).join('');
+            }
         };
-        window.changeAgendaMonth = function(delta) { agendaViewMonth += delta; renderAgendaTab(); };
-        window.jumpAgendaToToday = function() { const n = new Date(); agendaViewYear = n.getFullYear(); agendaViewMonth = n.getMonth(); renderAgendaTab(); };
+        window.changeAgendaMonth = function(delta) {
+            agendaViewMonth += delta;
+            if (agendaViewMonth < 0) { agendaViewMonth = 11; agendaViewYear--; }
+            if (agendaViewMonth > 11) { agendaViewMonth = 0; agendaViewYear++; }
+            renderAgendaTab();
+        };
+        window.jumpAgendaToToday = function() {
+            const n = new Date();
+            agendaViewYear = n.getFullYear();
+            agendaViewMonth = n.getMonth();
+            selectedAgendaDate = getTodayISODate();
+            renderAgendaTab();
+        };
 
         window.openSalesforceSyncModal = function() {
             document.getElementById('sf-inbound-url').value = `${FIREBASE_DB_URL}/sf_incoming/${encodeURIComponent(syncRoom)}.json`;
@@ -2887,7 +2837,6 @@
             document.getElementById('sf-sync-modal').classList.remove('hidden');
         };
         window.closeSalesforceSyncModal = function() { document.getElementById('sf-sync-modal').classList.add('hidden'); };
-        window.saveSalesforceConfig = function() { showToast("Configuración Salesforce guardada"); };
         window.syncSalesforceBidirectional = async function() { await pollIncomingSalesforceEvents(true); };
         window.pollIncomingSalesforceEvents = async function(manual = false) {
             try {
@@ -2924,37 +2873,586 @@
             showToast(`📥 Lead "${name}" ingresado desde Salesforce`);
         };
 
-        window.renderObjetivos = function() {};
-        window.saveGoalsConfig = function() { saveLocalData(); showToast("Metas guardadas"); };
-        window.applyAiSuggestedGoals = function() { showToast("Metas IA aplicadas"); };
+        // --- PESTAÑA 5: OBJETIVOS (PROYECCIÓN DÍAS HÁBILES LUN-VIE + COACH IA DE RENDIMIENTO) ---
+        function getBusinessDaysStats() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const todayDate = now.getDate();
 
-        async function restoreSavedPlanBlobsFromIndexedDB() {}
+            const dayOfWeek = now.getDay(); // 0=Dom, 1=Lun..5=Vie, 6=Sab
+            const weekElapsed = dayOfWeek === 0 ? 5 : Math.min(5, Math.max(1, dayOfWeek));
+            const weekRemaining = Math.max(1, 5 - weekElapsed + (dayOfWeek >= 1 && dayOfWeek <= 5 ? 1 : 0));
+
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let monthTotalBiz = 0;
+            let monthElapsedBiz = 0;
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dw = new Date(year, month, d).getDay();
+                if (dw >= 1 && dw <= 5) {
+                    monthTotalBiz++;
+                    if (d <= todayDate) monthElapsedBiz++;
+                }
+            }
+            const monthRemainingBiz = Math.max(1, monthTotalBiz - monthElapsedBiz + (dayOfWeek >= 1 && dayOfWeek <= 5 ? 1 : 0));
+            const monthName = now.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' });
+            return { weekElapsed, weekRemaining, monthTotalBiz, monthElapsedBiz, monthRemainingBiz, monthName };
+        }
+
+        function getCurrentFunnelActuals() {
+            const all = getAllListsCombined();
+            const llamadas = all.filter(c => (c.method || '').toLowerCase().includes('llamada')).length;
+            const mensajes = all.filter(c => (c.method || '').toLowerCase().includes('mensaje') || c.status === 'Mensaje Enviado (48h)').length;
+            const interesados = all.filter(c => c.status === 'Interesado' || c.status === 'Interesado a Futuro').length;
+            const entrevistas = all.filter(c => c.status === 'Entrevista').length;
+            const ventas = all.filter(c => c.status === 'Venta').length;
+            return { llamadas, mensajes, interesados, entrevistas, ventas, totalContactados: Math.max(1, llamadas + mensajes) };
+        }
+
+        window.renderObjetivos = function() {
+            const biz = getBusinessDaysStats();
+            const act = getCurrentFunnelActuals();
+
+            const paceSummary = document.getElementById('objetivos-pace-summary');
+            const diasRestBadge = document.getElementById('objetivos-dias-restantes-badge');
+            const mesActualLabel = document.getElementById('objetivos-mes-actual');
+            const diasHabilesBadge = document.getElementById('objetivos-dias-habiles-badge');
+
+            if (paceSummary) paceSummary.innerHTML = `Mes en curso: <b class="text-white capitalize">${biz.monthName}</b> • Transcurridos <b>${biz.monthElapsedBiz}</b> de <b>${biz.monthTotalBiz}</b> días hábiles. Te quedan <b>${biz.weekRemaining}</b> día(s) hábiles en la semana y <b>${biz.monthRemainingBiz}</b> en el mes.`;
+            if (diasRestBadge) diasRestBadge.textContent = `${biz.weekRemaining}d sem / ${biz.monthRemainingBiz}d mes`;
+            if (mesActualLabel) mesActualLabel.textContent = `Período: ${biz.monthName} (${biz.monthTotalBiz} días hábiles)`;
+            if (diasHabilesBadge) diasHabilesBadge.textContent = `${biz.monthRemainingBiz} días hábiles rest.`;
+
+            // Coach IA: Tasas reales de conversión y diagnóstico
+            const rateInt = Math.round((act.interesados / act.totalContactados) * 100);
+            const rateEnt = act.interesados > 0 ? Math.round((act.entrevistas / act.interesados) * 100) : 0;
+            const rateVen = act.entrevistas > 0 ? Math.round((act.ventas / act.entrevistas) * 100) : 0;
+
+            const ratesGrid = document.getElementById('ai-funnel-rates-grid');
+            if (ratesGrid) {
+                ratesGrid.innerHTML = `
+                    <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                        <div class="text-[11px] font-bold text-emerald-800 uppercase">Contacto → Interesado</div>
+                        <div class="text-2xl font-extrabold text-emerald-950 mt-0.5">${rateInt}%</div>
+                        <div class="text-[11px] text-emerald-700 mt-0.5">${act.interesados} interesados sobre ${act.llamadas + act.mensajes} gestiones</div>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200">
+                        <div class="text-[11px] font-bold text-purple-800 uppercase">Interesado → Entrevista</div>
+                        <div class="text-2xl font-extrabold text-purple-950 mt-0.5">${rateEnt}%</div>
+                        <div class="text-[11px] text-purple-700 mt-0.5">${act.entrevistas} entrevistas agendadas</div>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-red-50/70 border border-red-200">
+                        <div class="text-[11px] font-bold text-[#EB0A1E] uppercase">Entrevista → Venta</div>
+                        <div class="text-2xl font-extrabold text-slate-950 mt-0.5">${rateVen}%</div>
+                        <div class="text-[11px] text-slate-600 mt-0.5">${act.ventas} suscripciones cerradas</div>
+                    </div>`;
+            }
+
+            // Recalibración sugerida por IA según embudo real
+            const targetVentasW = Math.max(2, goals.weekly.ventas || 5);
+            const effVenRate = Math.max(0.25, rateVen / 100);
+            const effEntRate = Math.max(0.30, rateEnt / 100);
+            const effIntRate = Math.max(0.15, rateInt / 100);
+            const sugEntW = Math.ceil(targetVentasW / effVenRate);
+            const sugIntW = Math.ceil(sugEntW / effEntRate);
+            const sugContactsW = Math.ceil(sugIntW / effIntRate);
+            latestAiSuggestedWeekly = {
+                llamadas: Math.max(40, Math.round(sugContactsW * 0.4)),
+                mensajes: Math.max(60, Math.round(sugContactsW * 0.6)),
+                interesados: sugIntW,
+                entrevistas: sugEntW,
+                ventas: targetVentasW
+            };
+
+            const insightsEl = document.getElementById('ai-coach-insights-list');
+            if (insightsEl) {
+                const insights = [];
+                if ((act.llamadas + act.mensajes) < 20) {
+                    insights.push(`📣 <b>Volumen inicial de prospección:</b> Tienes ${act.llamadas + act.mensajes} contactos gestionados. Para asegurar ${targetVentasW} ventas semanales, la IA recomienda sostener ${latestAiSuggestedWeekly.mensajes} mensajes y ${latestAiSuggestedWeekly.llamadas} llamadas por semana.`);
+                } else if (rateInt < 15) {
+                    insights.push(`💬 <b>Optimización de apertura (${rateInt}% a Interesado):</b> Activa el Piloto Automático WA IA con cotizaciones directas de cuota pura para elevar la respuesta en las primeras 24h.`);
+                } else {
+                    insights.push(`✅ <b>Buena tracción de apertura (${rateInt}% a Interesado):</b> Tu embudo convierte bien en primer contacto; prioriza pasar interesados a Entrevista en salón o videollamada.`);
+                }
+                insights.push(`🎯 <b>Calibración IA sugerida para esta semana:</b> ${latestAiSuggestedWeekly.llamadas} llamadas • ${latestAiSuggestedWeekly.mensajes} mensajes → ${latestAiSuggestedWeekly.interesados} interesados → ${latestAiSuggestedWeekly.entrevistas} entrevistas → <b>${latestAiSuggestedWeekly.ventas} ventas</b>.`);
+                insightsEl.innerHTML = insights.map(txt => `<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 leading-relaxed">${txt}</div>`).join('');
+            }
+
+            // Render Columna 1: Objetivos Semanales (Lun-Vie)
+            const metricDefs = [
+                { key: 'llamadas', label: 'Llamadas Realizadas', actual: act.llamadas, color: 'bg-zinc-900' },
+                { key: 'mensajes', label: 'Mensajes WhatsApp', actual: act.mensajes, color: 'bg-emerald-600' },
+                { key: 'interesados', label: 'Clientes Interesados', actual: act.interesados, color: 'bg-teal-600' },
+                { key: 'entrevistas', label: 'Entrevistas Coordinadas', actual: act.entrevistas, color: 'bg-purple-600' },
+                { key: 'ventas', label: 'Ventas Toyota Plan', actual: act.ventas, color: 'bg-[#EB0A1E]' }
+            ];
+
+            const weeklyBox = document.getElementById('weekly-goals-container');
+            if (weeklyBox) {
+                weeklyBox.innerHTML = metricDefs.map(m => {
+                    const target = Math.max(1, Number(goals.weekly[m.key]) || 1);
+                    const pct = Math.min(100, Math.round((m.actual / target) * 100));
+                    const remaining = Math.max(0, target - m.actual);
+                    const dailyNeeded = Math.ceil(remaining / biz.weekRemaining);
+                    return `<div class="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200 space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-bold text-slate-800">${m.label}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[11px] text-slate-500">Meta:</span>
+                                <input type="number" min="1" value="${target}" onchange="goals.weekly['${m.key}']=Math.max(1, Number(this.value)); goals.monthly['${m.key}']=goals.weekly['${m.key}']*4; renderObjetivos();" class="w-20 px-2 py-1 text-xs font-extrabold text-right border border-slate-300 rounded-lg bg-white outline-none">
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                            <div class="${m.color} h-2 rounded-full transition-all" style="width: ${pct}%"></div>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px]">
+                            <span class="font-semibold text-slate-700">${m.actual} / ${target} (${pct}%)</span>
+                            <span class="font-bold text-[#EB0A1E]">Ritmo: ${dailyNeeded}/día hábil</span>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            // Render Columna 2: Objetivos Mensuales & Ritmo Diario
+            const monthlyBox = document.getElementById('monthly-goals-container');
+            if (monthlyBox) {
+                monthlyBox.innerHTML = metricDefs.map(m => {
+                    const targetM = Math.max(1, Number(goals.monthly[m.key]) || (Number(goals.weekly[m.key]) || 1) * 4);
+                    const pctM = Math.min(100, Math.round((m.actual / targetM) * 100));
+                    const remainingM = Math.max(0, targetM - m.actual);
+                    const dailyNeededM = Math.ceil(remainingM / biz.monthRemainingBiz);
+                    return `<div class="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200 space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-bold text-slate-800">${m.label} (Mes)</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[11px] text-slate-500">Meta Mes:</span>
+                                <input type="number" min="1" value="${targetM}" onchange="goals.monthly['${m.key}']=Math.max(1, Number(this.value)); renderObjetivos();" class="w-20 px-2 py-1 text-xs font-extrabold text-right border border-slate-300 rounded-lg bg-white outline-none">
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                            <div class="${m.color} h-2 rounded-full transition-all" style="width: ${pctM}%"></div>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px]">
+                            <span class="font-semibold text-slate-700">${m.actual} / ${targetM} (${pctM}%)</span>
+                            <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-bold text-slate-800">Objetivo diario: ${dailyNeededM} / día hábil</span>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+        };
+
+        window.saveGoalsConfig = function() {
+            saveLocalData(true);
+            renderObjetivos();
+            showToast("🎯 Metas semanales y mensuales guardadas");
+        };
+
+        window.applyAiSuggestedGoals = function() {
+            if (!latestAiSuggestedWeekly) renderObjetivos();
+            if (!latestAiSuggestedWeekly) return;
+            goals.weekly = { ...latestAiSuggestedWeekly };
+            goals.monthly = {
+                llamadas: latestAiSuggestedWeekly.llamadas * 4,
+                mensajes: latestAiSuggestedWeekly.mensajes * 4,
+                interesados: latestAiSuggestedWeekly.interesados * 4,
+                entrevistas: latestAiSuggestedWeekly.entrevistas * 4,
+                ventas: latestAiSuggestedWeekly.ventas * 4
+            };
+            saveLocalData(true);
+            renderObjetivos();
+            showToast("✨ Metas calibradas con IA aplicadas a tu semana y mes");
+        };
+
+        // --- PESTAÑA 6: PLANES & PDF (INDEXEDDB PERSISTENTE + JPG + COMPARTIR WA + GRÁFICO MES A MES) ---
+        const PLAN_IDB_NAME = 'CrmGinzaToyotaPlanesDB';
+        const PLAN_IDB_STORE = 'planFiles';
+
+        function openPlansIndexedDB() {
+            return new Promise((resolve, reject) => {
+                if (!window.indexedDB) { reject('No IndexedDB'); return; }
+                const req = indexedDB.open(PLAN_IDB_NAME, 1);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(PLAN_IDB_STORE)) db.createObjectStore(PLAN_IDB_STORE, { keyPath: 'id' });
+                };
+                req.onsuccess = (e) => resolve(e.target.result);
+                req.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        async function savePlanBlobsToIndexedDB(planId, pdfDataUrl, jpgPages) {
+            try {
+                const db = await openPlansIndexedDB();
+                const tx = db.transaction(PLAN_IDB_STORE, 'readwrite');
+                tx.objectStore(PLAN_IDB_STORE).put({ id: planId, pdfDataUrl, jpgPages });
+            } catch (e) {}
+        }
+
+        async function deletePlanBlobsFromIndexedDB(planId) {
+            try {
+                const db = await openPlansIndexedDB();
+                const tx = db.transaction(PLAN_IDB_STORE, 'readwrite');
+                tx.objectStore(PLAN_IDB_STORE).delete(planId);
+            } catch (e) {}
+        }
+
+        async function restoreSavedPlanBlobsFromIndexedDB() {
+            try {
+                const db = await openPlansIndexedDB();
+                const tx = db.transaction(PLAN_IDB_STORE, 'readonly');
+                const store = tx.objectStore(PLAN_IDB_STORE);
+                const allRecords = await new Promise((resolve) => {
+                    const r = store.getAll();
+                    r.onsuccess = () => resolve(r.result || []);
+                    r.onerror = () => resolve([]);
+                });
+                const map = new Map(allRecords.map(r => [r.id, r]));
+                plansHistory.forEach(p => {
+                    const blobRec = map.get(p.id);
+                    if (blobRec) {
+                        p.pdfDataUrl = blobRec.pdfDataUrl || '';
+                        p.jpgPages = blobRec.jpgPages || [];
+                    }
+                });
+                const latestWithJpg = plansHistory.find(p => Array.isArray(p.jpgPages) && p.jpgPages.length > 0);
+                if (latestWithJpg) {
+                    currentPlanJpgs = latestWithJpg.jpgPages;
+                    renderCurrentJpgGallery(latestWithJpg.planName, latestWithJpg.period);
+                }
+            } catch (e) {}
+        }
+
+        function parseNumbersFromPlanPdfText(fullText, fileName) {
+            const detectedModel = detectToyotaModelFromText(fullText) || detectToyotaModelFromText(fileName) || fileName.replace(/\.pdf$/i, '');
+            const matches = Array.from(fullText.matchAll(/\$\s*([\d]{1,3}(?:\.[\d]{3})+)/g))
+                .map(m => Number(m[1].replace(/\./g, '')))
+                .filter(n => !isNaN(n) && n >= 80000);
+
+            const vehicleCandidates = matches.filter(n => n >= 18000000 && n <= 160000000);
+            const quotaCandidates = matches.filter(n => n >= 120000 && n <= 2500000);
+
+            let vehicleValue = vehicleCandidates.length > 0 ? vehicleCandidates[0] : 0;
+            let avgQuota = quotaCandidates.length > 0 ? Math.round(quotaCandidates.reduce((a, b) => a + b, 0) / quotaCandidates.length) : 0;
+
+            if (!vehicleValue || !avgQuota) {
+                const refPlan = marketPlansCatalog.find(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()));
+                if (refPlan) {
+                    if (!vehicleValue) vehicleValue = refPlan.valorMovil;
+                    if (!avgQuota) avgQuota = refPlan.cuotaPura;
+                }
+            }
+            return { vehicleName: detectedModel, vehicleValue, price: avgQuota };
+        }
+
+        function renderCurrentJpgGallery(planTitle = '', periodLabel = '') {
+            const gallery = document.getElementById('pdf-jpg-gallery');
+            const titleEl = document.getElementById('jpg-preview-title');
+            const dlAllBtn = document.getElementById('btn-download-all-jpg');
+            if (!gallery) return;
+
+            if (titleEl && planTitle) titleEl.textContent = `Hojas JPG: ${planTitle} (${periodLabel})`;
+            if (!currentPlanJpgs || currentPlanJpgs.length === 0) {
+                dlAllBtn?.classList.add('hidden');
+                gallery.innerHTML = `<div class="col-span-full py-10 text-center text-slate-400 text-sm border-2 border-dashed border-slate-200 rounded-xl">Sube un archivo PDF a la izquierda para calcular su valor móvil y compartir sus hojas JPG por WhatsApp.</div>`;
+                return;
+            }
+
+            dlAllBtn?.classList.remove('hidden');
+            gallery.innerHTML = currentPlanJpgs.map((pg, idx) => `
+                <div class="rounded-xl border border-slate-200 bg-slate-50 overflow-hidden flex flex-col justify-between shadow-2xs">
+                    <div class="relative bg-white">
+                        <img src="${pg.dataUrl}" alt="Hoja ${pg.pageNum}" class="w-full h-36 object-contain border-b border-slate-100">
+                        <span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded bg-zinc-900/85 text-white text-[10px] font-bold">Hoja ${pg.pageNum}</span>
+                    </div>
+                    <div class="p-2 flex items-center justify-between gap-1.5 bg-white">
+                        <button onclick="openShareJpgWaModal(${idx})" class="flex-1 py-1.5 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold">📲 Enviar por WA</button>
+                        <a href="${pg.dataUrl}" download="${pg.fileName}" class="py-1.5 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-bold">⬇️ JPG</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.downloadAllPlanJpgs = function() {
+            currentPlanJpgs.forEach((pg, i) => {
+                setTimeout(() => {
+                    const a = document.createElement('a');
+                    a.href = pg.dataUrl;
+                    a.download = pg.fileName;
+                    a.click();
+                }, i * 180);
+            });
+            showToast(`⬇️ Descargando ${currentPlanJpgs.length} hoja(s) JPG...`);
+        };
+
         window.handlePlanPdfUpload = async function(event) {
             const files = Array.from(event.target.files || []);
             if (files.length === 0 || typeof pdfjsLib === 'undefined') return;
+            const statusBox = document.getElementById('pdf-processing-status');
+            statusBox?.classList.remove('hidden');
+
+            const monthVal = document.getElementById('plan-month-input')?.value || 'Noviembre';
+            const yearVal = document.getElementById('plan-year-input')?.value || '2026';
+            const period = `${monthVal} ${yearVal}`;
+
             for (const file of files) {
-                const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
-                const pages = [];
-                for (let p = 1; p <= pdf.numPages; p++) {
-                    const page = await pdf.getPage(p);
-                    const viewport = page.getViewport({ scale: 1.4 });
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = viewport.width; canvas.height = viewport.height;
-                    await page.render({ canvasContext: ctx, viewport }).promise;
-                    pages.push({ pageNum: p, fileName: `${file.name.replace(/\.pdf$/i, '')}_Hoja_${p}.jpg`, dataUrl: canvas.toDataURL('image/jpeg', 0.85) });
+                try {
+                    const arrayBuf = await file.arrayBuffer();
+                    const pdfDataUrl = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.readAsDataURL(file);
+                    });
+
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuf }).promise;
+                    const pages = [];
+                    let fullText = '';
+
+                    for (let p = 1; p <= pdf.numPages; p++) {
+                        const page = await pdf.getPage(p);
+                        const txtContent = await page.getTextContent();
+                        fullText += ' ' + txtContent.items.map(it => it.str).join(' ');
+
+                        const viewport = page.getViewport({ scale: 1.5 });
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+                        await page.render({ canvasContext: ctx, viewport }).promise;
+                        pages.push({
+                            pageNum: p,
+                            fileName: `${file.name.replace(/\.pdf$/i, '')}_${monthVal}_${yearVal}_Hoja_${p}.jpg`,
+                            dataUrl: canvas.toDataURL('image/jpeg', 0.88)
+                        });
+                    }
+
+                    const parsed = parseNumbersFromPlanPdfText(fullText, file.name);
+                    const newPlan = {
+                        id: Date.now().toString() + Math.random().toString(36).substr(2, 4),
+                        period,
+                        month: monthVal,
+                        year: Number(yearVal),
+                        planName: file.name.replace(/\.pdf$/i, ''),
+                        vehicleName: parsed.vehicleName,
+                        vehicleValue: parsed.vehicleValue,
+                        price: parsed.price,
+                        pagesCount: pages.length,
+                        pdfDataUrl,
+                        jpgPages: pages,
+                        uploadedAt: Date.now()
+                    };
+
+                    plansHistory.unshift(newPlan);
+                    await savePlanBlobsToIndexedDB(newPlan.id, pdfDataUrl, pages);
+                    currentPlanJpgs = pages;
+                    renderCurrentJpgGallery(newPlan.planName, period);
+                } catch (err) {
+                    showToast(`Error al procesar ${file.name}`, 'error');
                 }
-                plansHistory.unshift({ id: Date.now().toString(), period: `${document.getElementById('plan-month-input').value} ${document.getElementById('plan-year-input').value}`, planName: file.name.replace(/\.pdf$/i, ''), vehicleValue: 0, price: 0, jpgPages: pages });
             }
-            saveLocalData(); renderPlansHistory();
+
+            statusBox?.classList.add('hidden');
+            saveLocalData(true);
+            renderPlansHistory();
+            showToast("💾 PDF guardado en IndexedDB, hojas JPG listas y cargado en la IA");
         };
+
+        window.renderVehiclePriceEvolutionChart = function() {
+            const chartBox = document.getElementById('vehicle-price-chart-box');
+            const modelSel = document.getElementById('plan-chart-model-select');
+            if (!chartBox || !modelSel) return;
+
+            if (plansHistory.length === 0) {
+                chartBox.innerHTML = `<div class="text-center text-xs text-slate-400 py-6">Sube PDFs de distintos meses para visualizar la evolución comparativa de Valor Móvil y Cuota Promedio.</div>`;
+                return;
+            }
+
+            const models = Array.from(new Set(plansHistory.map(p => p.vehicleName || p.planName)));
+            const prev = modelSel.value;
+            modelSel.innerHTML = models.map(m => `<option value="${m}">${m}</option>`).join('');
+            if (prev && models.includes(prev)) modelSel.value = prev;
+
+            const selectedModel = modelSel.value || models[0];
+            const series = plansHistory
+                .filter(p => (p.vehicleName || p.planName) === selectedModel)
+                .slice()
+                .reverse();
+
+            const maxVal = Math.max(1, ...series.map(s => Number(s.vehicleValue) || 0));
+            chartBox.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <span class="text-xs font-extrabold text-slate-800 uppercase">Comparativa Mes a Mes: ${selectedModel}</span>
+                    <span class="text-[11px] text-slate-500">${series.length} período(s) cargado(s)</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${Math.min(4, Math.max(1, series.length))} gap-3">
+                    ${series.map((item, idx) => {
+                        const prevItem = idx > 0 ? series[idx - 1] : null;
+                        const diff = prevItem && prevItem.vehicleValue > 0 ? item.vehicleValue - prevItem.vehicleValue : 0;
+                        const diffPct = prevItem && prevItem.vehicleValue > 0 ? ((diff / prevItem.vehicleValue) * 100).toFixed(1) : null;
+                        const barPct = Math.max(12, Math.round(((Number(item.vehicleValue) || 0) / maxVal) * 100));
+                        return `<div class="p-3 rounded-xl bg-white border border-slate-200 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between text-xs font-bold">
+                                    <span class="text-[#EB0A1E]">${item.period}</span>
+                                    ${diffPct !== null ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold ${diff > 0 ? 'bg-amber-50 text-amber-800' : 'bg-emerald-50 text-emerald-700'}">${diff > 0 ? '+' : ''}${diffPct}%</span>` : '<span class="text-[10px] text-slate-400">Base</span>'}
+                                </div>
+                                <div class="text-sm font-extrabold text-slate-900 mt-1">${item.vehicleValue > 0 ? '$' + Number(item.vehicleValue).toLocaleString('es-AR') : 'Sin valor detectado'}</div>
+                                <div class="text-[11px] text-slate-500">Cuota prom.: <b>${item.price > 0 ? '$' + Number(item.price).toLocaleString('es-AR') : '-'}</b></div>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2 mt-3 overflow-hidden">
+                                <div class="bg-[#EB0A1E] h-2 rounded-full" style="width: ${barPct}%"></div>
+                            </div>
+                        </div>`;
+                    }).join('')}
+                </div>`;
+        };
+
         window.renderPlansHistory = function() {
             const tbody = document.getElementById('plans-history-body');
+            const emptyEl = document.getElementById('plans-empty-state');
+            const filterSel = document.getElementById('plan-model-filter');
             if (!tbody) return;
-            tbody.innerHTML = plansHistory.map(p => `<tr><td class="p-3.5 font-bold text-[#EB0A1E]">${p.period}</td><td class="p-3.5 font-bold">${p.planName}</td><td class="p-3.5">${p.vehicleValue > 0 ? '$' + p.vehicleValue.toLocaleString('es-AR') : '-'}</td><td class="p-3.5">-</td><td class="p-3.5">${p.price > 0 ? '$' + p.price.toLocaleString('es-AR') : '-'}</td><td class="p-3.5">-</td><td class="p-3.5"><button onclick="plansHistory = plansHistory.filter(x => x.id !== '${p.id}'); saveLocalData(); renderPlansHistory();" class="px-2 py-1 bg-red-50 text-red-600 rounded text-xs">Eliminar</button></td></tr>`).join('');
+
+            if (filterSel) {
+                const prev = filterSel.value;
+                const uniqueNames = Array.from(new Set(plansHistory.map(p => p.vehicleName || p.planName)));
+                filterSel.innerHTML = `<option value="Todos">Todos los Planes Vigentes (${plansHistory.length})</option>` + uniqueNames.map(n => `<option value="${n}">${n}</option>`).join('');
+                if (prev && (prev === 'Todos' || uniqueNames.includes(prev))) filterSel.value = prev;
+            }
+
+            const chosenFilter = filterSel?.value || 'Todos';
+            const visiblePlans = chosenFilter === 'Todos' ? plansHistory : plansHistory.filter(p => (p.vehicleName || p.planName) === chosenFilter);
+
+            if (visiblePlans.length === 0) {
+                tbody.innerHTML = '';
+                emptyEl?.classList.remove('hidden');
+            } else {
+                emptyEl?.classList.add('hidden');
+                tbody.innerHTML = visiblePlans.map((p, idx) => {
+                    const prevSameModel = plansHistory.slice(idx + 1).find(x => (x.vehicleName || x.planName) === (p.vehicleName || p.planName));
+                    const diffVal = prevSameModel && p.vehicleValue > 0 && prevSameModel.vehicleValue > 0 ? p.vehicleValue - prevSameModel.vehicleValue : null;
+                    const diffQuota = prevSameModel && p.price > 0 && prevSameModel.price > 0 ? p.price - prevSameModel.price : null;
+
+                    const diffValBadge = diffVal === null ? `<span class="text-xs text-slate-400">-</span>` : `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${diffVal > 0 ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">${diffVal > 0 ? '+' : ''}$${diffVal.toLocaleString('es-AR')}</span>`;
+                    const diffQuotaBadge = diffQuota === null ? `<span class="text-xs text-slate-400">-</span>` : `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${diffQuota > 0 ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">${diffQuota > 0 ? '+' : ''}$${diffQuota.toLocaleString('es-AR')}</span>`;
+
+                    return `<tr>
+                        <td class="p-3.5 font-bold text-[#EB0A1E]">${p.period}</td>
+                        <td class="p-3.5"><div class="font-bold text-slate-900">${p.vehicleName || p.planName}</div><div class="text-[11px] text-slate-400">${p.planName}</div></td>
+                        <td class="p-3.5 font-extrabold text-slate-900">${p.vehicleValue > 0 ? '$' + Number(p.vehicleValue).toLocaleString('es-AR') : '-'}</td>
+                        <td class="p-3.5">${diffValBadge}</td>
+                        <td class="p-3.5 font-bold text-emerald-700">${p.price > 0 ? '$' + Number(p.price).toLocaleString('es-AR') : '-'}</td>
+                        <td class="p-3.5">${diffQuotaBadge}</td>
+                        <td class="p-3.5">
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="openPlanFilesModal('${p.id}')" class="px-2.5 py-1 bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg text-xs font-bold">📂 Ver PDF y JPGs</button>
+                                <button onclick="deletePlanRecord('${p.id}')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-semibold">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join('');
+            }
+            renderVehiclePriceEvolutionChart();
         };
-        window.clearPlansHistory = function() { plansHistory = []; saveLocalData(); renderPlansHistory(); };
-        window.downloadAllPlanJpgs = function() {};
+
+        window.deletePlanRecord = async function(planId) {
+            plansHistory = plansHistory.filter(x => x.id !== planId);
+            await deletePlanBlobsFromIndexedDB(planId);
+            saveLocalData(true);
+            renderPlansHistory();
+            showToast("Plan eliminado del historial");
+        };
+
+        window.clearPlansHistory = async function() {
+            for (const p of plansHistory) await deletePlanBlobsFromIndexedDB(p.id);
+            plansHistory = [];
+            currentPlanJpgs = [];
+            saveLocalData(true);
+            renderCurrentJpgGallery();
+            renderPlansHistory();
+            showToast("Historial de PDFs vaciado");
+        };
+
+        window.openPlanFilesModal = function(planId) {
+            const plan = plansHistory.find(p => p.id === planId);
+            if (!plan) return;
+            currentPlanJpgs = plan.jpgPages || [];
+            document.getElementById('plan-files-modal-title').textContent = `${plan.planName} (${plan.period})`;
+            const actionsEl = document.getElementById('plan-files-modal-actions');
+            if (actionsEl) {
+                actionsEl.innerHTML = plan.pdfDataUrl
+                    ? `<a href="${plan.pdfDataUrl}" download="${plan.planName}.pdf" class="px-3 py-1.5 rounded-xl bg-[#EB0A1E] text-white text-xs font-bold">⬇️ Descargar PDF Original</a>`
+                    : '';
+            }
+            const gridEl = document.getElementById('plan-files-modal-grid');
+            if (gridEl) {
+                gridEl.innerHTML = currentPlanJpgs.length === 0
+                    ? `<div class="col-span-full text-center text-xs text-slate-400 py-8">No hay hojas JPG en memoria para este registro.</div>`
+                    : currentPlanJpgs.map((pg, idx) => `
+                        <div class="rounded-xl border border-slate-200 overflow-hidden bg-slate-50">
+                            <img src="${pg.dataUrl}" class="w-full h-44 object-contain bg-white border-b border-slate-100">
+                            <div class="p-2.5 flex items-center justify-between gap-2 bg-white">
+                                <span class="text-xs font-bold text-slate-700">Hoja ${pg.pageNum}</span>
+                                <div class="flex gap-1.5">
+                                    <button onclick="openShareJpgWaModal(${idx})" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-xs font-bold">📲 WA</button>
+                                    <a href="${pg.dataUrl}" download="${pg.fileName}" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold">⬇️ JPG</a>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+            }
+            document.getElementById('plan-files-modal').classList.remove('hidden');
+        };
+        window.closePlanFilesModal = function() { document.getElementById('plan-files-modal')?.classList.add('hidden'); };
+
+        window.openShareJpgWaModal = function(jpgIndex) {
+            pendingShareJpgItem = currentPlanJpgs[jpgIndex] || null;
+            if (!pendingShareJpgItem) return;
+            document.getElementById('share-jpg-wa-filename').textContent = pendingShareJpgItem.fileName;
+            document.getElementById('share-jpg-search').value = '';
+            renderShareJpgContactsList();
+            document.getElementById('share-jpg-wa-modal').classList.remove('hidden');
+        };
+        window.closeShareJpgWaModal = function() { document.getElementById('share-jpg-wa-modal')?.classList.add('hidden'); };
+        window.renderShareJpgContactsList = function() {
+            const box = document.getElementById('share-jpg-contacts-list');
+            if (!box) return;
+            const q = (document.getElementById('share-jpg-search')?.value || '').toLowerCase().trim();
+            const list = getAllListsCombined().filter(c => c.phone && (!q || (c.name || '').toLowerCase().includes(q) || c.phone.includes(q))).slice(0, 20);
+            box.innerHTML = list.length === 0
+                ? `<div class="p-3 text-center text-xs text-slate-400">Sin contactos coincidentes.</div>`
+                : list.map(c => `<button onclick="executeShareJpgToPhone('${c.phone}', '${(c.name || 'Cliente').replace(/'/g, "\\'")}')" class="w-full p-2.5 text-left hover:bg-emerald-50 flex items-center justify-between text-xs"><span class="font-bold text-slate-900">${c.name || 'Sin Nombre'}</span><span class="text-emerald-700 font-semibold">${formatPhoneAR(c.phone)}</span></button>`).join('');
+        };
+        window.executeShareJpgToPhone = async function(rawPhone, clientName = 'Cliente') {
+            const formatted = formatPhoneAR(rawPhone);
+            const waDigits = formatted.replace(/\D/g, '');
+            if (!waDigits) { showToast("Ingresa un teléfono válido", "error"); return; }
+
+            if (pendingShareJpgItem?.dataUrl && navigator.clipboard && window.ClipboardItem) {
+                try {
+                    const res = await fetch(pendingShareJpgItem.dataUrl);
+                    const blob = await res.blob();
+                    const pngBlob = blob.type === 'image/png' ? blob : await new Promise(resolve => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const c = document.createElement('canvas');
+                            c.width = img.width; c.height = img.height;
+                            c.getContext('2d').drawImage(img, 0, 0);
+                            c.toBlob(resolve, 'image/png');
+                        };
+                        img.src = pendingShareJpgItem.dataUrl;
+                    });
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
+                    showToast("📋 Imagen JPG copiada al portapapeles: presiona Ctrl+V en WhatsApp Web");
+                } catch (e) {
+                    showToast("Abriendo chat en WhatsApp Web...");
+                }
+            }
+            const msg = `Hola ${clientName}, te comparto la lista oficial vigente de Toyota Plan (Ginza Toyota).`;
+            openWhatsAppSingleTab(waDigits, null, 'clientes', clientName);
+            const targetUrl = `https://web.whatsapp.com/send?phone=${waDigits}&text=${encodeURIComponent(msg)}`;
+            if (waTabRef && !waTabRef.closed) { try { waTabRef.location.href = targetUrl; waTabRef.focus(); } catch (e) {} }
+            closeShareJpgWaModal();
+        };
 
         window.openBackupModal = function() { document.getElementById('sync-room-input').value = syncRoom; document.getElementById('backup-modal')?.classList.remove('hidden'); };
         window.closeBackupModal = function() { document.getElementById('backup-modal')?.classList.add('hidden'); };
@@ -2968,7 +3466,6 @@
             const blob = new Blob([JSON.stringify(buildSyncPayload(Date.now()), null, 2)], { type: 'application/json' });
             const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'crm_ginza_toyota.json'; a.click();
         };
-        window.importBackupFile = function() {};
         window.exportSectionCSV = function() { showToast("Exportando CSV..."); };
         window.exportClientesCSV = function() { showToast("Exportando Cartera CSV..."); };
         window.requestDeleteAll = function() { crmContacts = []; saveLocalData(true); renderAllTables(); updateDashboard(); };
@@ -3018,13 +3515,15 @@
             startWaIncomingLiveListener();
             startSfIncomingLiveListener();
             checkWhatsApp48hTimeouts(false);
-            await pollIncomingWhatsAppEvents(false);
+            await runAutonomousAiFollowUps();
+            await pollIncomingWhatsAppEvents();
             await pollIncomingSalesforceEvents(false);
 
             setInterval(() => {
                 pullFromFirebase(false);
                 checkWhatsApp48hTimeouts(false);
-                pollIncomingWhatsAppEvents(false);
+                runAutonomousAiFollowUps();
+                pollIncomingWhatsAppEvents();
                 pollIncomingSalesforceEvents(false);
             }, 3000);
         }
@@ -3062,15 +3561,6 @@
                 lbl.textContent = '🤖 WA IA';
             }
         }
-
-        window.toggleWaAiAutopilotQuick = function(enabled) {
-            waAiConfig.autoReplyMobile = Boolean(enabled);
-            localStorage.setItem('crm_wa_ai_config', JSON.stringify(waAiConfig));
-            updateWaAiNavBadge();
-            showToast(waAiConfig.autoReplyMobile
-                ? "🟢 Piloto Automático WA IA ACTIVADO (responde solo con datos reales del CRM)"
-                : "⏸️ Piloto Automático WA IA en modo Copiloto");
-        };
 
         function persistWaAiChats() {
             try {
@@ -3165,7 +3655,6 @@
                 ? plansHistory.find(p => (p.planName || '').toLowerCase().includes(detectedModel.toLowerCase()))
                 : null;
 
-            // Caso 1: Primer contacto / inicio de conversación
             if (!userMessage.trim()) {
                 if (contact?.status === 'Entrevista' && contact?.scheduleDate) {
                     return `${saludo} Soy ${advisor} de ${branch}. Te escribo para confirmar nuestra entrevista del ${formatDisplayISODate(contact.scheduleDate)}${contact.scheduleTime ? ` a las ${contact.scheduleTime} hs` : ''}${contact.interestModel ? ` por tu ${contact.interestModel}` : ''}. ¿Te queda bien ese horario?`;
@@ -3177,7 +3666,6 @@
                 return `${saludo} Soy ${advisor} de ${branch}. Te contacto por tu consulta sobre Toyota Plan. ¿Qué modelo estabas buscando así te paso los valores exactos vigentes?`;
             }
 
-            // Caso 2: Pregunta por precios / cuotas / modelos cargados en el CRM
             if (detectedModel && (matchedToyotaPlans.length > 0 || matchedPdf)) {
                 const lines = [];
                 matchedToyotaPlans.forEach(p => {
@@ -3189,7 +3677,6 @@
                 return `${saludo} Te paso los valores oficiales que tengo cargados hoy para *Toyota ${detectedModel}*:\n\n${lines.join('\n')}\n\n¿Te gustaría que lo repasemos en una llamada corta o coordinamos una visita en ${branch}?`;
             }
 
-            // Caso 3: Pregunta por modelos sin especificar cuál
             if (msgNorm.includes('precio') || msgNorm.includes('cuota') || msgNorm.includes('valor') || msgNorm.includes('plan')) {
                 const summaryTop = marketPlansCatalog
                     .filter(p => p.brand === 'Toyota')
@@ -3199,12 +3686,10 @@
                 return `${saludo} Te comparto algunas referencias vigentes de Toyota Plan en ${branch}:\n\n${summaryTop}\n\nDecime qué modelo te interesa (Yaris, Yaris Cross, Corolla, Corolla Cross, Hilux o Hiace) y te paso el detalle exacto.`;
             }
 
-            // Caso 4: Pregunta por entrevista / ubicación / horarios
             if (msgNorm.includes('direccion') || msgNorm.includes('donde') || msgNorm.includes('ubicacion') || msgNorm.includes('horario') || msgNorm.includes('reunion') || msgNorm.includes('entrevista')) {
                 return `${saludo} Podemos vernos en ${branch} o hacer una videollamada cuando te quede cómodo. Decime qué día y horario preferís y te lo dejo agendado.`;
             }
 
-            // Caso 5: Pregunta específica fuera de los datos del CRM (bonificaciones, entrega exacta, tasas externas)
             return `${saludo} Para darte ese dato con total precisión y no pasarte información incorrecta, lo reviso directamente en sistema con vos. ¿Te parece si te llamo 2 minutos o coordinamos un horario?`;
         }
 
@@ -3215,16 +3700,15 @@
                 ? `¡Perfecto! Ya te dejé agendada la entrevista en ${kb.concesionario} para el ${autoBooked.date} a las ${autoBooked.time} hs${contact?.interestModel ? ` por tu ${contact.interestModel}` : ''}. ¡Te esperamos!`
                 : buildDeterministicCrmReply(contact, userMessage);
 
-            // Intentar generación natural con Gemini usando exclusivamente el snapshot del CRM
             try {
                 const apiKey = "";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-                const systemPrompt = `Eres ${kb.asesor}, asesor comercial real de ${kb.concesionario} conversando con total libertad y naturalidad por WhatsApp en Argentina (voseo argentino: "vos", "tenés", "decime", cálido, persuasivo, directo y humano).
-TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CERRAR ENTREVISTAS, PERO CON ESTAS REGLAS INQUEBRANTABLES DE VERACIDAD:
+                const systemPrompt = `Eres ${kb.asesor}, asesor comercial real de ${kb.concesionario} conversando con naturalidad por WhatsApp en Argentina (voseo argentino: "vos", "tenés", "decime", cálido, profesional y cero desesperado o insistente).
+TIENES LIBERTAD PARA CONVERSAR, COMPARAR CONTRA RIVALES Y COORDINAR ENTREVISTAS, PERO CON ESTAS REGLAS INQUEBRANTABLES:
 1. NUNCA INVENTES DATOS: Todo precio, cuota pura, valor móvil, modalidad (70/30, 100%, 80/20), modelo o turno que menciones DEBE existir textualmente en DATOS_REALES_CRM.
-2. Si el cliente pregunta por un descuento, bonificación, plazo de entrega exacto, gasto administrativo o dato que NO esté en DATOS_REALES_CRM, dile con naturalidad que ese detalle fino lo revisás con él en una llamada rápida de 2 minutos o en el salón para no darle un número impreciso.
-3. Si en DATOS_REALES_CRM ves que se acaba de agendar una entrevista (${autoBooked ? `el ${autoBooked.date} a las ${autoBooked.time} hs` : 'ninguna nueva'}), confírmala con entusiasmo.
-4. Mantén los mensajes claros, humanos y fáciles de leer en celular (3 a 5 líneas máximo).`;
+2. Si el cliente pregunta por un descuento, bonificación, plazo de entrega exacto o dato que NO esté en DATOS_REALES_CRM, dile con naturalidad que ese detalle fino lo revisás con él en una llamada rápida de 2 minutos o en el salón para no darle un número impreciso.
+3. Si se acaba de agendar una entrevista (${autoBooked ? `el ${autoBooked.date} a las ${autoBooked.time} hs` : 'ninguna nueva'}), confírmala con amabilidad.
+4. Mensajes claros, relajados y fáciles de leer en celular (3 a 5 líneas máximo).`;
 
                 const promptText = `DATOS_REALES_CRM:\n${JSON.stringify(kb, null, 2)}\n\nMENSAJE_DEL_CLIENTE: "${userMessage || '(Iniciar primer contacto comercial cordial con datos de su ficha)'}"\n\nRedacta únicamente el mensaje listo para enviar por WhatsApp:`;
 
@@ -3257,7 +3741,6 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
             persistWaAiChats();
 
             try {
-                // Guardar tanto en historial de salida como en endpoint directo de texto plano para MacroDroid
                 await Promise.all([
                     fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'POST',
@@ -3275,12 +3758,14 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
                         body: JSON.stringify(replyText)
                     })
                 ]);
-                showToast(`🤖 Respuesta IA lista para MacroDroid (${contact.name || contact.phone})`);
+                showToast(`🤖 Respuesta IA lista para envío (${contact.name || contact.phone})`);
             } catch (e) {}
         }
 
         window.openWaAiAssistantModal = function() {
             document.getElementById('wa-ai-auto-reply').checked = Boolean(waAiConfig.autoReplyMobile);
+            const fuEl = document.getElementById('wa-ai-auto-followup');
+            if (fuEl) fuEl.checked = waAiConfig.autoFollowUp24h !== false;
             document.getElementById('wa-ai-allow-schedule').checked = waAiConfig.allowAutoSchedule !== false;
             document.getElementById('wa-ai-allow-compare').checked = waAiConfig.allowCompetitorCompare !== false;
             document.getElementById('wa-ai-advisor-name').value = waAiConfig.advisorName || 'Gonzalo';
@@ -3293,12 +3778,11 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
             if (kbSummaryEl) {
                 kbSummaryEl.innerHTML = `
                     <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Catálogo Toyota Vigente:</b> ${toyotaCount} planes con valores móviles y cuotas puras reales.</div>
-                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• PDFs Subidos en el CRM:</b> ${plansHistory.length} archivo(s) con cuotas promedio y precios finales reales.</div>
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• PDFs Subidos en el CRM:</b> ${plansHistory.length} archivo(s) reales cargados.</div>
                     <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Fichas de Clientes:</b> ${getAllListsCombined().length} contactos con etapa, modelo y turnos reales.</div>
                 `;
             }
 
-            // Poblar selector de contactos del CRM
             const sel = document.getElementById('wa-ai-contact-select');
             const all = getAllListsCombined();
             sel.innerHTML = all.length > 0
@@ -3315,6 +3799,7 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
             if (sel && contactId) {
                 sel.value = contactId;
                 onWaAiContactChange();
+                generateInitialOutreachWithAi();
             }
         };
 
@@ -3325,6 +3810,7 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
         window.saveWaAiConfig = function() {
             waAiConfig = {
                 autoReplyMobile: Boolean(document.getElementById('wa-ai-auto-reply')?.checked),
+                autoFollowUp24h: Boolean(document.getElementById('wa-ai-auto-followup')?.checked),
                 allowAutoSchedule: Boolean(document.getElementById('wa-ai-allow-schedule')?.checked),
                 allowCompetitorCompare: Boolean(document.getElementById('wa-ai-allow-compare')?.checked),
                 advisorName: document.getElementById('wa-ai-advisor-name')?.value.trim() || 'Gonzalo',
@@ -3404,7 +3890,7 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
             document.getElementById('wa-ai-draft-text').value = out.reply;
             document.getElementById('wa-ai-source-tag').textContent = out.source;
             document.getElementById('wa-ai-draft-box').classList.remove('hidden');
-            if (btn) { btn.disabled = false; btn.textContent = 'Generar Respuesta'; }
+            if (btn) { btn.disabled = false; btn.textContent = 'Responder'; }
         };
 
         window.copyWaAiDraft = function() {
@@ -3436,75 +3922,7 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
             showToast("🟢 Abriendo chat en WhatsApp Web con la respuesta verificada");
         };
 
-        window.downloadPreconfiguredMacroDroidFile = function() {
-            const incomingUrl = `${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`;
-            const replyUrl = `${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`;
-            const macroPayload = {
-                macroFormatVersion: 1,
-                macro: {
-                    name: "Ginza Toyota - Asistente WhatsApp IA",
-                    category: "CRM Toyota",
-                    description: "Envía mensajes entrantes de WhatsApp al CRM Ginza Toyota y responde automáticamente usando datos reales.",
-                    isFavourite: true,
-                    enabled: true,
-                    triggerList: [
-                        {
-                            type: "NotificationTrigger",
-                            packageNameList: ["com.whatsapp", "com.whatsapp.w4b"],
-                            applicationNameList: ["WhatsApp", "WhatsApp Business"],
-                            option: 0,
-                            textContent: "",
-                            exactMatch: false,
-                            excludes: false
-                        }
-                    ],
-                    actionList: [
-                        {
-                            type: "HttpRequestAction",
-                            requestConfig: {
-                                urlToOpen: incomingUrl,
-                                requestType: 1,
-                                contentType: "application/json",
-                                contentBodySource: 0,
-                                contentBodyText: "{\"sender\":\"{not_title}\",\"text\":\"{notification}\"}",
-                                saveReturnCodeToVariable: false,
-                                saveResponseToVariable: false
-                            }
-                        },
-                        {
-                            type: "PauseAction",
-                            delayInMilliSeconds: 3500,
-                            unitForVariables: 0
-                        },
-                        {
-                            type: "HttpRequestAction",
-                            requestConfig: {
-                                urlToOpen: replyUrl,
-                                requestType: 0,
-                                saveResponseToVariable: true,
-                                responseVariableName: "ia_reply"
-                            }
-                        },
-                        {
-                            type: "NotificationReplyAction",
-                            replyText: "{lv=ia_reply}"
-                        }
-                    ],
-                    constraintList: []
-                }
-            };
-            const blob = new Blob([JSON.stringify(macroPayload, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `Ginza_Toyota_WA_IA_${syncRoom}.macro`;
-            a.click();
-            showToast("📥 Macro descargada: ábrela con MacroDroid en tu celular y acepta permisos");
-        };
-
         initApp();
-        if (new URLSearchParams(window.location.search).get('view') === 'agenda') {
-            setTimeout(() => openAgendaWindow(), 150);
-        }
     </script>
 </body>
 </html>
