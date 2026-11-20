@@ -1590,8 +1590,23 @@
                     </div>
                 </div>
 
-                <!-- Columna Derecha: Chat en Vivo / Prueba Directa -->
+                <!-- Columna Derecha: Sandbox + Chat en Vivo / Prueba Directa -->
                 <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col overflow-hidden min-h-[400px]">
+                    <!-- TARJETA COMPACTA DE SEGURIDAD SANDBOX (MODO PRUEBA AISLADO) -->
+                    <div class="p-3 bg-amber-50 border-b-2 border-amber-300 space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-extrabold text-amber-950">
+                                <input type="checkbox" id="wa-ai-sandbox-enabled" checked onchange="saveWaAiConfig()" class="accent-amber-600 w-4 h-4">
+                                <span>🧪 MODO PRUEBA AISLADO (SANDBOX)</span>
+                            </label>
+                            <span class="px-2 py-0.5 rounded bg-amber-200 text-amber-950 text-[10px] font-bold">Bloquea clientes reales al probar</span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <input type="text" id="wa-ai-sandbox-phone" onchange="saveWaAiConfig()" placeholder="+549341..." class="flex-1 px-2.5 py-1.5 text-xs font-bold border border-amber-300 rounded-xl bg-white outline-none">
+                            <span class="text-[11px] text-amber-900">Solo responde a este número o contacto <b>Prueba CRM</b>.</span>
+                        </div>
+                    </div>
+
                     <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-2 flex-1 min-w-[200px]">
                             <label class="text-[11px] font-bold text-slate-600 shrink-0">Cliente:</label>
@@ -1686,14 +1701,17 @@
             destination: 'redes_interesado',
             keywords: 'publicidad, anuncio, info, informacion, información, plan, cuota, hilux, yaris, corolla, hiace, toyota, consulta, precio, financiación, financiacion'
         }));
-        let waAiConfig = JSON.parse(localStorage.getItem('crm_wa_ai_config') || JSON.stringify({
+        let waAiConfig = {
             autoReplyMobile: true,
             autoFollowUp24h: true,
             allowAutoSchedule: true,
             allowCompetitorCompare: true,
             advisorName: 'Gonzalo',
-            branchName: 'Ginza Toyota'
-        }));
+            branchName: 'Ginza Toyota',
+            sandboxEnabled: true,
+            sandboxPhone: '',
+            ...JSON.parse(localStorage.getItem('crm_wa_ai_config') || '{}')
+        };
         let waAiConversationLogs = JSON.parse(localStorage.getItem('crm_wa_ai_chats') || '{}');
 
         // --- BASE CONTRACTUAL OFICIAL TOYOTA PLAN ARGENTINA S.A. (CONDICIONES GENERALES + PLAN FLEXIBLE IGJ 183/24) ---
@@ -1926,6 +1944,8 @@
                     updatedAt: Date.now(),
                     room: syncRoom,
                     active: Boolean(waAiConfig.autoReplyMobile),
+                    sandboxEnabled: Boolean(waAiConfig.sandboxEnabled),
+                    sandboxPhone: formatPhoneAR(waAiConfig.sandboxPhone || ''),
                     strictCrmContactsOnly: true,
                     commercialProfileOnly: true,
                     discreetMode: true,
@@ -1958,7 +1978,11 @@
                     body: JSON.stringify(aiBrainSnapshot)
                 });
                 const badge = document.getElementById('wa-ai-cloud-brain-badge');
-                if (badge) badge.textContent = `☁️ Nube IA Sincronizada 24/7 (${authorizedContacts.length} contactos CRM • PC apagada OK)`;
+                if (badge) {
+                    badge.textContent = waAiConfig.sandboxEnabled
+                        ? `🧪 Modo Prueba Sandbox (${waAiConfig.sandboxPhone || 'Prueba CRM'})`
+                        : `☁️ Nube IA Sincronizada 24/7 (${authorizedContacts.length} contactos CRM • PC apagada OK)`;
+                }
             } catch (e) {}
         }
 
@@ -2290,7 +2314,7 @@
             }
         };
         window.runAutonomousAiFollowUps = async function() {
-            if (!waAiConfig.autoReplyMobile || waAiConfig.autoFollowUp24h === false) return;
+            if (!waAiConfig.autoReplyMobile || waAiConfig.autoFollowUp24h === false || waAiConfig.sandboxEnabled) return;
             const now = new Date();
             const hour = now.getHours() + now.getMinutes() / 60;
             if (hour < 9.5 || hour > 19.5) return;
@@ -2393,13 +2417,64 @@
                 ? `<div class="p-3 text-slate-400 text-center">Sin eventos recientes desde el celular.</div>`
                 : waIncomingLogs.slice(0, 15).map(log => `<div class="p-2.5 flex items-center justify-between gap-2"><div><span class="font-bold text-slate-800">${log.sender}</span> <span class="text-slate-500">→ ${log.actionLabel || ''}</span></div><span class="text-[11px] text-slate-400">${log.time}</span></div>`).join('');
         }
+        function isSystemOrSummaryNotification(sender, text) {
+            const combined = `${sender || ''} ${text || ''}`.toLowerCase();
+            const systemPatterns = [
+                'mensajes nuevos',
+                'mensajes de',
+                'buscando mensajes',
+                'realizando copia',
+                'enviando',
+                'llamando',
+                'whatsapp web',
+                'illegalstateexception',
+                'scheme == null',
+                'undefined'
+            ];
+            return systemPatterns.some(pattern => combined.includes(pattern));
+        }
+
+        function sanitizeFirebaseKey(rawKey) {
+            return String(rawKey || 'default')
+                .trim()
+                .replace(/[.#$\[\]\/]/g, '_')
+                .replace(/\s+/g, '_')
+                .slice(0, 80) || 'default';
+        }
+
         function processIncomingWhatsAppMessage(senderRaw, textRaw = '') {
             const sender = String(senderRaw || '').replace(/^WhatsApp(\sBusiness)?:\s*/i, '').trim();
             const textClean = String(textRaw || '').trim();
-            if (!sender && !textClean) return null;
+            if (!sender || !textClean) return null;
+            if (isSystemOrSummaryNotification(sender, textClean)) return null;
+
             const senderDigits = sender.replace(/\D/g, '');
             const tailDigits = senderDigits.length >= 6 ? senderDigits.slice(-7) : '';
             const normName = sender.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+            // MODO PRUEBA AISLADO (SANDBOX): Si está activo, SOLO responde al único número/contacto de prueba
+            if (waAiConfig.sandboxEnabled) {
+                const sbDigits = String(waAiConfig.sandboxPhone || '').replace(/\D/g, '');
+                const sbTail = sbDigits.length >= 6 ? sbDigits.slice(-7) : '';
+                const matchesSandboxPhone = sbTail && tailDigits && tailDigits === sbTail;
+                const matchesSandboxLabel = normName === 'prueba crm' || normName === 'test crm';
+                if (!matchesSandboxPhone && !matchesSandboxLabel) return null;
+
+                let testContact = getAllListsCombined().find(c => {
+                    const cDigits = String(c.phone || '').replace(/\D/g, '');
+                    return (sbTail && cDigits.endsWith(sbTail)) || String(c.name || '').toLowerCase() === 'prueba crm';
+                });
+                if (!testContact) {
+                    testContact = {
+                        id: 'sandbox_test_user',
+                        name: 'Prueba CRM',
+                        phone: formatPhoneAR(waAiConfig.sandboxPhone || sender),
+                        method: 'Sandbox',
+                        status: 'Contestó'
+                    };
+                }
+                return { contact: testContact, type: 'sandbox' };
+            }
 
             // CANDADO ESTRICTO ANTI-CHATS PERSONALES:
             // Solo procesa y responde si el remitente coincide con un contacto/cliente/lead ya cargado en las 7 listas del CRM.
@@ -3908,7 +3983,7 @@
             if (waAiConfig.autoReplyMobile) {
                 btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white animate-ping';
-                lbl.textContent = '🤖 WA IA ON';
+                lbl.textContent = waAiConfig.sandboxEnabled ? '🤖 WA IA ON (SANDBOX)' : '🤖 WA IA ON';
             } else {
                 btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-[#EB0A1E] hover:bg-red-700 text-white border border-red-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white/70';
@@ -4124,13 +4199,19 @@ REGLAS INQUEBRANTABLES:
 
         async function queueAutoReplyToMobile(contact, replyText, incomingText = '') {
             if (!contact) return;
+            const cleanReply = String(replyText || '').trim();
+            if (!cleanReply || cleanReply.length < 3 || /IllegalStateException|RuntimeException|Exception:|undefined|^null$|^\{/i.test(cleanReply)) {
+                return;
+            }
+
             if (!waAiConversationLogs[contact.id]) waAiConversationLogs[contact.id] = [];
             if (incomingText) {
                 waAiConversationLogs[contact.id].push({ from: 'client', text: incomingText, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
             }
-            waAiConversationLogs[contact.id].push({ from: 'ai', text: replyText, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
+            waAiConversationLogs[contact.id].push({ from: 'ai', text: cleanReply, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
             persistWaAiChats();
 
+            const recipientKey = sanitizeFirebaseKey(contact.phone || contact.name || 'default');
             try {
                 await Promise.all([
                     fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}.json`, {
@@ -4139,22 +4220,36 @@ REGLAS INQUEBRANTABLES:
                         body: JSON.stringify({
                             phone: formatPhoneAR(contact.phone),
                             name: contact.name || '',
-                            message: replyText,
+                            message: cleanReply,
                             createdAt: Date.now()
                         })
+                    }),
+                    fetch(`${FIREBASE_DB_URL}/wa_outbox/${encodeURIComponent(syncRoom)}/${encodeURIComponent(recipientKey)}.json`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(cleanReply)
                     }),
                     fetch(`${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(replyText)
+                        body: JSON.stringify(cleanReply)
                     })
                 ]);
+                setTimeout(() => {
+                    fetch(`${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`, {
+                        method: 'DELETE'
+                    }).catch(() => {});
+                }, 12000);
                 showToast(`🤖 Respuesta IA lista para envío (${contact.name || contact.phone})`);
             } catch (e) {}
         }
 
         window.openWaAiAssistantModal = function() {
             document.getElementById('wa-ai-auto-reply').checked = Boolean(waAiConfig.autoReplyMobile);
+            const sbChk = document.getElementById('wa-ai-sandbox-enabled');
+            if (sbChk) sbChk.checked = Boolean(waAiConfig.sandboxEnabled);
+            const sbPhoneEl = document.getElementById('wa-ai-sandbox-phone');
+            if (sbPhoneEl) sbPhoneEl.value = waAiConfig.sandboxPhone || '';
             const fuEl = document.getElementById('wa-ai-auto-followup');
             if (fuEl) fuEl.checked = waAiConfig.autoFollowUp24h !== false;
             document.getElementById('wa-ai-allow-schedule').checked = waAiConfig.allowAutoSchedule !== false;
@@ -4199,14 +4294,19 @@ REGLAS INQUEBRANTABLES:
         };
 
         window.saveWaAiConfig = function() {
+            const rawSandboxPhone = document.getElementById('wa-ai-sandbox-phone')?.value.trim() || '';
             waAiConfig = {
                 autoReplyMobile: Boolean(document.getElementById('wa-ai-auto-reply')?.checked),
+                sandboxEnabled: Boolean(document.getElementById('wa-ai-sandbox-enabled')?.checked),
+                sandboxPhone: rawSandboxPhone ? formatPhoneAR(rawSandboxPhone) : '',
                 autoFollowUp24h: Boolean(document.getElementById('wa-ai-auto-followup')?.checked),
                 allowAutoSchedule: Boolean(document.getElementById('wa-ai-allow-schedule')?.checked),
                 allowCompetitorCompare: Boolean(document.getElementById('wa-ai-allow-compare')?.checked),
                 advisorName: document.getElementById('wa-ai-advisor-name')?.value.trim() || 'Gonzalo',
                 branchName: document.getElementById('wa-ai-branch')?.value.trim() || 'Ginza Toyota'
             };
+            const sbPhoneEl = document.getElementById('wa-ai-sandbox-phone');
+            if (sbPhoneEl && waAiConfig.sandboxPhone) sbPhoneEl.value = waAiConfig.sandboxPhone;
             localStorage.setItem('crm_wa_ai_config', JSON.stringify(waAiConfig));
             updateWaAiNavBadge();
             syncAiBrainSnapshotToFirebase();
