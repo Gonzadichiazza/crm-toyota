@@ -1726,23 +1726,27 @@
                 <div class="lg:col-span-5 space-y-4">
                     <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold uppercase text-emerald-950">📲 Instalación Automática en Celular</span>
-                            <span class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold">LISTO PARA USAR</span>
+                            <span class="text-xs font-extrabold uppercase text-emerald-950">📲 Conexión Rápida con MacroDroid (3 Pasos)</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold">SIN ERRORES</span>
                         </div>
-                        <p class="text-xs text-emerald-900">Descarga la macro ya preconfigurada con tu sala y tus URLs reales, ábrela con <b>MacroDroid</b> en tu Android y listo:</p>
-                        <button onclick="downloadPreconfiguredMacroDroidFile()" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-extrabold shadow-sm flex items-center justify-center gap-2 transition-all">
-                            <span>📥 Descargar Macro Lista (.macro)</span>
-                        </button>
-                        <div class="grid grid-cols-1 gap-1.5 pt-1">
+                        <p class="text-xs text-emerald-900">En MacroDroid crea una macro nueva llamada <b>CRM Toyota</b>, agrega el disparador <b>Notificación recibida (WhatsApp)</b> y pega estos 3 datos en <b>Acciones</b>:</p>
+                        <div class="space-y-2 pt-1">
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-600 uppercase">URL Entrada (Celular → CRM):</label>
+                                <label class="block text-[10px] font-bold text-slate-700 uppercase">1. Acción HTTP POST — URL Entrada:</label>
                                 <div class="flex gap-1">
                                     <input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-slate-300 rounded-lg">
                                     <button onclick="copyInputText('wa-ai-incoming-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-600 uppercase">URL Respuesta IA (CRM → Celular):</label>
+                                <label class="block text-[10px] font-bold text-slate-700 uppercase">2. Acción HTTP POST — Cuerpo JSON (Tipo: application/json):</label>
+                                <div class="flex gap-1">
+                                    <input type="text" id="wa-ai-post-body" readonly value='{"sender":"{not_title}","text":"{notification}"}' class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-slate-300 rounded-lg">
+                                    <button onclick="copyInputText('wa-ai-post-body')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-700 uppercase">3. Esperar 4s → HTTP GET (Variable: ia) → Responder Notificación ({lv=ia}):</label>
                                 <div class="flex gap-1">
                                     <input type="text" id="wa-ai-outgoing-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-slate-300 rounded-lg">
                                     <button onclick="copyInputText('wa-ai-outgoing-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
@@ -2653,6 +2657,7 @@
             const s = contact.status;
             const safeCh = String(channelKey || 'gestion').replace(/'/g, "\\'");
             let buttons = `<button onclick="openEditModal('${contact.id}')" class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium hover:bg-slate-200">Editar</button>`;
+            buttons += `<button onclick="openWaAiForContact('${contact.id}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold hover:bg-emerald-100" title="Responder con Asistente IA usando datos reales del CRM">🤖 IA</button>`;
             if (s === 'Pendiente' || s === 'Registrado') {
                 buttons += `<button onclick="executeStatusUpdate('${contact.id}', 'Llamada Realizada', 'Llamada')" class="px-2.5 py-1 bg-zinc-900 text-white rounded-lg text-xs font-semibold">📞 Llamar</button>`;
                 buttons += `<button onclick="openWhatsAppSingleTab('${formatPhoneAR(contact.phone).replace(/\D/g, '')}', '${contact.id}', '${safeCh}', '${(contact.name||'').replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-semibold">💬 Mensaje</button>`;
@@ -2783,7 +2788,7 @@
             if (!tbody) return;
             const active = getAllClientesWithSource().filter(c => c.status !== 'No Compra');
             const filtered = currentClientesStage === 'Todos' ? active : active.filter(c => c.status === currentClientesStage);
-            tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold">${c.name} <div class="mt-0.5">${renderWhatsAppLink(c.phone, null, null, c.status, 'clientes', c.name)}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel || '-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button> <button onclick="deleteContact('${c.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-xs">🗑️</button></td></tr>`).join('');
+            tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold">${c.name} <div class="mt-0.5">${renderWhatsAppLink(c.phone, null, null, c.status, 'clientes', c.name)}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel || '-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><button onclick="openWaAiForContact('${c.id}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold">🤖 Responder IA</button> <button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button> <button onclick="deleteContact('${c.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-xs">🗑️</button></td></tr>`).join('');
         };
         window.updateStatus = function(id, newStatus) {
             if (newStatus === 'Entrevista' || newStatus === 'Interesado a Futuro') openScheduleModal(id, newStatus);
@@ -3302,6 +3307,15 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
 
             onWaAiContactChange();
             document.getElementById('wa-ai-assistant-modal').classList.remove('hidden');
+        };
+
+        window.openWaAiForContact = function(contactId) {
+            openWaAiAssistantModal();
+            const sel = document.getElementById('wa-ai-contact-select');
+            if (sel && contactId) {
+                sel.value = contactId;
+                onWaAiContactChange();
+            }
         };
 
         window.closeWaAiAssistantModal = function() {
