@@ -1663,163 +1663,150 @@
                     </div>
                 </div>
 
-                <!-- Mapeo de Estados CRM <-> Salesforce -->
-                <div class="p-4 rounded-2xl border border-slate-200 bg-white">
-                    <h4 class="text-xs font-extrabold uppercase text-slate-800 mb-2.5">Mapeo Automático de Estados (CRM Ginza Toyota ↔ Salesforce Status)</h4>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                        <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>Pendiente</b> ↔ <code>Open - Not Contacted</code></div>
-                        <div class="p-2 rounded-lg bg-blue-50 border border-blue-200"><b>Contestó / 48h</b> ↔ <code>Working - Contacted</code></div>
-                        <div class="p-2 rounded-lg bg-purple-50 border border-purple-200"><b>Interesado / Entrevista</b> ↔ <code>Qualified / Meeting</code></div>
-                        <div class="p-2 rounded-lg bg-emerald-50 border border-emerald-200"><b>Venta / No Compra</b> ↔ <code>Closed - Converted / Lost</code></div>
-                    </div>
-                </div>
-
-                <!-- Simulador de Prueba Segura & Bitácora de Sincronización -->
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-                    <div class="md:col-span-5 p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2.5">
-                        <h4 class="text-xs font-extrabold uppercase text-slate-800">Simular Lead Entrante desde Salesforce</h4>
-                        <input type="text" id="sf-sim-id" placeholder="ID Salesforce (ej: 00Q8b00001XYZ)" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg bg-white outline-none">
-                        <input type="text" id="sf-sim-name" placeholder="Nombre del cliente (ej: Diego Fernández)" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg bg-white outline-none">
-                        <input type="text" id="sf-sim-phone" placeholder="Teléfono (ej: 3415557890)" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg bg-white outline-none">
-                        <input type="text" id="sf-sim-campaign" placeholder="Campaña / Modelo (ej: Hilux Plan 70/30)" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg bg-white outline-none">
-                        <button onclick="simulateSalesforceInboundLead()" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold">📥 Simular Entrada desde Salesforce</button>
-                    </div>
-
-                    <div class="md:col-span-7 p-4 rounded-2xl border border-slate-200 bg-white flex flex-col">
-                        <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-xs font-extrabold uppercase text-slate-800">Bitácora de Sincronización & Auditoría</h4>
-                            <button onclick="sfSyncLogs = []; renderSfSyncLogs();" class="text-[11px] text-slate-400 hover:text-slate-600">Limpiar log</button>
-                        </div>
-                        <div id="sf-sync-logs-box" class="flex-1 max-h-44 overflow-y-auto divide-y divide-slate-100 border border-slate-100 rounded-xl text-xs">
-                            <div class="p-3 text-slate-400 text-center">Sin movimientos de sincronización registrados aún.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center shrink-0">
-                <span class="text-[11px] text-slate-500">Cada edición en el CRM se encola de forma segura para Salesforce sin borrar registros existentes.</span>
-                <button onclick="closeSalesforceSyncModal()" class="px-4 py-2 bg-zinc-900 text-white text-xs sm:text-sm font-semibold rounded-xl">Cerrar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL DEL ASISTENTE CONVERSACIONAL IA DE WHATSAPP (100% DATOS REALES DEL CRM) -->
-    <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
-            <div class="px-5 py-4 bg-gradient-to-r from-zinc-950 via-neutral-900 to-red-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-[#EB0A1E] flex items-center justify-center text-lg shadow">🤖</div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h3 class="text-base sm:text-lg font-extrabold">Asistente Autónomo WhatsApp — Ginza Toyota</h3>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">LIBERTAD TOTAL • CERO INVENCIÓN</span>
-                        </div>
-                        <p class="text-[11px] text-zinc-300">Conversa con libertad natural, asesora, agenda entrevistas y responde en piloto automático usando únicamente datos reales de tu CRM.</p>
-                    </div>
-                </div>
-                <button onclick="closeWaAiAssistantModal()" class="text-zinc-300 hover:text-white text-lg px-2">✕</button>
-            </div>
-
-            <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50/70">
-                <!-- Columna Izquierda: Configuración + Base de Datos Autorizada -->
-                <div class="lg:col-span-5 space-y-4">
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-                        <div class="flex items-center justify-between gap-2">
-                            <span class="text-xs font-extrabold uppercase text-slate-800">1. Piloto Automático WhatsApp</span>
-                            <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs font-extrabold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-300">
-                                <input type="checkbox" id="wa-ai-auto-reply" onchange="toggleWaAiAutopilotQuick(this.checked)" class="accent-[#EB0A1E] w-4 h-4">
-                                <span>Autónomo 24/7</span>
-                            </label>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Nombre del Asesor</label>
-                                <input type="text" id="wa-ai-advisor-name" placeholder="Ej: Gonzalo" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-xl outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Sede Concesionario</label>
-                                <input type="text" id="wa-ai-branch" placeholder="Ginza Toyota Rosario" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-xl outline-none">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <label class="flex items-center gap-1.5 p-2 rounded-xl bg-slate-50 border border-slate-200 text-[11px] font-semibold text-slate-700 cursor-pointer">
-                                <input type="checkbox" id="wa-ai-allow-schedule" checked class="accent-[#EB0A1E]">
-                                <span>Agendar entrevistas solo</span>
-                            </label>
-                            <label class="flex items-center gap-1.5 p-2 rounded-xl bg-slate-50 border border-slate-200 text-[11px] font-semibold text-slate-700 cursor-pointer">
-                                <input type="checkbox" id="wa-ai-allow-compare" checked class="accent-[#EB0A1E]">
-                                <span>Comparar vs rivales CRM</span>
-                            </label>
-                        </div>
-                        <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-950 leading-relaxed">
-                            <b>🛡️ Libertad con Cero Invención:</b> La IA puede conversar con total soltura, hacer preguntas de calificación y cerrar entrevistas, pero <b>solo puede citar precios, cuotas, modelos y turnos que existan en tu CRM</b>. Si le piden un dato que no está cargado, deriva cordial y naturalmente a una llamada breve con vos.
-                        </div>
-                        <div class="flex justify-end">
-                            <button onclick="saveWaAiConfig()" class="px-3.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl text-xs font-bold">💾 Guardar Ajustes</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2.5">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold uppercase text-slate-800">2. Conexión Real a tu Celular</span>
-                            <span id="wa-ai-kb-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-[#EB0A1E]">En Vivo</span>
-                        </div>
-                        <div id="wa-ai-kb-summary" class="text-xs text-slate-600 space-y-1.5 max-h-36 overflow-y-auto pr-1"></div>
-                        <div class="pt-2 border-t border-slate-100 space-y-1.5">
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase">1. Webhook Entrada Celular → CRM (POST):</label>
-                            <div class="flex gap-1.5">
-                                <input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2.5 py-1 text-[10px] font-mono bg-slate-100 border border-slate-300 rounded-lg outline-none">
-                                <button onclick="copyInputText('wa-ai-incoming-url')" class="px-2.5 py-1 bg-zinc-800 text-white rounded-lg text-[10px] font-bold">Copiar</button>
-                            </div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase">2. Cola Salida IA → Celular MacroDroid (GET / Stream):</label>
-                            <div class="flex gap-1.5">
-                                <input type="text" id="wa-ai-outgoing-url" readonly class="flex-1 px-2.5 py-1 text-[10px] font-mono bg-slate-100 border border-slate-300 rounded-lg outline-none">
-                                <button onclick="copyInputText('wa-ai-outgoing-url')" class="px-2.5 py-1 bg-[#EB0A1E] text-white rounded-lg text-[10px] font-bold">Copiar</button>
-                            </div>
-                            <p class="text-[10px] text-slate-500">En MacroDroid: lee la cola de salida y usa la acción <b>"Responder notificación de WhatsApp"</b> o <b>"Enviar WhatsApp"</b> con los campos <code>phone</code> y <code>message</code>.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Columna Derecha: Consola Conversacional Real sobre Clientes del CRM -->
-                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col overflow-hidden">
+                <!-- Columna Derecha: Consola de Chat Autónomo & Simulador en Vivo -->
+                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col overflow-hidden min-h-[380px]">
                     <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
-                        <div class="flex-1 min-w-[200px]">
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Seleccionar Contacto / Cliente de tu CRM:</label>
-                            <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="w-full px-3 py-1.5 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
+                        <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+                            <label class="text-[11px] font-bold text-slate-600 shrink-0">Cliente:</label>
+                            <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
                         </div>
-                        <button onclick="generateInitialOutreachWithAi()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0 self-end">
+                        <button onclick="generateInitialOutreachWithAi()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
                             ✨ Redactar 1er Mensaje Real
                         </button>
                     </div>
 
-                    <!-- Historial del Chat Simulado / Real -->
-                    <div id="wa-ai-chat-history" class="flex-1 p-4 space-y-3 min-h-[240px] max-h-[320px] overflow-y-auto bg-[#efeae2]/50">
-                        <div class="text-center text-xs text-slate-500 py-8">
-                            Selecciona un cliente de tu CRM arriba y escribe lo que te preguntó por WhatsApp (o pulsa <b>"Redactar 1er Mensaje Real"</b>).
+                    <div id="wa-ai-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[260px]"></div>
+
+                    <div id="wa-ai-draft-box" class="hidden p-3 bg-emerald-50/90 border-t border-emerald-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-extrabold uppercase text-emerald-900">Borrador Verificado con Datos Reales CRM:</span>
+                            <span id="wa-ai-source-tag" class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold"></span>
+                        </div>
+                        <textarea id="wa-ai-draft-text" rows="3" class="w-full px-3 py-2 text-xs border border-emerald-300 rounded-xl bg-white outline-none resize-none"></textarea>
+                        <div class="flex justify-end gap-2">
+                            <button onclick="copyWaAiDraft()" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-slate-800 text-xs font-bold hover:bg-slate-100">📋 Copiar</button>
+                            <button onclick="sendWaAiDraftToWhatsApp()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">🟢 Enviar por WhatsApp Web</button>
                         </div>
                     </div>
 
-                    <!-- Barra de Entrada / Prueba y Envío Directo a WhatsApp Web -->
-                    <div class="p-3.5 bg-white border-t border-slate-200 space-y-2.5">
-                        <div class="flex gap-2">
-                            <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Escribe aquí lo que dice el cliente (ej: 'Cuánto sale la cuota de Hilux?')" class="flex-1 px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-xl outline-none">
-                            <button id="btn-wa-ai-generate" onclick="runWaAiReply()" class="px-4 py-2 bg-[#EB0A1E] hover:bg-red-700 text-white rounded-xl text-xs font-bold shrink-0">
-                                Generar Respuesta
-                            </button>
+                    <div class="p-3 bg-white border-t border-slate-200 flex gap-2">
+                        <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Simula o pega lo que te escribió el cliente por WhatsApp..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
+                        <button id="btn-wa-ai-generate" onclick="runWaAiReply()" class="px-4 py-2 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs font-bold shrink-0">Generar Respuesta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (PILOTO AUTOMÁTICO 24/7 + DESCARGA MACRO LISTA) -->
+    <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
+            <div class="px-5 py-4 bg-gradient-to-r from-zinc-950 via-neutral-900 to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-base sm:text-lg font-extrabold">Asistente Autónomo WhatsApp — Ginza Toyota</h3>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">CERO INVENCIÓN • 100% DATOS CRM</span>
                         </div>
-                        <div id="wa-ai-draft-box" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[11px] font-extrabold text-emerald-900">✅ Respuesta verificada con datos reales del CRM (editable):</span>
-                                <span id="wa-ai-source-tag" class="text-[10px] font-bold text-emerald-700"></span>
+                        <p class="text-xs text-zinc-300">Responde con naturalidad humana usando únicamente tus precios, cuotas y fichas reales cargadas.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="inline-flex items-center gap-2 cursor-pointer px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-xs font-bold">
+                        <input type="checkbox" id="wa-ai-auto-reply" checked onchange="saveWaAiConfig()" class="accent-emerald-500 w-4 h-4">
+                        <span>Piloto Automático 24/7</span>
+                    </label>
+                    <button onclick="closeWaAiAssistantModal()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">✕ Cerrar</button>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50/70">
+                <!-- Columna Izquierda: Instalación 1-Clic en Celular + Reglas Verificadas -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold uppercase text-emerald-950">📲 Instalación Automática en Celular</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold">LISTO PARA USAR</span>
+                        </div>
+                        <p class="text-xs text-emerald-900">Descarga la macro ya preconfigurada con tu sala y tus URLs reales, ábrela con <b>MacroDroid</b> en tu Android y listo:</p>
+                        <button onclick="downloadPreconfiguredMacroDroidFile()" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-extrabold shadow-sm flex items-center justify-center gap-2 transition-all">
+                            <span>📥 Descargar Macro Lista (.macro)</span>
+                        </button>
+                        <div class="grid grid-cols-1 gap-1.5 pt-1">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 uppercase">URL Entrada (Celular → CRM):</label>
+                                <div class="flex gap-1">
+                                    <input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-slate-300 rounded-lg">
+                                    <button onclick="copyInputText('wa-ai-incoming-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
+                                </div>
                             </div>
-                            <textarea id="wa-ai-draft-text" rows="3" class="w-full px-3 py-2 text-xs sm:text-sm border border-emerald-300 rounded-xl bg-white outline-none resize-none"></textarea>
-                            <div class="flex justify-end gap-2">
-                                <button onclick="copyWaAiDraft()" class="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 rounded-xl text-xs font-semibold">📋 Copiar</button>
-                                <button onclick="sendWaAiDraftToWhatsApp()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold">🟢 Enviar por WhatsApp Web</button>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 uppercase">URL Respuesta IA (CRM → Celular):</label>
+                                <div class="flex gap-1">
+                                    <input type="text" id="wa-ai-outgoing-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-slate-300 rounded-lg">
+                                    <button onclick="copyInputText('wa-ai-outgoing-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3">
+                        <div class="text-xs font-extrabold uppercase text-slate-800">🛡️ Base de Datos Real Autorizada</div>
+                        <div id="wa-ai-kb-summary" class="space-y-1.5 text-xs text-slate-700"></div>
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 mb-1">Nombre Asesor</label>
+                                <input type="text" id="wa-ai-advisor-name" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 mb-1">Concesionario</label>
+                                <input type="text" id="wa-ai-branch" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div class="space-y-1.5 text-xs text-slate-700">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="wa-ai-allow-schedule" checked class="accent-[#EB0A1E]">
+                                <span>Agendar entrevistas automáticamente en mi Calendario</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="wa-ai-allow-compare" checked class="accent-[#EB0A1E]">
+                                <span>Comparar contra rivales usando mi tabla real</span>
+                            </label>
+                        </div>
+                        <button onclick="saveWaAiConfig()" class="w-full py-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl text-xs font-bold">💾 Guardar Preferencias</button>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Chat en Vivo / Prueba Directa -->
+                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col overflow-hidden min-h-[400px]">
+                    <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+                            <label class="text-[11px] font-bold text-slate-600 shrink-0">Cliente:</label>
+                            <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
+                        </div>
+                        <button onclick="generateInitialOutreachWithAi()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
+                            ✨ Redactar 1er Mensaje Real
+                        </button>
+                    </div>
+
+                    <div id="wa-ai-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[260px]"></div>
+
+                    <div id="wa-ai-draft-box" class="hidden p-3 bg-emerald-50/90 border-t border-emerald-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-extrabold uppercase text-emerald-900">Respuesta Verificada con Datos Reales CRM:</span>
+                            <span id="wa-ai-source-tag" class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold"></span>
+                        </div>
+                        <textarea id="wa-ai-draft-text" rows="3" class="w-full px-3 py-2 text-xs border border-emerald-300 rounded-xl bg-white outline-none resize-none"></textarea>
+                        <div class="flex justify-end gap-2">
+                            <button onclick="copyWaAiDraft()" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-slate-800 text-xs font-bold hover:bg-slate-100">📋 Copiar</button>
+                            <button onclick="sendWaAiDraftToWhatsApp()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">🟢 Enviar por WhatsApp Web</button>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-white border-t border-slate-200 flex gap-2">
+                        <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Escribe o simula un mensaje de WhatsApp para probar..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
+                        <button id="btn-wa-ai-generate" onclick="runWaAiReply()" class="px-4 py-2 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs font-bold shrink-0">Responder</button>
                     </div>
                 </div>
             </div>
@@ -3265,17 +3252,25 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
             persistWaAiChats();
 
             try {
-                await fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}.json`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        phone: formatPhoneAR(contact.phone),
-                        name: contact.name || '',
-                        message: replyText,
-                        createdAt: Date.now()
+                // Guardar tanto en historial de salida como en endpoint directo de texto plano para MacroDroid
+                await Promise.all([
+                    fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}.json`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            phone: formatPhoneAR(contact.phone),
+                            name: contact.name || '',
+                            message: replyText,
+                            createdAt: Date.now()
+                        })
+                    }),
+                    fetch(`${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(replyText)
                     })
-                });
-                showToast(`🤖 Respuesta IA enviada a cola móvil para ${contact.name || contact.phone}`);
+                ]);
+                showToast(`🤖 Respuesta IA lista para MacroDroid (${contact.name || contact.phone})`);
             } catch (e) {}
         }
 
@@ -3286,18 +3281,17 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
             document.getElementById('wa-ai-advisor-name').value = waAiConfig.advisorName || 'Gonzalo';
             document.getElementById('wa-ai-branch').value = waAiConfig.branchName || 'Ginza Toyota';
             document.getElementById('wa-ai-incoming-url').value = `${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`;
-            document.getElementById('wa-ai-outgoing-url').value = `${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}.json`;
+            document.getElementById('wa-ai-outgoing-url').value = `${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`;
 
-            // Renderizar resumen de datos reales cargados en el CRM
-            const kbBox = document.getElementById('wa-ai-kb-summary');
-            const tyCount = marketPlansCatalog.filter(p => p.brand === 'Toyota').length;
-            const rvCount = marketPlansCatalog.filter(p => p.brand !== 'Toyota').length;
-            kbBox.innerHTML = `
-                <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Catálogo Toyota Vigente:</b> ${tyCount} versiones con Valor Móvil y Cuota Pura real.</div>
-                <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Comparativa Competencia:</b> ${rvCount} modelos rivales autorizados para argumentar.</div>
-                <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• PDFs Subidos en el CRM:</b> ${plansHistory.length} archivo(s) con cuotas promedio y precios finales reales.</div>
-                <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Fichas de Clientes:</b> ${getAllListsCombined().length} contactos con etapa, modelo y turnos reales.</div>
-            `;
+            const toyotaCount = marketPlansCatalog.filter(p => p.brand === 'Toyota').length;
+            const kbSummaryEl = document.getElementById('wa-ai-kb-summary');
+            if (kbSummaryEl) {
+                kbSummaryEl.innerHTML = `
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Catálogo Toyota Vigente:</b> ${toyotaCount} planes con valores móviles y cuotas puras reales.</div>
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• PDFs Subidos en el CRM:</b> ${plansHistory.length} archivo(s) con cuotas promedio y precios finales reales.</div>
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Fichas de Clientes:</b> ${getAllListsCombined().length} contactos con etapa, modelo y turnos reales.</div>
+                `;
+            }
 
             // Poblar selector de contactos del CRM
             const sel = document.getElementById('wa-ai-contact-select');
@@ -3426,6 +3420,71 @@ TIENES TOTAL LIBERTAD PARA CONVERSAR, REPREGUNTAR, COMPARAR CONTRA RIVALES Y CER
                 waTabRef = window.open(targetUrl, 'crm_whatsapp_web_singleton');
             }
             showToast("🟢 Abriendo chat en WhatsApp Web con la respuesta verificada");
+        };
+
+        window.downloadPreconfiguredMacroDroidFile = function() {
+            const incomingUrl = `${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`;
+            const replyUrl = `${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`;
+            const macroPayload = {
+                macroFormatVersion: 1,
+                macro: {
+                    name: "Ginza Toyota - Asistente WhatsApp IA",
+                    category: "CRM Toyota",
+                    description: "Envía mensajes entrantes de WhatsApp al CRM Ginza Toyota y responde automáticamente usando datos reales.",
+                    isFavourite: true,
+                    enabled: true,
+                    triggerList: [
+                        {
+                            type: "NotificationTrigger",
+                            packageNameList: ["com.whatsapp", "com.whatsapp.w4b"],
+                            applicationNameList: ["WhatsApp", "WhatsApp Business"],
+                            option: 0,
+                            textContent: "",
+                            exactMatch: false,
+                            excludes: false
+                        }
+                    ],
+                    actionList: [
+                        {
+                            type: "HttpRequestAction",
+                            requestConfig: {
+                                urlToOpen: incomingUrl,
+                                requestType: 1,
+                                contentType: "application/json",
+                                contentBodySource: 0,
+                                contentBodyText: "{\"sender\":\"{not_title}\",\"text\":\"{notification}\"}",
+                                saveReturnCodeToVariable: false,
+                                saveResponseToVariable: false
+                            }
+                        },
+                        {
+                            type: "PauseAction",
+                            delayInMilliSeconds: 3500,
+                            unitForVariables: 0
+                        },
+                        {
+                            type: "HttpRequestAction",
+                            requestConfig: {
+                                urlToOpen: replyUrl,
+                                requestType: 0,
+                                saveResponseToVariable: true,
+                                responseVariableName: "ia_reply"
+                            }
+                        },
+                        {
+                            type: "NotificationReplyAction",
+                            replyText: "{lv=ia_reply}"
+                        }
+                    ],
+                    constraintList: []
+                }
+            };
+            const blob = new Blob([JSON.stringify(macroPayload, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Ginza_Toyota_WA_IA_${syncRoom}.macro`;
+            a.click();
+            showToast("📥 Macro descargada: ábrela con MacroDroid en tu celular y acepta permisos");
         };
 
         initApp();
