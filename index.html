@@ -62,9 +62,9 @@
                     <button onclick="openPdfPriceChatbotModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 transition-colors flex items-center gap-1 shadow-sm shrink-0" title="Corregir precios leídos de los PDFs por chat">
                         <span>🛠️ Corregir Precio PDF</span>
                     </button>
-                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Autónomo 24/7 (Solo contactos CRM • Perfil Comercial • Funciona con PC apagada)">
+                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofía 24/7 (Solo contactos CRM • Perfil Comercial • Funciona con PC apagada)">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-                        <span id="nav-wa-ai-label">🤖 WA IA ON</span>
+                        <span id="nav-wa-ai-label">🤖 Sofía IA ON</span>
                     </button>
                     <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
@@ -148,12 +148,12 @@
         <div id="wa-tracker-banner" class="mt-3 bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="font-bold text-slate-900">Seguimiento Autónomo IA (24h suave / 48h cierre):</span>
+                <span class="font-bold text-slate-900">Seguimiento Autónomo Sofía IA (24h suave / 48h cierre):</span>
                 <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h sin insistir.</span>
             </div>
             <div class="flex items-center gap-1.5 flex-wrap">
                 <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">
-                    🤖 Piloto IA 24/7
+                    🤖 Piloto Sofía IA 24/7
                 </button>
                 <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">
                     🟢 Pestaña WA Web
@@ -178,7 +178,7 @@
                         Gestión Comercial & Asesoramiento IA <span class="text-[#EB0A1E]">Toyota Plan</span>
                     </h1>
                     <p class="text-xs sm:text-sm text-zinc-300 mt-2 leading-relaxed">
-                        Tu IA domina las Condiciones Generales (Plan Tradicional y Plan Flexible IGJ 183/24) y tus listas reales sin cuota extraordinaria, respondiendo únicamente lo que el cliente pregunta.
+                        Sofía asesora en toda la gama Toyota, orienta naturalmente hacia Toyota Plan (Tradicional y Flexible IGJ 183/24) e invita al salón con elegancia y sin presionar.
                     </p>
                     <div class="flex flex-wrap gap-2.5 mt-4">
                         <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">
@@ -256,7 +256,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
                 <div>
                     <h2 class="text-base sm:text-lg font-bold text-slate-900">Base de Datos de Prospección (7 Canales)</h2>
-                    <p class="text-xs text-slate-500">Al enviar un mensaje pasa a <b>espera (48 hs)</b>. La IA hace <b>1 seguimiento suave a las 24 hs</b> sin insistir y agenda entrevistas automáticamente.</p>
+                    <p class="text-xs text-slate-500">Al enviar un mensaje pasa a <b>espera (48 hs)</b>. Sofía IA hace <b>1 seguimiento suave a las 24 hs</b> sin insistir y agenda entrevistas automáticamente.</p>
                 </div>
                 <button onclick="switchTab('clientes')" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-red-50 text-[#EB0A1E] border border-red-200 hover:bg-red-100 transition-colors self-start sm:self-auto">
                     <span>Ver derivados en Clientes:</span>
@@ -1494,7 +1494,7 @@
         </div>
     </div>
 
-    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (MODO CONSULTIVO DISCRETO + CONOCIMIENTO CONTRACTUAL OFICIAL) -->
+    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA • PERFIL COMERCIAL SEDUCTOR Y CONSULTIVO) -->
     <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
             <div class="px-5 py-4 bg-gradient-to-r from-zinc-950 via-neutral-900 to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
@@ -1502,11 +1502,11 @@
                     <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="text-base sm:text-lg font-extrabold">Asistente Autónomo WhatsApp — Ginza Toyota</h3>
+                            <h3 class="text-base sm:text-lg font-extrabold">Sofía — Asesora Virtual WhatsApp • Ginza Toyota</h3>
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">SOLO CONTACTOS CRM • PERFIL COMERCIAL</span>
-                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Nube IA Sincronizada 24/7 (Funciona con PC apagada)</span>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Nube IA Sincronizada 24/7</span>
                         </div>
-                        <p class="text-xs text-zinc-300">Ignora chats personales • Atiende planes, convencional, usados y turnos • Solo da datos si el cliente pregunta.</p>
+                        <p class="text-xs text-zinc-300">Asesora en toda la gama Toyota, encauza hacia Toyota Plan e invita sutilmente al concesionario sin presionar.</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1526,7 +1526,7 @@
                             <span class="text-xs font-extrabold uppercase text-emerald-950">📲 Conexión Rápida Android (24/7 PC Apagada)</span>
                             <span class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold">AUTÓNOMO</span>
                         </div>
-                        <p class="text-xs text-emerald-900">La memoria IA se sincroniza en Firebase (<b>ai_brain</b>). Usa estas URLs en <b>AutoResponder para WA</b> o <b>MacroDroid</b> para responder incluso con la PC apagada:</p>
+                        <p class="text-xs text-emerald-900">La memoria IA se sincroniza en Firebase (<b>ai_brain</b>). Usa estas URLs en <b>MacroDroid</b>:</p>
                         <div class="space-y-2 pt-1">
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-700 uppercase">1. HTTP POST — URL Entrada (Mensajes entrantes):</label>
@@ -1543,7 +1543,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-700 uppercase">3. HTTP GET — URL Cerebro IA Nube 24/7 (Funciona con PC apagada):</label>
+                                <label class="block text-[10px] font-bold text-slate-700 uppercase">3. HTTP GET — URL Cerebro IA Nube 24/7:</label>
                                 <div class="flex gap-1">
                                     <input type="text" id="wa-ai-brain-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-slate-300 rounded-lg">
                                     <button onclick="copyInputText('wa-ai-brain-url')" class="px-2 py-1 bg-sky-700 text-white rounded-lg text-[10px] font-bold">Copiar</button>
@@ -1564,8 +1564,8 @@
                         <div id="wa-ai-kb-summary" class="space-y-1.5 text-xs text-slate-700"></div>
                         <div class="grid grid-cols-2 gap-2 pt-1">
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-600 mb-1">Nombre Asesor</label>
-                                <input type="text" id="wa-ai-advisor-name" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg">
+                                <label class="block text-[10px] font-bold text-slate-600 mb-1">Nombre Asistente IA</label>
+                                <input type="text" id="wa-ai-advisor-name" value="Sofía" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg">
                             </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-600 mb-1">Concesionario</label>
@@ -1592,7 +1592,6 @@
 
                 <!-- Columna Derecha: Sandbox + Chat en Vivo / Prueba Directa -->
                 <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col overflow-hidden min-h-[400px]">
-                    <!-- TARJETA COMPACTA DE SEGURIDAD SANDBOX (MODO PRUEBA AISLADO) -->
                     <div class="p-3 bg-amber-50 border-b-2 border-amber-300 space-y-2">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-extrabold text-amber-950">
@@ -1603,7 +1602,7 @@
                         </div>
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                             <input type="text" id="wa-ai-sandbox-phone" onchange="saveWaAiConfig()" placeholder="+549341..." class="flex-1 px-2.5 py-1.5 text-xs font-bold border border-amber-300 rounded-xl bg-white outline-none">
-                            <span class="text-[11px] text-amber-900">Solo responde a este número o contacto <b>Prueba CRM</b>.</span>
+                            <span class="text-[11px] text-amber-900">Solo responde a este número o contacto <b>Prueba CRM / Hans</b>.</span>
                         </div>
                     </div>
 
@@ -1613,7 +1612,7 @@
                             <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
                         </div>
                         <button onclick="generateInitialOutreachWithAi()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
-                            ✨ Redactar Saludo Discreto
+                            ✨ Redactar Saludo Sofía
                         </button>
                     </div>
 
@@ -1621,7 +1620,7 @@
 
                     <div id="wa-ai-draft-box" class="hidden p-3 bg-emerald-50/90 border-t border-emerald-200 space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-[10px] font-extrabold uppercase text-emerald-900">Respuesta Verificada (Solo lo preguntado):</span>
+                            <span class="text-[10px] font-extrabold uppercase text-emerald-900">Respuesta Verificada de Sofía:</span>
                             <span id="wa-ai-source-tag" class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold"></span>
                         </div>
                         <textarea id="wa-ai-draft-text" rows="3" class="w-full px-3 py-2 text-xs border border-emerald-300 rounded-xl bg-white outline-none resize-none"></textarea>
@@ -1695,26 +1694,23 @@
         let selectedAgendaDate = new Date().toISOString().split('T')[0];
         let waIncomingLogs = [];
         let processedWaEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_wa_events') || '[]'));
-        let waAdsSettings = JSON.parse(localStorage.getItem('crm_wa_ads_settings') || JSON.stringify({
-            enabled: true,
-            mode: 'keywords',
-            destination: 'redes_interesado',
-            keywords: 'publicidad, anuncio, info, informacion, información, plan, cuota, hilux, yaris, corolla, hiace, toyota, consulta, precio, financiación, financiacion'
-        }));
         let waAiConfig = {
             autoReplyMobile: true,
             autoFollowUp24h: true,
             allowAutoSchedule: true,
             allowCompetitorCompare: true,
-            advisorName: 'Gonzalo',
+            advisorName: 'Sofía',
             branchName: 'Ginza Toyota',
             sandboxEnabled: true,
             sandboxPhone: '',
             ...JSON.parse(localStorage.getItem('crm_wa_ai_config') || '{}')
         };
+        if (!waAiConfig.advisorName || waAiConfig.advisorName === 'Gonzalo') {
+            waAiConfig.advisorName = 'Sofía';
+        }
         let waAiConversationLogs = JSON.parse(localStorage.getItem('crm_wa_ai_chats') || '{}');
 
-        // --- BASE CONTRACTUAL OFICIAL TOYOTA PLAN ARGENTINA S.A. (CONDICIONES GENERALES + PLAN FLEXIBLE IGJ 183/24) ---
+        // --- BASE CONTRACTUAL OFICIAL TOYOTA PLAN ARGENTINA S.A. ---
         const TOYOTA_PLAN_CONTRACT_KNOWLEDGE = {
             administradora: "Toyota Plan Argentina S.A. de Ahorro para Fines Determinados (garantizada solidariamente por Toyota Argentina S.A.). Controlada por IGJ.",
             planFlexibleRes183_24: "El Plan Flexible (Res. IGJ N° 183/2024) adjudica una suma de dinero (Certificado equivalente al Valor Móvil) que permite elegir un Automotor 0 km de la lista Toyota o un Automotor Usado Certificado Toyota con Garantía Extendida (hasta 4 años de antigüedad en www.toyotausados.com.ar).",
@@ -1922,7 +1918,7 @@
             }
         }
 
-        // --- SINCRONIZACIÓN DE CEREBRO IA EN FIREBASE (/ai_brain/{syncRoom}.json) PARA OPERAR CON PC APAGADA ---
+        // --- SINCRONIZACIÓN DE CEREBRO IA EN FIREBASE (/ai_brain/{syncRoom}.json) ---
         async function syncAiBrainSnapshotToFirebase() {
             try {
                 const authorizedContacts = getAllListsCombined()
@@ -1948,8 +1944,7 @@
                     sandboxPhone: formatPhoneAR(waAiConfig.sandboxPhone || ''),
                     strictCrmContactsOnly: true,
                     commercialProfileOnly: true,
-                    discreetMode: true,
-                    advisorName: waAiConfig.advisorName || 'Gonzalo',
+                    advisorName: waAiConfig.advisorName || 'Sofía',
                     branchName: waAiConfig.branchName || 'Ginza Toyota',
                     autoFollowUp24h: waAiConfig.autoFollowUp24h !== false,
                     allowAutoSchedule: waAiConfig.allowAutoSchedule !== false,
@@ -1980,8 +1975,8 @@
                 const badge = document.getElementById('wa-ai-cloud-brain-badge');
                 if (badge) {
                     badge.textContent = waAiConfig.sandboxEnabled
-                        ? `🧪 Modo Prueba Sandbox (${waAiConfig.sandboxPhone || 'Prueba CRM'})`
-                        : `☁️ Nube IA Sincronizada 24/7 (${authorizedContacts.length} contactos CRM • PC apagada OK)`;
+                        ? `🧪 Modo Prueba Sandbox (${waAiConfig.sandboxPhone || 'Prueba CRM / Hans'})`
+                        : `☁️ Nube IA Sincronizada 24/7 (${authorizedContacts.length} contactos CRM)`;
                 }
             } catch (e) {}
         }
@@ -2310,7 +2305,7 @@
                 c.status = 'Mensaje Enviado (48h)'; c.method = 'Mensaje'; c.waSentAt = Date.now();
                 c.aiFollowUpCount = c.aiFollowUpCount || 0;
                 saveLocalData(true); renderAllTables(); updateDashboard();
-                showToast(`🤖 Seguimiento IA programado (24h suave, sin insistir): ${c.name || c.phone}`);
+                showToast(`🤖 Seguimiento Sofía IA programado (24h suave): ${c.name || c.phone}`);
             }
         };
         window.runAutonomousAiFollowUps = async function() {
@@ -2329,7 +2324,7 @@
                     c.aiFollowUpAt = Date.now();
 
                     const rawName = (c.name && !['sin nombre', 'lead salesforce'].includes(c.name.toLowerCase())) ? c.name.split(' ')[0] : '';
-                    const calmMsg = `${rawName ? `Hola ${rawName}, ` : 'Hola, '}¿cómo va? Te dejo mi contacto por acá sin compromiso por si en algún momento querés consultarme algo o pasar un ratito por ${waAiConfig.branchName || 'Ginza Toyota'}. ¡Saludos!`;
+                    const calmMsg = `${rawName ? `Hola ${rawName}, ` : 'Hola, '}soy Sofía de ${waAiConfig.branchName || 'Ginza Toyota'}. Te dejo mi contacto por acá sin ningún compromiso por si en algún momento querés pasar a tomar un café y ver las unidades en salón o simular números. ¡Que tengas un excelente día!`;
 
                     await queueAutoReplyToMobile(c, calmMsg, '');
                     triggered++;
@@ -2337,7 +2332,7 @@
             }
             if (triggered > 0) {
                 saveLocalData(true);
-                showToast(`🤖 IA envió ${triggered} seguimiento(s) cordial(es) de 24h (sin insistencia)`);
+                showToast(`🤖 Sofía IA envió ${triggered} seguimiento(s) cordial(es) de 24h`);
             }
         };
         window.checkWhatsApp48hTimeouts = function(manual = false) {
@@ -2452,22 +2447,22 @@
             const tailDigits = senderDigits.length >= 6 ? senderDigits.slice(-7) : '';
             const normName = sender.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
-            // MODO PRUEBA AISLADO (SANDBOX): Si está activo, SOLO responde al único número/contacto de prueba
             if (waAiConfig.sandboxEnabled) {
                 const sbDigits = String(waAiConfig.sandboxPhone || '').replace(/\D/g, '');
                 const sbTail = sbDigits.length >= 6 ? sbDigits.slice(-7) : '';
                 const matchesSandboxPhone = sbTail && tailDigits && tailDigits === sbTail;
-                const matchesSandboxLabel = normName === 'prueba crm' || normName === 'test crm';
+                const matchesSandboxLabel = normName === 'prueba crm' || normName === 'test crm' || normName.includes('hans');
                 if (!matchesSandboxPhone && !matchesSandboxLabel) return null;
 
                 let testContact = getAllListsCombined().find(c => {
                     const cDigits = String(c.phone || '').replace(/\D/g, '');
-                    return (sbTail && cDigits.endsWith(sbTail)) || String(c.name || '').toLowerCase() === 'prueba crm';
+                    const cLow = String(c.name || '').toLowerCase();
+                    return (sbTail && cDigits.endsWith(sbTail)) || cLow === 'prueba crm' || (normName.includes('hans') && cLow.includes('hans'));
                 });
                 if (!testContact) {
                     testContact = {
-                        id: 'sandbox_test_user',
-                        name: 'Prueba CRM',
+                        id: normName.includes('hans') ? 'sandbox_hans_user' : 'sandbox_test_user',
+                        name: normName.includes('hans') ? 'Hans' : 'Prueba CRM',
                         phone: formatPhoneAR(waAiConfig.sandboxPhone || sender),
                         method: 'Sandbox',
                         status: 'Contestó'
@@ -2476,8 +2471,6 @@
                 return { contact: testContact, type: 'sandbox' };
             }
 
-            // CANDADO ESTRICTO ANTI-CHATS PERSONALES:
-            // Solo procesa y responde si el remitente coincide con un contacto/cliente/lead ya cargado en las 7 listas del CRM.
             for (const list of [crmContacts, gestionContacts, redesContacts, salesforceContacts, convencionalContacts, canceladosContacts, rescindidosContacts]) {
                 for (const c of list) {
                     const cDigits = String(c.phone || '').replace(/\D/g, '');
@@ -2493,7 +2486,6 @@
                 }
             }
 
-            // Si no está en el CRM (familia, amigos, grupos personales), se ignora completamente.
             return null;
         }
         window.pollIncomingWhatsAppEvents = async function() {
@@ -2629,7 +2621,7 @@
             const s = contact.status;
             const safeCh = String(channelKey || 'gestion').replace(/'/g, "\\'");
             let buttons = `<button onclick="openEditModal('${contact.id}')" class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium hover:bg-slate-200">Editar</button>`;
-            buttons += `<button onclick="openWaAiForContact('${contact.id}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold hover:bg-emerald-100" title="Responder con Asistente IA (Modo Discreto)">🤖 IA</button>`;
+            buttons += `<button onclick="openWaAiForContact('${contact.id}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold hover:bg-emerald-100" title="Responder con Sofía IA">🤖 Sofía</button>`;
             if (s === 'Pendiente' || s === 'Registrado') {
                 buttons += `<button onclick="executeStatusUpdate('${contact.id}', 'Llamada Realizada', 'Llamada')" class="px-2.5 py-1 bg-zinc-900 text-white rounded-lg text-xs font-semibold">📞 Llamar</button>`;
                 buttons += `<button onclick="openWhatsAppSingleTab('${formatPhoneAR(contact.phone).replace(/\D/g, '')}', '${contact.id}', '${safeCh}', '${(contact.name||'').replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-semibold">💬 Mensaje</button>`;
@@ -2649,8 +2641,29 @@
         function renderSimpleChannelTable(list, tbodyId, emptyId, channelKey) {
             const tbody = document.getElementById(tbodyId);
             const emptyEl = document.getElementById(emptyId);
+            const waitingBox = document.getElementById(`${channelKey}-waiting-sublist`);
             if (!tbody) return;
             tbody.innerHTML = '';
+
+            const waitingItems = list.filter(c => c.status === 'Mensaje Enviado (48h)');
+            if (waitingBox) {
+                waitingBox.innerHTML = waitingItems.length === 0 ? '' : `
+                    <div class="p-3.5 bg-teal-50/70 border-t border-teal-200">
+                        <div class="text-xs font-bold text-teal-900 mb-2">⏳ En espera de respuesta 48 hs (${waitingItems.length})</div>
+                        <div class="space-y-1.5">
+                            ${waitingItems.map(c => `
+                                <div class="p-2 rounded-xl bg-white border border-teal-200 flex items-center justify-between gap-2 text-xs">
+                                    <div><b>${c.name || 'Sin Nombre'}</b> • ${c.phone || ''}</div>
+                                    <div class="flex items-center gap-1">
+                                        <button onclick="executeStatusUpdate('${c.id}', 'Contestó', 'Mensaje')" class="px-2 py-1 bg-blue-600 text-white rounded-lg font-semibold">✓ Contestó</button>
+                                        <button onclick="openEditModal('${c.id}')" class="px-2 py-1 bg-slate-100 text-slate-700 rounded-lg">Editar</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>`;
+            }
+
             const filtered = list.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
             if (filtered.length === 0) { emptyEl?.classList.remove('hidden'); return; }
             emptyEl?.classList.add('hidden');
@@ -2864,7 +2877,7 @@
                 emptyEl?.classList.remove('hidden');
             } else {
                 emptyEl?.classList.add('hidden');
-                tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold">${c.name} <div class="mt-0.5">${renderWhatsAppLink(c.phone, null, null, c.status, 'clientes', c.name)}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel || '-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><button onclick="openWaAiForContact('${c.id}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold">🤖 Responder IA</button> <button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button> <button onclick="deleteContact('${c.id}')" class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg text-xs">🗑️</button></td></tr>`).join('');
+                tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold">${c.name} <div class="mt-0.5">${renderWhatsAppLink(c.phone, null, null, c.status, 'clientes', c.name)}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel || '-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><button onclick="openWaAiForContact('${c.id}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold">🤖 Sofía IA</button> <button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button> <button onclick="deleteContact('${c.id}')" class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg text-xs">🗑️</button></td></tr>`).join('');
             }
             if (noCompraBody) {
                 if (noCompraList.length === 0) {
@@ -3084,7 +3097,7 @@
             showToast(`📥 Lead "${name}" ingresado desde Salesforce`);
         };
 
-        // --- PESTAÑA 5: OBJETIVOS (PROYECCIÓN DÍAS HÁBILES LUN-VIE + COACH IA DE RENDIMIENTO) ---
+        // --- PESTAÑA 5: OBJETIVOS ---
         function getBusinessDaysStats() {
             const now = new Date();
             const year = now.getFullYear();
@@ -3265,7 +3278,7 @@
             showToast("✨ Metas calibradas con IA aplicadas a tu semana y mes");
         };
 
-        // --- PESTAÑA 6: PLANES & PDF (INDEXEDDB PERSISTENTE + 4 TRAMOS ORDINARIOS SIN EXTRAORDINARIA) ---
+        // --- PESTAÑA 6: PLANES & PDF ---
         const PLAN_IDB_NAME = 'CrmGinzaToyotaPlanesDB';
         const PLAN_IDB_STORE = 'planFiles';
 
@@ -3342,7 +3355,6 @@
                 }
             }
 
-            // Duración del plan e Integración Mínima contractual (Art. 3)
             const durMatch = combinedLabel.match(/\b(60|72|84|96|108|120)\s*(?:cuotas|meses)\b/i);
             const planMonths = durMatch ? Number(durMatch[1]) : 84;
             const intMinExplicit = combinedLabel.match(/integraci[oó]n\s*m[ií]nima[^\d]{0,20}(\d{1,2})\s*cuotas?/i);
@@ -3350,12 +3362,10 @@
                 ? Number(intMinExplicit[1])
                 : (planMonths >= 96 ? 36 : (planMonths >= 72 ? 24 : 12));
 
-            // Extraer todos los importes monetarios en orden de aparición (ignorando porcentajes y números de cuota)
             const parseMoneyList = (txt) => Array.from(String(txt || '').matchAll(/\$?\s*([\d]{1,3}(?:\.[\d]{3})+)(?:,\d{2})?/g))
                 .map(m => Number(m[1].replace(/\./g, '')))
                 .filter(n => !isNaN(n) && n >= 50000);
 
-            // 1. Identificar Valor del Vehículo (100%), Valor del 70% y Valor del 30% (Cuota Extraordinaria)
             const allBigAmounts = parseMoneyList(rawStr).filter(n => n >= 4000000 && n <= 250000000);
             let vehicleValue = allBigAmounts.length > 0 ? Math.max(...allBigAmounts) : 0;
             let value70 = 0;
@@ -3367,14 +3377,12 @@
                 const expectedMain = vehicleValue * mainPct;
                 const expectedComp = vehicleValue * compPct;
 
-                // Buscar importes reales del PDF que coincidan con el 70% y el 30% del vehículo (tolerancia 3%)
                 value70 = allBigAmounts.find(n => Math.abs(n - expectedMain) / expectedMain <= 0.03) || Math.round(expectedMain);
                 value30 = allBigAmounts.find(n => Math.abs(n - expectedComp) / expectedComp <= 0.03) || Math.round(expectedComp);
             } else if (vehicleValue > 0) {
                 value70 = vehicleValue;
             }
 
-            // Conjunto de importes grandes (Valor Vehículo, 70% y 30% Extraordinaria) para excluirlos de las cuotas mensuales
             const excludedCapitalSet = new Set([vehicleValue, value70, value30].filter(v => v > 0));
             const maxMonthlyQuotaCap = vehicleValue > 0 ? Math.round(vehicleValue * 0.045) : 3500000;
 
@@ -3386,7 +3394,6 @@
                 return true;
             };
 
-            // 2. Extraer cada período de cuota según el mes de pago (Cuota 1, 2 a 18, 19 a 24, 25 a 84 y rangos dinámicos)
             const extractPeriodQuota = (regex) => {
                 const found = [];
                 let m;
@@ -3410,7 +3417,6 @@
             if (c19_24 > 0) allPeriods.push({ label: 'Cuotas 19 a 24', amount: c19_24 });
             if (c25_84 > 0) allPeriods.push({ label: `Cuotas 25 a ${planMonths}`, amount: c25_84 });
 
-            // Detectar cualquier otro rango de meses de pago (ej: 2 a 12, 13 a 36, 37 a 84, etc.)
             const dynamicRangeRegex = /\b(\d{1,3})\s*(?:a|al|-)\s*(\d{1,3})\b/gi;
             let rm;
             while ((rm = dynamicRangeRegex.exec(rawStr)) !== null) {
@@ -3428,7 +3434,6 @@
                 }
             }
 
-            // 3. Extraer el valor de la Cuota Pura (que aparece al final de la tabla/fila)
             let pureQuota = 0;
             const pureExplicit = rawStr.match(/(?:cuota\s*pura|al[ií]cuota)[^\n$]{0,70}\$?\s*([\d]{1,3}(?:\.[\d]{3})+)(?:,\d{2})?/i);
             if (pureExplicit) {
@@ -3436,22 +3441,16 @@
                 if (isMonthlyQuota(candidate)) pureQuota = candidate;
             }
 
-            // Todos los importes de cuota mensual ordinaria detectados en el PDF
             const allMonthlyCandidates = parseMoneyList(rawStr).filter(isMonthlyQuota);
-
-            // Si no vino etiquetada la Cuota Pura pero hay varios montos de cuota, la cuota pura suele ser el menor importe al final de la fila
             if (!pureQuota && allMonthlyCandidates.length > 0) {
-                const tailCandidate = allMonthlyCandidates[allMonthlyCandidates.length - 1];
-                pureQuota = tailCandidate;
+                pureQuota = allMonthlyCandidates[allMonthlyCandidates.length - 1];
             }
 
-            // Cuota del período más alta (excluyendo siempre el 30% extraordinario)
             const periodAmounts = allPeriods.map(p => p.amount).filter(v => v > 0);
             let highestPeriodQuota = periodAmounts.length > 0
                 ? Math.max(...periodAmounts)
                 : (allMonthlyCandidates.length > 0 ? Math.max(...allMonthlyCandidates) : 0);
 
-            // Fallback contra catálogo si el PDF era una imagen escaneada sin capa de texto
             if (!vehicleValue || !highestPeriodQuota) {
                 const refPlan = marketPlansCatalog.find(p =>
                     p.brand === 'Toyota' &&
@@ -3473,7 +3472,6 @@
                 pureQuota = Math.round((vehicleValue * pctFactor) / planMonths);
             }
 
-            // 4. Cuota Extraordinaria (30% en planes reducidos) o Integración Mínima * Cuota Pura (si es 100%)
             let extraordinaryQuota = 0;
             let extraordinaryLabel = '';
             if (modality !== '100%' && value30 > 0) {
@@ -3974,7 +3972,7 @@
             showToast(`✅ Tramos ordinarios actualizados (${targetPlan.modality || '70/30'})`);
         };
 
-        // --- ASISTENTE CONVERSACIONAL IA WHATSAPP (MODO DISCRETO: SOLO RESPONDE LO QUE EL CLIENTE PREGUNTA) ---
+        // --- ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA • PERFIL COMERCIAL SEDUCTOR Y CONSULTIVO) ---
         function updateWaAiNavBadge() {
             const btn = document.getElementById('nav-wa-ai-btn');
             const dot = document.getElementById('nav-wa-ai-dot');
@@ -3983,11 +3981,11 @@
             if (waAiConfig.autoReplyMobile) {
                 btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white animate-ping';
-                lbl.textContent = waAiConfig.sandboxEnabled ? '🤖 WA IA ON (SANDBOX)' : '🤖 WA IA ON';
+                lbl.textContent = waAiConfig.sandboxEnabled ? '🤖 Sofía IA ON (SANDBOX)' : '🤖 Sofía IA ON';
             } else {
                 btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-[#EB0A1E] hover:bg-red-700 text-white border border-red-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white/70';
-                lbl.textContent = '🤖 WA IA';
+                lbl.textContent = '🤖 Sofía IA';
             }
         }
 
@@ -4019,11 +4017,11 @@
                 const extraTxt = p.extraordinaryQuota > 0
                     ? ` | ${p.extraordinaryLabel || 'Cuota Extraordinaria / Integ. Mínima'}: $${Number(p.extraordinaryQuota).toLocaleString('es-AR')}`
                     : '';
-                return `- PDF "${p.planName}" [${p.modality || '70/30'}] (${p.period}): Valor Vehículo $${Number(p.vehicleValue || 0).toLocaleString('es-AR')}${cap70Txt} | CUOTA_DEL_PERIODO_MAS_ALTA (INFORMAR AL CLIENTE SI PREGUNTA CUOTA): $${Number(p.price || 0).toLocaleString('es-AR')}${periodsArr ? ' | Desglose períodos: ' + periodsArr : ''}${pureTxt}${extraTxt}`.trim();
+                return `- PDF "${p.planName}" [${p.modality || '70/30'}] (${p.period}): Valor Vehículo $${Number(p.vehicleValue || 0).toLocaleString('es-AR')}${cap70Txt} | CUOTA_DEL_PERIODO_MAS_ALTA: $${Number(p.price || 0).toLocaleString('es-AR')}${periodsArr ? ' | Desglose períodos: ' + periodsArr : ''}${pureTxt}${extraTxt}`.trim();
             });
 
             const historyMsgs = contact && waAiConversationLogs[contact.id]
-                ? waAiConversationLogs[contact.id].slice(-8).map(m => `${m.from === 'ai' ? 'Asesor' : 'Cliente'}: ${m.text}`)
+                ? waAiConversationLogs[contact.id].slice(-8).map(m => `${m.from === 'ai' ? 'Sofía' : 'Cliente'}: ${m.text}`)
                 : [];
 
             const clientContext = contact ? {
@@ -4041,7 +4039,7 @@
             return {
                 fechaHoy: new Date().toLocaleDateString('es-AR'),
                 concesionario: waAiConfig.branchName || 'Ginza Toyota',
-                asesor: waAiConfig.advisorName || 'Asesor Comercial',
+                asesora: waAiConfig.advisorName || 'Sofía',
                 baseLegalContractualToyotaPlan: TOYOTA_PLAN_CONTRACT_KNOWLEDGE,
                 planesToyotaVigentes: toyotaPlans,
                 comparativaCompetenciaAutorizada: rivalPlans,
@@ -4068,7 +4066,7 @@
             contact.status = 'Entrevista';
             contact.scheduleDate = isoDate;
             contact.scheduleTime = timeStr;
-            contact.scheduleNote = 'Agendado por Asistente WA IA';
+            contact.scheduleNote = 'Agendado por Sofía IA';
             contact.updatedAt = Date.now();
             if (contact.method === 'Salesforce') pushSalesforceOutboundUpdate(contact, 'ai_auto_schedule');
             saveLocalData(true);
@@ -4078,105 +4076,112 @@
         }
 
         function buildDeterministicCrmReply(contact, userMessage = '') {
-            const advisor = waAiConfig.advisorName || 'Gonzalo';
+            const advisor = waAiConfig.advisorName || 'Sofía';
             const branch = waAiConfig.branchName || 'Ginza Toyota';
-            const rawName = (contact?.name && !['sin nombre', 'lead salesforce'].includes(contact.name.toLowerCase())) ? contact.name.split(' ')[0] : '';
-            const saludo = rawName ? `Hola ${rawName}, ¿cómo estás?` : `Hola, ¿cómo estás?`;
-            const msgNorm = String(userMessage || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const rawName = (contact?.name && !['sin nombre', 'lead salesforce', 'prueba crm'].includes(contact.name.toLowerCase()))
+                ? contact.name.split(' ')[0]
+                : '';
+            const msgNorm = String(userMessage || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+            const prevLogs = (contact && waAiConversationLogs[contact.id]) ? waAiConversationLogs[contact.id] : [];
+            const alreadyGreeted = prevLogs.some(m => m.from === 'ai');
 
             const detectedModel = detectToyotaModelFromText(userMessage) || contact?.interestModel || '';
-            if (detectedModel && contact && !contact.interestModel) {
+            if (detectedModel && contact && contact.interestModel !== detectedModel) {
                 contact.interestModel = detectedModel;
             }
 
-            // REGLA ESTRICTA: En el primer mensaje o saludo sin pregunta puntual, NO soltar precios ni cláusulas por adelantado
-            if (!userMessage.trim()) {
+            if (!msgNorm || (!alreadyGreeted && /^(hola|buen dia|buenas|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm))) {
                 if (contact?.status === 'Entrevista' && contact?.scheduleDate) {
-                    return `${saludo} Soy ${advisor} de ${branch}. Te escribo para confirmar nuestra entrevista del ${formatDisplayISODate(contact.scheduleDate)}${contact.scheduleTime ? ` a las ${contact.scheduleTime} hs` : ''}. ¿Te queda bien ese horario?`;
+                    return `${rawName ? `Hola ${rawName}, ` : 'Hola, '}soy ${advisor} de ${branch}. Te escribo para confirmar nuestra reunión del ${formatDisplayISODate(contact.scheduleDate)}${contact.scheduleTime ? ` a las ${contact.scheduleTime} hs` : ''}. ¿Te queda cómodo ese horario?`;
                 }
                 if (detectedModel) {
-                    return `${saludo} Soy ${advisor} de ${branch}. Vi tu consulta por ${detectedModel}, ¿buscabas operación convencional, entrega de usado o financiación?`;
+                    return `${rawName ? `Hola ${rawName}, ` : 'Hola, '}¿cómo estás? Soy ${advisor}, asesora de ${branch}. Vi que te interesa el *${detectedModel}*: es un vehículo increíble. Contame, ¿lo pensás para uso diario o ruta, y te gustaría ver cómo armarlo con un plan a medida?`;
                 }
-                return `${saludo} Soy ${advisor} de ${branch}. Te contacto por tu consulta comercial con nosotros, ¿en qué vehículo o gestión te puedo asesorar?`;
+                return `${rawName ? `Hola ${rawName}, ` : 'Hola, '}¿cómo estás? Soy ${advisor}, asesora comercial de ${branch}. Qué bueno saludarte; contame qué Toyota tenés en mente o qué estilo de vehículo estás buscando así te guío.`;
             }
 
-            // Consultas comerciales amplias: Venta convencional, toma de usados, financiación bancaria / Toyota Compañía Financiera
+            const isAutomotiveOrCommercial = /\b(toyota|yaris|corolla|hilux|hiace|sw4|rav4|auto|camioneta|vehiculo|0km|0 km|usado|plan|cuota|financ|precio|valor|contado|convencional|permuta|entrega|concesionario|ginza|salon|test drive|manejar|ver|pasar|reunion|entrevista|horario|direccion|adjudica|licita|sorteo|service|garantia|70\/30|100%|comprar|quiero|modelo|version|caja|automatico|manual|hibrido)\b/.test(msgNorm);
+            if (!isAutomotiveOrCommercial && msgNorm.split(/\s+/).length >= 2) {
+                return `Totalmente comprensible${rawName ? `, ${rawName}` : ''}, gracias por comentármelo. En lo que respecta a mi área acá en ${branch}, siempre que quieras evaluar movilidad o proyectar tu próximo Toyota con la tranquilidad de un plan oficial, estoy a tu disposición. ¿Hay algún modelo de la línea que te llame la atención hoy?`;
+            }
+
+            if (/\b(direccion|donde|ubicacion|horario|reunion|entrevista|pasar|visitar|salon|concesionario|test drive|manejar|verlo)\b/.test(msgNorm)) {
+                return `Cuando quieras estás invitado a pasar por ${branch} a tomar un café, subirte al ${detectedModel || 'Toyota'} y verlo en detalle sin ningún compromiso. ¿Preferís darte una vuelta por la mañana o por la tarde?`;
+            }
+
+            if (/\b(usado|permuta|parte de pago|tomar|cotizar|tasan|entrego)\b/.test(msgNorm)) {
+                return `Sí, tomamos usados en parte de pago y además podés usarlo para licitar y retirar tu 0 km muchísimo más rápido dentro de Toyota Plan, sin descapitalizarte. Si querés, pasame año y versión de tu auto y cuando gustes lo tasamos tranquilos en el salón.`;
+            }
+
             if (/\b(contado|convencional|entrega inmediata|stock|disponibilidad)\b/.test(msgNorm)) {
-                return `${saludo} En ${branch} trabajamos tanto venta convencional como financiación y planes. Decime qué versión de ${detectedModel || 'Toyota'} buscás y si tenés un vehículo para entregar, así lo revisamos juntos.`;
-            }
-            if (/\b(usado|permuta|parte de pago|tomar|cotizar mi auto|tasan)\b/.test(msgNorm)) {
-                return `${saludo} Sí, en ${branch} tomamos usados en parte de pago (y también contamos con Usados Certificados Toyota). Si querés, decime qué año y modelo es tu vehículo o coordinamos para tasarlo en salón.`;
-            }
-            if (/\b(postventa|service|taller|repuesto|garantia oficial)\b/.test(msgNorm)) {
-                return `${saludo} Los vehículos 0 km Toyota cuentan con garantía oficial y servicio de postventa en ${branch}. Si necesitás gestionar un turno o consulta puntual, decime qué necesitás y te derivo con el área correspondiente.`;
+                return `Trabajamos operación convencional y entrega directa en ${branch}. De todos modos, muchos clientes que vienen por contado terminan eligiendo suscribir un *Toyota Plan* (100% o 70/30) porque congelan capital, no pagan intereses bancarios y licitan rápido. Si querés, pasate un ratito por el salón y comparamos ambas opciones lado a lado para tu ${detectedModel || 'Toyota'}.`;
             }
 
-            // Consultas contractuales / legales específicas (solo si el cliente pregunta por ese tema)
             if (/\b(flexible|garantia extendida)\b/.test(msgNorm)) {
-                return `${saludo} Con el Plan Flexible (Res. IGJ 183/24) al adjudicar recibís un Certificado por el Valor Móvil que podés usar para retirar un 0 km o un Usado Certificado Toyota con Garantía Extendida de hasta 4 años.`;
+                return `Con el *Plan Flexible* (Res. IGJ 183/24) al adjudicar recibís un Certificado por el Valor Móvil que te permite elegir un 0 km de lista o un Usado Certificado Toyota con Garantía Extendida de hasta 4 años. Es súper versátil si después querés cambiar de opción.`;
             }
-            if (/\b(adjudica|sorteo|licita|entrega|demora|plazo|dias)\b/.test(msgNorm)) {
-                return `${saludo} Los actos de adjudicación se hacen entre los días 12 y 20 de cada mes por sorteo o licitación (oferta mínima 1 cuota pura). Una vez cumplido el pedido, el plazo contractual de entrega es de hasta 75 días corridos para 0 km y 60 días para usados certificados.`;
+            if (/\b(adjudica|sorteo|licita|plazo|demora)\b/.test(msgNorm)) {
+                return `Las adjudicaciones son todos los meses entre los días 12 y 20 por sorteo o licitación (con oferta mínima de apenas 1 cuota pura). Una vez hecho el pedido, el plazo contractual de entrega es de hasta 75 días corridos. Si te parece, lo vemos con ejemplos reales en el concesionario.`;
             }
             if (/\b(arrepent|baja|renunc|rescind|devolucion|reintegro)\b/.test(msgNorm)) {
-                return `${saludo} Tenés derecho de arrepentimiento dentro de los 10 días corridos con devolución del 100% de lo abonado. Si renunciás más adelante, el haber se calcula por cuotas puras integradas menos 2% (o 4% en rescisión) y se reintegra al liquidar el grupo o al sustituirse el plan.`;
+                return `Tenés total respaldo oficial de Toyota Argentina: contás con 10 días corridos de arrepentimiento con reintegro del 100%, y si en algún momento decidís no seguir, tu ahorro en cuotas puras queda resguardado según condiciones contractuales IGJ.`;
             }
             if (/\b(adelant|cancelar|transfer|ceder|cesion)\b/.test(msgNorm)) {
-                return `${saludo} Podés adelantar o cancelar cuotas en cualquier momento a valor de Cuota Pura (sin cargos administrativos), y también podés ceder el plan a un tercero sin que Toyota Plan cobre comisión por la transferencia.`;
+                return `Podés adelantar cuotas cuando quieras a valor de *Cuota Pura* (sin gastos administrativos, achicando plazo de atrás para adelante) o transferir el plan sin comisión de Toyota Plan. Es una herramienta muy cómoda para ir capitalizándote.`;
             }
 
-            // Consultas de precios / cuotas (SOLO si el cliente pregunta por precio, cuota, valor o monto)
-            const asksPrice = /\b(precio|cuota|valor|sale|cuesta|monto|plata|financ|70\/30|100%)\b/.test(msgNorm);
-            if (asksPrice) {
-                const matchedToyotaPlans = detectedModel
-                    ? marketPlansCatalog.filter(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()))
-                    : [];
-                const matchedPdf = detectedModel
-                    ? plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(detectedModel.toLowerCase()))
-                    : null;
+            const asksFinanceOrPrice = /\b(financ|plan|cuota|precio|valor|sale|cuesta|monto|plata|70\/30|100%|comprar|quiero|interesa)\b/.test(msgNorm);
 
-                if (detectedModel && (matchedToyotaPlans.length > 0 || matchedPdf)) {
+            if (detectedModel && (asksFinanceOrPrice || msgNorm === detectedModel.toLowerCase())) {
+                const matchedPdf = plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(detectedModel.toLowerCase()));
+                const matchedCatalog = marketPlansCatalog.filter(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()));
+
+                if (/\b(financ|plan|cuota|precio|valor|sale|cuesta|monto|70\/30|100%)\b/.test(msgNorm)) {
                     const lines = [];
                     if (matchedPdf && matchedPdf.price > 0) {
-                        lines.push(`• *${matchedPdf.vehicleName || matchedPdf.planName}* (${matchedPdf.modality || '70/30'}): Valor vehículo $${Number(matchedPdf.vehicleValue || 0).toLocaleString('es-AR')} — Cuota del período más alta $${Number(matchedPdf.price).toLocaleString('es-AR')}`);
+                        lines.push(`• *${matchedPdf.vehicleName || matchedPdf.planName}* (${matchedPdf.modality || '70/30'}): Valor móvil $${Number(matchedPdf.vehicleValue || 0).toLocaleString('es-AR')} — Cuota ref. $${Number(matchedPdf.price).toLocaleString('es-AR')}`);
                     } else {
-                        matchedToyotaPlans.forEach(p => {
-                            lines.push(`• *${p.model}* (${p.modality}): Valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')} — Cuota ref. $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
+                        matchedCatalog.forEach(p => {
+                            lines.push(`• *${p.model}* (${p.modality}): Valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')} — Cuota pura ref. $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
                         });
                     }
-                    return `${saludo} Te paso el detalle consultado para *Toyota ${detectedModel}*:\n\n${lines.join('\n')}\n\n¿Querés que veamos alguna otra opción o coordinamos una charla?`;
+                    if (lines.length > 0) {
+                        return `Para el *Toyota ${detectedModel}* tenemos alternativas muy convenientes en Toyota Plan (sin bancos ni tasas abusivas):\n\n${lines.join('\n')}\n\nLa modalidad *70/30* te deja una cuota mensual súper liviana, y el *100%* financia toda la unidad en cuotas puras. ¿Te gustaría pasar unos minutos por ${branch} para verlo en persona y armar tu esquema ideal?`;
+                    }
                 }
-                return `${saludo} Decime qué modelo Toyota te interesa (Yaris, Yaris Cross, Corolla, Corolla Cross, Hilux o Hiace) y te paso el valor exacto.`;
+
+                return `¡Gran elección el *${detectedModel}*! Es uno de los modelos más buscados por su confiabilidad y valor de reventa. Con *Toyota Plan* podés proyectarlo en cuotas sin interés bancario (en esquema 70/30 o 100%). Si te queda cómodo, te invito a pasar por ${branch} a conocerlo en salón y vemos cómo te quedaría la cuota. ¿Qué día solés andar por la zona?`;
             }
 
-            if (/\b(direccion|donde|ubicacion|horario|reunion|entrevista|pasar|visitar)\b/.test(msgNorm)) {
-                return `${saludo} Podemos vernos en ${branch} o hacer una videollamada cuando te quede cómodo. Decime qué día y horario preferís y te lo agendo.`;
+            if (asksFinanceOrPrice && !detectedModel) {
+                return `En ${branch} trabajamos toda la línea Toyota mediante *Toyota Plan* (esquemas 70/30 de cuota reducida o 100% financiado directo de fábrica, con posibilidad de licitar con usado o efectivo). ¿Qué modelo te entusiasma más hoy: Yaris, Yaris Cross, Corolla, Corolla Cross o Hilux?`;
             }
 
-            // Respuesta comercial abierta y profesional ante cualquier otra consulta sin volcar información no solicitada
-            return `${saludo} Contame un poco más qué operación o vehículo estabas buscando en ${branch}${detectedModel ? ` (vi que mencionaste ${detectedModel})` : ''} así te asesoro puntual.`;
+            return `Perfecto${rawName ? ` ${rawName}` : ''}. Mi idea es ayudarte a encontrar la forma más inteligente y cómoda de llegar a tu Toyota, ya sea con un plan a medida o tomando tu usado. Cuando quieras podés darte una vuelta por ${branch} para verlo sin compromiso, o decime qué detalle te gustaría revisar primero.`;
         }
 
         async function generateGroundedWhatsAppReply(contact, userMessage = '') {
             const autoBooked = tryAutoScheduleFromClientMessage(contact, userMessage);
             const kb = buildCrmRealKnowledgeSnapshot(contact);
             const fallbackReply = autoBooked
-                ? `¡Perfecto! Ya te dejé agendada la entrevista en ${kb.concesionario} para el ${autoBooked.date} a las ${autoBooked.time} hs${contact?.interestModel ? ` por tu ${contact.interestModel}` : ''}. ¡Te esperamos!`
+                ? `¡Excelente! Ya te dejé agendada la visita en ${kb.concesionario} para el ${autoBooked.date} a las ${autoBooked.time} hs${contact?.interestModel ? ` para ver tu ${contact.interestModel}` : ''}. ¡Te espero con un café!`
                 : buildDeterministicCrmReply(contact, userMessage);
 
             try {
                 const apiKey = "";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
-                const systemPrompt = `Eres ${kb.asesor}, asesor comercial profesional de ${kb.concesionario} atendiendo por WhatsApp en Argentina (voseo argentino: "vos", "tenés", "decime", cordial, ejecutivo y 100% comercial).
+                const systemPrompt = `Eres ${kb.asesora}, asesora comercial de ${kb.concesionario} atendiendo por WhatsApp en Argentina (voseo argentino: "vos", "tenés", "decime", cálida, segura, elegante y profesional).
 REGLAS INQUEBRANTABLES:
-1. PERFIL ESTRICTAMENTE COMERCIAL Y AMPLIO: Responde siempre en tono comercial profesional (nunca personal ni informal en exceso). Puedes asesorar sobre cualquier operación comercial de Toyota: venta convencional, entrega de usados en parte de pago, financiación, Plan de Ahorro tradicional, Plan Flexible (Res. IGJ 183/24), comparativas o coordinación de entrevistas.
-2. MODO DISCRETO (NO DES INFO SI NO PREGUNTAN): Nunca sueltes precios, cuotas, tramos ni cláusulas contractuales por adelantado si el cliente solo saludó o no preguntó por ese dato. Responde únicamente lo que el cliente preguntó y haz una pregunta comercial breve para avanzar.
-3. NUNCA INVENTES DATOS: Todo precio, cuota, valor móvil o cláusula que menciones DEBE salir exclusivamente de DATOS_REALES_CRM (excluyendo siempre cualquier cuota extraordinaria; usa solo la cuota ordinaria más alta de referencia cuando pidan precios).
-4. Si se acaba de agendar una entrevista (${autoBooked ? `el ${autoBooked.date} a las ${autoBooked.time} hs` : 'ninguna nueva'}), confírmala con amabilidad.
-5. Mensajes breves y claros (2 a 4 líneas máximo).`;
+1. IDENTIDAD Y MEMORIA: Te llamás ${kb.asesora}. Si en historialRecienteChat ya saludaste antes, NO vuelvas a decir "Hola, ¿cómo estás?". Continuá la charla con naturalidad.
+2. SEDUCCIÓN COMERCIAL SIN DESESPERACIÓN: Asesorá en todo lo referido a Toyota (modelos, convencional, usados, financiación), pero guiá sutilmente la conversación hacia los beneficios de suscribir un *Toyota Plan* (sin interés bancario, cuotas puras, esquemas 70/30 o 100%, posibilidad de licitar con usado) e invitá con elegancia y cero presión a visitar el concesionario ${kb.concesionario} (tomar un café, ver el auto en salón, tasar su usado).
+3. TEMAS AJENOS A TOYOTA: Si el cliente habla de algo que no tiene relación con Toyota o autos, respondé con máxima educación, empatía y altura profesional, y luego reencauzá suavemente hacia cómo podés ayudarlo en ${kb.concesionario}.
+4. NUNCA INVENTES DATOS: Todo precio, cuota o cláusula que menciones DEBE salir exclusivamente de DATOS_REALES_CRM (sin cuota extraordinaria). No tires listas largas de precios si el cliente aún no preguntó por valores.
+5. Si se agendó una entrevista (${autoBooked ? `el ${autoBooked.date} a las ${autoBooked.time} hs` : 'ninguna nueva'}), confirmala con calidez.
+6. Mensajes breves, naturales y persuasivos (2 a 4 líneas máximo).`;
 
-                const promptText = `DATOS_REALES_CRM:\n${JSON.stringify(kb, null, 2)}\n\nMENSAJE_DEL_CLIENTE: "${userMessage || '(Saludo inicial comercial cordial sin dar precios ni info no solicitada)'}"\n\nRedacta únicamente el mensaje listo para enviar por WhatsApp:`;
+                const promptText = `DATOS_REALES_CRM:\n${JSON.stringify(kb, null, 2)}\n\nMENSAJE_DEL_CLIENTE: "${userMessage || '(Primer contacto comercial cordial presentándote como Sofía)'}"\n\nRedacta únicamente el mensaje listo para enviar por WhatsApp:`;
 
                 const res = await fetch(apiUrl, {
                     method: 'POST',
@@ -4190,11 +4195,11 @@ REGLAS INQUEBRANTABLES:
                 const data = await res.json();
                 const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
                 if (aiText) {
-                    return { reply: aiText, source: autoBooked ? 'IA Comercial + Turno Agendado' : 'IA Comercial Discreta + CRM' };
+                    return { reply: aiText, source: autoBooked ? 'Sofía IA + Turno Agendado' : 'Sofía IA Comercial + CRM' };
                 }
             } catch (e) {}
 
-            return { reply: fallbackReply, source: autoBooked ? 'Turno Agendado en CRM' : 'Motor Comercial Verificado CRM' };
+            return { reply: fallbackReply, source: autoBooked ? 'Turno Agendado en CRM' : 'Sofía Asesora Verificada CRM' };
         }
 
         async function queueAutoReplyToMobile(contact, replyText, incomingText = '') {
@@ -4240,7 +4245,7 @@ REGLAS INQUEBRANTABLES:
                         method: 'DELETE'
                     }).catch(() => {});
                 }, 12000);
-                showToast(`🤖 Respuesta IA lista para envío (${contact.name || contact.phone})`);
+                showToast(`🤖 Respuesta Sofía IA lista para envío (${contact.name || contact.phone})`);
             } catch (e) {}
         }
 
@@ -4254,7 +4259,7 @@ REGLAS INQUEBRANTABLES:
             if (fuEl) fuEl.checked = waAiConfig.autoFollowUp24h !== false;
             document.getElementById('wa-ai-allow-schedule').checked = waAiConfig.allowAutoSchedule !== false;
             document.getElementById('wa-ai-allow-compare').checked = waAiConfig.allowCompetitorCompare !== false;
-            document.getElementById('wa-ai-advisor-name').value = waAiConfig.advisorName || 'Gonzalo';
+            document.getElementById('wa-ai-advisor-name').value = waAiConfig.advisorName || 'Sofía';
             document.getElementById('wa-ai-branch').value = waAiConfig.branchName || 'Ginza Toyota';
             document.getElementById('wa-ai-incoming-url').value = `${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`;
             document.getElementById('wa-ai-brain-url').value = `${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`;
@@ -4265,7 +4270,7 @@ REGLAS INQUEBRANTABLES:
             if (kbSummaryEl) {
                 kbSummaryEl.innerHTML = `
                     <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Candado Anti-Chats Personales:</b> Solo responde a los <b>${getAllListsCombined().length} contacto(s)</b> cargados en el CRM.</div>
-                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Perfil Comercial + Modo Discreto:</b> Atiende convencional, usados, planes (IGJ 183/24) y ${toyotaCount} modelos + ${plansHistory.length} PDF(s) sin cuota extraordinaria, solo si el cliente pregunta.</div>
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Perfil Sofía (Consultivo & Seductor):</b> Asesora en toda la gama Toyota, encauza hacia Toyota Plan (${toyotaCount} modelos + ${plansHistory.length} PDFs) e invita al salón con elegancia.</div>
                 `;
             }
 
@@ -4302,7 +4307,7 @@ REGLAS INQUEBRANTABLES:
                 autoFollowUp24h: Boolean(document.getElementById('wa-ai-auto-followup')?.checked),
                 allowAutoSchedule: Boolean(document.getElementById('wa-ai-allow-schedule')?.checked),
                 allowCompetitorCompare: Boolean(document.getElementById('wa-ai-allow-compare')?.checked),
-                advisorName: document.getElementById('wa-ai-advisor-name')?.value.trim() || 'Gonzalo',
+                advisorName: document.getElementById('wa-ai-advisor-name')?.value.trim() || 'Sofía',
                 branchName: document.getElementById('wa-ai-branch')?.value.trim() || 'Ginza Toyota'
             };
             const sbPhoneEl = document.getElementById('wa-ai-sandbox-phone');
@@ -4310,7 +4315,7 @@ REGLAS INQUEBRANTABLES:
             localStorage.setItem('crm_wa_ai_config', JSON.stringify(waAiConfig));
             updateWaAiNavBadge();
             syncAiBrainSnapshotToFirebase();
-            showToast("🤖 Configuración y Nube IA 24/7 actualizadas");
+            showToast("🤖 Configuración y Nube Sofía IA actualizadas");
         };
 
         window.onWaAiContactChange = function() {
@@ -4333,7 +4338,7 @@ REGLAS INQUEBRANTABLES:
                 </div>
             `;
             if (logs.length === 0) {
-                chatBox.innerHTML = headerCard + `<div class="text-center text-xs text-slate-500 py-6">Escribe abajo lo que preguntó el cliente o pulsa <b>"✨ Redactar Saludo Discreto"</b>.</div>`;
+                chatBox.innerHTML = headerCard + `<div class="text-center text-xs text-slate-500 py-6">Escribe abajo lo que preguntó el cliente o pulsa <b>"✨ Redactar Saludo Sofía"</b>.</div>`;
                 return;
             }
             chatBox.innerHTML = headerCard + logs.map(m => `
@@ -4367,7 +4372,7 @@ REGLAS INQUEBRANTABLES:
             if (!clientMsg) { showToast("Escribe el mensaje del cliente", "error"); return; }
 
             const btn = document.getElementById('btn-wa-ai-generate');
-            if (btn) { btn.disabled = true; btn.textContent = 'Verificando CRM...'; }
+            if (btn) { btn.disabled = true; btn.textContent = 'Sofía redactando...'; }
 
             if (!waAiConversationLogs[id]) waAiConversationLogs[id] = [];
             waAiConversationLogs[id].push({ from: 'client', text: clientMsg, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
@@ -4411,7 +4416,7 @@ REGLAS INQUEBRANTABLES:
             } else {
                 waTabRef = window.open(targetUrl, 'crm_whatsapp_web_singleton');
             }
-            showToast("🟢 Abriendo chat en WhatsApp Web con la respuesta verificada");
+            showToast("🟢 Abriendo chat en WhatsApp Web con la respuesta de Sofía");
         };
 
         window.openBackupModal = function() { document.getElementById('sync-room-input').value = syncRoom; document.getElementById('backup-modal')?.classList.remove('hidden'); };
