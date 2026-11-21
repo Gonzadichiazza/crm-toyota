@@ -1615,6 +1615,20 @@
                     </div>
 
                     <div class="p-3.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+                            <label class="text-[11px] font-bold text-slate-600 shrink-0">Cliente:</label>
+                            <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button onclick="resetWaAiChatHistory()" class="px-2.5 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold" title="Borrar memoria de este chat">
+                                🧹 Limpiar Chat
+                            </button>
+                            <button onclick="generateInitialOutreachWithAi()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">
+                                ✨ Redactar Saludo Sofía
+                            </button>
+                        </div>
+                    </div>
+
                     <div id="wa-ai-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[260px]"></div>
 
                     <div id="wa-ai-draft-box" class="hidden p-3 bg-emerald-50/90 border-t border-emerald-200 space-y-2">
