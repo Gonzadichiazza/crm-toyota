@@ -177,6 +177,20 @@
                 Marcar vistas
             </button>
         </div>
+
+        <!-- ALERTA COMERCIAL EN VIVO (NOTIFICA AL ASESOR CUANDO UN CLIENTE PIDE COTIZACIÓN, CONVENCIONAL O ATENCIÓN) -->
+        <div id="commercial-live-alerts-banner" class="hidden mt-3 bg-rose-50 border-2 border-[#EB0A1E] rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div class="flex items-start sm:items-center gap-2.5">
+                <span class="text-xl shrink-0">🔔</span>
+                <div>
+                    <div class="font-extrabold text-[#EB0A1E] uppercase tracking-wide">Atención Requerida en WhatsApp — Lead Caliente / Cotización</div>
+                    <div id="commercial-live-alerts-list" class="text-slate-900 mt-0.5 space-y-1"></div>
+                </div>
+            </div>
+            <button onclick="dismissAllCommercialAlerts()" class="px-3 py-1.5 rounded-xl bg-red-100 hover:bg-red-200 text-[#EB0A1E] font-bold shrink-0 self-end sm:self-center">
+                Marcar vistas
+            </button>
+        </div>
     </section>
 
     <!-- TAB 1: PANEL PRINCIPAL EJECUTIVO GINZA TOYOTA -->
@@ -1721,6 +1735,7 @@
         let selectedAgendaDate = new Date().toISOString().split('T')[0];
         let waIncomingLogs = [];
         let processedWaEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_wa_events') || '[]'));
+        let recentWaMessageFingerprints = new Map();
         let waAiConfig = {
             autoReplyMobile: true,
             autoFollowUp24h: true,
@@ -1733,55 +1748,69 @@
             sandboxPhone: '',
             ...JSON.parse(localStorage.getItem('crm_wa_ai_config') || '{}')
         };
-        if (!waAiConfig.advisorName || waAiConfig.advisorName === 'Gonzalo') {
-            waAiConfig.advisorName = 'Sofía';
-        }
         let waAiConversationLogs = JSON.parse(localStorage.getItem('crm_wa_ai_chats') || '{}');
+        let infoAutoAlerts = JSON.parse(localStorage.getItem('crm_infoauto_alerts') || '[]');
+        let commercialLiveAlerts = JSON.parse(localStorage.getItem('crm_commercial_live_alerts') || '[]');
+        let cachedAvailableGeminiModels = null;
+
+        async function resolveAvailableGeminiModels(apiKey) {
+            if (Array.isArray(cachedAvailableGeminiModels) && cachedAvailableGeminiModels.length > 0) {
+                return cachedAvailableGeminiModels;
+            }
+            const preferredOrder = [
+                'gemini-3-flash-preview',
+                'gemini-2.5-flash',
+                'gemini-2.5-flash-lite',
+                'gemini-flash-latest'
+            ];
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    const validNames = (data.models || [])
+                        .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
+                        .map(m => String(m.name || '').replace(/^models\//, ''))
+                        .filter(n => n.includes('gemini') && !n.includes('2.0-flash'));
+                    if (validNames.length > 0) {
+                        const sorted = [
+                            ...preferredOrder.filter(p => validNames.includes(p)),
+                            ...validNames.filter(v => !preferredOrder.includes(v))
+                        ];
+                        cachedAvailableGeminiModels = sorted.slice(0, 4);
+                        return cachedAvailableGeminiModels;
+                    }
+                }
+            } catch (e) {}
+            return preferredOrder;
+        }
 
         // --- BASE CONTRACTUAL OFICIAL TOYOTA PLAN ARGENTINA S.A. ---
         const TOYOTA_PLAN_CONTRACT_KNOWLEDGE = {
             administradora: "Toyota Plan Argentina S.A. de Ahorro para Fines Determinados (garantizada solidariamente por Toyota Argentina S.A.). Controlada por IGJ.",
-            planFlexibleRes183_24: "El Plan Flexible (Res. IGJ N° 183/2024) adjudica una suma de dinero (Certificado equivalente al Valor Móvil) que permite elegir un Automotor 0 km de la lista Toyota o un Automotor Usado Certificado Toyota con Garantía Extendida (hasta 4 años de antigüedad en www.toyotausados.com.ar).",
-            modalidades: "Planes de hasta 84 o 120 meses: Plan 100% (sin cuota complementaria) y Planes Especiales con Cuota Pura Reducida y Cuota Complementaria al adjudicar (70/30, 80/20, 60/40, 50/50, 75/25, 90/10). Integración mínima según plazo (24 cuotas en planes de 84 meses, 36 cuotas en planes de 96 a 120 meses).",
-            cargosYAranceles: "Derecho de Adhesión y Permanencia: 3% del Valor Móvil (contado o prorrateado hasta 24 cuotas). Derecho de Adjudicación: 1% del Valor Móvil por única vez al adjudicar. Vencimiento mensual del 1 al 10 de cada mes.",
-            adjudicacion: "Actos mensuales entre los días 12 y 20 de cada mes por Sorteo y Licitación (presencial o Licitación Electrónica en web). Oferta mínima: 1 Cuota Pura. Ganador por licitación integra oferta dentro de los 4 días hábiles; aceptación de sorteo dentro de los 10 días corridos.",
-            plazosEntrega: "0 km de Lista: máximo 75 días corridos desde firmado el pedido y cumplidos requisitos (hasta +60 días si es 0 km fuera de lista). Usado con Garantía Extendida (Plan Flexible): máximo 60 días corridos desde firmado el pedido. Demora injustificada devenga intereses tasa activa BNA.",
-            cambioDeModelo: "Al pedir la unidad se puede elegir otro modelo Toyota de mayor valor (pagando la diferencia al Valor Móvil vigente) o de menor valor (imputando la diferencia a cancelación anticipada de Cuotas Puras).",
-            arrepentimientoYRescision: "Derecho de arrepentimiento: devolución del 100% dentro de los 10 días corridos de los pagos iniciales (y devolución de Cuota Pura entre días 11 y 60 si aún no fue agrupado). Renuncia tiene penalidad del 2% sobre el haber y rescisión (3 cuotas impagas) del 4%, reintegrándose al liquidar el grupo o al ser sustituido.",
-            cancelacionYCesion: "Cancelación anticipada total o parcial permitida en cualquier momento a valor de Cuota Pura vigente (sin cargos administrativos). Cesión/transferencia del plan permitida sin cobro de comisión por parte de Toyota Plan (requiere firmas certificadas por escribano y aprobación dentro de 30 días).",
-            seguroVida: "Seguro Colectivo de Vida sobre saldos deudores obligatorio para personas humanas (edad máxima de suscripción 75 años; cubre fallecimiento o invalidez total y permanente cancelando cuotas puras a vencer)."
+            planFlexibleRes183_24: "El Plan Flexible (Res. IGJ N° 183/2024) adjudica una suma de dinero (Certificado equivalente al Valor Móvil) que permite elegir un Automotor 0 km de la lista Toyota o un Automotor Usado Certificado Toyota con Garantía Extendida.",
+            modalidades: "Planes de hasta 84 o 120 meses: Plan 100% (sin cuota complementaria) y Planes Especiales con Cuota Pura Reducida y Cuota Complementaria al adjudicar (70/30, 80/20).",
+            adjudicacion: "Actos mensuales entre los días 12 y 20 de cada mes por Sorteo y Licitación (oferta mínima: 1 Cuota Pura).",
+            plazosEntrega: "0 km de Lista: máximo 75 días corridos desde firmado el pedido y cumplidos requisitos.",
+            arrepentimientoYRescision: "Derecho de arrepentimiento dentro de los 10 días corridos con devolución del 100%.",
+            cancelacionYCesion: "Cancelación anticipada permitida a valor de Cuota Pura vigente sin cargos administrativos; cesión permitida sin comisión de Toyota Plan."
         };
 
-        // --- CATÁLOGO DE PLANES ACTUALIZADO (VALOR MÓVIL Y CUOTA MÁS ALTA DE LOS 3 PERÍODOS ORDINARIOS) ---
+        // --- CATÁLOGO DE PLANES ACTUALIZADO (CUOTA MÁXIMA ORDINARIA DE LOS 3 PERÍODOS) ---
         const DEFAULT_MARKET_PLANS = [
-            { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 485200 },
-            { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 842500 },
-            { id: 'ty-yariscross-xli', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XLI CVT', modality: '70/30', valorMovil: 41464000, cuotaPura: 412800 },
-            { id: 'ty-yariscross-hv', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XEI Híbrido', modality: '70/30', valorMovil: 48457000, cuotaPura: 478900 },
-            { id: 'ty-corollacross', brand: 'Toyota', segment: 'SUV', model: 'Corolla Cross XLI CVT', modality: '70/30', valorMovil: 51918000, cuotaPura: 514600 },
-            { id: 'ty-yaris-70', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '70/30', valorMovil: 36315000, cuotaPura: 362400 },
-            { id: 'ty-yaris-100', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '100%', valorMovil: 36315000, cuotaPura: 516900 },
-            { id: 'ty-corolla-xli', brand: 'Toyota', segment: 'Sedán', model: 'Corolla XLI CVT', modality: '70/30', valorMovil: 44082000, cuotaPura: 438500 },
-            { id: 'ty-hiace-l2h2', brand: 'Toyota', segment: 'Furgón', model: 'Hiace Furgón L2H2 AT', modality: '100%', valorMovil: 72077000, cuotaPura: 1015400 },
-            { id: 'fd-transit', brand: 'Ford', segment: 'Furgón', model: 'Ford Transit Van Mediana Techo Elevado', modality: '100%', valorMovil: 74890000, cuotaPura: 891547 },
-            { id: 'fd-ranger-xl', brand: 'Ford', segment: 'Pick Up', model: 'Ford Ranger XL 4x2', modality: '70/30', valorMovil: 45484213, cuotaPura: 322180 },
-            { id: 'fd-ranger-xls', brand: 'Ford', segment: 'Pick Up', model: 'Ford Ranger XLS V6 4x4 AT', modality: '80/20', valorMovil: 66950000, cuotaPura: 637619 },
-            { id: 'fd-maverick', brand: 'Ford', segment: 'Pick Up', model: 'Ford Maverick XLT AT', modality: '70/30', valorMovil: 48920000, cuotaPura: 346516 },
-            { id: 'fd-territory', brand: 'Ford', segment: 'SUV', model: 'Ford Territory SEL AT', modality: '70/30', valorMovil: 52850000, cuotaPura: 374354 },
-            { id: 'fd-bronco', brand: 'Ford', segment: 'SUV', model: 'Ford Bronco Sport Big Bend 4WD', modality: '80/20', valorMovil: 57900000, cuotaPura: 551428 },
-            { id: 'vw-amarok', brand: 'Volkswagen', segment: 'Pick Up', model: 'Amarok Trendline 4x2', modality: '70/30', valorMovil: 53133050, cuotaPura: 376359 },
-            { id: 'ns-frontier', brand: 'Nissan', segment: 'Pick Up', model: 'Frontier S 4x2', modality: '70/30', valorMovil: 45624222, cuotaPura: 323171 },
-            { id: 'ft-toro', brand: 'Fiat', segment: 'Pick Up', model: 'Toro Freedom AT', modality: '70/30', valorMovil: 57410000, cuotaPura: 406654 },
-            { id: 'pg-2008', brand: 'Peugeot', segment: 'SUV', model: '2008 Active AT', modality: '70/30', valorMovil: 51610000, cuotaPura: 365570 },
-            { id: 'ch-tracker', brand: 'Chevrolet', segment: 'SUV', model: 'Tracker 1.2T AT', modality: '70/30', valorMovil: 41436900, cuotaPura: 293511 },
-            { id: 'jp-renegade', brand: 'Jeep', segment: 'SUV', model: 'Renegade Sport AT', modality: '70/30', valorMovil: 45050400, cuotaPura: 319107 },
-            { id: 'pg-208', brand: 'Peugeot', segment: 'Hatchback', model: '208 Active', modality: '70/30', valorMovil: 44690000, cuotaPura: 316554 },
-            { id: 'vw-polo', brand: 'Volkswagen', segment: 'Hatchback', model: 'Polo Track', modality: '70/30', valorMovil: 37950000, cuotaPura: 268812 },
-            { id: 'ft-cronos', brand: 'Fiat', segment: 'Sedán', model: 'Cronos Drive Pack Plus', modality: '70/30', valorMovil: 40430000, cuotaPura: 286379 },
-            { id: 'vw-virtus', brand: 'Volkswagen', segment: 'Sedán', model: 'Virtus MSI', modality: '70/30', valorMovil: 45200000, cuotaPura: 320166 },
-            { id: 'mb-sprinter', brand: 'Mercedes-Benz', segment: 'Furgón', model: 'Sprinter 314 CDI Mediana', modality: '100%', valorMovil: 78400000, cuotaPura: 933333 },
-            { id: 'rn-master', brand: 'Renault', segment: 'Furgón', model: 'Master L2H2', modality: '100%', valorMovil: 71200000, cuotaPura: 847619 },
-            { id: 'pg-boxer', brand: 'Peugeot', segment: 'Furgón', model: 'Boxer 330M', modality: '100%', valorMovil: 69950000, cuotaPura: 832738 }
+            { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 528803 },
+            { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 891366 },
+            { id: 'ty-yariscross-xli', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XLI CVT', modality: '70/30', valorMovil: 41464000, cuotaPura: 441862 },
+            { id: 'ty-yariscross-hv', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XEI Híbrido', modality: '70/30', valorMovil: 48457000, cuotaPura: 516395 },
+            { id: 'ty-corollacross', brand: 'Toyota', segment: 'SUV', model: 'Corolla Cross XLI CVT', modality: '70/30', valorMovil: 51918000, cuotaPura: 582729 },
+            { id: 'ty-yaris-70', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '70/30', valorMovil: 36315000, cuotaPura: 386998 },
+            { id: 'ty-yaris-100', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '100%', valorMovil: 36315000, cuotaPura: 541856 },
+            { id: 'ty-corolla-xli', brand: 'Toyota', segment: 'Sedán', model: 'Corolla XLI CVT', modality: '70/30', valorMovil: 44082000, cuotaPura: 469767 },
+            { id: 'ty-hiace-l2h2', brand: 'Toyota', segment: 'Furgón', model: 'Hiace Furgón L2H2 AT', modality: '100%', valorMovil: 72077000, cuotaPura: 1075468 },
+            { id: 'fd-ranger-xl', brand: 'Ford', segment: 'Pick Up', model: 'Ford Ranger XL 4x2', modality: '70/30', valorMovil: 45484213, cuotaPura: 484700 },
+            { id: 'vw-amarok', brand: 'Volkswagen', segment: 'Pick Up', model: 'Amarok Trendline 4x2', modality: '70/30', valorMovil: 53133050, cuotaPura: 566200 },
+            { id: 'fd-territory', brand: 'Ford', segment: 'SUV', model: 'Ford Territory SEL AT', modality: '70/30', valorMovil: 52850000, cuotaPura: 563180 },
+            { id: 'pg-208', brand: 'Peugeot', segment: 'Hatchback', model: '208 Active', modality: '70/30', valorMovil: 44690000, cuotaPura: 476250 },
+            { id: 'ft-cronos', brand: 'Fiat', segment: 'Sedán', model: 'Cronos Drive Pack Plus', modality: '70/30', valorMovil: 40430000, cuotaPura: 430850 }
         ];
         let marketPlansCatalog = [...DEFAULT_MARKET_PLANS];
         const FIXED_INTEREST_MODELS = ['Yaris', 'Yaris Cross', 'Corolla', 'Corolla Cross', 'Hilux', 'Hiace'];
@@ -1946,7 +1975,6 @@
             }
         }
 
-        // --- SINCRONIZACIÓN DE CEREBRO IA EN FIREBASE (/ai_brain/{syncRoom}.json) ---
         async function syncAiBrainSnapshotToFirebase() {
             try {
                 const authorizedContacts = getAllListsCombined()
@@ -1970,29 +1998,11 @@
                     active: Boolean(waAiConfig.autoReplyMobile),
                     sandboxEnabled: Boolean(waAiConfig.sandboxEnabled),
                     sandboxPhone: formatPhoneAR(waAiConfig.sandboxPhone || ''),
-                    strictCrmContactsOnly: true,
-                    commercialProfileOnly: true,
                     advisorName: waAiConfig.advisorName || 'Sofía',
                     branchName: waAiConfig.branchName || 'Ginza Toyota',
-                    autoFollowUp24h: waAiConfig.autoFollowUp24h !== false,
-                    allowAutoSchedule: waAiConfig.allowAutoSchedule !== false,
-                    allowCompetitorCompare: waAiConfig.allowCompetitorCompare !== false,
                     authorizedContactsCount: authorizedContacts.length,
                     authorizedContacts,
-                    contractKnowledge: TOYOTA_PLAN_CONTRACT_KNOWLEDGE,
-                    toyotaPlans: marketPlansCatalog.filter(p => p.brand === 'Toyota'),
-                    competitorPlans: marketPlansCatalog.filter(p => p.brand !== 'Toyota'),
-                    pdfPriceLists: plansHistory.slice(0, 20).map(p => ({
-                        period: p.period,
-                        vehicleName: p.vehicleName || p.planName,
-                        modality: p.modality || '70/30',
-                        vehicleValue: p.vehicleValue || 0,
-                        highestOrdinaryQuota: p.price || 0,
-                        allQuotaPeriods: p.allPeriods || [],
-                        tranches: p.tranches || {},
-                        extraordinaryOrMinIntegration: p.extraordinaryQuota || 0,
-                        extraordinaryFormula: p.extraordinaryLabel || ''
-                    }))
+                    toyotaPlans: marketPlansCatalog.filter(p => p.brand === 'Toyota')
                 };
 
                 await fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`, {
@@ -2003,8 +2013,8 @@
                 const badge = document.getElementById('wa-ai-cloud-brain-badge');
                 if (badge) {
                     badge.textContent = waAiConfig.sandboxEnabled
-                        ? `🧪 Modo Prueba Sandbox (${waAiConfig.sandboxPhone || 'Prueba CRM / Hans'})`
-                        : `☁️ Nube IA Sincronizada 24/7 (${authorizedContacts.length} contactos CRM)`;
+                        ? `🧪 Modo Prueba Sandbox (${waAiConfig.sandboxPhone || 'Hans / Prueba CRM'})`
+                        : `☁️ Nube Sofía IA 24/7 (${authorizedContacts.length} contactos CRM)`;
                 }
             } catch (e) {}
         }
@@ -2352,7 +2362,7 @@
                     c.aiFollowUpAt = Date.now();
 
                     const rawName = (c.name && !['sin nombre', 'lead salesforce'].includes(c.name.toLowerCase())) ? c.name.split(' ')[0] : '';
-                    const calmMsg = `${rawName ? `Hola ${rawName}, ` : 'Hola, '}soy Sofía del equipo de Gonzalo Dichiazza en ${waAiConfig.branchName || 'Ginza Toyota'}. Te dejo nuestro contacto por acá sin compromiso por si en algún momento querés evaluar números o coordinar una visita al salón. ¡Que tengas un excelente día!`;
+                    const calmMsg = `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy Sofía, del equipo de Gonzalo Dichiazza en ${waAiConfig.branchName || 'Ginza Toyota'}. Te dejo mi contacto por acá sin compromiso por si en algún momento querés consultar por algún modelo. ¡Saludos!`;
 
                     await queueAutoReplyToMobile(c, calmMsg, '');
                     triggered++;
@@ -2360,7 +2370,7 @@
             }
             if (triggered > 0) {
                 saveLocalData(true);
-                showToast(`🤖 Sofía IA envió ${triggered} seguimiento(s) cordial(es) de 24h`);
+                showToast(`🤖 Sofía envió ${triggered} seguimiento(s) cordial(es) de 24h`);
             }
         };
         window.checkWhatsApp48hTimeouts = function(manual = false) {
@@ -2443,16 +2453,8 @@
         function isSystemOrSummaryNotification(sender, text) {
             const combined = `${sender || ''} ${text || ''}`.toLowerCase();
             const systemPatterns = [
-                'mensajes nuevos',
-                'mensajes de',
-                'buscando mensajes',
-                'realizando copia',
-                'enviando',
-                'llamando',
-                'whatsapp web',
-                'illegalstateexception',
-                'scheme == null',
-                'undefined'
+                'mensajes nuevos', 'mensajes de', 'buscando mensajes', 'realizando copia',
+                'enviando', 'llamando', 'whatsapp web', 'illegalstateexception', 'scheme == null', 'undefined'
             ];
             return systemPatterns.some(pattern => combined.includes(pattern));
         }
@@ -2479,18 +2481,18 @@
                 const sbDigits = String(waAiConfig.sandboxPhone || '').replace(/\D/g, '');
                 const sbTail = sbDigits.length >= 6 ? sbDigits.slice(-7) : '';
                 const matchesSandboxPhone = sbTail && tailDigits && tailDigits === sbTail;
-                const matchesSandboxLabel = normName === 'prueba crm' || normName === 'test crm' || normName.includes('hans');
+                const matchesSandboxLabel = normName === 'prueba crm' || normName === 'test crm' || normName === 'hans';
                 if (!matchesSandboxPhone && !matchesSandboxLabel) return null;
 
                 let testContact = getAllListsCombined().find(c => {
                     const cDigits = String(c.phone || '').replace(/\D/g, '');
-                    const cLow = String(c.name || '').toLowerCase();
-                    return (sbTail && cDigits.endsWith(sbTail)) || cLow === 'prueba crm' || (normName.includes('hans') && cLow.includes('hans'));
+                    const cName = String(c.name || '').toLowerCase().trim();
+                    return (sbTail && cDigits.endsWith(sbTail)) || cName === 'prueba crm' || cName === 'hans';
                 });
                 if (!testContact) {
                     testContact = {
-                        id: normName.includes('hans') ? 'sandbox_hans_user' : 'sandbox_test_user',
-                        name: normName.includes('hans') ? 'Hans' : 'Prueba CRM',
+                        id: 'sandbox_test_user',
+                        name: sender || 'Prueba CRM',
                         phone: formatPhoneAR(waAiConfig.sandboxPhone || sender),
                         method: 'Sandbox',
                         status: 'Contestó'
@@ -2513,9 +2515,9 @@
                     }
                 }
             }
-
             return null;
         }
+
         window.pollIncomingWhatsAppEvents = async function() {
             try {
                 const res = await fetch(`${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`);
@@ -2528,6 +2530,16 @@
                     processedWaEventIds.add(evId);
                     const sender = typeof ev === 'string' ? ev : (ev.sender || ev.not_title || ev.title || '');
                     const text = typeof ev === 'object' ? (ev.text || ev.notification || '') : '';
+
+                    // Evitar procesar notificaciones duplicadas idénticas en menos de 6 segundos
+                    const fp = `${sender.trim().toLowerCase()}|${text.trim().toLowerCase()}`;
+                    const lastSeen = recentWaMessageFingerprints.get(fp) || 0;
+                    if (Date.now() - lastSeen < 6000) {
+                        fetch(`${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}/${encodeURIComponent(evId)}.json`, { method: 'DELETE' }).catch(() => {});
+                        continue;
+                    }
+                    recentWaMessageFingerprints.set(fp, Date.now());
+
                     const result = processIncomingWhatsAppMessage(sender, text);
                     waIncomingLogs.unshift({
                         sender: sender || 'Desconocido',
@@ -2569,6 +2581,143 @@
             } else {
                 showToast(`🛡️ Ignorado: "${sender}" no figura en el CRM (protección chat personal)`, 'error');
             }
+        };
+
+        // --- ALERTAS EN VIVO EN EL CRM (INFOAUTO + ATENCIÓN COMERCIAL) ---
+        function detectAndRegisterTradeInAlert(contact, userMessage) {
+            if (!contact || !userMessage) return false;
+            const norm = String(userMessage).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const hasYear = /\b(199\d|20[0-2]\d)\b/.test(norm);
+            const hasKm = /\b\d{1,3}(?:[.,]\d{3})*\s*(?:mil\s*)?kms?\b/.test(norm);
+            const hasUsedKeyword = /\b(tengo un|tengo una|mi auto|mi camioneta|mi usado|usado|permuta|parte de pago|entregar|hyundai|santa fe|ford|ranger|focus|fiesta|ecosport|chevrolet|cruze|onix|tracker|volkswagen|vw|gol|polo|amarok|vento|fiat|cronos|argo|toro|peugeot|208|308|2008|renault|sandero|kangoo|duster|nissan|frontier|kicks|honda|civic|hrv|crv)\b/.test(norm);
+            if (!(hasUsedKeyword && (hasYear || hasKm))) return false;
+
+            const existing = infoAutoAlerts.find(a => !a.resolved && a.contactId === contact.id);
+            if (existing) {
+                existing.vehicleDesc = userMessage.trim();
+                existing.time = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+            } else {
+                infoAutoAlerts.unshift({
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 3),
+                    contactId: contact.id,
+                    clientName: contact.name || 'Cliente CRM',
+                    phone: contact.phone || '',
+                    vehicleDesc: userMessage.trim(),
+                    time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
+                    resolved: false
+                });
+            }
+            localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts.slice(0, 30)));
+            renderInfoAutoAlertsBanner();
+            showToast(`🚗 ALERTA INFOAUTO: ${contact.name || 'Cliente'} informó su usado (${userMessage.trim().slice(0, 40)})`);
+            return true;
+        }
+
+        function triggerCommercialAttentionAlert(contact, userMessage) {
+            if (!contact || !userMessage) return false;
+            const norm = String(userMessage).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            let reason = '';
+            if (/\b(contado|convencional|prendario|credito|banco|alternativa|no estoy seguro|no quiero plan)\b/.test(norm)) {
+                reason = 'Evalúa compra convencional / crédito o duda del plan';
+            } else if (/\b(presupuesto|cotizacion|precio|cuanto sale|cuota|cuotas)\b/.test(norm)) {
+                reason = 'Pidió números / cotización';
+            } else if (/\b(ir|pasar|salon|concesionario|visita|horario|entrevista)\b/.test(norm)) {
+                reason = 'Interesado en visitar el concesionario';
+            }
+            if (!reason) return false;
+
+            const existing = commercialLiveAlerts.find(a => !a.resolved && a.contactId === contact.id && a.reason === reason);
+            if (existing) {
+                existing.snippet = userMessage.trim().slice(0, 70);
+                existing.time = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+            } else {
+                commercialLiveAlerts.unshift({
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 3),
+                    contactId: contact.id,
+                    clientName: contact.name || 'Cliente CRM',
+                    phone: contact.phone || '',
+                    reason,
+                    snippet: userMessage.trim().slice(0, 70),
+                    time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
+                    resolved: false
+                });
+            }
+            localStorage.setItem('crm_commercial_live_alerts', JSON.stringify(commercialLiveAlerts.slice(0, 30)));
+            renderCommercialLiveAlertsBanner();
+            showToast(`🔔 ALERTA CRM: ${contact.name || 'Cliente'} — ${reason}`);
+            return true;
+        }
+
+        function renderInfoAutoAlertsBanner() {
+            const banner = document.getElementById('infoauto-alerts-banner');
+            const listEl = document.getElementById('infoauto-alerts-list');
+            if (!banner || !listEl) return;
+            const pending = infoAutoAlerts.filter(a => !a.resolved);
+            if (pending.length === 0) {
+                banner.classList.add('hidden');
+                return;
+            }
+            banner.classList.remove('hidden');
+            listEl.innerHTML = pending.map(a => `
+                <div class="flex flex-wrap items-center gap-2">
+                    <span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}): <b>${a.vehicleDesc}</b> <span class="text-[11px] text-amber-800">(${a.time})</span></span>
+                    <button onclick="openSendInfoAutoQuote('${a.id}')" class="px-2 py-0.5 rounded-lg bg-amber-900 text-white text-[11px] font-bold hover:bg-amber-950">💵 Cargar InfoAuto y Enviar</button>
+                </div>
+            `).join('');
+        }
+
+        function renderCommercialLiveAlertsBanner() {
+            const banner = document.getElementById('commercial-live-alerts-banner');
+            const listEl = document.getElementById('commercial-live-alerts-list');
+            if (!banner || !listEl) return;
+            const pending = commercialLiveAlerts.filter(a => !a.resolved);
+            if (pending.length === 0) {
+                banner.classList.add('hidden');
+                return;
+            }
+            banner.classList.remove('hidden');
+            listEl.innerHTML = pending.map(a => `
+                <div class="flex flex-wrap items-center gap-2">
+                    <span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}): <b>${a.reason}</b> — <i>"${a.snippet}"</i> <span class="text-[11px] text-slate-500">(${a.time})</span></span>
+                    <button onclick="openWaAiForContact('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-[#EB0A1E] text-white text-[11px] font-bold hover:bg-red-700">💬 Ver Chat</button>
+                </div>
+            `).join('');
+        }
+
+        window.dismissAllCommercialAlerts = function() {
+            commercialLiveAlerts.forEach(a => a.resolved = true);
+            localStorage.setItem('crm_commercial_live_alerts', JSON.stringify(commercialLiveAlerts));
+            renderCommercialLiveAlertsBanner();
+        };
+
+        window.openSendInfoAutoQuote = function(alertId) {
+            const alertObj = infoAutoAlerts.find(a => a.id === alertId);
+            if (!alertObj) return;
+            alertObj.resolved = true;
+            localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts));
+            renderInfoAutoAlertsBanner();
+
+            openWaAiAssistantModal();
+            const sel = document.getElementById('wa-ai-contact-select');
+            if (sel && alertObj.contactId) {
+                sel.value = alertObj.contactId;
+                onWaAiContactChange();
+            }
+            const draftBox = document.getElementById('wa-ai-draft-box');
+            const draftText = document.getElementById('wa-ai-draft-text');
+            const sourceTag = document.getElementById('wa-ai-source-tag');
+            if (draftBox && draftText) {
+                draftText.value = `Hola, revisamos en InfoAuto la referencia por tu ${alertObj.vehicleDesc} y el valor estimado de toma ronda los $[COMPLETAR_VALOR]. Si te parece bien, coordinamos una visita en Ginza Toyota para verlo en persona y cerrar los números.`;
+                if (sourceTag) sourceTag.textContent = 'Cotización InfoAuto Lista';
+                draftBox.classList.remove('hidden');
+                draftText.focus();
+            }
+        };
+
+        window.dismissAllInfoAutoAlerts = function() {
+            infoAutoAlerts.forEach(a => a.resolved = true);
+            localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts));
+            renderInfoAutoAlertsBanner();
         };
 
         // --- COMPARATIVA DE PLANES ---
@@ -2614,20 +2763,20 @@
                     <span class="px-2 py-0.5 rounded bg-[#EB0A1E] text-[10px] font-bold">TOYOTA ${ty.modality}</span>
                     <h3 class="text-lg font-extrabold mt-2">${ty.model}</h3>
                     <p class="text-sm mt-2">Valor Móvil: <b>$${ty.valorMovil.toLocaleString('es-AR')}</b></p>
-                    <p class="text-sm mt-1">Cuota Pura: <b class="text-emerald-400">$${ty.cuotaPura.toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm mt-1">Cuota Máx. Ref.: <b class="text-emerald-400">$${ty.cuotaPura.toLocaleString('es-AR')}</b></p>
                 </div>
                 <div class="lg:col-span-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">${rv.brand} ${rv.modality}</span>
                     <h3 class="text-lg font-bold text-slate-900 mt-2">${rv.model}</h3>
                     <p class="text-sm text-slate-700 mt-2">Valor Móvil: <b>$${rv.valorMovil.toLocaleString('es-AR')}</b></p>
-                    <p class="text-sm text-slate-700 mt-1">Cuota Pura: <b>$${rv.cuotaPura.toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm text-slate-700 mt-1">Cuota Máx. Ref.: <b>$${rv.cuotaPura.toLocaleString('es-AR')}</b></p>
                 </div>
                 <div class="lg:col-span-4 p-4 rounded-2xl bg-red-50/70 border border-red-200 flex flex-col justify-between">
                     <div>
                         <span class="text-[11px] font-extrabold uppercase text-[#EB0A1E]">✨ Argumento Comercial Ginza</span>
                         <p class="text-xs text-slate-800 mt-2 leading-relaxed">
                             ${diffValor >= 0
-                                ? `Toyota <b>${ty.model}</b> tiene un valor móvil <b>$${diffValor.toLocaleString('es-AR')} más conveniente</b> y cuota pura $${Math.abs(diffCuota).toLocaleString('es-AR')} ${diffCuota >= 0 ? 'más baja' : 'competitiva'}, sumado al mayor valor de reventa del mercado.`
+                                ? `Toyota <b>${ty.model}</b> tiene un valor móvil <b>$${diffValor.toLocaleString('es-AR')} más conveniente</b> y cuota $${Math.abs(diffCuota).toLocaleString('es-AR')} ${diffCuota >= 0 ? 'más baja' : 'competitiva'}, sumado al mayor valor de reventa del mercado.`
                                 : `Con una diferencia de capital de $${Math.abs(diffValor).toLocaleString('es-AR')}, el cliente accede a la confiabilidad, garantía oficial de 5 años / 150.000 km y valor de reventa líder de <b>Toyota ${ty.model}</b>.`}
                         </p>
                     </div>
@@ -2666,40 +2815,59 @@
         function renderContactRowHTML(c, defaultTitle = 'Sin Nombre', channelKey = 'gestion') {
             return `<td class="p-3.5"><div class="text-sm font-bold text-slate-900">${c.name || defaultTitle}</div><div class="mt-0.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status, channelKey, c.name || '')}</div></td><td class="p-3.5 text-xs text-slate-600">${c.method || '-'} • ${c.locality || '-'}</td><td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5">${renderActions(c, channelKey)}</td>`;
         }
-        function renderSimpleChannelTable(list, tbodyId, emptyId, channelKey) {
+        function renderWaitingSublistForChannel(list, containerId, channelKey) {
+            const box = document.getElementById(containerId);
+            if (!box) return;
+            const waiting = list.filter(c => c.status === 'Mensaje Enviado (48h)');
+            if (waiting.length === 0) {
+                box.innerHTML = '';
+                return;
+            }
+            box.innerHTML = `
+                <div class="border-t-2 border-teal-200 bg-teal-50/40 p-4">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-teal-600 animate-pulse"></span>
+                            <h4 class="text-xs font-extrabold uppercase text-teal-950">En Espera de Respuesta — Seguimiento Sofía IA 24h / Cierre 48h (${waiting.length})</h4>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto bg-white rounded-xl border border-teal-200">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
+                            <tbody class="divide-y divide-teal-100 text-xs">
+                                ${waiting.map(c => {
+                                    const hrsAgo = c.waSentAt ? Math.max(0, Math.floor((Date.now() - Number(c.waSentAt)) / 3600000)) : 0;
+                                    const remHrs = Math.max(0, 48 - hrsAgo);
+                                    return `<tr>
+                                        <td class="p-3">
+                                            <div class="font-bold text-slate-900">${c.name || 'Sin Nombre'}</div>
+                                            <div class="mt-0.5">${renderWhatsAppLink(c.phone, null, c.waSentAt, c.status, channelKey, c.name || '')}</div>
+                                        </td>
+                                        <td class="p-3 text-teal-800 font-semibold">Enviado hace ${hrsAgo}h • Restan ${remHrs}h</td>
+                                        <td class="p-3">${renderActions(c, channelKey)}</td>
+                                    </tr>`;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+        function renderSimpleChannelTable(list, tbodyId, emptyId, channelKey, waitingBoxId = '') {
             const tbody = document.getElementById(tbodyId);
             const emptyEl = document.getElementById(emptyId);
-            const waitingBox = document.getElementById(`${channelKey}-waiting-sublist`);
             if (!tbody) return;
             tbody.innerHTML = '';
-
-            const waitingItems = list.filter(c => c.status === 'Mensaje Enviado (48h)');
-            if (waitingBox) {
-                waitingBox.innerHTML = waitingItems.length === 0 ? '' : `
-                    <div class="p-3.5 bg-teal-50/70 border-t border-teal-200">
-                        <div class="text-xs font-bold text-teal-900 mb-2">⏳ En espera de respuesta 48 hs (${waitingItems.length})</div>
-                        <div class="space-y-1.5">
-                            ${waitingItems.map(c => `
-                                <div class="p-2 rounded-xl bg-white border border-teal-200 flex items-center justify-between gap-2 text-xs">
-                                    <div><b>${c.name || 'Sin Nombre'}</b> • ${c.phone || ''}</div>
-                                    <div class="flex items-center gap-1">
-                                        <button onclick="executeStatusUpdate('${c.id}', 'Contestó', 'Mensaje')" class="px-2 py-1 bg-blue-600 text-white rounded-lg font-semibold">✓ Contestó</button>
-                                        <button onclick="openEditModal('${c.id}')" class="px-2 py-1 bg-slate-100 text-slate-700 rounded-lg">Editar</button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>`;
-            }
-
             const filtered = list.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
-            if (filtered.length === 0) { emptyEl?.classList.remove('hidden'); return; }
-            emptyEl?.classList.add('hidden');
-            filtered.forEach(c => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = renderContactRowHTML(c, 'Sin Nombre', channelKey);
-                tbody.appendChild(tr);
-            });
+            if (filtered.length === 0) { emptyEl?.classList.remove('hidden'); }
+            else {
+                emptyEl?.classList.add('hidden');
+                filtered.forEach(c => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = renderContactRowHTML(c, 'Sin Nombre', channelKey);
+                    tbody.appendChild(tr);
+                });
+            }
+            if (waitingBoxId) renderWaitingSublistForChannel(list, waitingBoxId, channelKey);
         }
         window.renderCrmTable = function() {
             const foldersBox = document.getElementById('crm-folders-container');
@@ -2715,13 +2883,13 @@
                 if (query && !(c.name || '').toLowerCase().includes(query) && !(c.phone || '').includes(query)) return false;
                 return true;
             });
-            renderSimpleChannelTable(filtered, 'crm-table-body', 'crm-empty-state', 'crm');
+            renderSimpleChannelTable(filtered, 'crm-table-body', 'crm-empty-state', 'crm', 'crm-waiting-sublist');
         };
-        window.renderGestionTable = function() { renderSimpleChannelTable(gestionContacts, 'gestion-table-body', 'gestion-empty-state', 'gestion'); };
-        window.renderRedesTable = function() { renderSimpleChannelTable(redesContacts, 'redes-table-body', 'redes-empty-state', 'redes'); };
-        window.renderSalesforceTable = function() { renderSimpleChannelTable(salesforceContacts, 'salesforce-table-body', 'salesforce-empty-state', 'salesforce'); };
-        window.renderCanceladosTable = function() { renderSimpleChannelTable(canceladosContacts, 'cancelados-table-body', 'cancelados-empty-state', 'cancelados'); };
-        window.renderRescindidosTable = function() { renderSimpleChannelTable(rescindidosContacts, 'rescindidos-table-body', 'rescindidos-empty-state', 'rescindidos'); };
+        window.renderGestionTable = function() { renderSimpleChannelTable(gestionContacts, 'gestion-table-body', 'gestion-empty-state', 'gestion', 'gestion-waiting-sublist'); };
+        window.renderRedesTable = function() { renderSimpleChannelTable(redesContacts, 'redes-table-body', 'redes-empty-state', 'redes', 'redes-waiting-sublist'); };
+        window.renderSalesforceTable = function() { renderSimpleChannelTable(salesforceContacts, 'salesforce-table-body', 'salesforce-empty-state', 'salesforce', 'salesforce-waiting-sublist'); };
+        window.renderCanceladosTable = function() { renderSimpleChannelTable(canceladosContacts, 'cancelados-table-body', 'cancelados-empty-state', 'cancelados', 'cancelados-waiting-sublist'); };
+        window.renderRescindidosTable = function() { renderSimpleChannelTable(rescindidosContacts, 'rescindidos-table-body', 'rescindidos-empty-state', 'rescindidos', 'rescindidos-waiting-sublist'); };
 
         window.addConvencionalSeller = function() {
             const inp = document.getElementById('conv-new-seller');
@@ -2780,6 +2948,7 @@
             };
             renderRows(sentList, 'conv-sent-body', 'conv-sent-empty');
             renderRows(recList, 'conv-received-body', 'conv-received-empty');
+            renderWaitingSublistForChannel(convencionalContacts, 'convencional-waiting-sublist', 'convencional');
         };
 
         window.handleCsvUpload = async function(event) {
@@ -3404,7 +3573,6 @@
                 const compPct = Number((1 - mainPct).toFixed(2));
                 const expectedMain = vehicleValue * mainPct;
                 const expectedComp = vehicleValue * compPct;
-
                 value70 = allBigAmounts.find(n => Math.abs(n - expectedMain) / expectedMain <= 0.03) || Math.round(expectedMain);
                 value30 = allBigAmounts.find(n => Math.abs(n - expectedComp) / expectedComp <= 0.03) || Math.round(expectedComp);
             } else if (vehicleValue > 0) {
@@ -3455,9 +3623,7 @@
                     if (!allPeriods.some(p => p.label.toLowerCase() === label.toLowerCase())) {
                         const slice = rawStr.slice(rm.index, rm.index + 130);
                         const nums = parseMoneyList(slice).filter(isMonthlyQuota);
-                        if (nums.length > 0) {
-                            allPeriods.push({ label, amount: nums[0] });
-                        }
+                        if (nums.length > 0) allPeriods.push({ label, amount: nums[0] });
                     }
                 }
             }
@@ -3858,7 +4024,7 @@
         // --- CHATBOT CORRECTOR DE PRECIOS PDF ---
         let pdfChatbotSelectedPlanId = '';
         let pdfChatbotHistory = [
-            { from: 'bot', text: 'Hola 👋 Soy el asistente de verificación de listas PDF de Ginza Toyota. Distingo planes 70/30 y 100% y los 4 tramos ordinarios (Cuota 1, 1 a 18, 19 a 24 y 25 a 84), excluyendo siempre la cuota extraordinaria. Dime qué plan quieres corregir.' }
+            { from: 'bot', text: 'Hola 👋 Soy el asistente de verificación de listas PDF de Ginza Toyota. Distingo planes 70/30 y 100% y los tramos ordinarios, tomando siempre la cuota más alta de los 3 períodos. Dime qué plan quieres corregir.' }
         ];
 
         window.openPdfPriceChatbotModal = function(preselectPlanId = '') {
@@ -3880,7 +4046,7 @@
                 const t = p.tranches || {};
                 pdfChatbotHistory.push({
                     from: 'bot',
-                    text: `Seleccionaste "${p.vehicleName || p.planName}" [${p.modality || '70/30'}] (${p.period}):\n• Valor Móvil: $${Number(p.vehicleValue || 0).toLocaleString('es-AR')}\n• Cuota 1: $${Number(t.c1 || 0).toLocaleString('es-AR')} | 1–18: $${Number(t.c1_18 || 0).toLocaleString('es-AR')} | 19–24: $${Number(t.c19_24 || 0).toLocaleString('es-AR')} | 25–84: $${Number(t.c25_84 || 0).toLocaleString('es-AR')}\n• Cuota Ordinaria Más Alta (Ref.): $${Number(p.price || 0).toLocaleString('es-AR')}\n\nEscríbeme los montos o tramos correctos.`
+                    text: `Seleccionaste "${p.vehicleName || p.planName}" [${p.modality || '70/30'}] (${p.period}):\n• Valor Móvil: $${Number(p.vehicleValue || 0).toLocaleString('es-AR')}\n• Cuota 1: $${Number(t.c1 || 0).toLocaleString('es-AR')} | 1–18: $${Number(t.c1_18 || 0).toLocaleString('es-AR')} | 19–24: $${Number(t.c19_24 || 0).toLocaleString('es-AR')} | 25–84: $${Number(t.c25_84 || 0).toLocaleString('es-AR')}\n• Cuota Más Alta de los 3 Períodos: $${Number(p.price || 0).toLocaleString('es-AR')}\n\nEscríbeme los montos o tramos correctos.`
                 });
             }
             renderPdfChatbotUI();
@@ -3994,7 +4160,7 @@
             const t = targetPlan.tranches;
             pdfChatbotHistory.push({
                 from: 'bot',
-                text: `✅ ¡Actualizado "${targetPlan.vehicleName || targetPlan.planName}" [${targetPlan.modality || '70/30'}] (${targetPlan.period}):\n• Valor Móvil: $${Number(targetPlan.vehicleValue).toLocaleString('es-AR')}\n• Tramos: C.1 $${Number(t.c1 || 0).toLocaleString('es-AR')} | 1–18 $${Number(t.c1_18 || 0).toLocaleString('es-AR')} | 19–24 $${Number(t.c19_24 || 0).toLocaleString('es-AR')} | 25–84 $${Number(t.c25_84 || 0).toLocaleString('es-AR')}\n• Cuota Ordinaria Más Alta (Referencia): $${Number(targetPlan.price).toLocaleString('es-AR')}`
+                text: `✅ ¡Actualizado "${targetPlan.vehicleName || targetPlan.planName}" [${targetPlan.modality || '70/30'}] (${targetPlan.period}):\n• Valor Móvil: $${Number(targetPlan.vehicleValue).toLocaleString('es-AR')}\n• Tramos: C.1 $${Number(t.c1 || 0).toLocaleString('es-AR')} | 1–18 $${Number(t.c1_18 || 0).toLocaleString('es-AR')} | 19–24 $${Number(t.c19_24 || 0).toLocaleString('es-AR')} | 25–84 $${Number(t.c25_84 || 0).toLocaleString('es-AR')}\n• Cuota Más Alta de los 3 Períodos: $${Number(targetPlan.price).toLocaleString('es-AR')}`
             });
             renderPdfChatbotUI();
             showToast(`✅ Tramos ordinarios actualizados (${targetPlan.modality || '70/30'})`);
@@ -4009,7 +4175,7 @@
             if (waAiConfig.autoReplyMobile) {
                 btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white animate-ping';
-                lbl.textContent = waAiConfig.sandboxEnabled ? '🤖 Sofía IA ON (SANDBOX)' : '🤖 Sofía IA ON';
+                lbl.textContent = waAiConfig.sandboxEnabled ? '🤖 Sofía IA (SANDBOX)' : '🤖 Sofía IA ON';
             } else {
                 btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-[#EB0A1E] hover:bg-red-700 text-white border border-red-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white/70';
@@ -4026,24 +4192,23 @@
         function buildCrmRealKnowledgeSnapshot(contact = null) {
             const toyotaPlans = marketPlansCatalog
                 .filter(p => p.brand === 'Toyota')
-                .map(p => `- ${p.model} (Segmento ${p.segment}, Modalidad ${p.modality}): Valor Móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS (ÚNICA CUOTA A INFORMAR): $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
+                .map(p => `- ${p.model} (Segmento ${p.segment}, Modalidad ${p.modality}): Valor Móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
 
             const rivalPlans = waAiConfig.allowCompetitorCompare !== false
                 ? marketPlansCatalog
                     .filter(p => p.brand !== 'Toyota')
-                    .map(p => `- ${p.brand} ${p.model} (${p.segment}, ${p.modality}): Valor Móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | Cuota $${Number(p.cuotaPura).toLocaleString('es-AR')}`)
+                    .map(p => `- ${p.brand} ${p.model} (${p.segment}, ${p.modality}): Valor Móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | Cuota Ref. $${Number(p.cuotaPura).toLocaleString('es-AR')}`)
                 : [];
 
             const pdfPlans = plansHistory.slice(0, 15).map(p => {
                 const periodsArr = Array.isArray(p.allPeriods) && p.allPeriods.length > 0
                     ? p.allPeriods.map(pr => `${pr.label}: $${Number(pr.amount).toLocaleString('es-AR')}`).join(', ')
                     : '';
-                const highestQuota = Number(p.price || 0);
-                return `- PDF "${p.planName}" [${p.modality || '70/30'}] (${p.period}): Valor Vehículo $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS (ÚNICA CUOTA A INFORMAR AL CLIENTE): $${highestQuota.toLocaleString('es-AR')}${periodsArr ? ' | Detalle interno de períodos: ' + periodsArr : ''}`.trim();
+                return `- PDF "${p.planName}" [${p.modality || '70/30'}] (${p.period}): Valor Vehículo $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS (ÚNICA CUOTA A INFORMAR): $${Number(p.price || 0).toLocaleString('es-AR')}${periodsArr ? ' | Desglose períodos: ' + periodsArr : ''}`.trim();
             });
 
             const historyMsgs = contact && waAiConversationLogs[contact.id]
-                ? waAiConversationLogs[contact.id].slice(-10).map(m => `${m.from === 'ai' ? 'Sofía (Asesora)' : 'Cliente'}: ${m.text}`)
+                ? waAiConversationLogs[contact.id].slice(-12).map(m => `${m.from === 'ai' ? 'Sofía (Asesora de Gonzalo)' : 'Cliente'}: ${m.text}`)
                 : [];
 
             const clientContext = contact ? {
@@ -4052,7 +4217,6 @@
                 canalOrigen: contact.method || 'CRM',
                 etapaActual: contact.status || 'Pendiente',
                 modeloInteres: contact.interestModel || 'No definido aún',
-                usadoParaTasarInfoAuto: contact.tradeInVehicle || 'Ninguno informado',
                 referencia: contact.reference || contact.seller || '',
                 fechaAgendada: contact.scheduleDate ? `${formatDisplayISODate(contact.scheduleDate)} ${contact.scheduleTime || ''} (${contact.scheduleNote || ''})`.trim() : 'Sin fecha agendada',
                 observaciones: contact.observations || 'Ninguna',
@@ -4063,89 +4227,15 @@
                 fechaHoy: new Date().toLocaleDateString('es-AR'),
                 concesionario: waAiConfig.branchName || 'Ginza Toyota',
                 asesora: waAiConfig.advisorName || 'Sofía',
+                asesorTitular: 'Gonzalo Dichiazza',
+                reglaTasacionUsados: 'En Ginza Toyota NO realizamos tasaciones en el momento. Si el cliente menciona un vehículo usado, tomar nota y avisar que Gonzalo lo cotizará según InfoAuto.',
+                reglaCuotaAInformar: 'Informar SIEMPRE el valor más alto de cuota de los 3 períodos ordinarios (nunca cuota extraordinaria ni cuota pura base).',
                 baseLegalContractualToyotaPlan: TOYOTA_PLAN_CONTRACT_KNOWLEDGE,
                 planesToyotaVigentes: toyotaPlans,
                 comparativaCompetenciaAutorizada: rivalPlans,
                 pdfsAnalizadosEnCrm: pdfPlans,
                 fichaClienteActual: clientContext
             };
-        }
-
-        let infoAutoAlerts = JSON.parse(localStorage.getItem('crm_infoauto_alerts') || '[]');
-
-        function renderInfoAutoAlertsBanner() {
-            const banner = document.getElementById('infoauto-alerts-banner');
-            const listEl = document.getElementById('infoauto-alerts-list');
-            if (!banner || !listEl) return;
-            const pending = infoAutoAlerts.filter(a => !a.resolved);
-            if (pending.length === 0) {
-                banner.classList.add('hidden');
-                return;
-            }
-            banner.classList.remove('hidden');
-            listEl.innerHTML = pending.map(a => `
-                <div class="flex flex-wrap items-center gap-2">
-                    <span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) ofreció usado: <b>"${a.vehicleText}"</b> ${a.targetModel ? `→ Busca <b>${a.targetModel}</b>` : ''} <span class="text-[11px] text-amber-700">(${a.time})</span></span>
-                    <button onclick="openInfoAutoReplyPrompt('${a.id}')" class="px-2 py-0.5 rounded-lg bg-[#EB0A1E] text-white text-[11px] font-bold hover:bg-red-700">📲 Pasar valor InfoAuto por WA</button>
-                </div>
-            `).join('');
-        }
-
-        window.dismissAllInfoAutoAlerts = function() {
-            infoAutoAlerts.forEach(a => a.resolved = true);
-            localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts));
-            renderInfoAutoAlertsBanner();
-        };
-
-        window.openInfoAutoReplyPrompt = function(alertId) {
-            const alertItem = infoAutoAlerts.find(a => a.id === alertId);
-            if (!alertItem) return;
-            alertItem.resolved = true;
-            localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts));
-            renderInfoAutoAlertsBanner();
-            if (alertItem.contactId) {
-                openWaAiForContact(alertItem.contactId);
-                const draftBox = document.getElementById('wa-ai-draft-box');
-                const draftText = document.getElementById('wa-ai-draft-text');
-                const tag = document.getElementById('wa-ai-source-tag');
-                if (draftBox && draftText) {
-                    const firstName = (alertItem.clientName || '').split(' ')[0];
-                    draftText.value = `Hola${firstName ? ` ${firstName}` : ''}, revisamos con Gonzalo la referencia en InfoAuto por tu ${alertItem.vehicleText} y está aproximadamente en $[COMPLETAR_VALOR_INFOAUTO] (sujeto a verificación física en salón). Con ese valor como base, te queda muy accesible el ${alertItem.targetModel || 'Toyota'}. ¿Querés que coordinemos una visita a Ginza Toyota para verlo?`;
-                    if (tag) tag.textContent = 'Cotización InfoAuto Lista';
-                    draftBox.classList.remove('hidden');
-                }
-            }
-        };
-
-        function detectAndRegisterTradeInAlert(contact, userMessage) {
-            if (!contact || !userMessage) return false;
-            const norm = String(userMessage).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            const hasYear = /\b(199\d|20[0-2]\d)\b/.test(norm);
-            const hasKm = /\b(\d{1,3}(?:[.,]\d{3})*|\d+)\s*(?:mil\s*)?(?:km|kms|kilometros)\b/.test(norm);
-            const hasOtherBrand = /\b(hyundai|santa fe|ford|vw|volkswagen|chevrolet|fiat|peugeot|renault|honda|nissan|amarok|ranger|cronos|208|focus|fiesta|cruze|tracker|ecosport|duster|sandero|kangoo|partner|berlingo|s10|toro|renegade|compass|hrv|civic|fit|tiida|versa|sentra|march|gol|polo|virtus|vento|suran|fox|up|saveiro|etios)\b/.test(norm);
-            const mentionsTradeIn = /\b(usado|permuta|parte de pago|entregar mi|tengo un|tengo una)\b/.test(norm);
-
-            if ((hasOtherBrand && (hasYear || hasKm || mentionsTradeIn)) || (mentionsTradeIn && (hasYear || hasKm))) {
-                const cleanVehicle = userMessage.trim();
-                contact.tradeInVehicle = cleanVehicle;
-                contact.observations = `${contact.observations ? contact.observations + ' | ' : ''}Usado InfoAuto: ${cleanVehicle}`;
-                infoAutoAlerts.unshift({
-                    id: Date.now().toString(),
-                    contactId: contact.id,
-                    clientName: contact.name || 'Cliente CRM',
-                    phone: contact.phone || '',
-                    vehicleText: cleanVehicle,
-                    targetModel: contact.interestModel || '',
-                    time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
-                    resolved: false
-                });
-                localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts.slice(0, 30)));
-                renderInfoAutoAlertsBanner();
-                saveLocalData(true);
-                showToast(`🚗 ALERTA INFOAUTO: ${contact.name || 'Cliente'} informó usado (${cleanVehicle.slice(0, 35)}...)`);
-                return true;
-            }
-            return false;
         }
 
         function tryAutoScheduleFromClientMessage(contact, userMessage) {
@@ -4185,7 +4275,6 @@
 
             const prevLogs = (contact && waAiConversationLogs[contact.id]) ? waAiConversationLogs[contact.id] : [];
             const alreadyGreeted = prevLogs.some(m => m.from === 'ai');
-            const clientTurns = prevLogs.filter(m => m.from === 'client').length;
 
             const newModel = detectToyotaModelFromText(userMessage);
             if (newModel && contact) {
@@ -4195,103 +4284,81 @@
 
             const isTradeIn = detectAndRegisterTradeInAlert(contact, userMessage);
             if (isTradeIn) {
-                return `Perfecto, ya tomé nota de tu vehículo (${userMessage.trim()}). Nosotros no realizamos tasaciones en el momento en el salón, así que le voy a pasar los datos a Gonzalo para que te cotice el valor de referencia según InfoAuto y te lo pasamos por acá. Mientras tanto, si querés podés acercarte a ${branch} a conocer el ${activeModel || 'vehículo'} en persona.`;
+                return `Anotado el dato de tu vehículo (${userMessage.trim()}).|||No hacemos tasaciones en el momento, así que se lo paso a Gonzalo para que te lo cotice por InfoAuto y te lo enviamos por acá.`;
             }
 
-            // 1. Saludo inicial limpio y profesional
             if (!msgNorm || (!alreadyGreeted && /^(hola|buen dia|buenas|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm))) {
-                return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora de Gonzalo Dichiazza en ${branch}. ¿En qué te puedo ayudar hoy?`;
+                return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora de Gonzalo Dichiazza en ${branch}.|||¿En qué modelo Toyota te puedo ayudar hoy?`;
             }
 
-            // 2. Si el cliente manifiesta dudas por la economía o cuotas fijas
-            if (/\b(miedo|pais|inflacion|situacion|fijas|fija|aumenta|sube|incertidumbre|econom)\b/.test(msgNorm)) {
-                return `Es muy comprensible lo que planteás respecto al contexto económico. Con total transparencia: las cuotas en pesos no son fijas porque acompañan el valor oficial de la unidad, pero te permiten capitalizarte sin intereses bancarios. Si tenés un vehículo usado para entregar, podemos cotizarlo por InfoAuto para que veas cuánto cubrirías de entrada.`;
+            const asksPriceOrPlan = /\b(cuota|cuotas|precio|valor|sale|cuesta|monto|plan|financ|70\/30|100%|alternativa|contado|convencional|credito)\b/.test(msgNorm);
+            if (newModel && !asksPriceOrPlan) {
+                return `Muy buena elección el ${newModel}.|||Contame, ¿lo buscás para uso diario, ruta o trabajo, y pensás entregar algún usado?`;
             }
 
-            // 3. Si el cliente dice que recién empieza a averiguar
-            if (/\b(empezando|averiguar|mirando|viendo|curiosidad|sin apuro|tranquilo)\b/.test(msgNorm)) {
-                return `Está muy bien tomarse el tiempo para analizarlo${activeModel ? ` con el ${activeModel}` : ''}. Contame qué uso le darías principalmente y si tenés un vehículo usado para entregar como parte de pago, así te oriento con precisión.`;
+            if (/\b(no estoy seguro|no quiero plan|otra alternativa|otras alternativas|contado|convencional|prendario|credito|banco)\b/.test(msgNorm)) {
+                return `Totalmente válido analizarlo bien. Además de Toyota Plan, trabajamos venta convencional de contado y créditos prendarios.|||Para orientarte mejor: ¿contás con un capital o usado para entregar, o preferís financiar la mayor parte?`;
             }
 
-            // 4. Agendamiento / Visita al concesionario
-            if (/\b(direccion|donde|ubicacion|horario|reunion|entrevista|pasar|visitar|salon|concesionario|test drive|manejar|verlo|lunes|martes|miercoles|jueves|viernes|sabado|manana)\b/.test(msgNorm)) {
-                return `Con mucho gusto te esperamos en ${branch} para que conozcas el ${activeModel || 'vehículo'} en el salón y conversemos personalmente con Gonzalo sobre las alternativas disponibles. ¿Qué día y horario te quedaría más cómodo acercarte?`;
+            if (/\b(informacion antes|info antes|antes de ir)\b/.test(msgNorm)) {
+                return `Por supuesto, te paso toda la info por acá con tranquilidad antes de que vengas.|||¿Qué te interesa revisar primero: valores de referencia, formas de pago o toma de usado?`;
             }
 
-            // 5. Consulta explícita de cuotas / precios / plan de ahorro (INFORMA LA CUOTA MÁS ALTA DE LOS 3 PERÍODOS ORDINARIOS)
-            const asksPriceOrPlan = /\b(cuota|cuotas|precio|valor|sale|cuesta|monto|plan|financ|70\/30|100%)\b/.test(msgNorm);
-            if (asksPriceOrPlan) {
+            if (/\b(cuota|cuotas|precio|valor|sale|cuesta|monto)\b/.test(msgNorm)) {
                 if (!activeModel) {
-                    return `Con gusto te paso los valores vigentes. Decime qué modelo Toyota te interesa (Yaris, Yaris Cross, Corolla, Corolla Cross, Hilux o Hiace) y si tenés pensado entregar un vehículo usado.`;
+                    return `Con gusto te paso los números.|||¿Sobre qué modelo Toyota querés que veamos los valores?`;
                 }
                 const matchedPdf = plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(activeModel.toLowerCase()));
                 const matchedCatalog = marketPlansCatalog.filter(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(activeModel.toLowerCase()));
                 const lines = [];
                 if (matchedPdf && matchedPdf.price > 0) {
-                    lines.push(`• *${matchedPdf.vehicleName || matchedPdf.planName}* (${matchedPdf.modality || '70/30'}): Valor móvil $${Number(matchedPdf.vehicleValue || 0).toLocaleString('es-AR')} — Cuota máxima de referencia $${Number(matchedPdf.price).toLocaleString('es-AR')}`);
+                    lines.push(`${matchedPdf.vehicleName || matchedPdf.planName} (${matchedPdf.modality || '70/30'}): valor móvil $${Number(matchedPdf.vehicleValue || 0).toLocaleString('es-AR')}, cuota máxima $${Number(matchedPdf.price).toLocaleString('es-AR')}`);
                 } else {
                     matchedCatalog.forEach(p => {
-                        lines.push(`• *${p.model}* (${p.modality}): Valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')} — Cuota máxima de referencia $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
+                        lines.push(`${p.model} (${p.modality}): valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')}, cuota máxima $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
                     });
                 }
                 if (lines.length > 0) {
-                    return `Para el *Toyota ${activeModel}*, los valores vigentes de referencia en Toyota Plan (tomando la cuota más alta de los períodos ordinarios) son:\n\n${lines.join('\n')}\n\n¿Tenés algún vehículo usado para entregar como parte de pago? De ser así, pasame modelo, año y kilometraje así Gonzalo lo cotiza por InfoAuto.`;
+                    return `En Toyota Plan para ${activeModel} tenés: ${lines.join(' / ')}.|||¿Tenés algún vehículo usado o anticipo en mente para evaluar cómo te quedaría?`;
                 }
             }
 
-            // 6. Si menciona el modelo por primera vez
-            if (activeModel && clientTurns <= 2) {
-                return `Excelente elección el *${activeModel}*. Contame si buscás operación convencional, entrega de un vehículo usado en parte de pago o evaluar financiación a través de Toyota Plan.`;
-            }
-
-            // 7. Seguimiento profesional
-            return `Perfecto, tomo nota${activeModel ? ` para el ${activeModel}` : ''}. Si te parece conveniente, podemos coordinar una visita a ${branch} para que veas la unidad en el salón y evaluemos junto a Gonzalo la alternativa más adecuada para vos. ¿Qué día te resultaría más cómodo?`;
+            return `Perfecto, tomo nota${activeModel ? ` por el ${activeModel}` : ''}.|||Contame un poco más qué operación tenés pensada así le paso tu consulta a Gonzalo y te asesoramos puntual.`;
         }
 
         async function generateGroundedWhatsAppReply(contact, userMessage = '') {
             const autoBooked = tryAutoScheduleFromClientMessage(contact, userMessage);
             const hasTradeInAlert = detectAndRegisterTradeInAlert(contact, userMessage);
+            const hasCommercialAlert = triggerCommercialAttentionAlert(contact, userMessage);
             const kb = buildCrmRealKnowledgeSnapshot(contact);
             const fallbackReply = autoBooked
-                ? `Excelente, ya dejé agendada tu visita en ${kb.concesionario} con Gonzalo para el ${autoBooked.date} a las ${autoBooked.time} hs${contact?.interestModel ? ` para conocer el ${contact.interestModel}` : ''}. Te esperamos.`
+                ? `Excelente, ya dejé agendada tu visita en ${kb.concesionario} con Gonzalo para el ${autoBooked.date} a las ${autoBooked.time} hs.|||Te esperamos en el salón.`
                 : buildDeterministicCrmReply(contact, userMessage);
 
             const apiKey = (waAiConfig.geminiApiKey || '').trim();
             if (!apiKey) {
-                return { reply: fallbackReply, source: hasTradeInAlert ? '🚨 Alerta InfoAuto Activada' : (autoBooked ? 'Turno Agendado' : '⚠️ Falta API Key Gemini') };
+                return { reply: fallbackReply, source: (hasTradeInAlert || hasCommercialAlert) ? '🔔 Alerta CRM Activada' : (autoBooked ? 'Turno Agendado' : '⚠️ Falta API Key Gemini') };
             }
 
-            const systemPrompt = `Sos ${kb.asesora}, asesora comercial profesional del equipo de Gonzalo Dichiazza en ${kb.concesionario} (concesionario oficial Toyota en Argentina), atendiendo por WhatsApp.
+            const systemPrompt = `Sos ${kb.asesora}, asesora comercial del equipo de Gonzalo Dichiazza en ${kb.concesionario} (concesionario oficial Toyota en Argentina), chateando por WhatsApp.
 
-REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
-1. TONO PROFESIONAL DE CONCESIONARIO OFICIAL: Hablá con calidez, educación y elegancia comercial argentina ("vos", "tenés", "decime"). PROHIBIDO usar jerga callejera o demasiada confianza: NUNCA digas "una nave", "espectacular nave", "tomamos unos mates", "tomar mates" ni expresiones informales similares.
-2. PRESENTACIÓN SIN REPETIR: Presentate como "${kb.asesora}, asesora de Gonzalo Dichiazza en ${kb.concesionario}" únicamente si todavía no te presentaste en historialRecienteChat. Si ya hubo intercambio previo, respondé directo al hilo sin volver a presentarte.
-3. USADOS Y TASACIÓN INFOAUTO (REGLA CRÍTICA): En Ginza Toyota NO se tasan vehículos en el acto ni en el momento en el salón. Cuando el cliente mencione un vehículo usado (marca, modelo, año, km), agradecé el dato, aclarale con amabilidad que no hacemos tasaciones en el momento sino que Gonzalo lo cotiza por **InfoAuto** para pasarle un valor real de referencia, e invitalo igualmente a conocer el 0 km en el salón cuando guste.
-4. VALORES DE CUOTA (REGLA CRÍTICA): Cuando el cliente pregunte cuánto sale o cuál es la cuota, informá SIEMPRE la **CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS** que figura en CONTEXTO_CRM_Y_PRECIOS (nunca pases la cuota pura mínima ni la cuota extraordinaria).
-5. ORIENTACIÓN NATURAL HACIA TOYOTA PLAN Y SALÓN: Escuchá primero al cliente, resolvé sus dudas con transparencia y llevalo con naturalidad hacia las ventajas de Toyota Plan y a coordinar una visita formal al salón de ${kb.concesionario} sin sonar desesperada.
-6. TEMAS AJENOS A TOYOTA: Si habla de otro tema ajeno a vehículos o al concesionario, respondé con máxima cortesía profesional y volvé suavemente a cómo podés asistirlo en ${kb.concesionario}.
-7. MEMORIA Y BREVEDAD: Leé historialRecienteChat para no repetir nunca preguntas ya respondidas ni el nombre del cliente en cada mensaje. Escribí 2 a 4 oraciones completas.`;
+CÓMO TENÉS QUE HABLAR (ESTILO HUMANO REAL DE WHATSAPP):
+1. MENSAJES CORTOS EN 2 BURBUJAS (MUY IMPORTANTE): Nadie en WhatsApp escribe párrafos largos. Escribí SIEMPRE respuestas cortas (máximo 2 o 3 oraciones en total) divididas en **2 mensajes breves** separados exactamente por \`|||\`.
+   - Ejemplo de formato: \`Qué buena elección la Hilux.|||Contame, ¿la buscás para trabajo, campo o uso diario?\`
+2. INDAGAR ANTES DE OFRECER: No tires precios, ni modalidades 70/30, ni invites al salón en los primeros mensajes si el cliente todavía no pidió números. Primero hacé preguntas cortas para entender qué busca: uso del vehículo, si tiene usado para entregar, o qué forma de pago evalúa.
+3. USAR EL NOMBRE SOLO UNA VEZ: Usá el nombre del cliente únicamente en el saludo inicial si todavía no se saludaron. En los mensajes siguientes NO repitas su nombre.
+4. TONO PROFESIONAL Y NATURAL: Voseo argentino cordial ("vos", "tenés", "contame"). Prohibido usar jerga callejera ("una nave", "tomamos mates") ni sonar robótica o desesperada por vender.
+5. USADOS Y TASACIÓN INFOAUTO: En Ginza Toyota NO tasamos vehículos en el momento. Si menciona un usado, decile que no tasamos en el acto y que Gonzalo se lo va a cotizar por **InfoAuto** para pasarle el valor de referencia.
+6. VALORES DE CUOTA (SOLO SI PREGUNTA PRECIO/CUOTA): Informá únicamente la **CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS** de CONTEXTO_CRM_Y_PRECIOS (nunca la cuota pura mínima ni la extraordinaria).
+7. LLEVAR CON SUTILEZA HACIA TOYOTA PLAN Y SALÓN: Cuando ya conozcas su necesidad, mostrá con naturalidad cómo Toyota Plan le permite capitalizarse sin bancos, e invitalo sin presión al salón de ${kb.concesionario}.
+8. TEMAS AJENOS A TOYOTA: Si habla de otra cosa, respondé con mucha educación y profesionalismo y volvé suavemente a cómo ayudarlo con su vehículo.`;
 
-            const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\n${hasTradeInAlert ? 'NOTA_INTERNA: Se acaba de activar una alerta InfoAuto en el CRM de Gonzalo por el usado mencionado. Informá al cliente que Gonzalo lo va a cotizar por InfoAuto (no tasamos en el momento).' : ''}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Iniciar conversación presentándote profesionalmente como Sofía, asesora de Gonzalo Dichiazza en Ginza Toyota)'}"\n\nRedactá únicamente el mensaje de WhatsApp completo y profesional:`;
+            const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\n${hasTradeInAlert ? 'NOTA_INTERNA: Se activó alerta InfoAuto en el CRM por su usado.' : ''}${hasCommercialAlert ? ' NOTA_INTERNA: Se activó alerta comercial en el CRM de Gonzalo.' : ''}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Saludo inicial corto presentándote como Sofía, asesora de Gonzalo Dichiazza en Ginza Toyota, usando ||| para dividir en 2 mensajes breves)'}"\n\nRedactá únicamente los 2 mensajes cortos separados por |||:`;
 
-            let modelsToTry = ['gemini-2.5-flash', 'gemini-3-flash-preview', 'gemini-2.5-flash-lite', 'gemini-2.5-pro'];
-            try {
-                const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
-                if (listRes.ok) {
-                    const listData = await listRes.json();
-                    const dynamicModels = (listData.models || [])
-                        .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
-                        .map(m => m.name.replace(/^models\//, ''))
-                        .filter(n => n.includes('gemini') && !n.includes('2.0-flash') && !n.includes('1.5'));
-                    if (dynamicModels.length > 0) {
-                        const preferred = dynamicModels.filter(n => n.includes('flash'));
-                        modelsToTry = Array.from(new Set([...preferred, ...dynamicModels, ...modelsToTry]));
-                    }
-                }
-            } catch (e) {}
-
+            const candidateModels = await resolveAvailableGeminiModels(apiKey);
             let lastErrorMsg = '';
-            for (const modelName of modelsToTry) {
+
+            for (const modelName of candidateModels) {
                 try {
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
                     const res = await fetch(apiUrl, {
@@ -4300,18 +4367,22 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
                         body: JSON.stringify({
                             contents: [{ parts: [{ text: promptText }] }],
                             systemInstruction: { parts: [{ text: systemPrompt }] },
-                            generationConfig: { temperature: 0.65, maxOutputTokens: 1200 }
+                            generationConfig: {
+                                temperature: 0.75,
+                                maxOutputTokens: 1200
+                            }
                         })
                     });
-                    const data = await res.json();
                     if (!res.ok) {
-                        lastErrorMsg = data?.error?.message || `HTTP ${res.status}`;
+                        const errData = await res.json().catch(() => ({}));
+                        lastErrorMsg = errData?.error?.message || `HTTP ${res.status}`;
                         continue;
                     }
+                    const data = await res.json();
                     const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
                     if (aiText) {
-                        const tag = hasTradeInAlert
-                            ? `🚨 InfoAuto + Sofía (${modelName})`
+                        const tag = (hasTradeInAlert || hasCommercialAlert)
+                            ? `🔔 Alerta CRM + Sofía (${modelName})`
                             : (autoBooked ? `Sofía (${modelName}) + Turno` : `Sofía (${modelName})`);
                         return { reply: aiText, source: tag };
                     }
@@ -4323,25 +4394,35 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             if (lastErrorMsg) {
                 showToast(`⚠️ Error API Gemini: ${lastErrorMsg.slice(0, 90)}`, 'error');
             }
-            return { reply: fallbackReply, source: hasTradeInAlert ? '🚨 Alerta InfoAuto' : (lastErrorMsg ? `⚠️ ${lastErrorMsg.slice(0, 55)}` : 'Motor Respaldo CRM') };
+            return { reply: fallbackReply, source: (hasTradeInAlert || hasCommercialAlert) ? '🔔 Alerta CRM' : (lastErrorMsg ? `⚠️ ${lastErrorMsg.slice(0, 55)}` : 'Motor Respaldo CRM') };
         }
 
         async function queueAutoReplyToMobile(contact, replyText, incomingText = '') {
             if (!contact) return;
-            const cleanReply = String(replyText || '').trim();
-            if (!cleanReply || cleanReply.length < 3 || /IllegalStateException|RuntimeException|Exception:|undefined|^null$|^\{/i.test(cleanReply)) {
+            const rawReply = String(replyText || '').trim();
+            if (!rawReply || rawReply.length < 3 || /IllegalStateException|RuntimeException|Exception:|undefined|^null$|^\{/i.test(rawReply)) {
                 return;
             }
+
+            const bubbles = rawReply
+                .split(/\s*\|\|\|\s*/)
+                .map(s => s.replace(/^["']+|["']+$/g, '').trim())
+                .filter(Boolean)
+                .slice(0, 2);
+            if (bubbles.length === 0) return;
 
             if (!waAiConversationLogs[contact.id]) waAiConversationLogs[contact.id] = [];
             if (incomingText) {
                 waAiConversationLogs[contact.id].push({ from: 'client', text: incomingText, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
             }
-            waAiConversationLogs[contact.id].push({ from: 'ai', text: cleanReply, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
+            const timeLabel = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+            bubbles.forEach(b => {
+                waAiConversationLogs[contact.id].push({ from: 'ai', text: b, time: timeLabel });
+            });
             persistWaAiChats();
 
             const recipientKey = sanitizeFirebaseKey(contact.phone || contact.name || 'default');
-            try {
+            const sendSingleBubble = async (bubbleMsg) => {
                 await Promise.all([
                     fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'POST',
@@ -4349,27 +4430,38 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
                         body: JSON.stringify({
                             phone: formatPhoneAR(contact.phone),
                             name: contact.name || '',
-                            message: cleanReply,
+                            message: bubbleMsg,
                             createdAt: Date.now()
                         })
                     }),
                     fetch(`${FIREBASE_DB_URL}/wa_outbox/${encodeURIComponent(syncRoom)}/${encodeURIComponent(recipientKey)}.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(cleanReply)
+                        body: JSON.stringify(bubbleMsg)
                     }),
                     fetch(`${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(cleanReply)
+                        body: JSON.stringify(bubbleMsg)
                     })
                 ]);
+            };
+
+            try {
+                await sendSingleBubble(bubbles[0]);
+                if (bubbles.length > 1) {
+                    setTimeout(async () => {
+                        try {
+                            await sendSingleBubble(bubbles[1]);
+                        } catch (e) {}
+                    }, 9500);
+                }
                 setTimeout(() => {
                     fetch(`${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'DELETE'
                     }).catch(() => {});
-                }, 12000);
-                showToast(`🤖 Respuesta Sofía IA lista para envío (${contact.name || contact.phone})`);
+                }, bubbles.length > 1 ? 22000 : 12000);
+                showToast(`🤖 Sofía envió ${bubbles.length} mensaje(s) breve(s) a ${contact.name || contact.phone}`);
             } catch (e) {}
         }
 
@@ -4396,7 +4488,7 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             if (kbSummaryEl) {
                 kbSummaryEl.innerHTML = `
                     <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Candado Anti-Chats Personales:</b> Solo responde a los <b>${getAllListsCombined().length} contacto(s)</b> cargados en el CRM.</div>
-                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Perfil Sofía (Consultivo & Seductor):</b> Asesora en toda la gama Toyota, encauza hacia Toyota Plan (${toyotaCount} modelos + ${plansHistory.length} PDFs) e invita al salón con elegancia.</div>
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Sofía IA Comercial (${toyotaCount} modelos):</b> Indaga antes de cotizar, envía mensajes breves en 2 burbujas y activa alertas en vivo en tu CRM.</div>
                 `;
             }
 
@@ -4416,7 +4508,6 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             if (sel && contactId) {
                 sel.value = contactId;
                 onWaAiContactChange();
-                generateInitialOutreachWithAi();
             }
         };
 
@@ -4442,7 +4533,7 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             localStorage.setItem('crm_wa_ai_config', JSON.stringify(waAiConfig));
             updateWaAiNavBadge();
             syncAiBrainSnapshotToFirebase();
-            showToast(waAiConfig.geminiApiKey ? "🤖 Sofía conectada con Gemini IA Fluida" : "🤖 Preferencias guardadas (falta API Key Gemini)");
+            showToast(waAiConfig.geminiApiKey ? "🤖 Sofía IA conectada con Google Gemini" : "🤖 Configuración de Sofía guardada");
         };
 
         window.resetWaAiChatHistory = function() {
@@ -4451,7 +4542,7 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             delete waAiConversationLogs[id];
             persistWaAiChats();
             onWaAiContactChange();
-            showToast("🧹 Historial de conversación limpiado");
+            showToast("🧹 Historial de este chat borrado. Listo para probar desde cero.");
         };
 
         window.onWaAiContactChange = function() {
@@ -4494,7 +4585,7 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             if (!found) { showToast("Selecciona un cliente primero", "error"); return; }
 
             const out = await generateGroundedWhatsAppReply(found.contact, '');
-            document.getElementById('wa-ai-draft-text').value = out.reply;
+            document.getElementById('wa-ai-draft-text').value = String(out.reply || '').replace(/\s*\|\|\|\s*/g, '\n\n');
             document.getElementById('wa-ai-source-tag').textContent = out.source;
             document.getElementById('wa-ai-draft-box').classList.remove('hidden');
         };
@@ -4508,7 +4599,7 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             if (!clientMsg) { showToast("Escribe el mensaje del cliente", "error"); return; }
 
             const btn = document.getElementById('btn-wa-ai-generate');
-            if (btn) { btn.disabled = true; btn.textContent = 'Sofía redactando...'; }
+            if (btn) { btn.disabled = true; btn.textContent = 'Pensando...'; }
 
             if (!waAiConversationLogs[id]) waAiConversationLogs[id] = [];
             waAiConversationLogs[id].push({ from: 'client', text: clientMsg, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
@@ -4516,11 +4607,15 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             onWaAiContactChange();
 
             const out = await generateGroundedWhatsAppReply(found.contact, clientMsg);
-            waAiConversationLogs[id].push({ from: 'ai', text: out.reply, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
+            const bubbles = String(out.reply || '').split(/\s*\|\|\|\s*/).map(s => s.trim()).filter(Boolean);
+            const nowT = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+            bubbles.forEach(b => {
+                waAiConversationLogs[id].push({ from: 'ai', text: b, time: nowT });
+            });
             persistWaAiChats();
             onWaAiContactChange();
 
-            document.getElementById('wa-ai-draft-text').value = out.reply;
+            document.getElementById('wa-ai-draft-text').value = bubbles.join('\n\n');
             document.getElementById('wa-ai-source-tag').textContent = out.source;
             document.getElementById('wa-ai-draft-box').classList.remove('hidden');
             if (btn) { btn.disabled = false; btn.textContent = 'Responder'; }
@@ -4555,21 +4650,36 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             showToast("🟢 Abriendo chat en WhatsApp Web con la respuesta de Sofía");
         };
 
-        window.openBackupModal = function() { document.getElementById('sync-room-input').value = syncRoom; document.getElementById('backup-modal')?.classList.remove('hidden'); };
-        window.closeBackupModal = function() { document.getElementById('backup-modal')?.classList.add('hidden'); };
+        window.openBackupModal = function() {
+            document.getElementById('sync-room-input').value = syncRoom;
+            document.getElementById('backup-modal')?.classList.remove('hidden');
+        };
+        window.closeBackupModal = function() {
+            document.getElementById('backup-modal')?.classList.add('hidden');
+        };
         window.changeSyncRoom = async function() {
             const val = document.getElementById('sync-room-input').value.trim();
             if (!val) return;
-            syncRoom = val; localStorage.setItem('crm_sync_room', syncRoom);
-            await pullFromFirebase(true); closeBackupModal();
+            syncRoom = val;
+            localStorage.setItem('crm_sync_room', syncRoom);
+            await pullFromFirebase(true);
+            closeBackupModal();
         };
         window.exportBackupFile = function() {
             const blob = new Blob([JSON.stringify(buildSyncPayload(Date.now()), null, 2)], { type: 'application/json' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'crm_ginza_toyota.json'; a.click();
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'crm_ginza_toyota.json';
+            a.click();
         };
         window.exportSectionCSV = function() { showToast("Exportando CSV..."); };
         window.exportClientesCSV = function() { showToast("Exportando Cartera CSV..."); };
-        window.requestDeleteAll = function() { crmContacts = []; saveLocalData(true); renderAllTables(); updateDashboard(); };
+        window.requestDeleteAll = function() {
+            crmContacts = [];
+            saveLocalData(true);
+            renderAllTables();
+            updateDashboard();
+        };
         window.showToast = function(message, type = 'success') {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -4577,7 +4687,7 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             toast.className = `${type === 'success' ? 'bg-zinc-900 border border-zinc-700' : 'bg-[#EB0A1E]'} text-white px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-medium toast-animate max-w-xs sm:max-w-sm`;
             toast.textContent = message;
             container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            setTimeout(() => toast.remove(), 3500);
         };
 
         function renderAllTables() {
@@ -4629,6 +4739,7 @@ REGLAS ESTRICTAS DE ATENCIÓN Y OPERATORIA COMERCIAL:
             await restoreSavedPlanBlobsFromIndexedDB();
             renderPlansHistory();
             renderInfoAutoAlertsBanner();
+            renderCommercialLiveAlertsBanner();
             updateWaAiNavBadge();
             startFirebaseLiveListener();
             startWaIncomingLiveListener();
