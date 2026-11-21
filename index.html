@@ -4186,7 +4186,22 @@ METODOLOGÍA DE CONVERSACIÓN CONSULTIVA (MUY IMPORTANTE):
 
             const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Iniciar conversación saludando como Sofía)'}"\n\nRespondé únicamente con el texto del mensaje de WhatsApp:`;
 
-            const modelsToTry = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-flash-latest', 'gemini-2.0-flash'];
+            let modelsToTry = ['gemini-3-flash-preview', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.5-pro'];
+            try {
+                const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
+                if (listRes.ok) {
+                    const listData = await listRes.json();
+                    const dynamicModels = (listData.models || [])
+                        .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
+                        .map(m => m.name.replace(/^models\//, ''))
+                        .filter(n => n.includes('gemini') && !n.includes('2.0-flash') && !n.includes('1.5'));
+                    if (dynamicModels.length > 0) {
+                        const preferred = dynamicModels.filter(n => n.includes('flash'));
+                        modelsToTry = Array.from(new Set([...preferred, ...dynamicModels, ...modelsToTry]));
+                    }
+                }
+            } catch (e) {}
+
             let lastErrorMsg = '';
             for (const modelName of modelsToTry) {
                 try {
