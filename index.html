@@ -191,6 +191,20 @@
                 Marcar vistas
             </button>
         </div>
+
+        <!-- ALERTA DE AUDIO RECIBIDO EN WHATSAPP -->
+        <div id="audio-live-alerts-banner" class="hidden mt-3 bg-indigo-50 border-2 border-indigo-500 rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div class="flex items-start sm:items-center gap-2.5">
+                <span class="text-xl shrink-0">🎙️</span>
+                <div>
+                    <div class="font-extrabold text-indigo-950 uppercase tracking-wide">Audio de WhatsApp Recibido — Escuchar en el Teléfono</div>
+                    <div id="audio-live-alerts-list" class="text-indigo-900 mt-0.5 space-y-1"></div>
+                </div>
+            </div>
+            <button onclick="dismissAllAudioAlerts()" class="px-3 py-1.5 rounded-xl bg-indigo-200 hover:bg-indigo-300 text-indigo-950 font-bold shrink-0 self-end sm:self-center">
+                Marcar escuchados
+            </button>
+        </div>
     </section>
 
     <!-- TAB 1: PANEL PRINCIPAL EJECUTIVO GINZA TOYOTA -->
@@ -1751,6 +1765,7 @@
         let waAiConversationLogs = JSON.parse(localStorage.getItem('crm_wa_ai_chats') || '{}');
         let infoAutoAlerts = JSON.parse(localStorage.getItem('crm_infoauto_alerts') || '[]');
         let commercialLiveAlerts = JSON.parse(localStorage.getItem('crm_commercial_live_alerts') || '[]');
+        let audioLiveAlerts = JSON.parse(localStorage.getItem('crm_audio_live_alerts') || '[]');
         let cachedAvailableGeminiModels = null;
 
         async function resolveAvailableGeminiModels(apiKey) {
@@ -2000,6 +2015,7 @@
                     sandboxPhone: formatPhoneAR(waAiConfig.sandboxPhone || ''),
                     advisorName: waAiConfig.advisorName || 'Sofía',
                     branchName: waAiConfig.branchName || 'Ginza Toyota',
+                    geminiApiKey: waAiConfig.geminiApiKey || '',
                     authorizedContactsCount: authorizedContacts.length,
                     authorizedContacts,
                     toyotaPlans: marketPlansCatalog.filter(p => p.brand === 'Toyota')
@@ -2648,6 +2664,51 @@
             return true;
         }
 
+        function detectAndRegisterAudioAlert(contact, userMessage) {
+            if (!contact || !userMessage) return false;
+            const norm = String(userMessage).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+            const isAudio = /^(?:🎤\s*)?(?:mensaje de voz|audio|nota de voz)(?:\s*\(\d+:\d+\))?$/i.test(norm) || norm.includes('mensaje de voz');
+            if (!isAudio) return false;
+
+            audioLiveAlerts.unshift({
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 3),
+                contactId: contact.id,
+                clientName: contact.name || 'Cliente CRM',
+                phone: contact.phone || '',
+                rawLabel: userMessage.trim(),
+                time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
+                resolved: false
+            });
+            localStorage.setItem('crm_audio_live_alerts', JSON.stringify(audioLiveAlerts.slice(0, 30)));
+            renderAudioLiveAlertsBanner();
+            showToast(`🎙️ AUDIO RECIBIDO de ${contact.name || 'Cliente'} — Revisá tu WhatsApp`);
+            return true;
+        }
+
+        function renderAudioLiveAlertsBanner() {
+            const banner = document.getElementById('audio-live-alerts-banner');
+            const listEl = document.getElementById('audio-live-alerts-list');
+            if (!banner || !listEl) return;
+            const pending = audioLiveAlerts.filter(a => !a.resolved);
+            if (pending.length === 0) {
+                banner.classList.add('hidden');
+                return;
+            }
+            banner.classList.remove('hidden');
+            listEl.innerHTML = pending.map(a => `
+                <div class="flex flex-wrap items-center gap-2">
+                    <span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) envió <b>${a.rawLabel}</b> <span class="text-[11px] text-indigo-700">(${a.time})</span></span>
+                    <button onclick="openWaAiForContact('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-indigo-800 text-white text-[11px] font-bold hover:bg-indigo-900">💬 Abrir Ficha</button>
+                </div>
+            `).join('');
+        }
+
+        window.dismissAllAudioAlerts = function() {
+            audioLiveAlerts.forEach(a => a.resolved = true);
+            localStorage.setItem('crm_audio_live_alerts', JSON.stringify(audioLiveAlerts));
+            renderAudioLiveAlertsBanner();
+        };
+
         function renderInfoAutoAlertsBanner() {
             const banner = document.getElementById('infoauto-alerts-banner');
             const listEl = document.getElementById('infoauto-alerts-list');
@@ -2660,8 +2721,8 @@
             banner.classList.remove('hidden');
             listEl.innerHTML = pending.map(a => `
                 <div class="flex flex-wrap items-center gap-2">
-                    <span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}): <b>${a.vehicleDesc}</b> <span class="text-[11px] text-amber-800">(${a.time})</span></span>
-                    <button onclick="openSendInfoAutoQuote('${a.id}')" class="px-2 py-0.5 rounded-lg bg-amber-900 text-white text-[11px] font-bold hover:bg-amber-950">💵 Cargar InfoAuto y Enviar</button>
+                    <span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) mencionó: <b>"${a.vehicleDesc}"</b> <span class="text-[11px] text-amber-700">(${a.time})</span></span>
+                    <button onclick="openSendInfoAutoQuote('${a.id}')" class="px-2 py-0.5 rounded-lg bg-amber-900 text-white text-[11px] font-bold hover:bg-amber-950">📋 Enviar Cotización InfoAuto</button>
                 </div>
             `).join('');
         }
@@ -2678,7 +2739,7 @@
             banner.classList.remove('hidden');
             listEl.innerHTML = pending.map(a => `
                 <div class="flex flex-wrap items-center gap-2">
-                    <span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}): <b>${a.reason}</b> — <i>"${a.snippet}"</i> <span class="text-[11px] text-slate-500">(${a.time})</span></span>
+                    <span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}): <b>${a.reason}</b> — "${a.snippet}" <span class="text-[11px] text-rose-700">(${a.time})</span></span>
                     <button onclick="openWaAiForContact('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-[#EB0A1E] text-white text-[11px] font-bold hover:bg-red-700">💬 Ver Chat</button>
                 </div>
             `).join('');
@@ -4284,29 +4345,33 @@
 
             const isTradeIn = detectAndRegisterTradeInAlert(contact, userMessage);
             if (isTradeIn) {
-                return `Anotado el dato de tu vehículo (${userMessage.trim()}).|||No hacemos tasaciones en el momento, así que se lo paso a Gonzalo para que te lo cotice por InfoAuto y te lo enviamos por acá.`;
+                return `Anotado el dato de tu vehículo (${userMessage.trim()}). En Ginza Toyota no hacemos tasaciones en el momento, así que se lo paso a Gonzalo para que te lo cotice por InfoAuto y te pasamos el valor de referencia por acá.`;
             }
 
             if (!msgNorm || (!alreadyGreeted && /^(hola|buen dia|buenas|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm))) {
-                return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora de Gonzalo Dichiazza en ${branch}.|||¿En qué modelo Toyota te puedo ayudar hoy?`;
+                return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora de Gonzalo Dichiazza en ${branch}. Contame, ¿en qué modelo Toyota te puedo asesorar hoy?`;
+            }
+
+            if (/\b(4x4|4x2|dx|srv|srx|gr|automatica|manual|hibrid|version|versiones|opciones)\b/.test(msgNorm)) {
+                const targetModel = activeModel || 'Hilux';
+                if (targetModel === 'Hilux') {
+                    return `Para Hilux 4x4 tenemos dos caminos muy convenientes: podés suscribir directo al plan 100% de Hilux 4x4 DX AT (valor móvil $59.739.000, cuota máxima $891.366) o arrancar con un 70/30 de 4x2 (cuota máxima $528.803) y pedir cambio de versión a 4x4 al adjudicar. ¿Tenés algún vehículo usado o capital para entregar, o preferís ir armando el ahorro en cuotas?`;
+                }
+                return `En ${targetModel} podemos armar la operación por Toyota Plan (70/30 o 100% sin intereses bancarios) o evaluar entrega de usado y financiación convencional. ¿Cómo tenías pensado encarar la compra?`;
             }
 
             const asksPriceOrPlan = /\b(cuota|cuotas|precio|valor|sale|cuesta|monto|plan|financ|70\/30|100%|alternativa|contado|convencional|credito)\b/.test(msgNorm);
             if (newModel && !asksPriceOrPlan) {
-                return `Muy buena elección el ${newModel}.|||Contame, ¿lo buscás para uso diario, ruta o trabajo, y pensás entregar algún usado?`;
+                return `Muy buena elección el ${newModel}. Para asesorarte bien: ¿lo buscás para uso diario, ruta o trabajo, y tenés algún usado para entregar?`;
             }
 
             if (/\b(no estoy seguro|no quiero plan|otra alternativa|otras alternativas|contado|convencional|prendario|credito|banco)\b/.test(msgNorm)) {
-                return `Totalmente válido analizarlo bien. Además de Toyota Plan, trabajamos venta convencional de contado y créditos prendarios.|||Para orientarte mejor: ¿contás con un capital o usado para entregar, o preferís financiar la mayor parte?`;
-            }
-
-            if (/\b(informacion antes|info antes|antes de ir)\b/.test(msgNorm)) {
-                return `Por supuesto, te paso toda la info por acá con tranquilidad antes de que vengas.|||¿Qué te interesa revisar primero: valores de referencia, formas de pago o toma de usado?`;
+                return `Totalmente válido analizar todas las vías. Además de Toyota Plan (que te permite capitalizarte sin tasas bancarias y adelantar cuotas puras cuando quieras), trabajamos venta convencional y créditos prendarios. ¿Contás con un usado o anticipo para entregar?`;
             }
 
             if (/\b(cuota|cuotas|precio|valor|sale|cuesta|monto)\b/.test(msgNorm)) {
                 if (!activeModel) {
-                    return `Con gusto te paso los números.|||¿Sobre qué modelo Toyota querés que veamos los valores?`;
+                    return `Con gusto te asesoro con los valores vigentes. ¿Sobre qué modelo Toyota querés que veamos las opciones?`;
                 }
                 const matchedPdf = plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(activeModel.toLowerCase()));
                 const matchedCatalog = marketPlansCatalog.filter(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(activeModel.toLowerCase()));
@@ -4319,20 +4384,28 @@
                     });
                 }
                 if (lines.length > 0) {
-                    return `En Toyota Plan para ${activeModel} tenés: ${lines.join(' / ')}.|||¿Tenés algún vehículo usado o anticipo en mente para evaluar cómo te quedaría?`;
+                    return `Para ${activeModel} en Toyota Plan tenés: ${lines.join(' / ')}. Además podés licitar o adelantar cuotas puras sin gastos administrativos. ¿Querés que evaluemos cómo te quedaría con un usado o anticipo, o preferís pasar por ${branch} a verlo?`;
                 }
             }
 
-            return `Perfecto, tomo nota${activeModel ? ` por el ${activeModel}` : ''}.|||Contame un poco más qué operación tenés pensada así le paso tu consulta a Gonzalo y te asesoramos puntual.`;
+            return `Entendido${activeModel ? ` respecto al ${activeModel}` : ''}. En ${branch} podemos armar la operación tanto por Toyota Plan (con cuota reducida 70/30 o 100% y posibilidad de cambio de modelo al adjudicar) como tomando tu usado. Contame qué modalidad te resulta más cómoda para avanzar.`;
         }
 
         async function generateGroundedWhatsAppReply(contact, userMessage = '') {
+            const isAudio = detectAndRegisterAudioAlert(contact, userMessage);
+            if (isAudio) {
+                return {
+                    reply: `¡Recibí tu audio! En este momento estoy en reunión, pero ya se lo paso a Gonzalo para escucharlo bien y responderte puntual por acá.`,
+                    source: '🎙️ Alerta Audio en CRM'
+                };
+            }
+
             const autoBooked = tryAutoScheduleFromClientMessage(contact, userMessage);
             const hasTradeInAlert = detectAndRegisterTradeInAlert(contact, userMessage);
             const hasCommercialAlert = triggerCommercialAttentionAlert(contact, userMessage);
             const kb = buildCrmRealKnowledgeSnapshot(contact);
             const fallbackReply = autoBooked
-                ? `Excelente, ya dejé agendada tu visita en ${kb.concesionario} con Gonzalo para el ${autoBooked.date} a las ${autoBooked.time} hs.|||Te esperamos en el salón.`
+                ? `Excelente, ya dejé agendada tu visita en ${kb.concesionario} con Gonzalo para el ${autoBooked.date} a las ${autoBooked.time} hs. Te esperamos en el salón.`
                 : buildDeterministicCrmReply(contact, userMessage);
 
             const apiKey = (waAiConfig.geminiApiKey || '').trim();
@@ -4340,20 +4413,21 @@
                 return { reply: fallbackReply, source: (hasTradeInAlert || hasCommercialAlert) ? '🔔 Alerta CRM Activada' : (autoBooked ? 'Turno Agendado' : '⚠️ Falta API Key Gemini') };
             }
 
-            const systemPrompt = `Sos ${kb.asesora}, asesora comercial del equipo de Gonzalo Dichiazza en ${kb.concesionario} (concesionario oficial Toyota en Argentina), chateando por WhatsApp.
+            const systemPrompt = `Sos ${kb.asesora}, asesora comercial senior del equipo de Gonzalo Dichiazza en ${kb.concesionario} (concesionario oficial Toyota en Argentina), atendiendo por WhatsApp.
 
-CÓMO TENÉS QUE HABLAR (ESTILO HUMANO REAL DE WHATSAPP):
-1. MENSAJES CORTOS EN 2 BURBUJAS (MUY IMPORTANTE): Nadie en WhatsApp escribe párrafos largos. Escribí SIEMPRE respuestas cortas (máximo 2 o 3 oraciones en total) divididas en **2 mensajes breves** separados exactamente por \`|||\`.
-   - Ejemplo de formato: \`Qué buena elección la Hilux.|||Contame, ¿la buscás para trabajo, campo o uso diario?\`
-2. INDAGAR ANTES DE OFRECER: No tires precios, ni modalidades 70/30, ni invites al salón en los primeros mensajes si el cliente todavía no pidió números. Primero hacé preguntas cortas para entender qué busca: uso del vehículo, si tiene usado para entregar, o qué forma de pago evalúa.
-3. USAR EL NOMBRE SOLO UNA VEZ: Usá el nombre del cliente únicamente en el saludo inicial si todavía no se saludaron. En los mensajes siguientes NO repitas su nombre.
-4. TONO PROFESIONAL Y NATURAL: Voseo argentino cordial ("vos", "tenés", "contame"). Prohibido usar jerga callejera ("una nave", "tomamos mates") ni sonar robótica o desesperada por vender.
-5. USADOS Y TASACIÓN INFOAUTO: En Ginza Toyota NO tasamos vehículos en el momento. Si menciona un usado, decile que no tasamos en el acto y que Gonzalo se lo va a cotizar por **InfoAuto** para pasarle el valor de referencia.
-6. VALORES DE CUOTA (SOLO SI PREGUNTA PRECIO/CUOTA): Informá únicamente la **CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS** de CONTEXTO_CRM_Y_PRECIOS (nunca la cuota pura mínima ni la extraordinaria).
-7. LLEVAR CON SUTILEZA HACIA TOYOTA PLAN Y SALÓN: Cuando ya conozcas su necesidad, mostrá con naturalidad cómo Toyota Plan le permite capitalizarse sin bancos, e invitalo sin presión al salón de ${kb.concesionario}.
-8. TEMAS AJENOS A TOYOTA: Si habla de otra cosa, respondé con mucha educación y profesionalismo y volvé suavemente a cómo ayudarlo con su vehículo.`;
+TU MISIÓN COMO ASESORA (NO SEAS PASIVA):
+1. ASESORAR DE VERDAD CON CRITERIO COMERCIAL: Nunca respondas con frases vacías de relleno como "Excelente elección" sin aportar valor. En CADA respuesta tenés que:
+   - Responder con precisión y conocimiento técnico/comercial lo que el cliente dijo o eligió (ej: si pide Hilux 4x4, explicarle las alternativas reales: suscribir directo al plan 100% de Hilux 4x4 DX AT o entrar en un 70/30 y pedir cambio de versión al adjudicar, o combinar entrega de usado + financiación).
+   - Guiarlo con inteligencia hacia las ventajas de **Toyota Plan** (sin intereses bancarios, adelanto a cuota pura, flexibilidad para cambiar de versión o modelo al adjudicar, Plan Flexible Res. IGJ 183/24) sin sonar desesperada.
+   - Cerrar siempre con **una pregunta concreta** que haga avanzar la negociación (uso del vehículo, si entrega usado, capital disponible o invitación sutil a pasar por el salón de ${kb.concesionario}).
+2. EXTENSIÓN IDEAL DE WHATSAPP: Un único mensaje fluido, claro y sustancioso de **3 a 4 líneas máximo** (sin usar separadores raros ni listas eternas).
+3. USAR EL NOMBRE SOLO UNA VEZ: Usá el nombre del cliente únicamente en el saludo inicial si todavía no se saludaron. En los turnos siguientes NO repitas su nombre.
+4. TONO PROFESIONAL Y NATURAL: Voseo argentino cordial ("vos", "tenés", "contame"). Prohibido usar jerga callejera ("una nave", "tomamos mates").
+5. USADOS Y TASACIÓN INFOAUTO: En Ginza Toyota NO tasamos vehículos en el momento. Si menciona un usado, aclarale con amabilidad que no hacemos tasaciones en el acto y que Gonzalo lo va a cotizar por **InfoAuto** para pasarle el valor de referencia.
+6. VALORES DE CUOTA (SOLO CUANDO PIDE PRECIOS O VERSIONES CONCRETAS): Informá únicamente la **CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS** de CONTEXTO_CRM_Y_PRECIOS (nunca la cuota pura mínima ni la extraordinaria).
+7. TEMAS AJENOS A TOYOTA: Si habla de otra cosa, respondé con mucha altura profesional y volvé suavemente a cómo ayudarlo con su próximo Toyota.`;
 
-            const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\n${hasTradeInAlert ? 'NOTA_INTERNA: Se activó alerta InfoAuto en el CRM por su usado.' : ''}${hasCommercialAlert ? ' NOTA_INTERNA: Se activó alerta comercial en el CRM de Gonzalo.' : ''}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Saludo inicial corto presentándote como Sofía, asesora de Gonzalo Dichiazza en Ginza Toyota, usando ||| para dividir en 2 mensajes breves)'}"\n\nRedactá únicamente los 2 mensajes cortos separados por |||:`;
+            const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\n${hasTradeInAlert ? 'NOTA_INTERNA: Se activó alerta InfoAuto en el CRM por su usado.' : ''}${hasCommercialAlert ? ' NOTA_INTERNA: Se activó alerta comercial en el CRM de Gonzalo.' : ''}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Saludo inicial breve presentándote como Sofía, asesora de Gonzalo Dichiazza en Ginza Toyota, y preguntando en qué modelo Toyota lo podés asesorar)'}"\n\nRedactá únicamente la respuesta lista para enviar por WhatsApp:`;
 
             const candidateModels = await resolveAvailableGeminiModels(apiKey);
             let lastErrorMsg = '';
@@ -4368,7 +4442,7 @@ CÓMO TENÉS QUE HABLAR (ESTILO HUMANO REAL DE WHATSAPP):
                             contents: [{ parts: [{ text: promptText }] }],
                             systemInstruction: { parts: [{ text: systemPrompt }] },
                             generationConfig: {
-                                temperature: 0.75,
+                                temperature: 0.72,
                                 maxOutputTokens: 1200
                             }
                         })
@@ -4399,30 +4473,21 @@ CÓMO TENÉS QUE HABLAR (ESTILO HUMANO REAL DE WHATSAPP):
 
         async function queueAutoReplyToMobile(contact, replyText, incomingText = '') {
             if (!contact) return;
-            const rawReply = String(replyText || '').trim();
-            if (!rawReply || rawReply.length < 3 || /IllegalStateException|RuntimeException|Exception:|undefined|^null$|^\{/i.test(rawReply)) {
+            const cleanReply = String(replyText || '').replace(/\s*\|\|\|\s*/g, ' ').replace(/^["']+|["']+$/g, '').trim();
+            if (!cleanReply || cleanReply.length < 3 || /IllegalStateException|RuntimeException|Exception:|undefined|^null$|^\{/i.test(cleanReply)) {
                 return;
             }
-
-            const bubbles = rawReply
-                .split(/\s*\|\|\|\s*/)
-                .map(s => s.replace(/^["']+|["']+$/g, '').trim())
-                .filter(Boolean)
-                .slice(0, 2);
-            if (bubbles.length === 0) return;
 
             if (!waAiConversationLogs[contact.id]) waAiConversationLogs[contact.id] = [];
             if (incomingText) {
                 waAiConversationLogs[contact.id].push({ from: 'client', text: incomingText, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
             }
             const timeLabel = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-            bubbles.forEach(b => {
-                waAiConversationLogs[contact.id].push({ from: 'ai', text: b, time: timeLabel });
-            });
+            waAiConversationLogs[contact.id].push({ from: 'ai', text: cleanReply, time: timeLabel });
             persistWaAiChats();
 
             const recipientKey = sanitizeFirebaseKey(contact.phone || contact.name || 'default');
-            const sendSingleBubble = async (bubbleMsg) => {
+            try {
                 await Promise.all([
                     fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'POST',
@@ -4430,38 +4495,27 @@ CÓMO TENÉS QUE HABLAR (ESTILO HUMANO REAL DE WHATSAPP):
                         body: JSON.stringify({
                             phone: formatPhoneAR(contact.phone),
                             name: contact.name || '',
-                            message: bubbleMsg,
+                            message: cleanReply,
                             createdAt: Date.now()
                         })
                     }),
                     fetch(`${FIREBASE_DB_URL}/wa_outbox/${encodeURIComponent(syncRoom)}/${encodeURIComponent(recipientKey)}.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(bubbleMsg)
+                        body: JSON.stringify(cleanReply)
                     }),
                     fetch(`${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(bubbleMsg)
+                        body: JSON.stringify(cleanReply)
                     })
                 ]);
-            };
-
-            try {
-                await sendSingleBubble(bubbles[0]);
-                if (bubbles.length > 1) {
-                    setTimeout(async () => {
-                        try {
-                            await sendSingleBubble(bubbles[1]);
-                        } catch (e) {}
-                    }, 9500);
-                }
                 setTimeout(() => {
                     fetch(`${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'DELETE'
                     }).catch(() => {});
-                }, bubbles.length > 1 ? 22000 : 12000);
-                showToast(`🤖 Sofía envió ${bubbles.length} mensaje(s) breve(s) a ${contact.name || contact.phone}`);
+                }, 14000);
+                showToast(`🤖 Sofía respondió a ${contact.name || contact.phone}`);
             } catch (e) {}
         }
 
@@ -4736,10 +4790,21 @@ CÓMO TENÉS QUE HABLAR (ESTILO HUMANO REAL DE WHATSAPP):
             if (csvInput) csvInput.addEventListener('change', handleCsvUpload);
 
             await pullFromFirebase(true);
+            try {
+                const brainRes = await fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`);
+                if (brainRes.ok) {
+                    const brainData = await brainRes.json();
+                    if (brainData && brainData.geminiApiKey && !waAiConfig.geminiApiKey) {
+                        waAiConfig.geminiApiKey = brainData.geminiApiKey;
+                        localStorage.setItem('crm_wa_ai_config', JSON.stringify(waAiConfig));
+                    }
+                }
+            } catch (e) {}
             await restoreSavedPlanBlobsFromIndexedDB();
             renderPlansHistory();
             renderInfoAutoAlertsBanner();
             renderCommercialLiveAlertsBanner();
+            renderAudioLiveAlertsBanner();
             updateWaAiNavBadge();
             startFirebaseLiveListener();
             startWaIncomingLiveListener();
