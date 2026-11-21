@@ -55,16 +55,16 @@
                     <span id="cloud-status" class="px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5 shrink-0">
                         <span id="cloud-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                         <span id="cloud-text">Conectando...</span>
-                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofía 2.1 • Criterio Senior">
-                        <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-                        <span id="nav-wa-ai-label">🤖 Sofía IA 2.1 ON</span>
+                    </span>
+                    <button onclick="openWaTemplatesModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-white border border-white/15 hover:bg-white/20 transition-colors flex items-center gap-1 shrink-0" title="Mensajes Predeterminados por Canal">
+                        <span>💬 Mensajes</span>
                     </button>
                     <button onclick="openPdfPriceChatbotModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 transition-colors flex items-center gap-1 shadow-sm shrink-0" title="Corregir precios leídos de los PDFs por chat">
                         <span>🛠️ Corregir Precio PDF</span>
                     </button>
-                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofía 2.0 • 100% Google Gemini">
+                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofía 2.1 • Criterio Senior">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-                        <span id="nav-wa-ai-label">🤖 Sofía IA 2.0 ON</span>
+                        <span id="nav-wa-ai-label">🤖 Sofía IA 2.1 ON</span>
                     </button>
                     <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
@@ -639,9 +639,9 @@
                     <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="text-base sm:text-lg font-extrabold">Sofía IA 2.0 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">LIBERTAD TOTAL GEMINI • PRECIOS CRM</span>
-                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Sofía IA 2.0 Nube</span>
+                            <h3 class="text-base sm:text-lg font-extrabold">Sofía IA 2.1 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">CRITERIO SENIOR • PRECIOS CRM</span>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Sofía IA 2.1 Nube</span>
                         </div>
                         <p class="text-xs text-zinc-300">Conversación 100% libre impulsada por Google Gemini • Valores y cuotas oficiales desde tu CRM.</p>
                     </div>
@@ -2177,9 +2177,7 @@
         }
 
         // ============================================================================
-        // MÓDULO 4: SOFIA_AI (100% IMPULSADA POR GOOGLE GEMINI • SIN FRASES FIJAS)
-        // Todo lo que dice Sofía nace dinámicamente de Gemini; la app solo le pasa
-        // las cuotas y valores oficiales de los vehículos.
+        // MÓDULO 4: SOFIA_AI (ÚNICA INSTANCIA • 100% GOOGLE GEMINI • CRITERIO SENIOR)
         // ============================================================================
         const SOFIA_AI = {
             config: {
@@ -2198,7 +2196,6 @@
             cachedModels: null,
             pendingBuffers: {},
 
-            // Agrupa mensajes seguidos del cliente durante 3.5 segundos para responder una sola vez con todo el contexto
             enqueueClientMessage(contact, text) {
                 if (!contact || !text) return;
                 const cid = contact.id;
@@ -2320,10 +2317,10 @@
 ESTILO Y NATURALIDAD (REGLAS DE ORO):
 - Hablás por WhatsApp como una profesional argentina real, cercana, segura y sin rodeos ("vos", "mirá", "contame", "todo bien").
 - PROHIBIDO REPETIR EL NOMBRE DEL CLIENTE: Usá su nombre ÚNICAMENTE en el primer saludo inicial. En todos los mensajes siguientes está PROHIBIDO volver a decir su nombre (nunca digas "Qué bueno Hans", "Mirá Hans", "Dale Hans").
-- Escribí mensajes cortos y claros (2 a 4 líneas máximo) y cerrá con UNA sola pregunta precisa para mantener el hilo claro (no hagas dos preguntas distintas en el mismo mensaje para evitar confusiones cuando el cliente responde).
+- Escribí mensajes cortos y claros (2 a 4 líneas máximo) y cerrá con UNA sola pregunta precisa para mantener el hilo claro (no hagas dos preguntas distintas en el mismo mensaje).
 - Leé con atención todo el historial: si acabás de preguntar por los kilómetros de un usado y el cliente responde un número como "60000" o "74 mil", entendé de inmediato que son los kilómetros de su auto, nunca lo confundas con una cuota.
 
-CRITERIO COMERCIAL DE VENDEDORA SENIOR (NO INEXPERTA):
+CRITERIO COMERCIAL DE VENDEDORA SENIOR:
 1. PRIMER SALUDO: Saludá con calidez humana, presentate como Sofía (asistente comercial de Gonzalo Dichiazza en ${branch}) y abrí la charla con naturalidad sin interrogar de golpe.
 2. INDAGACIÓN ANTES DE VENDER: Cuando pregunta por un modelo (ej. Hilux), indagá primero para qué uso la busca (trabajo, campo o uso personal) y qué versión o caja tiene en mente, antes de hablar de formas de pago.
 3. CUANDO PREGUNTA "¿QUÉ CUESTA?" SIN HABER DIAGNOSTICADO TODAVÍA:
@@ -2360,11 +2357,10 @@ ${officialPricesText}`;
 
                 const apiKey = (this.config.geminiApiKey || '').trim();
                 if (!apiKey) {
-                    showToast("⚠️ Pegá tu API Key de Google Gemini en Sofía IA 2.0", "error");
+                    showToast("⚠️ Pegá tu API Key de Google Gemini en Sofía IA 2.1", "error");
                     return { reply: '', source: '⚠️ Falta API Key Gemini' };
                 }
 
-                // Historial real multi-turno de esta conversación (cero guiones predeterminados)
                 const contents = [];
                 const rawHistory = (contact && Array.isArray(this.chats[contact.id])) ? this.chats[contact.id].slice(-18) : [];
                 for (const m of rawHistory) {
@@ -2421,11 +2417,11 @@ ${officialPricesText}`;
                             const detectedModel = detectToyotaModelFromText(cleanInput);
                             if (detectedModel && contact) contact.interestModel = detectedModel;
                             const tag = (hasTradeInAlert || hasCommercialAlert)
-                            ? `🔔 Alerta CRM + Sofía IA 2.1 (${modelName})`
-                            : `Sofía IA 2.1 • Gemini (${modelName})`;
-                        return { reply: aiText, source: tag };
-                    }
-                } catch (e) {
+                                ? `🔔 Alerta CRM + Sofía IA 2.1 (${modelName})`
+                                : `Sofía IA 2.1 • Gemini (${modelName})`;
+                            return { reply: aiText, source: tag };
+                        }
+                    } catch (e) {
                         lastErrorMsg = e.message || 'Error de red';
                     }
                 }
