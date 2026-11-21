@@ -4186,7 +4186,7 @@ METODOLOGÍA DE CONVERSACIÓN CONSULTIVA (MUY IMPORTANTE):
 
             const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Iniciar conversación saludando como Sofía)'}"\n\nRespondé únicamente con el texto del mensaje de WhatsApp:`;
 
-            const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+            const modelsToTry = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-flash-latest', 'gemini-2.0-flash'];
             let lastErrorMsg = '';
             for (const modelName of modelsToTry) {
                 try {
@@ -4215,9 +4215,9 @@ METODOLOGÍA DE CONVERSACIÓN CONSULTIVA (MUY IMPORTANTE):
             }
 
             if (lastErrorMsg) {
-                showToast(`⚠️ Error API Gemini: ${lastErrorMsg.slice(0, 70)}`, 'error');
+                showToast(`⚠️ Error API Gemini: ${lastErrorMsg.slice(0, 90)}`, 'error');
             }
-            return { reply: fallbackReply, source: lastErrorMsg ? '⚠️ Error API Key (Usando respaldo)' : 'Motor Respaldo CRM' };
+            return { reply: fallbackReply, source: lastErrorMsg ? `⚠️ ${lastErrorMsg.slice(0, 55)}` : 'Motor Respaldo CRM' };
         }
 
         async function queueAutoReplyToMobile(contact, replyText, incomingText = '') {
