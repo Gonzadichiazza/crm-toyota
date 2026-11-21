@@ -2451,6 +2451,7 @@
             const sender = String(senderRaw || '').replace(/^WhatsApp(\sBusiness)?:\s*/i, '').trim();
             const textClean = String(textRaw || '').trim();
             if (!sender || !textClean) return null;
+            if (/^[?¿!¡.,\s]+$/.test(textClean)) return null;
             if (isSystemOrSummaryNotification(sender, textClean)) return null;
 
             const senderDigits = sender.replace(/\D/g, '');
@@ -2511,6 +2512,12 @@
                     const sender = typeof ev === 'string' ? ev : (ev.sender || ev.not_title || ev.title || '');
                     const text = typeof ev === 'object' ? (ev.text || ev.notification || '') : '';
 
+                    // Ignorar signos sueltos ("?", "!", ".") enviados como segundo mensaje rápido para no pisar la respuesta real
+                    if (/^[?!.,…\s]+$/.test(text.trim())) {
+                        fetch(`${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}/${encodeURIComponent(evId)}.json`, { method: 'DELETE' }).catch(() => {});
+                        continue;
+                    }
+
                     // Evitar procesar notificaciones duplicadas idénticas en menos de 6 segundos
                     const fp = `${sender.trim().toLowerCase()}|${text.trim().toLowerCase()}`;
                     const lastSeen = recentWaMessageFingerprints.get(fp) || 0;
@@ -2529,8 +2536,15 @@
                     if (result) {
                         anyUpdated = true;
                         if (waAiConfig.autoReplyMobile && text) {
-                            const out = await generateGroundedWhatsAppReply(result.contact, text);
-                            await queueAutoReplyToMobile(result.contact, out.reply, text);
+                            try {
+                                const out = await generateGroundedWhatsAppReply(result.contact, text);
+                                if (out && out.reply) {
+                                    await queueAutoReplyToMobile(result.contact, out.reply, text);
+                                }
+                            } catch (aiErr) {
+                                const safeReply = SOFIA_AI.buildFallbackReply(result.contact, text);
+                                await queueAutoReplyToMobile(result.contact, safeReply, text);
+                            }
                         }
                     }
                     fetch(`${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}/${encodeURIComponent(evId)}.json`, { method: 'DELETE' }).catch(() => {});
@@ -4338,8 +4352,8 @@ CÓMO CONDUCÍS LA CONVERSACIÓN (PASO A PASO):
    - Nunca ofrezcas compra convencional ni créditos bancarios por iniciativa propia.
    - Si tiene poco capital/usado antiguo y busca cuota cómoda, mostrale con honestidad que hoy no se pueden juntar al mismo tiempo: (1) poca entrega inicial, (2) cuota baja y (3) retiro inmediato. Preguntale cuál de esas variables prioriza hoy.
    - Prohibido usar frases defensivas como "antes de que lo descartes".
-6. PRECIOS Y TRANSPARENCIA:
-   - Informá precios SOLO cuando ya diagnosticaste o cuando el cliente insiste en el número, usando únicamente la "Cuota máxima ref." de la lista oficial:
+6. PRECIOS Y TRANSPARENCIA (ESTILO CONVERSACIÓN 21):
+   - Si el cliente pide directo el precio o valor de cuota de un modelo (ej. "Quería saber el precio de la Hilux DX"), respondé al grano sin dar vueltas con el Valor Móvil oficial y la "Cuota máxima ref." de la lista oficial, y cerrá con una única pregunta filtro (si busca financiar desde cero o tiene usado/capital para entregar):
 ${kb.preciosToyota}
    - Si pregunta por gastos de retiro o plazos, decile la verdad cruda: patentamiento y flete rondan el 8% al 10% del valor móvil, y la entrega por contrato IGJ es de hasta 75 días corridos tras adjudicar (45 a 65 días en la práctica).
 7. CIERRE: Cuando ya está claro el panorama, proponé agendar una llamada de 10 minutos o una visita en ${kb.concesionario} con Gonzalo Dichiazza para ver los números en limpio.
@@ -4417,6 +4431,11 @@ Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en peso
 
                 if (isPureGreeting) {
                     return { reply: this.buildFallbackReply(contact, userMessage), source: 'Sofía • Saludo Natural' };
+                }
+
+                // Si el cliente mandó solo "?" o signos sueltos, no sobrescribir la respuesta
+                if (/^[?!.,…\s]+$/.test(String(userMessage || '').trim())) {
+                    return { reply: '', source: 'Ignorado' };
                 }
 
                 const autoBooked = tryAutoScheduleFromClientMessage(contact, userMessage);
@@ -4851,9 +4870,9 @@ Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en peso
                 const brainRes = await fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`);
                 if (brainRes.ok) {
                     const brainData = await brainRes.json();
-                    if (brainData && brainData.geminiApiKey && !waAiConfig.geminiApiKey) {
-                        waAiConfig.geminiApiKey = brainData.geminiApiKey;
-                        localStorage.setItem('crm_wa_ai_config', JSON.stringify(waAiConfig));
+                    if (brainData && brainData.geminiApiKey && !SOFIA_AI.config.geminiApiKey) {
+                        SOFIA_AI.config.geminiApiKey = brainData.geminiApiKey;
+                        SOFIA_AI.saveConfig();
                     }
                 }
             } catch (e) {}
