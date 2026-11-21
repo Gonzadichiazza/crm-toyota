@@ -4109,25 +4109,35 @@
 
             // 1. Saludo inicial limpio y abierto (sin asumir modelos previos si recién saluda)
             if (!msgNorm || !alreadyGreeted || /^(hola|buen dia|buenas|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm)) {
-                return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora comercial de ${branch}. ¿En qué te puedo ayudar hoy?`;
+                return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora de Gonzalo Dichiazza acá en ${branch}. ¿En qué te puedo dar una mano hoy?`;
             }
 
-            // 2. Si el cliente dice que recién empieza a averiguar / mirar
+            // 2. Si el cliente describe su vehículo usado (año, marca, km)
+            if (/\b(km|kilometros|20\d{2}|19\d{2}|hyundai|santa fe|ford|vw|volkswagen|chevrolet|fiat|peugeot|renault|honda|nissan|amarok|ranger|cronos|208|focus|fiesta|cruze|tracker)\b/.test(msgNorm) && !/\b(cuota|precio|valor|sale|cuesta|plan)\b/.test(msgNorm)) {
+                return `¡Linda camioneta la Santa Fe! Con ese año y kilometraje lo ideal es que la revisen nuestros tasadores en ${branch} para pasarte un número real y competitivo de toma (sin tirarte un valor al aire por mensaje). ¿Te quedaría cómodo pasar un ratito esta semana por el salón así la ven y aprovechás a mirar el ${activeModel || 'Toyota'}?`;
+            }
+
+            // 3. Si el cliente manifiesta miedo / dudas por la economía o cuotas fijas
+            if (/\b(miedo|pais|inflacion|situacion|fijas|fija|aumenta|sube|incertidumbre|econom)\b/.test(msgNorm)) {
+                return `Es súper lógico lo que planteás con cómo está el país. Te soy totalmente sincera: en pesos las cuotas no son fijas porque acompañan el valor oficial del vehículo, pero justamente eso hace que tu capital no pierda valor y no pagues tasas bancarias altísimas. Igual no hace falta apurarse con ningún plan; si querés primero vemos cuánto te toman tu usado y qué opciones te dejan más tranquilo.`;
+            }
+
+            // 4. Si el cliente dice que recién empieza a averiguar / mirar
             if (/\b(empezando|averiguar|mirando|viendo|curiosidad|sin apuro|tranquilo)\b/.test(msgNorm)) {
-                return `¡Está perfecto! Es la mejor etapa para comparar tranquilo${activeModel ? ` con el ${activeModel}` : ''}. Contame un poco: ¿qué uso le darías principalmente (ciudad, ruta, familia) y tenés algún vehículo hoy para entregar o sería tu primer 0 km?`;
+                return `¡Está perfecto! Es la mejor etapa para analizar tranquilo${activeModel ? ` el ${activeModel}` : ''}. Contame un poco: ¿qué uso le darías principalmente (ciudad, ruta, familia) y tenés algún vehículo hoy para entregar o sería compra directa?`;
             }
 
-            // 3. Si responde sobre el uso o entrega de usado / ahorro
+            // 5. Si responde sobre el uso o entrega de usado sin dar detalles todavía
             if (/\b(ciudad|ruta|familia|trabajo|viajar|usado|permuta|ahorro|entrega|anticipo|tengo un|tengo una)\b/.test(msgNorm) && !/\b(cuota|precio|valor|sale|cuesta|plan)\b/.test(msgNorm)) {
-                return `Buenísimo, ese dato me sirve un montón para orientarte bien${activeModel ? ` con el ${activeModel}` : ''}. Con ese perfil podés armar algo súper cómodo sin descapitalizarte. ¿Te gustaría que veamos cómo quedaría una cuota aproximada o preferís darte una vuelta por ${branch} a verlo en persona?`;
+                return `Bárbaro, ese dato ayuda un montón para orientarte bien${activeModel ? ` con el ${activeModel}` : ''}. Contame qué vehículo tenés (marca, modelo, año y kilómetros aproximados) así te digo cómo podemos encararlo de la forma más cómoda para vos.`;
             }
 
-            // 4. Agendamiento / Visita al concesionario
+            // 6. Agendamiento / Visita al concesionario
             if (/\b(direccion|donde|ubicacion|horario|reunion|entrevista|pasar|visitar|salon|concesionario|test drive|manejar|verlo|lunes|martes|miercoles|jueves|viernes|sabado|manana)\b/.test(msgNorm)) {
-                return `Cuando quieras te espero en ${branch} para tomar un café, conocer el ${activeModel || 'vehículo'} en detalle y revisar juntos las opciones sin compromiso. ¿Qué día y horario te quedaría más cómodo?`;
+                return `Cuando quieras te esperamos con Gonzalo en ${branch} para tomar un café, ver el ${activeModel || 'vehículo'} en persona y revisar tranquilo tus números sin compromiso. ¿Qué día y horario te quedaría más cómodo?`;
             }
 
-            // 5. Consulta explícita de cuotas / precios / plan de ahorro
+            // 7. Consulta explícita de cuotas / precios / plan de ahorro
             const asksPriceOrPlan = /\b(cuota|cuotas|precio|valor|sale|cuesta|monto|plan|financ|70\/30|100%)\b/.test(msgNorm);
             if (asksPriceOrPlan) {
                 if (!activeModel) {
@@ -4148,20 +4158,20 @@
                 }
             }
 
-            // 6. Si menciona el modelo por primera vez sin pedir precio todavía -> Preguntar para recolectar información primero
+            // 8. Si menciona el modelo por primera vez sin pedir precio todavía
             if (activeModel && clientTurns <= 2) {
-                return `¡Excelente elección el *${activeModel}*! Antes de tirarte números al aire, contame un poquito: ¿qué uso le vas a dar y cómo venís pensando la compra (si tenés un usado para entregar, algún ahorro o buscar cuotas bajas)?`;
+                return `¡Muy lindo vehículo el *${activeModel}*! Contame un poco cómo venís pensando la operación: ¿buscás operación convencional de contado, entregar un usado en parte de pago o evaluar financiación?`;
             }
 
-            // 7. Seguimiento natural manteniendo el modelo en memoria
-            return `Perfecto, tomo nota${activeModel ? ` para tu ${activeModel}` : ''}. ¿Qué es lo que más te importa priorizar hoy: mantener una cuota mensual baja, retirar rápido o analizar cuánto te tomamos tu usado?`;
+            // 9. Seguimiento natural manteniendo el modelo en memoria
+            return `Tomo nota${activeModel ? ` para tu ${activeModel}` : ''}. Si te parece bien, podemos coordinar una pasada rápida por ${branch} con Gonzalo para ver la unidad y analizar juntos la mejor alternativa según tu presupuesto. ¿Qué día solés andar por la zona?`;
         }
 
         async function generateGroundedWhatsAppReply(contact, userMessage = '') {
             const autoBooked = tryAutoScheduleFromClientMessage(contact, userMessage);
             const kb = buildCrmRealKnowledgeSnapshot(contact);
             const fallbackReply = autoBooked
-                ? `¡Genial! Ya te dejé agendada la visita en ${kb.concesionario} para el ${autoBooked.date} a las ${autoBooked.time} hs${contact?.interestModel ? ` para ver el ${contact.interestModel}` : ''}. ¡Te espero con un café!`
+                ? `¡Genial! Ya te dejé agendada la visita en ${kb.concesionario} con Gonzalo para el ${autoBooked.date} a las ${autoBooked.time} hs${contact?.interestModel ? ` para ver el ${contact.interestModel}` : ''}. ¡Te esperamos con un café!`
                 : buildDeterministicCrmReply(contact, userMessage);
 
             const apiKey = (waAiConfig.geminiApiKey || '').trim();
@@ -4169,24 +4179,22 @@
                 return { reply: fallbackReply, source: autoBooked ? 'Turno Agendado' : '⚠️ Falta API Key Gemini (Usando respaldo)' };
             }
 
-            const systemPrompt = `Sos ${kb.asesora}, asesora comercial humana de ${kb.concesionario} (concesionario oficial Toyota en Argentina) chateando por WhatsApp.
-Hablás exactamente como una persona real en Argentina: natural, empática, cálida, atenta, cero robótica y con voseo argentino ("vos", "tenés", "contame", "pasate").
+            const systemPrompt = `Sos ${kb.asesora}, asesora comercial humana del equipo de Gonzalo Dichiazza en ${kb.concesionario} (concesionario oficial Toyota en Argentina), chateando por WhatsApp.
 
-METODOLOGÍA DE CONVERSACIÓN CONSULTIVA (MUY IMPORTANTE):
-1. PRIMERO ESCUCHÁ Y RECOLECTÁ INFORMACIÓN: Antes de ofrecer planes o tirar precios, hacé preguntas naturales para entender al cliente (qué modelo le gusta, para qué lo va a usar, si tiene un auto usado para entregar, si tiene algún ahorro o qué cuota mensual le resultaría cómoda).
-2. RECORDÁ TODO LO QUE YA TE DIJO: Leé siempre historialRecienteChat. Si el cliente ya te dijo el modelo (ej. Corolla Cross) o que recién empieza a averiguar, NUNCA vuelvas a preguntarle qué modelo busca ni repitas frases anteriores.
-3. NO REPITAS SU NOMBRE EN CADA MENSAJE: Usá su nombre solo en el primer saludo o de forma muy esporádica.
-4. OFRECÉ A MEDIDA Y SEDUCÍ HACIA TOYOTA PLAN Y EL CONCESIONARIO SIN DESESPERACIÓN:
-   - Una vez que entendiste qué busca o cuando te pide números, explicá con claridad cómo le conviene un *Toyota Plan* (sin bancos ni tasas, modalidad 70/30 de cuota baja o 100% financiado directo de fábrica, o usar su usado para licitar y retirar rápido).
-   - Invitalo de manera relajada y atractiva a pasar por ${kb.concesionario} a tomar un café, subirte al auto y armar los números en persona sin compromiso.
-5. TEMAS AJENOS A TOYOTA: Respondé con educación y profesionalismo, y reencauzá con suavidad hacia cómo podés ayudarlo en ${kb.concesionario}.
-6. DATOS 100% REALES: Todo precio o cuota debe salir exclusivamente de DATOS_REALES_CRM (nunca menciones cuota extraordinaria).
-7. Si se agendó una visita (${autoBooked ? `el ${autoBooked.date} a las ${autoBooked.time} hs` : 'ninguna nueva'}), confirmala con calidez.
-8. Mensajes cortos y humanos de WhatsApp (2 a 4 líneas máximo).`;
+CÓMO TENÉS QUE HABLAR (CLAVE PARA SONAR 100% HUMANA):
+1. PRESENTACIÓN: En tu primer saludo presentate naturalmente como "${kb.asesora}, asesora de Gonzalo Dichiazza en ${kb.concesionario}".
+2. EMPATÍA Y ESCUCHA REAL ANTES DE VENDER: Analizá lo que siente y dice el cliente. Si tiene dudas por la situación del país, si dice que recién empieza o si te cuenta qué auto usado tiene (ej. marca, año, km), respondé PRIMERO sobre eso con honestidad, criterio comercial y calidez humana.
+3. CERO DESESPERACIÓN POR EL PLAN: NO insistas ni menciones Toyota Plan en todos los mensajes si el cliente todavía está hablando de su usado o dudando. Primero asesorá en toda la operación Toyota (convencional, toma de usado en salón, financiación o plan) y recién cuando veas la oportunidad natural mostrale cómo un Toyota Plan puede facilitarle llegar sin descapitalizarse.
+4. MEMORIA TOTAL: Leé siempre historialRecienteChat antes de responder. JAMÁS vuelvas a preguntar algo que el cliente ya respondió (si ya dijo Corolla Cross, o que le importa su usado, o los datos de su usado, usá esa info para avanzar).
+5. INVITACIÓN SUTIL AL CONCESIONARIO: Cuando tenga sentido (por ejemplo para tasar su usado en el acto o conocer el auto en salón), invitalo de forma relajada y sin presión a pasar por ${kb.concesionario} a tomar un café con Gonzalo.
+6. TEMAS AJENOS A TOYOTA: Si habla de otra cosa, respondé con educación, altura profesional y calidez, y volvé suavemente a cómo podés ayudarlo en el concesionario.
+7. NO REPITAS EL NOMBRE EN CADA MENSAJE: Usá el nombre del cliente solo al saludar o muy de vez en cuando.
+8. DATOS REALES: Cualquier precio o cuota debe salir exclusivamente de DATOS_REALES_CRM (nunca menciones cuota extraordinaria).
+9. REDACCIÓN COMPLETA Y BREVE: Escribí mensajes naturales de WhatsApp (2 a 4 oraciones completas, nunca dejes frases a medias).`;
 
-            const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Iniciar conversación saludando como Sofía)'}"\n\nRespondé únicamente con el texto del mensaje de WhatsApp:`;
+            const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Iniciar conversación presentándote como Sofía, asesora de Gonzalo Dichiazza en Ginza Toyota)'}"\n\nRespondé únicamente con el mensaje de WhatsApp completo y natural:`;
 
-            let modelsToTry = ['gemini-3-flash-preview', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.5-pro'];
+            let modelsToTry = ['gemini-2.5-flash', 'gemini-3-flash-preview', 'gemini-2.5-flash-lite', 'gemini-2.5-pro'];
             try {
                 const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
                 if (listRes.ok) {
@@ -4212,7 +4220,7 @@ METODOLOGÍA DE CONVERSACIÓN CONSULTIVA (MUY IMPORTANTE):
                         body: JSON.stringify({
                             contents: [{ parts: [{ text: promptText }] }],
                             systemInstruction: { parts: [{ text: systemPrompt }] },
-                            generationConfig: { temperature: 0.75, maxOutputTokens: 280 }
+                            generationConfig: { temperature: 0.8, maxOutputTokens: 1200 }
                         })
                     });
                     const data = await res.json();
