@@ -62,9 +62,9 @@
                     <button onclick="openPdfPriceChatbotModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 transition-colors flex items-center gap-1 shadow-sm shrink-0" title="Corregir precios leídos de los PDFs por chat">
                         <span>🛠️ Corregir Precio PDF</span>
                     </button>
-                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofía 2.1 • Criterio Senior">
+                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofi 2.2 • Humana y Consultiva">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-                        <span id="nav-wa-ai-label">🤖 Sofía IA 2.1 ON</span>
+                        <span id="nav-wa-ai-label">🤖 Sofi 2.2 ON</span>
                     </button>
                     <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
@@ -639,9 +639,9 @@
                     <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="text-base sm:text-lg font-extrabold">Sofía IA 2.1 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">CRITERIO SENIOR • PRECIOS CRM</span>
-                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Sofía IA 2.1 Nube</span>
+                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 2.2 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">HUMANA • ANTI-DUPLICADOS</span>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Sofi 2.2 Nube</span>
                         </div>
                         <p class="text-xs text-zinc-300">Conversación 100% libre impulsada por Google Gemini • Valores y cuotas oficiales desde tu CRM.</p>
                     </div>
@@ -835,6 +835,7 @@
         let waIncomingLogs = [];
         let processedWaEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_wa_events') || '[]'));
         let recentWaMessageFingerprints = new Map();
+        let isPollingWa = false;
         let infoAutoAlerts = JSON.parse(localStorage.getItem('crm_infoauto_alerts') || '[]');
         let commercialLiveAlerts = JSON.parse(localStorage.getItem('crm_commercial_live_alerts') || '[]');
         let audioLiveAlerts = JSON.parse(localStorage.getItem('crm_audio_live_alerts') || '[]');
@@ -1505,6 +1506,8 @@
         }
 
         window.pollIncomingWhatsAppEvents = async function() {
+            if (isPollingWa) return;
+            isPollingWa = true;
             try {
                 const res = await fetch(`${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`);
                 if (!res.ok) return;
@@ -1523,10 +1526,10 @@
                         continue;
                     }
 
-                    // Evitar procesar notificaciones duplicadas idénticas en menos de 6 segundos
+                    // Evitar procesar notificaciones duplicadas idénticas en menos de 8 segundos
                     const fp = `${sender.trim().toLowerCase()}|${text.trim().toLowerCase()}`;
                     const lastSeen = recentWaMessageFingerprints.get(fp) || 0;
-                    if (Date.now() - lastSeen < 6000) {
+                    if (Date.now() - lastSeen < 8000) {
                         fetch(`${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}/${encodeURIComponent(evId)}.json`, { method: 'DELETE' }).catch(() => {});
                         continue;
                     }
@@ -1535,7 +1538,7 @@
                     const result = processIncomingWhatsAppMessage(sender, text);
                     waIncomingLogs.unshift({
                         sender: sender || 'Desconocido',
-                        actionLabel: result ? `Atendido Sofía IA 2.0 (${result.contact.name})` : 'Ignorado (No está en CRM / Chat Personal)',
+                        actionLabel: result ? `Atendido Sofía IA 2.2 (${result.contact.name})` : 'Ignorado (No está en CRM / Chat Personal)',
                         time: new Date().toLocaleTimeString()
                     });
                     if (result) {
@@ -1549,10 +1552,12 @@
                 localStorage.setItem('crm_processed_wa_events', JSON.stringify(Array.from(processedWaEventIds).slice(-100)));
                 if (anyUpdated) { saveLocalData(true); renderAllTables(); updateDashboard(); }
                 renderWaIncomingLogs();
-            } catch (e) {}
+            } catch (e) {} finally {
+                isPollingWa = false;
+            }
         };
 
-        // --- ALERTAS EN VIVO EN EL CRM ---
+        // --- ALERTAS EN VIVO EN EL CRM (INFOAUTO + ATENCIÓN COMERCIAL + AUDIO) ---
         function detectAndRegisterTradeInAlert(contact, userMessage) {
             if (!contact || !userMessage) return false;
             const norm = String(userMessage).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -1578,7 +1583,7 @@
             }
             localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts.slice(0, 30)));
             renderInfoAutoAlertsBanner();
-            showToast(`🚗 ALERTA INFOAUTO: ${contact.name || 'Cliente'} informó su usado`);
+            showToast(`🚗 ALERTA INFOAUTO: ${contact.name || 'Cliente'} informó su usado (${userMessage.trim().slice(0, 40)})`);
             return true;
         }
 
@@ -1645,9 +1650,14 @@
             const pending = audioLiveAlerts.filter(a => !a.resolved);
             if (pending.length === 0) { banner.classList.add('hidden'); return; }
             banner.classList.remove('hidden');
-            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) envió <b>${a.rawLabel}</b> (${a.time})</span><button onclick="openWaAiForContact('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-indigo-800 text-white text-[11px] font-bold">💬 Abrir Ficha</button></div>`).join('');
+            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) envió <b>${a.rawLabel}</b> <span class="text-[11px] text-indigo-700">(${a.time})</span></span><button onclick="openWaAiForContact('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-indigo-800 text-white text-[11px] font-bold">💬 Abrir Ficha</button></div>`).join('');
         }
-        window.dismissAllAudioAlerts = function() { audioLiveAlerts.forEach(a => a.resolved = true); localStorage.setItem('crm_audio_live_alerts', JSON.stringify(audioLiveAlerts)); renderAudioLiveAlertsBanner(); };
+
+        window.dismissAllAudioAlerts = function() {
+            audioLiveAlerts.forEach(a => a.resolved = true);
+            localStorage.setItem('crm_audio_live_alerts', JSON.stringify(audioLiveAlerts));
+            renderAudioLiveAlertsBanner();
+        };
 
         function renderInfoAutoAlertsBanner() {
             const banner = document.getElementById('infoauto-alerts-banner');
@@ -1656,8 +1666,9 @@
             const pending = infoAutoAlerts.filter(a => !a.resolved);
             if (pending.length === 0) { banner.classList.add('hidden'); return; }
             banner.classList.remove('hidden');
-            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) mencionó: <b>"${a.vehicleDesc}"</b> (${a.time})</span><button onclick="openSendInfoAutoQuote('${a.id}')" class="px-2 py-0.5 rounded-lg bg-amber-900 text-white text-[11px] font-bold">📋 Enviar Cotización InfoAuto</button></div>`).join('');
+            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) mencionó: <b>"${a.vehicleDesc}"</b> <span class="text-[11px] text-amber-700">(${a.time})</span></span><button onclick="openSendInfoAutoQuote('${a.id}')" class="px-2 py-0.5 rounded-lg bg-amber-900 text-white text-[11px] font-bold">📋 Enviar Cotización InfoAuto</button></div>`).join('');
         }
+
         function renderCommercialLiveAlertsBanner() {
             const banner = document.getElementById('commercial-live-alerts-banner');
             const listEl = document.getElementById('commercial-live-alerts-list');
@@ -1665,25 +1676,40 @@
             const pending = commercialLiveAlerts.filter(a => !a.resolved);
             if (pending.length === 0) { banner.classList.add('hidden'); return; }
             banner.classList.remove('hidden');
-            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b>: <b>${a.reason}</b> — "${a.snippet}"</span><button onclick="openWaAiForContact('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-[#EB0A1E] text-white text-[11px] font-bold">💬 Ver Chat</button></div>`).join('');
+            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}): <b>${a.reason}</b> — "${a.snippet}" <span class="text-[11px] text-rose-700">(${a.time})</span></span><button onclick="openWaAiForContact('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-[#EB0A1E] text-white text-[11px] font-bold">💬 Ver Chat</button></div>`).join('');
         }
-        window.dismissAllCommercialAlerts = function() { commercialLiveAlerts.forEach(a => a.resolved = true); localStorage.setItem('crm_commercial_live_alerts', JSON.stringify(commercialLiveAlerts)); renderCommercialLiveAlertsBanner(); };
-        window.dismissAllInfoAutoAlerts = function() { infoAutoAlerts.forEach(a => a.resolved = true); localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts)); renderInfoAutoAlertsBanner(); };
+
+        window.dismissAllCommercialAlerts = function() {
+            commercialLiveAlerts.forEach(a => a.resolved = true);
+            localStorage.setItem('crm_commercial_live_alerts', JSON.stringify(commercialLiveAlerts));
+            renderCommercialLiveAlertsBanner();
+        };
+
         window.openSendInfoAutoQuote = function(alertId) {
             const alertObj = infoAutoAlerts.find(a => a.id === alertId);
             if (!alertObj) return;
             alertObj.resolved = true;
             localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts));
             renderInfoAutoAlertsBanner();
+
             openWaAiAssistantModal();
             const sel = document.getElementById('wa-ai-contact-select');
             if (sel && alertObj.contactId) { sel.value = alertObj.contactId; onWaAiContactChange(); }
             const draftBox = document.getElementById('wa-ai-draft-box');
             const draftText = document.getElementById('wa-ai-draft-text');
+            const sourceTag = document.getElementById('wa-ai-source-tag');
             if (draftBox && draftText) {
                 draftText.value = `Hola, revisamos en InfoAuto la referencia por tu ${alertObj.vehicleDesc} y el valor estimado de toma ronda los $[COMPLETAR_VALOR]. Si te parece bien, coordinamos una visita en Ginza Toyota para verlo en persona y cerrar los números.`;
+                if (sourceTag) sourceTag.textContent = 'Cotización InfoAuto Lista';
                 draftBox.classList.remove('hidden');
+                draftText.focus();
             }
+        };
+
+        window.dismissAllInfoAutoAlerts = function() {
+            infoAutoAlerts.forEach(a => a.resolved = true);
+            localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts));
+            renderInfoAutoAlertsBanner();
         };
 
         // --- TABLAS Y CRUD ---
@@ -2198,23 +2224,31 @@
 
             enqueueClientMessage(contact, text) {
                 if (!contact || !text) return;
+                const cleanChunk = String(text).replace(/^[?!.,…\s]+|[?!.,…\s]+$/g, '').trim() || String(text).trim();
+                if (/^[?!.,…\s]+$/.test(cleanChunk)) return;
                 const cid = contact.id;
                 if (!this.pendingBuffers[cid]) {
                     this.pendingBuffers[cid] = { contact, texts: [], timer: null };
                 }
                 this.pendingBuffers[cid].contact = contact;
-                this.pendingBuffers[cid].texts.push(text.trim());
+                if (!this.pendingBuffers[cid].texts.includes(cleanChunk)) {
+                    this.pendingBuffers[cid].texts.push(cleanChunk);
+                }
                 clearTimeout(this.pendingBuffers[cid].timer);
                 this.pendingBuffers[cid].timer = setTimeout(async () => {
                     const batch = this.pendingBuffers[cid];
                     delete this.pendingBuffers[cid];
                     if (!batch || batch.texts.length === 0) return;
-                    const combinedMessage = batch.texts.join('\n');
-                    const out = await this.generateReply(batch.contact, combinedMessage);
-                    if (out && out.reply) {
-                        await this.queueToMobile(batch.contact, out.reply, combinedMessage);
+                    const combinedMessage = batch.texts.join(' ');
+                    try {
+                        const out = await this.generateReply(batch.contact, combinedMessage);
+                        if (out && out.reply) {
+                            await this.queueToMobile(batch.contact, out.reply, combinedMessage);
+                        }
+                    } catch (err) {
+                        console.error('Error en Sofía IA:', err);
                     }
-                }, 3500);
+                }, 3000);
             },
 
             saveConfig() {
@@ -2291,8 +2325,8 @@
                     const badge = document.getElementById('wa-ai-cloud-brain-badge');
                     if (badge) {
                         badge.textContent = this.config.sandboxEnabled
-                            ? `🧪 Sofía IA 2.1 Sandbox (${this.config.sandboxPhone || 'Hans / Prueba CRM'})`
-                            : `☁️ Sofía IA 2.1 Nube (${authorizedContacts.length} contactos CRM)`;
+                            ? `🧪 Sofi 2.2 Sandbox (${this.config.sandboxPhone || 'Hans / Prueba CRM'})`
+                            : `☁️ Sofi 2.2 Nube (${authorizedContacts.length} contactos CRM)`;
                     }
                 } catch (e) {}
             },
@@ -2312,33 +2346,41 @@
             getSystemPrompt(officialPricesText) {
                 const advisor = this.config.advisorName || 'Sofía';
                 const branch = this.config.branchName || 'Ginza Toyota';
-                return `Sos ${advisor}, asistente comercial ejecutiva de Gonzalo Dichiazza en ${branch} (concesionario oficial Toyota en Argentina), con criterio de asesora senior de alta experiencia.
+                return `Sos ${advisor}, asistente de Gonzalo Dichiazza en ${branch} (concesionario oficial Toyota en Argentina), chateando por WhatsApp como una persona real.
 
-ESTILO Y NATURALIDAD (REGLAS DE ORO):
-- Hablás por WhatsApp como una profesional argentina real, cercana, segura y sin rodeos ("vos", "mirá", "contame", "todo bien").
-- PROHIBIDO REPETIR EL NOMBRE DEL CLIENTE: Usá su nombre ÚNICAMENTE en el primer saludo inicial. En todos los mensajes siguientes está PROHIBIDO volver a decir su nombre (nunca digas "Qué bueno Hans", "Mirá Hans", "Dale Hans").
-- Escribí mensajes cortos y claros (2 a 4 líneas máximo) y cerrá con UNA sola pregunta precisa para mantener el hilo claro (no hagas dos preguntas distintas en el mismo mensaje).
-- Leé con atención todo el historial: si acabás de preguntar por los kilómetros de un usado y el cliente responde un número como "60000" o "74 mil", entendé de inmediato que son los kilómetros de su auto, nunca lo confundas con una cuota.
+ESTILO Y NATURALIDAD (REGLAS ESTRICTAS):
+- Hablás por WhatsApp como una persona argentina real: cálida, tranquila, empática y segura ("vos", "mirá", "contame", "todo bien"). NUNCA parezcas desesperada por vender.
+- EN EL PRIMER SALUDO ("Hola", "Buenas", "Buen día"): Todavía NO sabés para qué te escribe la persona. Saludá con naturalidad, presentate como Sofía (asistente de Gonzalo Dichiazza en ${branch}) y preguntá abierto en qué lo podés ayudar (ej: "¡Hola! ¿Cómo estás? Todo bien por acá. Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Contame, ¿en qué te puedo ayudar?"). PROHIBIDO asumir de entrada que busca un auto nuevo o preguntar "¿qué modelo estás buscando?" en el primer saludo.
+- PROHIBIDO VOLVER A SALUDAR O PRESENTARTE EN MENSAJES SIGUIENTES: Si en el historial ya hay mensajes previos tuyos, NUNCA vuelvas a decir "Hola" ni "Soy Sofía". Continuá el hilo directo de la charla.
+- PROHIBIDO REPETIR EL NOMBRE DEL CLIENTE: Usá su nombre ÚNICAMENTE en el primer saludo inicial. En todos los mensajes siguientes está PROHIBIDO volver a escribir su nombre.
+- PROHIBIDO HACER DOBLES PREGUNTAS: Cada mensaje debe cerrar con UNA ÚNICA pregunta clara y puntual. Nunca juntes dos preguntas en el mismo mensaje.
+- PROHIBIDO HABLAR MAL DE OTRAS MARCAS O CONCESIONARIOS: Jamás menciones malas experiencias de otras marcas ni descalifiques a la competencia.
 
-CRITERIO COMERCIAL DE VENDEDORA SENIOR:
-1. PRIMER SALUDO: Saludá con calidez humana, presentate como Sofía (asistente comercial de Gonzalo Dichiazza en ${branch}) y abrí la charla con naturalidad sin interrogar de golpe.
-2. INDAGACIÓN ANTES DE VENDER: Cuando pregunta por un modelo (ej. Hilux), indagá primero para qué uso la busca (trabajo, campo o uso personal) y qué versión o caja tiene en mente, antes de hablar de formas de pago.
-3. CUANDO PREGUNTA "¿QUÉ CUESTA?" SIN HABER DIAGNOSTICADO TODAVÍA:
-   - Respondé al grano con el valor móvil oficial de lista de la versión de entrada (ej. Hilux 4x2 DX: $49.621.000) SIN nombrar todavía Toyota Plan ni tirar cuotas.
-   - Enseguida hacé una pregunta filtro inteligente para entender cómo piensa encarar la operación: si tiene algún vehículo usado para entregar, efectivo disponible o si busca financiar una parte.
-4. USADOS E INFOAUTO: En ${branch} NO tasamos en el acto. Si menciona un usado, pedile modelo, año y kilómetros (de a un dato claro si falta alguno) y avisale que se lo pasás a Gonzalo para cotizarlo por InfoAuto y tener una base real (aclarando que al adjudicar tiene 5 días hábiles por si prefiere venderlo particular más caro o entregarlo llave por llave).
-5. CHOQUE CON LA REALIDAD Y MANEJO DE DUDAS ("NO SÉ SI QUIERO UN PLAN"):
-   - Nunca ofrezcas compra convencional ni créditos prendarios por iniciativa propia.
-   - Si el cliente dice "No sé si quiero un plan" o duda del sistema, NUNCA te pongas a recitar "es 0% interés directo de fábrica" como folleto. Validá su duda con calma y criterio senior: preguntale qué es lo que más le frena hoy (si los tiempos de entrega, el tema de sorteo/licitación o cómo queda la diferencia financiera) y mostrale con honestidad el equilibrio entre anticipo, cuota mensual y plazo de entrega.
-   - Recordá las 3 variables: poca entrega inicial, cuota cómoda y entrega inmediata no se juntan al mismo tiempo. Recién cuando el cliente entiende su escenario real, Toyota Plan (70/30 o 100%, gastos de retiro 8%-10% y entrega contractual IGJ hasta 75 días) aparece como conclusión lógica.
-6. CIERRE: Cuando ya tenés el diagnóstico completo (modelo, usado/capital y expectativa de cuota/plazo), invitá con elegancia a coordinar una llamada de 10 minutos o una visita en ${branch} con Gonzalo Dichiazza para ver los números reales en limpio.
+GAMA OFICIAL TOYOTA ARGENTINA (NO COMETER ERRORES TÉCNICOS):
+- Yaris: Viene ÚNICAMENTE en carrocería Hatchback 5 puertas y ÚNICAMENTE con caja Automática CVT (ya no existe Yaris sedán ni caja manual).
+- Yaris Cross: SUV compacto, 100% Automático CVT (nafta o híbrido).
+- Corolla: Único Sedán 4 puertas de la gama, 100% Automático CVT (nafta 2.0 o híbrido 1.8).
+- Corolla Cross: SUV mediano, 100% Automático CVT (nafta 2.0 o híbrido 1.8).
+- Hilux: Pick-up (único modelo de volumen con opción manual 6MT o automática 6AT, 4x2 o 4x4, cabina simple o doble).
+- Hiace: Utilitario Furgón/Commuter/Wagon, 100% Automático.
+- REGLA DE EQUIPAMIENTO Y CAMBIO DE MODELO: No marees al cliente enumerando versiones ni detalles de equipamiento. Explicá con sencillez que en Toyota Plan solemos arrancar por el modelo inicio de gama (para tener la cuota más accesible) y al momento de adjudicar puede hacer el cambio de modelo a la versión que quiera pagando solo la diferencia. Nuestro foco es mostrarle cómo con una cuota que pueda pagar hoy llega a su 0km.
+
+FLUJO CONSULTIVO PASO A PASO Y MANEJO DE OBJECIONES:
+1. FILTRO DE USO Y CONTEXTO: Cuando menciona un modelo, validalo con naturalidad y hacé una sola pregunta sobre el uso que le va a dar (ciudad, ruta, trabajo, etc.), sin apurarlo ni decir frases como "sin hacerte perder tiempo".
+2. SITUACIÓN FINANCIERA (USADO / CAPITAL / CUOTA): Indagá de a una pregunta por turno si tiene algún vehículo usado para entregar o arranca de cero, y qué cuota mensual le quedaría cómoda hoy.
+3. USADOS E INFOAUTO: En ${branch} NO tasamos en el acto. Si menciona un usado, pedile modelo, año y kilómetros y avisale que se lo pasás a Gonzalo para cotizarlo por InfoAuto y tener una base real (aclarando que al adjudicar tiene 5 días hábiles por si prefiere venderlo particular más caro o entregarlo llave por llave).
+4. OBJECIÓN "NO QUIERO PLAN DE AHORRO":
+   - ANTES de salir a defender o justificar el plan, validá su postura con calma y hacé UNA sola pregunta abierta para descubrir el porqué real (ej: "Te entiendo perfectamente y quedate tranquilo que no te voy a insistir con nada que no te cierre. Contame por curiosidad, ¿qué es lo que no te convence hoy de un plan de ahorro?").
+   - Recién cuando te explica su miedo puntual (ej. cuotas variables, inflación, tiempos de entrega), refutá exactamente ese punto con altura y datos reales (tasa 0% sin interés bancario, 1/84 o 1/120 parte real del vehículo, posibilidad de adelantar cuotas puras sin gastos ni seguro, cesión sin comisión de Toyota Plan o rescisión, gastos de retiro 8%-10% y entrega contractual IGJ hasta 75 días) y cerrá con una única pregunta sobre su presupuesto mensual.
+5. CIERRE: Cuando el panorama está claro, invitá con elegancia a coordinar una llamada de 10 minutos o una visita en ${branch} con Gonzalo Dichiazza para ver los números en limpio.
 
 VALORES Y CUOTAS OFICIALES DESDE LA APP (USAR ÚNICAMENTE ESTOS DATOS CUANDO CONSULTEN PRECIOS O CUOTAS):
 ${officialPricesText}`;
             },
 
             async generateReply(contact, userMessage = '') {
-                const isAudio = detectAndRegisterAudioAlert(contact, userMessage);
+                const cleanInput = String(userMessage || '').trim();
+                const isAudio = detectAndRegisterAudioAlert(contact, cleanInput);
                 if (isAudio) {
                     return {
                         reply: `¡Recibí tu audio! En este momento estoy en reunión, pero ya se lo paso a Gonzalo para escucharlo bien y responderte puntual por acá.`,
@@ -2346,7 +2388,6 @@ ${officialPricesText}`;
                     };
                 }
 
-                const cleanInput = String(userMessage || '').trim();
                 if (/^[?!.,…\s]+$/.test(cleanInput)) {
                     return { reply: '', source: 'Ignorado' };
                 }
@@ -2357,12 +2398,16 @@ ${officialPricesText}`;
 
                 const apiKey = (this.config.geminiApiKey || '').trim();
                 if (!apiKey) {
-                    showToast("⚠️ Pegá tu API Key de Google Gemini en Sofía IA 2.1", "error");
-                    return { reply: '', source: '⚠️ Falta API Key Gemini' };
+                    return {
+                        reply: '⚠️ Falta configurar tu API Key de Google Gemini en el panel de Sofi 2.2.',
+                        source: 'Sin API Key'
+                    };
                 }
 
                 const contents = [];
-                const rawHistory = (contact && Array.isArray(this.chats[contact.id])) ? this.chats[contact.id].slice(-18) : [];
+                const rawHistory = (contact && Array.isArray(this.chats[contact.id])) ? this.chats[contact.id].slice(-16) : [];
+                const hasPriorAiTurn = rawHistory.some(m => m.from === 'ai');
+
                 for (const m of rawHistory) {
                     const role = m.from === 'ai' ? 'model' : 'user';
                     const text = String(m.text || '').trim();
@@ -2374,23 +2419,31 @@ ${officialPricesText}`;
                     }
                 }
 
-                const contextHints = [
-                    contact?.name && !['sin nombre', 'lead salesforce', 'prueba crm'].includes(contact.name.toLowerCase()) ? `[Nombre del cliente: ${contact.name}]` : '',
-                    hasTradeInAlert ? '[Nota interna CRM: Se activó alerta InfoAuto para que Gonzalo cotice su usado]' : '',
-                    autoBooked ? `[Nota interna CRM: Se agendó reunión con Gonzalo para el ${autoBooked.date} a las ${autoBooked.time} hs]` : ''
+                const isFirstTurn = !hasPriorAiTurn && contents.length === 0;
+                const cleanClientName = (contact?.name && !['sin nombre', 'lead salesforce', 'prueba crm'].includes(contact.name.toLowerCase()))
+                    ? contact.name.split(' ')[0]
+                    : '';
+
+                const turnDirectives = [
+                    isFirstTurn
+                        ? (cleanClientName ? `[Primer turno: podés saludar a ${cleanClientName} usando su nombre solo esta vez]` : '[Primer turno: saludá con naturalidad sin asumir que busca un auto]')
+                        : '[Turno siguiente: PROHIBIDO volver a decir Hola, PROHIBIDO presentarte de nuevo y PROHIBIDO repetir el nombre del cliente]',
+                    hasTradeInAlert ? '[Sistema: Se activó alerta InfoAuto para que Gonzalo cotice su usado]' : '',
+                    autoBooked ? `[Sistema: Ya quedó agendada la reunión en ${this.config.branchName || 'Ginza Toyota'} con Gonzalo para el ${autoBooked.date} a las ${autoBooked.time} hs]` : ''
                 ].filter(Boolean).join(' ');
 
-                const userTurnText = cleanInput
-                    ? (contextHints ? `${contextHints}\n${cleanInput}` : cleanInput)
-                    : `${contextHints}\n(Iniciá vos el primer saludo natural por WhatsApp para este contacto)`;
+                const userPromptText = cleanInput
+                    ? (turnDirectives ? `${turnDirectives}\n${cleanInput}` : cleanInput)
+                    : (cleanClientName ? `[Primer contacto saliente para ${cleanClientName}: escribí un saludo breve y humano]` : '[Primer contacto saliente: escribí un saludo breve y humano]');
 
                 if (contents.length > 0 && contents[contents.length - 1].role === 'user') {
-                    contents[contents.length - 1].parts[0].text = userTurnText;
+                    contents[contents.length - 1].parts[0].text = userPromptText;
                 } else {
-                    contents.push({ role: 'user', parts: [{ text: userTurnText }] });
+                    contents.push({ role: 'user', parts: [{ text: userPromptText }] });
                 }
 
-                const systemPrompt = this.getSystemPrompt(this.buildOfficialPricesText());
+                const officialPricesText = this.buildOfficialPricesText();
+                const systemPrompt = this.getSystemPrompt(officialPricesText);
                 const candidateModels = await this.resolveModels(apiKey);
                 let lastErrorMsg = '';
 
@@ -2403,7 +2456,7 @@ ${officialPricesText}`;
                             body: JSON.stringify({
                                 contents,
                                 systemInstruction: { parts: [{ text: systemPrompt }] },
-                                generationConfig: { temperature: 0.8, maxOutputTokens: 1200 }
+                                generationConfig: { temperature: 0.72, maxOutputTokens: 1200 }
                             })
                         });
                         if (!res.ok) {
@@ -2417,8 +2470,8 @@ ${officialPricesText}`;
                             const detectedModel = detectToyotaModelFromText(cleanInput);
                             if (detectedModel && contact) contact.interestModel = detectedModel;
                             const tag = (hasTradeInAlert || hasCommercialAlert)
-                                ? `🔔 Alerta CRM + Sofía IA 2.1 (${modelName})`
-                                : `Sofía IA 2.1 • Gemini (${modelName})`;
+                                ? `🔔 Alerta CRM + Sofi 2.2 (${modelName})`
+                                : `Sofi 2.2 • Gemini (${modelName})`;
                             return { reply: aiText, source: tag };
                         }
                     } catch (e) {
@@ -2429,13 +2482,15 @@ ${officialPricesText}`;
                 if (lastErrorMsg) {
                     showToast(`⚠️ Error API Gemini: ${lastErrorMsg.slice(0, 90)}`, 'error');
                 }
-                return { reply: '', source: `⚠️ Error Gemini: ${lastErrorMsg.slice(0, 60)}` };
+                return { reply: '', source: lastErrorMsg ? `⚠️ ${lastErrorMsg.slice(0, 55)}` : 'Sin respuesta Gemini' };
             },
 
             async queueToMobile(contact, replyText, incomingText = '') {
                 if (!contact) return;
                 const cleanReply = String(replyText || '').replace(/\s*\|\|\|\s*/g, ' ').replace(/^["']+|["']+$/g, '').trim();
-                if (!cleanReply || cleanReply.length < 2) return;
+                if (!cleanReply || cleanReply.length < 3 || /IllegalStateException|RuntimeException|Exception:|undefined|^null$|^\{/i.test(cleanReply)) {
+                    return;
+                }
 
                 if (!this.chats[contact.id]) this.chats[contact.id] = [];
                 if (incomingText) {
@@ -2451,7 +2506,12 @@ ${officialPricesText}`;
                         fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}.json`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ phone: formatPhoneAR(contact.phone), name: contact.name || '', message: cleanReply, createdAt: Date.now() })
+                            body: JSON.stringify({
+                                phone: formatPhoneAR(contact.phone),
+                                name: contact.name || '',
+                                message: cleanReply,
+                                createdAt: Date.now()
+                            })
                         }),
                         fetch(`${FIREBASE_DB_URL}/wa_outbox/${encodeURIComponent(syncRoom)}/${encodeURIComponent(recipientKey)}.json`, {
                             method: 'PUT',
@@ -2465,9 +2525,11 @@ ${officialPricesText}`;
                         })
                     ]);
                     setTimeout(() => {
-                        fetch(`${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`, { method: 'DELETE' }).catch(() => {});
+                        fetch(`${FIREBASE_DB_URL}/wa_latest_reply/${encodeURIComponent(syncRoom)}.json`, {
+                            method: 'DELETE'
+                        }).catch(() => {});
                     }, 14000);
-                    showToast(`🤖 Sofía respondió a ${contact.name || contact.phone}`);
+                    showToast(`🤖 Sofi 2.2 respondió a ${contact.name || contact.phone}`);
                 } catch (e) {}
             }
         };
@@ -2486,7 +2548,7 @@ ${officialPricesText}`;
             const pill = document.getElementById('wa-ai-engine-pill');
             const hasKey = Boolean((SOFIA_AI.config.geminiApiKey || '').trim());
             if (pill) {
-                pill.textContent = hasKey ? '🟢 Sofía IA 2.1 • Criterio Senior' : '⚠️ Falta API Key Gemini';
+                pill.textContent = hasKey ? '🟢 Sofi 2.2 • Humana' : '⚠️ Falta API Key Gemini';
                 pill.className = hasKey
                     ? 'px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-900 border border-emerald-300'
                     : 'px-2 py-1 rounded-lg text-[10px] font-extrabold bg-rose-100 text-rose-900 border border-rose-300';
@@ -2495,11 +2557,11 @@ ${officialPricesText}`;
             if (SOFIA_AI.config.autoReplyMobile) {
                 btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white animate-ping';
-                lbl.textContent = SOFIA_AI.config.sandboxEnabled ? '🤖 Sofía IA 2.1 (SANDBOX)' : '🤖 Sofía IA 2.1 ON';
+                lbl.textContent = SOFIA_AI.config.sandboxEnabled ? '🤖 Sofi 2.2 (SANDBOX)' : '🤖 Sofi 2.2 ON';
             } else {
                 btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-[#EB0A1E] hover:bg-red-700 text-white border border-red-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
                 if (dot) dot.className = 'w-2 h-2 rounded-full bg-white/70';
-                lbl.textContent = '🤖 Sofía IA 2.1';
+                lbl.textContent = '🤖 Sofi 2.2';
             }
         }
 
