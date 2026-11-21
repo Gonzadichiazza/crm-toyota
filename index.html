@@ -4337,7 +4337,7 @@
             const prevLogs = (contact && waAiConversationLogs[contact.id]) ? waAiConversationLogs[contact.id] : [];
             const alreadyGreeted = prevLogs.some(m => m.from === 'ai');
 
-            // 1. Si el cliente solo saludó ("Hola", "Buenas", etc.), saludar y hacer UNA sola pregunta abierta sin mencionar modelos ni planes
+            // ETAPA 1 — Apertura cálida: saludo y UNA sola pregunta abierta sin mencionar modelos ni planes
             if (!msgNorm || /^(hola|buen dia|buenas|buenas tardes|buenas noches|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm)) {
                 if (!alreadyGreeted) {
                     return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora de Gonzalo Dichiazza en ${branch}. Contame, ¿en qué te puedo ayudar hoy?`;
@@ -4351,26 +4351,28 @@
             }
             const activeModel = newModel || contact?.interestModel || '';
 
+            // ETAPA 2 — Diagnóstico real: detección de vehículo usado y alerta InfoAuto en CRM
             const isTradeIn = detectAndRegisterTradeInAlert(contact, userMessage);
             if (isTradeIn) {
-                return `Anotado el dato de tu vehículo (${userMessage.trim()}). En ${branch} no hacemos tasaciones en el momento, así que se lo paso a Gonzalo para que te lo cotice por InfoAuto y te pasamos el valor de referencia por acá.`;
+                return `Anotado el dato de tu vehículo (${userMessage.trim()}). En ${branch} no hacemos tasaciones en el momento, así que se lo paso a Gonzalo para que te lo cotice por InfoAuto y tengas la base real. Además del usado, ¿contás con algún capital adicional o buscás financiar la diferencia en cuotas?`;
+            }
+
+            // ETAPA 3 — Encuadre transparente evitando ofrecer convencional: mostrar Toyota Plan como camino viable
+            if (/\b(no quiero sorteo|sin sorteo|no quiero licitacion|sin licitacion|entrega inmediata|lo antes posible|rapido|ya|contado|convencional|prendario|credito|banco|alternativa|otras alternativas|no estoy seguro|no quiero plan|poco capital|no tengo mucho|no llego)\b/.test(msgNorm)) {
+                return `Te soy totalmente franca para cuidar tu tiempo: una operación de retiro inmediato requiere contar hoy con un capital inicial alto o calificar a un crédito bancario con tasas elevadas. Si tu idea es no descapitalizarte y manejar una cuota previsible sin intereses bancarios, el Toyota Plan (en 70/30 o 100%) es la herramienta real para llegar a tu ${activeModel || '0 km'}. ¿Querés que evaluemos qué cuota mensual te resultaría cómoda?`;
             }
 
             if (/\b(4x4|4x2|dx|srv|srx|gr|automatica|manual|hibrid|version|versiones|opciones)\b/.test(msgNorm)) {
                 const targetModel = activeModel || 'Hilux';
                 if (targetModel === 'Hilux') {
-                    return `Para Hilux 4x4 tenemos dos caminos muy convenientes: podés suscribir directo al plan 100% de Hilux 4x4 DX AT (valor móvil $59.739.000, cuota máxima $891.366) o arrancar con un 70/30 de 4x2 (cuota máxima $528.803) y pedir cambio de versión a 4x4 al adjudicar. ¿Tenés algún vehículo usado o capital para entregar, o preferís ir armando el ahorro en cuotas?`;
+                    return `Para Hilux 4x4 tenemos dos caminos muy concretos en Toyota Plan: suscribir directo al plan 100% de Hilux 4x4 DX AT (valor móvil $59.739.000, cuota máxima $891.366) o arrancar con un 70/30 de 4x2 (cuota máxima $528.803) y pedir cambio de versión a 4x4 al adjudicar. Contame, ¿tenés algún vehículo usado o capital para entregar, o preferís ir armando el ahorro en cuotas?`;
                 }
-                return `En ${targetModel} podemos armar la operación por Toyota Plan (70/30 o 100% sin intereses bancarios) o evaluar entrega de usado y financiación convencional. ¿Cómo tenías pensado encarar la compra?`;
+                return `En ${targetModel} podemos estructurar la operación por Toyota Plan (70/30 o 100% directo de fábrica, sin intereses bancarios). Para orientarte bien, ¿contás con algún usado para entregar o capital inicial?`;
             }
 
-            const asksPriceOrPlan = /\b(cuota|cuotas|precio|valor|sale|cuesta|monto|plan|financ|70\/30|100%|alternativa|contado|convencional|credito)\b/.test(msgNorm);
+            const asksPriceOrPlan = /\b(cuota|cuotas|precio|valor|sale|cuesta|monto|plan|financ|70\/30|100%)\b/.test(msgNorm);
             if (newModel && !asksPriceOrPlan) {
-                return `Muy buena elección el ${newModel}. Para asesorarte bien: ¿lo buscás para uso diario, ruta o trabajo, y tenés algún usado para entregar?`;
-            }
-
-            if (/\b(no estoy seguro|no quiero plan|otra alternativa|otras alternativas|contado|convencional|prendario|credito|banco)\b/.test(msgNorm)) {
-                return `Totalmente válido analizar todas las vías. Además de Toyota Plan (que te permite capitalizarte sin tasas bancarias y adelantar cuotas puras cuando quieras), trabajamos venta convencional y créditos prendarios. ¿Contás con un usado o anticipo para entregar?`;
+                return `Muy buena elección el ${newModel}. Para asesorarte bien antes de hablar de números: ¿lo buscás para uso diario, ruta o trabajo, y tenés algún vehículo usado para entregar?`;
             }
 
             if (/\b(cuota|cuotas|precio|valor|sale|cuesta|monto)\b/.test(msgNorm)) {
@@ -4388,11 +4390,12 @@
                     });
                 }
                 if (lines.length > 0) {
-                    return `Para ${activeModel} en Toyota Plan tenés: ${lines.join(' / ')}. Además podés licitar o adelantar cuotas puras sin gastos administrativos. ¿Querés que evaluemos cómo te quedaría con un usado o anticipo, o preferís pasar por ${branch} a verlo?`;
+                    return `Para ${activeModel} en Toyota Plan tenés: ${lines.join(' / ')}. Además podés adelantar cuotas puras sin gastos administrativos o licitar cuando te convenga. ¿Te gustaría que repasemos los números con Gonzalo en ${branch} o te queda cómodo que primero coticemos tu usado?`;
                 }
             }
 
-            return `Entendido${activeModel ? ` respecto al ${activeModel}` : ''}. En ${branch} podemos armar la operación tanto por Toyota Plan (con cuota reducida 70/30 o 100% y posibilidad de cambio de modelo al adjudicar) como tomando tu usado. Contame qué modalidad te resulta más cómoda para avanzar.`;
+            // ETAPA 4 — Cierre hacia visita o cotización alineada
+            return `Entendido${activeModel ? ` respecto al ${activeModel}` : ''}. Para no hacerte perder tiempo con números teóricos, lo ideal es cruzar lo que tenés para entregar con la cuota que te resulte cómoda en un Toyota Plan. ¿Querés que Gonzalo te cotice tu usado por InfoAuto o preferís coordinar 20 minutos en ${branch}?`;
         }
 
         async function generateGroundedWhatsAppReply(contact, userMessage = '') {
@@ -4409,7 +4412,7 @@
 
             if (isPureGreeting) {
                 const greetingText = buildDeterministicCrmReply(contact, userMessage);
-                return { reply: greetingText, source: 'Sofía • Saludo Natural' };
+                return { reply: greetingText, source: 'Sofía • Etapa 1 Apertura' };
             }
 
             const autoBooked = tryAutoScheduleFromClientMessage(contact, userMessage);
@@ -4427,14 +4430,20 @@
 
             const systemPrompt = `Sos ${kb.asesora} (escribilo siempre "Sofía", nunca "Sofí"), asesora comercial del equipo de Gonzalo Dichiazza en ${kb.concesionario} (concesionario oficial Toyota en Argentina), chateando por WhatsApp.
 
-REGLA DE ORO — RITMO HUMANO DE WHATSAPP (1 PASO POR VEZ):
-1. SI EL CLIENTE SOLO SALUDÓ ("Hola", "Buenas", "Qué tal"): Respondé ÚNICAMENTE con un saludo cálido de 1 o 2 líneas presentándote como Sofía, asesora de Gonzalo Dichiazza en ${kb.concesionario}, y preguntale en qué lo podés ayudar. PROHIBIDO mencionar modelos de la ficha, precios o Toyota Plan si el cliente todavía no dijo qué busca.
-2. MENSAJES CORTOS Y NATURALES (MÁXIMO 2 A 3 LÍNEAS): Hablá como una asesora real en WhatsApp, no como un folleto. Hacé UNA sola pregunta por turno para ir entendiendo qué necesita antes de ofrecerle Toyota Plan.
-3. CUÁNDO PROPONER TOYOTA PLAN: Recién cuando el cliente ya contó qué modelo busca o cómo piensa pagarlo, asesorale con criterio real mostrando las ventajas de Toyota Plan (sin intereses bancarios, flexibilidad para cambiar de versión al adjudicar) o tomando su usado, e invitalo con elegancia a visitar el salón de ${kb.concesionario} sin sonar desesperada.
-4. USAR EL NOMBRE SOLO UNA VEZ: Usá el nombre del cliente únicamente en el primer saludo. Después nunca lo repitas.
-5. USADOS Y INFOAUTO: En Ginza Toyota NO tasamos en el acto. Si menciona un usado, aclarale con amabilidad que Gonzalo lo cotizará por InfoAuto para pasarle el valor de referencia.
-6. CUOTAS: Solo si pide precios, informá únicamente la CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS de CONTEXTO_CRM_Y_PRECIOS.
-7. TEMAS AJENOS A TOYOTA: Si habla de otra cosa, respondé con mucha altura profesional y encauzá suavemente hacia cómo ayudarlo en Ginza Toyota.`;
+MÉTODO CONSULTIVO DE 4 ETAPAS (SIN ENGAÑAR NI DESESPERARSE):
+1. ETAPA 1 — APERTURA CÁLIDA: Si el cliente solo saludó ("Hola", "Buenas"), respondé ÚNICAMENTE con un saludo breve presentándote como Sofía, asesora de Gonzalo Dichiazza en ${kb.concesionario}, y hacé UNA sola pregunta abierta. Prohibido tirar precios o planes antes de que hable.
+2. ETAPA 2 — DIAGNÓSTICO REAL (2 a 3 turnos): Antes de ofrecer nada, indagá con preguntas inteligentes: para qué uso busca el vehículo, qué usado tiene (año, versión y km), cuánto capital inicial dispone y qué cuota mensual le queda cómoda. Hablá con franqueza y calidez profesional.
+3. ETAPA 3 — ENCUADRE TRANSPARENTE HACIA TOYOTA PLAN (EVITAR CONVENCIONAL):
+   - NUNCA ofrezcas compra convencional ni créditos prendarios por iniciativa propia.
+   - Si el cliente dice "no quiero sorteo/licitación" o "la quiero rápido", indagá con sinceridad si cuenta hoy con el capital total o un anticipo muy alto que requiere un retiro inmediato.
+   - Si el cliente tiene poco capital adicional o un usado antiguo/con muchos km, hacelo reflexionar con honestidad y empatía (sin prometer magia ni ocultar que el plan adjudica por sorteo o licitación) para que entienda que Toyota Plan (sin intereses bancarios, con cuota accesible y posibilidad de cambio de modelo o licitación) es el camino realista y viable para llegar a su Toyota.
+4. ETAPA 4 — CIERRE A COTIZACIÓN O VISITA: Resumí brevemente lo que entendiste de su situación y proponé el siguiente paso concreto: pasarle los datos del usado a Gonzalo para cotizarlo por InfoAuto (aclarando que en Ginza Toyota NO tasamos en el acto) o coordinar 20 minutos en ${kb.concesionario} para ver los números reales sobre la mesa.
+
+REGLAS DE ESTILO:
+- Mensajes breves y humanos de WhatsApp (máximo 2 a 4 líneas, una sola pregunta por turno).
+- Usá el nombre del cliente únicamente en el primer saludo; después no lo repitas.
+- Si pide precios, informá únicamente la CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS de CONTEXTO_CRM_Y_PRECIOS.
+- Si habla de temas ajenos a Toyota, respondé con mucha altura profesional y encauzá suavemente hacia cómo ayudarlo en ${kb.concesionario}.`;
 
             const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\n${hasTradeInAlert ? 'NOTA_INTERNA: Se activó alerta InfoAuto en el CRM por su usado.' : ''}${hasCommercialAlert ? ' NOTA_INTERNA: Se activó alerta comercial en el CRM de Gonzalo.' : ''}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Saludo inicial breve)'}"\n\nRedactá únicamente la respuesta corta de WhatsApp:`;
 
@@ -4466,7 +4475,7 @@ REGLA DE ORO — RITMO HUMANO DE WHATSAPP (1 PASO POR VEZ):
                     if (aiText) {
                         const tag = (hasTradeInAlert || hasCommercialAlert)
                             ? `🔔 Alerta CRM + Sofía (${modelName})`
-                            : (autoBooked ? `Sofía (${modelName}) + Turno` : `Sofía (${modelName})`);
+                            : (autoBooked ? `Sofía (${modelName}) + Turno` : `Sofía Consultiva (${modelName})`);
                         return { reply: aiText, source: tag };
                     }
                 } catch (e) {
