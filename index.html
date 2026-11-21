@@ -100,7 +100,7 @@
         </div>
     </nav>
 
-    <!-- TARJETAS GLOBALES SUPERIORES -->
+    <!-- TARJETAS GLOBALES SUPERIORES Y ALERTAS EN VIVO -->
     <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-5">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <button onclick="filterByStatus('Todos')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-slate-900 hover:shadow transition-all text-left group relative overflow-hidden">
@@ -164,7 +164,7 @@
             </div>
         </div>
 
-        <!-- ALERTA DE TASACIÓN INFOAUTO (SE ACTIVA CUANDO UN CLIENTE MENCIONA UN USADO EN WHATSAPP) -->
+        <!-- ALERTA DE TASACIÓN INFOAUTO -->
         <div id="infoauto-alerts-banner" class="hidden mt-3 bg-amber-50 border-2 border-amber-400 rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div class="flex items-start sm:items-center gap-2.5">
                 <span class="text-xl shrink-0">🚗</span>
@@ -178,7 +178,7 @@
             </button>
         </div>
 
-        <!-- ALERTA COMERCIAL EN VIVO (NOTIFICA AL ASESOR CUANDO UN CLIENTE PIDE COTIZACIÓN, CONVENCIONAL O ATENCIÓN) -->
+        <!-- ALERTA COMERCIAL EN VIVO -->
         <div id="commercial-live-alerts-banner" class="hidden mt-3 bg-rose-50 border-2 border-[#EB0A1E] rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div class="flex items-start sm:items-center gap-2.5">
                 <span class="text-xl shrink-0">🔔</span>
@@ -292,7 +292,7 @@
         </div>
     </main>
 
-    <!-- TAB 2: BASE DE DATOS / CONTACTOS (7 CANALES + LISTAS SEPARADAS 48HS) -->
+    <!-- TAB 2: BASE DE DATOS / CONTACTOS (7 CANALES + SUBLISTAS VISIBLES 48H Y NO COMPRA) -->
     <main id="tab-contactos" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
@@ -972,7 +972,7 @@
         </div>
     </div>
 
-    <!-- TAB 4: COMPARATIVA DE PLANES (TOYOTA VS COMPETENCIA + ARGUMENTARIO IA DE CIERRE) -->
+    <!-- TAB 4: COMPARATIVA DE PLANES (TOYOTA VS COMPETENCIA) -->
     <main id="tab-comparativa" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-6">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 mb-5 border-b border-slate-100">
@@ -981,7 +981,7 @@
                         <h2 class="text-base sm:text-xl font-extrabold text-slate-900">⚖️ Comparativa de Planes: Toyota vs Competencia</h2>
                         <span id="comp-month-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-red-50 text-[#EB0A1E] border border-red-200">Lista Vigente</span>
                     </div>
-                    <p class="text-xs text-slate-500 mt-1">Compara valores móviles, modalidades (`100%`, `70/30`, `80/20`) y genera con IA los puntos exactos para cerrar la venta.</p>
+                    <p class="text-xs text-slate-500 mt-1">Compara valores móviles, modalidades (`100%`, `70/30`, `80/20`) y genera los puntos exactos para cerrar la venta.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button onclick="syncPlaneroDeLeyLive(true)" class="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold transition-colors">
@@ -1029,7 +1029,7 @@
                             <th class="p-3.5">Modelo / Versión</th>
                             <th class="p-3.5">Modalidad</th>
                             <th class="p-3.5">Valor Móvil</th>
-                            <th class="p-3.5">Cuota Pura Est.</th>
+                            <th class="p-3.5">Cuota Máx. Ref.</th>
                             <th class="p-3.5">Acción</th>
                         </tr>
                     </thead>
@@ -1089,7 +1089,7 @@
         </div>
     </main>
 
-    <!-- TAB 6: PLANES & PDF (PERSISTENCIA INDEXEDDB + 4 TRAMOS SIN EXTRAORDINARIA + GRÁFICO MES A MES) -->
+    <!-- TAB 6: PLANES & PDF (PERSISTENCIA INDEXEDDB + TRAMOS ORDINARIOS SIN EXTRAORDINARIA + GRÁFICO MES A MES) -->
     <main id="tab-planes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 flex flex-col justify-between">
@@ -1098,7 +1098,7 @@
                         <h2 class="text-base sm:text-lg font-bold text-slate-900">Subir PDFs de Planes</h2>
                         <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">💾 IndexedDB Persistente</span>
                     </div>
-                    <p class="text-xs text-slate-500 mb-4">Lee exactamente la estructura oficial: <b>Valor del Vehículo</b>, desglose <b>70% / 30% (Cuota Extraordinaria)</b> en planes reducidos, <b>todas las cuotas por período de mes</b> y la <b>Cuota Pura</b> final (o <code>Integ. Mínima × Cuota Pura</code> si es 100%).</p>
+                    <p class="text-xs text-slate-500 mb-4">Lee la estructura oficial: <b>Valor del Vehículo</b>, desglose <b>70% / 30% (Cuota Extraordinaria)</b> en planes reducidos, <b>todas las cuotas por período de mes</b> y la <b>cuota ordinaria más alta</b>.</p>
                     <div class="space-y-3">
                         <div class="grid grid-cols-3 gap-2">
                             <div>
@@ -1150,7 +1150,7 @@
             </div>
         </div>
 
-        <!-- GRÁFICO COMPARATIVO MES A MES (VALORES MÓVILES Y CUOTA ORDINARIA MÁS ALTA) -->
+        <!-- GRÁFICO COMPARATIVO MES A MES -->
         <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm space-y-5">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                 <div>
@@ -1190,7 +1190,7 @@
         </div>
     </main>
 
-    <!-- MODAL VISOR DE ARCHIVOS GUARDADOS (PDF + HOJAS JPG PARA COMPARTIR POR WA) -->
+    <!-- MODAL VISOR DE ARCHIVOS GUARDADOS (PDF + HOJAS JPG) -->
     <div id="plan-files-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[65] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <div class="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 sticky top-0 bg-white z-10">
@@ -1548,7 +1548,7 @@
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">SOLO CONTACTOS CRM • PERFIL COMERCIAL</span>
                             <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Nube IA Sincronizada 24/7</span>
                         </div>
-                        <p class="text-xs text-zinc-300">Asesora en toda la gama Toyota, encauza hacia Toyota Plan e invita sutilmente al concesionario sin presionar.</p>
+                        <p class="text-xs text-zinc-300">Asesora del equipo de Gonzalo Dichiazza • Ritmo humano de WhatsApp • Indagación consultiva.</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1565,7 +1565,7 @@
                 <div class="lg:col-span-5 space-y-4">
                     <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold uppercase text-emerald-950">📲 Conexión Rápida Android (24/7 PC Apagada)</span>
+                            <span class="text-xs font-extrabold uppercase text-emerald-950">📲 Conexión Rápida Android (MacroDroid)</span>
                             <span class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold">AUTÓNOMO</span>
                         </div>
                         <p class="text-xs text-emerald-900">La memoria IA se sincroniza en Firebase (<b>ai_brain</b>). Usa estas URLs en <b>MacroDroid</b>:</p>
@@ -2599,7 +2599,7 @@
             }
         };
 
-        // --- ALERTAS EN VIVO EN EL CRM (INFOAUTO + ATENCIÓN COMERCIAL) ---
+        // --- ALERTAS EN VIVO EN EL CRM (INFOAUTO + ATENCIÓN COMERCIAL + AUDIO) ---
         function detectAndRegisterTradeInAlert(contact, userMessage) {
             if (!contact || !userMessage) return false;
             const norm = String(userMessage).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -4250,7 +4250,7 @@
             } catch (e) {}
         }
 
-        function buildCrmRealKnowledgeSnapshot(contact = null) {
+        function buildCrmRealKnowledgeSnapshot(contact = null, isPureGreeting = false) {
             const toyotaPlans = marketPlansCatalog
                 .filter(p => p.brand === 'Toyota')
                 .map(p => `- ${p.model} (Segmento ${p.segment}, Modalidad ${p.modality}): Valor Móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
@@ -4277,7 +4277,7 @@
                 telefono: contact.phone || '',
                 canalOrigen: contact.method || 'CRM',
                 etapaActual: contact.status || 'Pendiente',
-                modeloInteres: contact.interestModel || 'No definido aún',
+                modeloInteres: isPureGreeting ? 'Oculto hasta que el cliente lo mencione' : (contact.interestModel || 'No definido aún'),
                 referencia: contact.reference || contact.seller || '',
                 fechaAgendada: contact.scheduleDate ? `${formatDisplayISODate(contact.scheduleDate)} ${contact.scheduleTime || ''} (${contact.scheduleNote || ''})`.trim() : 'Sin fecha agendada',
                 observaciones: contact.observations || 'Ninguna',
@@ -4337,6 +4337,14 @@
             const prevLogs = (contact && waAiConversationLogs[contact.id]) ? waAiConversationLogs[contact.id] : [];
             const alreadyGreeted = prevLogs.some(m => m.from === 'ai');
 
+            // 1. Si el cliente solo saludó ("Hola", "Buenas", etc.), saludar y hacer UNA sola pregunta abierta sin mencionar modelos ni planes
+            if (!msgNorm || /^(hola|buen dia|buenas|buenas tardes|buenas noches|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm)) {
+                if (!alreadyGreeted) {
+                    return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora de Gonzalo Dichiazza en ${branch}. Contame, ¿en qué te puedo ayudar hoy?`;
+                }
+                return `Hola, ¿cómo andás? Contame en qué te puedo ayudar.`;
+            }
+
             const newModel = detectToyotaModelFromText(userMessage);
             if (newModel && contact) {
                 contact.interestModel = newModel;
@@ -4345,11 +4353,7 @@
 
             const isTradeIn = detectAndRegisterTradeInAlert(contact, userMessage);
             if (isTradeIn) {
-                return `Anotado el dato de tu vehículo (${userMessage.trim()}). En Ginza Toyota no hacemos tasaciones en el momento, así que se lo paso a Gonzalo para que te lo cotice por InfoAuto y te pasamos el valor de referencia por acá.`;
-            }
-
-            if (!msgNorm || (!alreadyGreeted && /^(hola|buen dia|buenas|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm))) {
-                return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora de Gonzalo Dichiazza en ${branch}. Contame, ¿en qué modelo Toyota te puedo asesorar hoy?`;
+                return `Anotado el dato de tu vehículo (${userMessage.trim()}). En ${branch} no hacemos tasaciones en el momento, así que se lo paso a Gonzalo para que te lo cotice por InfoAuto y te pasamos el valor de referencia por acá.`;
             }
 
             if (/\b(4x4|4x2|dx|srv|srx|gr|automatica|manual|hibrid|version|versiones|opciones)\b/.test(msgNorm)) {
@@ -4400,10 +4404,18 @@
                 };
             }
 
+            const msgNorm = String(userMessage || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+            const isPureGreeting = !msgNorm || /^(hola|buen dia|buenas|buenas tardes|buenas noches|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm);
+
+            if (isPureGreeting) {
+                const greetingText = buildDeterministicCrmReply(contact, userMessage);
+                return { reply: greetingText, source: 'Sofía • Saludo Natural' };
+            }
+
             const autoBooked = tryAutoScheduleFromClientMessage(contact, userMessage);
             const hasTradeInAlert = detectAndRegisterTradeInAlert(contact, userMessage);
             const hasCommercialAlert = triggerCommercialAttentionAlert(contact, userMessage);
-            const kb = buildCrmRealKnowledgeSnapshot(contact);
+            const kb = buildCrmRealKnowledgeSnapshot(contact, isPureGreeting);
             const fallbackReply = autoBooked
                 ? `Excelente, ya dejé agendada tu visita en ${kb.concesionario} con Gonzalo para el ${autoBooked.date} a las ${autoBooked.time} hs. Te esperamos en el salón.`
                 : buildDeterministicCrmReply(contact, userMessage);
@@ -4413,21 +4425,18 @@
                 return { reply: fallbackReply, source: (hasTradeInAlert || hasCommercialAlert) ? '🔔 Alerta CRM Activada' : (autoBooked ? 'Turno Agendado' : '⚠️ Falta API Key Gemini') };
             }
 
-            const systemPrompt = `Sos ${kb.asesora}, asesora comercial senior del equipo de Gonzalo Dichiazza en ${kb.concesionario} (concesionario oficial Toyota en Argentina), atendiendo por WhatsApp.
+            const systemPrompt = `Sos ${kb.asesora} (escribilo siempre "Sofía", nunca "Sofí"), asesora comercial del equipo de Gonzalo Dichiazza en ${kb.concesionario} (concesionario oficial Toyota en Argentina), chateando por WhatsApp.
 
-TU MISIÓN COMO ASESORA (NO SEAS PASIVA):
-1. ASESORAR DE VERDAD CON CRITERIO COMERCIAL: Nunca respondas con frases vacías de relleno como "Excelente elección" sin aportar valor. En CADA respuesta tenés que:
-   - Responder con precisión y conocimiento técnico/comercial lo que el cliente dijo o eligió (ej: si pide Hilux 4x4, explicarle las alternativas reales: suscribir directo al plan 100% de Hilux 4x4 DX AT o entrar en un 70/30 y pedir cambio de versión al adjudicar, o combinar entrega de usado + financiación).
-   - Guiarlo con inteligencia hacia las ventajas de **Toyota Plan** (sin intereses bancarios, adelanto a cuota pura, flexibilidad para cambiar de versión o modelo al adjudicar, Plan Flexible Res. IGJ 183/24) sin sonar desesperada.
-   - Cerrar siempre con **una pregunta concreta** que haga avanzar la negociación (uso del vehículo, si entrega usado, capital disponible o invitación sutil a pasar por el salón de ${kb.concesionario}).
-2. EXTENSIÓN IDEAL DE WHATSAPP: Un único mensaje fluido, claro y sustancioso de **3 a 4 líneas máximo** (sin usar separadores raros ni listas eternas).
-3. USAR EL NOMBRE SOLO UNA VEZ: Usá el nombre del cliente únicamente en el saludo inicial si todavía no se saludaron. En los turnos siguientes NO repitas su nombre.
-4. TONO PROFESIONAL Y NATURAL: Voseo argentino cordial ("vos", "tenés", "contame"). Prohibido usar jerga callejera ("una nave", "tomamos mates").
-5. USADOS Y TASACIÓN INFOAUTO: En Ginza Toyota NO tasamos vehículos en el momento. Si menciona un usado, aclarale con amabilidad que no hacemos tasaciones en el acto y que Gonzalo lo va a cotizar por **InfoAuto** para pasarle el valor de referencia.
-6. VALORES DE CUOTA (SOLO CUANDO PIDE PRECIOS O VERSIONES CONCRETAS): Informá únicamente la **CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS** de CONTEXTO_CRM_Y_PRECIOS (nunca la cuota pura mínima ni la extraordinaria).
-7. TEMAS AJENOS A TOYOTA: Si habla de otra cosa, respondé con mucha altura profesional y volvé suavemente a cómo ayudarlo con su próximo Toyota.`;
+REGLA DE ORO — RITMO HUMANO DE WHATSAPP (1 PASO POR VEZ):
+1. SI EL CLIENTE SOLO SALUDÓ ("Hola", "Buenas", "Qué tal"): Respondé ÚNICAMENTE con un saludo cálido de 1 o 2 líneas presentándote como Sofía, asesora de Gonzalo Dichiazza en ${kb.concesionario}, y preguntale en qué lo podés ayudar. PROHIBIDO mencionar modelos de la ficha, precios o Toyota Plan si el cliente todavía no dijo qué busca.
+2. MENSAJES CORTOS Y NATURALES (MÁXIMO 2 A 3 LÍNEAS): Hablá como una asesora real en WhatsApp, no como un folleto. Hacé UNA sola pregunta por turno para ir entendiendo qué necesita antes de ofrecerle Toyota Plan.
+3. CUÁNDO PROPONER TOYOTA PLAN: Recién cuando el cliente ya contó qué modelo busca o cómo piensa pagarlo, asesorale con criterio real mostrando las ventajas de Toyota Plan (sin intereses bancarios, flexibilidad para cambiar de versión al adjudicar) o tomando su usado, e invitalo con elegancia a visitar el salón de ${kb.concesionario} sin sonar desesperada.
+4. USAR EL NOMBRE SOLO UNA VEZ: Usá el nombre del cliente únicamente en el primer saludo. Después nunca lo repitas.
+5. USADOS Y INFOAUTO: En Ginza Toyota NO tasamos en el acto. Si menciona un usado, aclarale con amabilidad que Gonzalo lo cotizará por InfoAuto para pasarle el valor de referencia.
+6. CUOTAS: Solo si pide precios, informá únicamente la CUOTA_MAS_ALTA_DE_LOS_3_PERIODOS de CONTEXTO_CRM_Y_PRECIOS.
+7. TEMAS AJENOS A TOYOTA: Si habla de otra cosa, respondé con mucha altura profesional y encauzá suavemente hacia cómo ayudarlo en Ginza Toyota.`;
 
-            const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\n${hasTradeInAlert ? 'NOTA_INTERNA: Se activó alerta InfoAuto en el CRM por su usado.' : ''}${hasCommercialAlert ? ' NOTA_INTERNA: Se activó alerta comercial en el CRM de Gonzalo.' : ''}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Saludo inicial breve presentándote como Sofía, asesora de Gonzalo Dichiazza en Ginza Toyota, y preguntando en qué modelo Toyota lo podés asesorar)'}"\n\nRedactá únicamente la respuesta lista para enviar por WhatsApp:`;
+            const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\n${hasTradeInAlert ? 'NOTA_INTERNA: Se activó alerta InfoAuto en el CRM por su usado.' : ''}${hasCommercialAlert ? ' NOTA_INTERNA: Se activó alerta comercial en el CRM de Gonzalo.' : ''}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Saludo inicial breve)'}"\n\nRedactá únicamente la respuesta corta de WhatsApp:`;
 
             const candidateModels = await resolveAvailableGeminiModels(apiKey);
             let lastErrorMsg = '';
@@ -4542,7 +4551,7 @@ TU MISIÓN COMO ASESORA (NO SEAS PASIVA):
             if (kbSummaryEl) {
                 kbSummaryEl.innerHTML = `
                     <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Candado Anti-Chats Personales:</b> Solo responde a los <b>${getAllListsCombined().length} contacto(s)</b> cargados en el CRM.</div>
-                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Sofía IA Comercial (${toyotaCount} modelos):</b> Indaga antes de cotizar, envía mensajes breves en 2 burbujas y activa alertas en vivo en tu CRM.</div>
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-200"><b>• Sofía IA Comercial (${toyotaCount} modelos):</b> Saludo natural 1 paso por vez, indagación consultiva y alertas InfoAuto / Audio en vivo.</div>
                 `;
             }
 
