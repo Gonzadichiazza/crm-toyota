@@ -4335,11 +4335,12 @@
             const msgNorm = String(userMessage || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
             const prevLogs = (contact && waAiConversationLogs[contact.id]) ? waAiConversationLogs[contact.id] : [];
-            const alreadyGreeted = prevLogs.some(m => m.from === 'ai');
+            const lastAiMsg = [...prevLogs].reverse().find(m => m.from === 'ai');
+            const recentlyGreeted = lastAiMsg && (Date.now() - (Number(lastAiMsg.ts) || 0) < 6 * 3600 * 1000);
 
-            // ETAPA 1 — Apertura cálida: saludo como asistente comercial de Gonzalo Dichiazza
+            // ETAPA 1 — Apertura cálida: presentarse siempre como Sofía, asistente comercial de Gonzalo Dichiazza
             if (!msgNorm || /^(hola|buen dia|buenas|buenas tardes|buenas noches|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm)) {
-                if (!alreadyGreeted) {
+                if (!recentlyGreeted) {
                     return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asistente comercial de Gonzalo Dichiazza acá en ${branch}. Contame, ¿en qué vehículo Toyota te puedo ayudar hoy?`;
                 }
                 return `Hola, ¿cómo andás? Contame en qué vehículo te puedo asesorar hoy.`;
@@ -4353,7 +4354,7 @@
 
             // PERFIL: BOT / ATENCIÓN HUMANA
             if (/\b(sos un bot|eres un bot|maquina|automatica|persona real)\b/.test(msgNorm)) {
-                return `Hola, soy ${advisor}, asistente comercial del equipo de Gonzalo Dichiazza acá en el salón de ${branch}. Te entiendo perfectamente, a mí también me fastidia cuando te contesta una máquina con menús. Contame tranquilo qué necesitás saber${activeModel ? ` sobre el ${activeModel}` : ''}, y si preferís charlarlo por teléfono o pasar por la agencia con Gonzalo, lo coordinamos sin problema.`;
+                return `Hola, soy ${advisor}, asistente comercial del equipo de Gonzalo Dichiazza acá en el salón de ${branch}. Te entiendo perfectamente, a mí también me fastidia cuando te contesta una máquina con menús. Contame tranquilo qué necesitás saber${activeModel ? ` sobre la ${activeModel}` : ''}, y si preferís charlarlo por teléfono o pasar por la agencia con Gonzalo, lo coordinamos sin problema.`;
             }
 
             // PERFIL: DESCONFIANZA / MALA EXPERIENCIA PREVIA / AGRESIVO
@@ -4402,7 +4403,12 @@
 
             const asksPriceOrPlan = /\b(cuota|cuotas|precio|valor|sale|cuesta|monto|plan|financ|70\/30|100%)\b/.test(msgNorm);
             if (newModel && !asksPriceOrPlan) {
-                return `Muy buena elección el ${newModel}. Para asesorarte bien antes de hablar de números: ¿lo buscás para trabajar o para uso personal/familiar, y tenés algún vehículo usado para entregar?`;
+                const article = (newModel === 'Hilux' || newModel === 'Hiace') ? 'la' : 'el';
+                return `Excelente elección ${article} ${newModel}. Para orientarte bien desde el principio: ¿${article} buscás para trabajar o para uso personal?`;
+            }
+
+            if (/\b(trabajo|trabajar|campo|laburar|personal|familiar|uso diario|ruta|viajar|los dos|ambos|mixto)\b/.test(msgNorm) && !asksPriceOrPlan) {
+                return `Clarísimo. Para saber por dónde encarar los números sin hacerte perder tiempo: ¿tenés algún vehículo usado para entregar en parte de pago, o arrancás de cero con efectivo?`;
             }
 
             if (/\b(cuota|cuotas|precio|valor|sale|cuesta|monto)\b/.test(msgNorm)) {
@@ -4549,10 +4555,10 @@ Tu objetivo NO es recitar argumentos de venta de memoria ni cerrar a la fuerza e
 
             if (!waAiConversationLogs[contact.id]) waAiConversationLogs[contact.id] = [];
             if (incomingText) {
-                waAiConversationLogs[contact.id].push({ from: 'client', text: incomingText, time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
+                waAiConversationLogs[contact.id].push({ from: 'client', text: incomingText, ts: Date.now(), time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) });
             }
             const timeLabel = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-            waAiConversationLogs[contact.id].push({ from: 'ai', text: cleanReply, time: timeLabel });
+            waAiConversationLogs[contact.id].push({ from: 'ai', text: cleanReply, ts: Date.now(), time: timeLabel });
             persistWaAiChats();
 
             const recipientKey = sanitizeFirebaseKey(contact.phone || contact.name || 'default');
