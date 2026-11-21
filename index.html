@@ -1662,6 +1662,7 @@
                             <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
+                            <span id="wa-ai-engine-pill" class="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300">⏳ Verificando Gemini...</span>
                             <button onclick="resetWaAiChatHistory()" class="px-2.5 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold" title="Borrar memoria de este chat">
                                 🧹 Limpiar Chat
                             </button>
@@ -4337,15 +4338,17 @@
             getSystemPrompt(kb) {
                 return `Sos ${kb.asesora} (siempre escribilo "Sofía"), asistente comercial ejecutiva de Gonzalo Dichiazza en ${kb.concesionario} (concesionario oficial Toyota en Argentina).
 
-TU FORMA DE HABLAR (IDÉNTICA A UN ASESOR HUMANO REAL EN WHATSAPP):
-- Hablás con voseo argentino natural, cercano, cálido y profesional ("vos", "contame", "decime", "mirá").
-- Nunca sonás a folleto, ni a bot, ni recitás discursos armados. Usás el nombre del cliente SOLO en el primer saludo; después nunca lo repetís.
-- Mensajes cortos y naturales (2 a 4 líneas máximo). Una sola pregunta clara por mensaje.
+TU FORMA DE HABLAR (COMO UNA PERSONA REAL EN WHATSAPP, NUNCA COMO UN BOT NI UN CALL CENTER):
+- Hablás como una chica argentina real, cercana, amable y tranquila ("vos", "che", "mirá", "contame", "todo bien").
+- PROHIBIDO sonar a atención automática o hacer preguntas robotizadas de entrada como "¿en qué vehículo te puedo asesorar hoy?".
+- En el primer saludo ("Hola"), saludá con calidez humana, presentate como Sofía (asistente de Gonzalo Dichiazza en ${kb.concesionario}) y abrí la charla con naturalidad, como lo haría una persona real (ej: "¡Hola! ¿Cómo estás? Todo bien por acá. Soy Sofía, asistente comercial de Gonzalo Dichiazza en Ginza Toyota. ¿Con quién tengo el gusto?" o "¡Hola! ¿Cómo andás? Soy Sofía, asistente de Gonzalo en Ginza Toyota. Contame, ¿venías mirando algún modelo en particular o querías hacerme alguna consulta?").
+- Usás el nombre del cliente SOLO si ya lo sabés y de forma natural; después no lo repetís en cada mensaje.
+- Mensajes breves, fluidos y conversacionales (2 a 3 líneas máximo). Una sola pregunta suave por mensaje.
 
 CÓMO CONDUCÍS LA CONVERSACIÓN (PASO A PASO):
-1. PRIMER SALUDO ("Hola"): Saludá con calidez, presentate como Sofía, asistente comercial de Gonzalo Dichiazza en ${kb.concesionario}, y preguntá en qué vehículo Toyota lo podés ayudar hoy. No menciones modelos ni planes todavía.
-2. CUANDO DICE EL MODELO (ej. "Quiero un Corolla" o "Hilux"): Valida la elección con naturalidad y preguntá para qué uso lo busca (trabajo, ciudad/familia o viajes).
-3. CUANDO PREGUNTA "¿CÓMO SERÍA EL PLAN?" ANTES DE QUE LO CONOZCAS: No le tires un folleto ni precios sueltos todavía. Explicá en 2 líneas que el Toyota Plan se arma distinto según si quiere arrancar desde cero con cuota baja o si tiene un usado/capital para retirar rápido, y preguntale cuál es su caso (si tiene vehículo usado para entregar o capital inicial).
+1. PRIMER SALUDO ("Hola"): Presentate con calidez humana como Sofía, asistente de Gonzalo Dichiazza en ${kb.concesionario}, y abrí la charla de forma natural sin sonar a menú ni a folleto.
+2. CUANDO DICE EL MODELO (ej. "Quiero un Corolla" o "Hilux"): Valida la elección con naturalidad ("Qué lindo auto el Corolla", "Muy buena camioneta la Hilux") y preguntá tranquilo para qué uso la está pensando (ciudad, ruta, laburo).
+3. CUANDO PREGUNTA "¿CÓMO SERÍA EL PLAN?" ANTES DE QUE LO CONOZCAS: No le tires un folleto ni precios sueltos todavía. Explicá en 2 líneas simples que se puede armar distinto según si quiere arrancar de cero con cuota baja o si tiene un usado/capital para sacarlo rápido, y preguntale cuál es su idea.
 4. DIAGNÓSTICO DE NÚMEROS REALES: Indagá qué usado tiene (año, versión y km) y qué cuota mensual le quedaría cómoda pagar sin complicarse.
    - REGLA USADOS: En ${kb.concesionario} NO tasamos en el momento. Si menciona un usado, decile con amabilidad que tomás nota para que Gonzalo lo cotice por InfoAuto y tener una base real (y aclarale que no está obligado a entregarlo: al adjudicar tiene 5 días hábiles por si lo vende particular más caro, o lo entrega llave por llave).
 5. CHOQUE CON LA REALIDAD Y LAS 3 VARIABLES (SIN POSTURA DEFENSIVA):
@@ -4360,13 +4363,13 @@ ${kb.preciosToyota}
 
 EJEMPLOS REALES DE TU TONO Y RITMO:
 Cliente: Hola
-Sofía: Hola, ¿cómo estás? Soy Sofía, asistente comercial de Gonzalo Dichiazza en Ginza Toyota. Contame, ¿en qué vehículo Toyota te puedo ayudar hoy?
+Sofía: ¡Hola! ¿Cómo estás? Soy Sofía, asistente comercial de Gonzalo Dichiazza en Ginza Toyota. Contame, ¿venías mirando algún modelo en particular o querías hacerme alguna consulta?
 
 Cliente: Estoy buscando un Corolla
-Sofía: Excelente elección el Corolla. Para orientarte bien desde el principio, ¿lo estás buscando para moverte más en ciudad o para viajar en ruta?
+Sofía: Qué lindo auto el Corolla, súper cómodo. Para orientarte bien, ¿lo estás pensando más para moverte en ciudad o para viajar?
 
 Cliente: Cómo sería el plan de ahorro
-Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en pesos sin intereses bancarios, pero el esquema cambia mucho según si buscás una cuota mensual bien baja desde cero o si tenés un usado o capital para retirar rápido. Contame, ¿tenés algún vehículo para entregar como parte de pago o arrancás de cero?`;
+Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en pesos sin intereses bancarios, pero se arma muy distinto según si buscás una cuota mensual bien baja desde cero o si tenés un usado o capital para retirarlo rápido. ¿Vos tenés algún auto para entregar o arrancás de cero?`;
             },
 
             buildFallbackReply(contact, userMessage = '') {
@@ -4381,40 +4384,57 @@ Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en peso
                 const lastAiMsg = [...prevLogs].reverse().find(m => m.from === 'ai');
                 const recentlyGreeted = lastAiMsg && (Date.now() - (Number(lastAiMsg.ts) || 0) < 6 * 3600 * 1000);
 
+                // 1. Saludo inicial natural
                 if (!msgNorm || /^(hola|buen dia|buenas|buenas tardes|buenas noches|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm)) {
                     if (!recentlyGreeted) {
-                        return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asistente comercial de Gonzalo Dichiazza en ${branch}. Contame, ¿en qué vehículo Toyota te puedo ayudar hoy?`;
+                        return `¡Hola${rawName ? ` ${rawName}` : ''}! ¿Cómo estás? Soy ${advisor}, asistente comercial de Gonzalo Dichiazza en ${branch}. Contame, ¿venías mirando algún modelo en particular o querías hacerme alguna consulta?`;
                     }
-                    return `Hola, ¿cómo andás? Contame en qué vehículo te puedo asesorar hoy.`;
+                    return `¡Hola! ¿Todo bien? Decime, ¿venías mirando algún modelo en particular o en qué te puedo dar una mano?`;
                 }
 
                 const newModel = detectToyotaModelFromText(userMessage);
                 if (newModel && contact) contact.interestModel = newModel;
                 const activeModel = newModel || contact?.interestModel || '';
+                const article = (activeModel === 'Hilux' || activeModel === 'Hiace') ? 'la' : 'el';
 
+                // 2. Si menciona un usado (ej: Ranger 2010, Fiesta 2016) -> Alerta InfoAuto + preguntar cuota cómoda
                 const isTradeIn = detectAndRegisterTradeInAlert(contact, userMessage);
                 if (isTradeIn) {
-                    return `Anotado el dato de tu vehículo (${userMessage.trim()}). En ${branch} no hacemos tasaciones en el acto, así que se lo paso a Gonzalo para que te lo cotice por InfoAuto y tengas una base real. Además del usado, ¿contás con algún capital extra o qué cuota mensual te sentirías cómodo pagando hoy?`;
+                    return `Perfecto, anotado el dato de tu vehículo. En ${branch} no hacemos tasaciones en el acto, así que se lo paso a Gonzalo para que lo cotice por InfoAuto y sepamos con qué base real contás. Y en cuanto a flujo mensual, ¿qué cuota te sentirías cómodo pagando por mes sin complicarte?`;
                 }
 
+                // 3. Si dice que arranca de cero / sin usado -> Preguntar capacidad de cuota mensual
+                if (/\b(nada|ninguno|de cero|desde cero|sin usado|no tengo auto|no tengo camioneta|no tengo vehiculo|solo efectivo)\b/.test(msgNorm)) {
+                    return `Clarísimo, arrancar de cero está perfecto. Para saber qué alternativa encaja mejor con tu bolsillo hoy: mirando tus gastos fijos del mes, ¿qué cuota mensual podrías pagar tranquilo sin que te apriete?`;
+                }
+
+                // 4. Si menciona un presupuesto de cuota o dice que no quiere sorteo / poco capital -> Choque con la realidad + 3 Variables
+                if (/\b(no tengo ahorros|sin anticipo|poco capital|no tengo mucho|\d{3}\s*mil|\d{3}\.\d{3}|cuota baja|no quiero sorteo|sin sorteo|no quiero licitacion|entrega inmediata|rapido|ya|contado|convencional|prendario|credito|banco|alternativa|no estoy seguro|no quiero plan)\b/.test(msgNorm)) {
+                    return `Ahora sí hablamos con números concretos. Te soy muy directa: buscando mantener una cuota cómoda sin poner una entrega inicial enorme, una compra tradicional o crédito bancario queda muy exigido por los intereses. Hoy es imposible juntar al mismo tiempo: poca plata de entrada, cuota baja y entrega inmediata. Si tuvieras que priorizar dos de esas tres cosas hoy, ¿cuáles elegirías?`;
+                }
+
+                // 5. Si pregunta cómo es el plan antes de diagnosticar -> Indagar usado/capital primero
                 if (/\b(como seria|como es|como funciona)\b/.test(msgNorm) && /\b(plan|ahorro|financ)\b/.test(msgNorm)) {
                     return `Te cuento simple: en Toyota Plan financiamos directo de fábrica en pesos sin intereses bancarios, pero el esquema cambia mucho según si buscás una cuota mensual baja desde cero o si tenés un usado o capital para retirar rápido. Contame, ¿tenés algún vehículo para entregar como parte de pago o arrancás de cero?`;
                 }
 
-                if (/\b(no tengo ahorros|sin anticipo|desde cero|poco capital|no tengo mucho|\d{3}\s*mil|\d{3}\.\d{3}|cuota baja|no quiero sorteo|sin sorteo|no quiero licitacion|entrega inmediata|rapido|ya|contado|convencional|prendario|credito|banco|alternativa|no estoy seguro|no quiero plan)\b/.test(msgNorm)) {
-                    return `Te soy totalmente franca con los números hoy: si buscás retiro inmediato sin sorteo ni licitación, los bancos o el contado exigen un anticipo inicial muy alto o cuotas con intereses elevados. Hoy es imposible juntar al mismo tiempo entrega inmediata, poca plata de entrada y cuota baja. Si tuvieras que priorizar dos de esas tres cosas hoy, ¿qué es más importante para vos: entrar con poco capital, mantener una cuota cómoda o retirar ya mismo?`;
+                // 6. Si elige prioridades -> Presentar Toyota Plan como conclusión lógica
+                if (/\b(no me urge|puedo esperar|cuota|no descapitalizarme|poca plata)\b/.test(msgNorm)) {
+                    return `Fijate qué importante lo que acabás de definir: si no necesitás retiro inmediato esta semana, pero sí querés cuidar tu capital inicial y mantener una cuota accesible sin intereses bancarios, recién ahí es donde tiene sentido evaluar Toyota Plan (70/30 o 100%). ¿Querés que coordinemos una llamada de 10 minutos con Gonzalo para ver los números exactos de tu caso?`;
                 }
 
+                // 7. Si mencionó el modelo por primera vez -> Preguntar uso
                 if (newModel) {
-                    const article = (newModel === 'Hilux' || newModel === 'Hiace') ? 'la' : 'el';
                     return `Excelente elección ${article} ${newModel}. Para orientarte bien desde el principio, ¿${article} buscás para trabajar o para uso personal?`;
                 }
 
-                if (/\b(trabajo|trabajar|campo|laburar|personal|familiar|ciudad|uso diario|ruta|viajar|los dos|ambos|mixto)\b/.test(msgNorm)) {
-                    return `Clarísimo. Para saber por dónde encarar los números sin hacerte perder tiempo: ¿tenés algún vehículo usado para entregar en parte de pago, o arrancás de cero con efectivo?`;
+                // 8. Si respondió el uso (trabajo, personal, ambas cosas, los dos, ciudad, ruta) -> Preguntar por usado o capital
+                if (/\b(trabajo|trabajar|campo|laburar|personal|familiar|ciudad|uso diario|ruta|viajar|los dos|ambos|ambas|dos cosas|mixto)\b/.test(msgNorm)) {
+                    return `Clarísimo, ${activeModel ? `${article} ${activeModel} ` : ''}para ese uso va impecable. Para saber por dónde encarar los números: ¿tenés algún vehículo usado para entregar en parte de pago, o arrancás de cero con efectivo?`;
                 }
 
-                return `Clarísimo${activeModel ? ` respecto al ${activeModel}` : ''}. Para armarte una alternativa real con tus números y no hacerte perder tiempo: ¿preferís que Gonzalo te cotice tu usado por InfoAuto o te queda cómodo una llamada de 10 minutos con él para verlo en detalle?`;
+                // 9. Cualquier otra respuesta intermedia -> Seguir indagando sin saltar al cierre
+                return `Entiendo perfectamente. Para poder armarte una opción realista y no hacerte perder tiempo con números teóricos, contame: ¿tenés algún vehículo usado para entregar o qué valor de cuota mensual te quedaría cómodo pagar hoy?`;
             },
 
             async generateReply(contact, userMessage = '') {
@@ -4433,7 +4453,6 @@ Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en peso
                     return { reply: this.buildFallbackReply(contact, userMessage), source: 'Sofía • Saludo Natural' };
                 }
 
-                // Si el cliente mandó solo "?" o signos sueltos, no sobrescribir la respuesta
                 if (/^[?!.,…\s]+$/.test(String(userMessage || '').trim())) {
                     return { reply: '', source: 'Ignorado' };
                 }
@@ -4448,11 +4467,23 @@ Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en peso
 
                 const apiKey = (this.config.geminiApiKey || '').trim();
                 if (!apiKey) {
-                    return { reply: fallbackReply, source: (hasTradeInAlert || hasCommercialAlert) ? '🔔 Alerta CRM Activada' : (autoBooked ? 'Turno Agendado' : '⚠️ Falta API Key Gemini') };
+                    return { reply: fallbackReply, source: '⚠️ Pegá tu API Key en Sofía IA (Usando respaldo)' };
                 }
 
-                // Construcción de conversación nativa multi-turno (role: 'user' / 'model') igual que la interfaz de Gemini
-                const contents = [];
+                // Ejemplos de entrenamiento multi-turno reales (Few-Shot) para que Gemini imite el ritmo consultivo exacto
+                const contents = [
+                    { role: 'user', parts: [{ text: 'Hola' }] },
+                    { role: 'model', parts: [{ text: `¡Hola! ¿Cómo estás? Soy Sofía, asistente comercial de Gonzalo Dichiazza en ${kb.concesionario}. Contame, ¿venías mirando algún modelo en particular o querías hacerme alguna consulta?` }] },
+                    { role: 'user', parts: [{ text: 'Quería consultar por la Hilux' }] },
+                    { role: 'model', parts: [{ text: 'Excelente elección la Hilux. Para orientarte bien desde el principio, ¿la buscás para trabajar o para uso personal?' }] },
+                    { role: 'user', parts: [{ text: 'Para ambas cosas' }] },
+                    { role: 'model', parts: [{ text: 'Clarísimo, para uso mixto va impecable. Para saber por dónde encarar los números sin hacerte perder tiempo: ¿tenés algún vehículo usado para entregar en parte de pago, o arrancás de cero con efectivo?' }] },
+                    { role: 'user', parts: [{ text: 'Tengo una Ranger 2010 con 250.000 km y algo de plata guardada, pero no quiero descapitalizarme' }] },
+                    { role: 'model', parts: [{ text: `Perfecto, anotado el dato de tu Ranger. En ${kb.concesionario} no hacemos tasaciones en el acto, así que se lo paso a Gonzalo para que lo cotice por InfoAuto y sepamos con qué base real contás. Y en cuanto a flujo mensual, ¿qué cuota te sentirías cómodo pagando por mes sin complicarte?` }] },
+                    { role: 'user', parts: [{ text: 'Unos 800 mil pesos por mes' }] },
+                    { role: 'model', parts: [{ text: 'Ahora sí hablamos de algo concreto. Te soy muy directa: con una Ranger 2010, sin poner una entrega enorme arriba y buscando una cuota alrededor de $800.000, una financiación bancaria tradicional queda muy exigida por los intereses. Hoy es imposible juntar al mismo tiempo: poca plata de entrada, cuota cerca de $800.000 y entrega inmediata. Si tuvieras que priorizar dos de esas tres cosas hoy, ¿cuáles elegirías?' }] }
+                ];
+
                 const rawHistory = (contact && Array.isArray(this.chats[contact.id])) ? this.chats[contact.id].slice(-14) : [];
                 for (const m of rawHistory) {
                     const role = m.from === 'ai' ? 'model' : 'user';
@@ -4467,7 +4498,7 @@ Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en peso
 
                 const contextNote = [
                     contact?.name && !['sin nombre', 'lead salesforce', 'prueba crm'].includes(contact.name.toLowerCase()) ? `[Cliente: ${contact.name}]` : '',
-                    contact?.interestModel ? `[Modelo de interés: ${contact.interestModel}]` : '',
+                    contact?.interestModel ? `[Modelo: ${contact.interestModel}]` : '',
                     hasTradeInAlert ? '[Sistema: Se activó alerta InfoAuto para que Gonzalo cotice su usado]' : ''
                 ].filter(Boolean).join(' ');
 
@@ -4491,7 +4522,7 @@ Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en peso
                             body: JSON.stringify({
                                 contents,
                                 systemInstruction: { parts: [{ text: systemPrompt }] },
-                                generationConfig: { temperature: 0.75, maxOutputTokens: 1200 }
+                                generationConfig: { temperature: 0.72, maxOutputTokens: 1200 }
                             })
                         });
                         if (!res.ok) {
@@ -4582,6 +4613,14 @@ Sofía: Te cuento simple: en Toyota Plan financiamos directo de fábrica en peso
             const btn = document.getElementById('nav-wa-ai-btn');
             const dot = document.getElementById('nav-wa-ai-dot');
             const lbl = document.getElementById('nav-wa-ai-label');
+            const pill = document.getElementById('wa-ai-engine-pill');
+            const hasKey = Boolean((SOFIA_AI.config.geminiApiKey || '').trim());
+            if (pill) {
+                pill.textContent = hasKey ? '🟢 Motor Gemini Activo' : '⚠️ Falta API Key Gemini';
+                pill.className = hasKey
+                    ? 'px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-900 border border-emerald-300'
+                    : 'px-2 py-1 rounded-lg text-[10px] font-extrabold bg-rose-100 text-rose-900 border border-rose-300';
+            }
             if (!btn || !lbl) return;
             if (SOFIA_AI.config.autoReplyMobile) {
                 btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
