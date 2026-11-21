@@ -4099,64 +4099,62 @@
 
             const prevLogs = (contact && waAiConversationLogs[contact.id]) ? waAiConversationLogs[contact.id] : [];
             const alreadyGreeted = prevLogs.some(m => m.from === 'ai');
+            const clientTurns = prevLogs.filter(m => m.from === 'client').length;
 
-            const detectedModel = detectToyotaModelFromText(userMessage) || contact?.interestModel || '';
-            if (detectedModel && contact && contact.interestModel !== detectedModel) {
-                contact.interestModel = detectedModel;
+            const newModel = detectToyotaModelFromText(userMessage);
+            if (newModel && contact) {
+                contact.interestModel = newModel;
             }
+            const activeModel = newModel || contact?.interestModel || '';
 
+            // 1. Saludo inicial limpio y abierto (sin asumir modelos previos si recién saluda)
             if (!msgNorm || !alreadyGreeted || /^(hola|buen dia|buenas|que tal|como andas|hola gonzalo|hola sofia)[!.,\s]*$/.test(msgNorm)) {
-                if (detectedModel) {
-                    return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora de ${branch}. Qué bueno saludarte; contame qué estás buscando en el ${detectedModel} (si es para uso diario, ruta o trabajo) así te asesoro bien.`;
-                }
                 return `Hola${rawName ? ` ${rawName}` : ''}, ¿cómo estás? Soy ${advisor}, asesora comercial de ${branch}. ¿En qué te puedo ayudar hoy?`;
             }
 
-            if (/\b(mal|robot|bot|recien|empiezo|no me entendes|repetis)\b/.test(msgNorm)) {
-                return `Tenés razón, disculpame. Acá estoy yo, ${advisor}, para escucharte. Contame tranquilo qué vehículo o consulta tenés en mente y lo vemos paso a paso.`;
+            // 2. Si el cliente dice que recién empieza a averiguar / mirar
+            if (/\b(empezando|averiguar|mirando|viendo|curiosidad|sin apuro|tranquilo)\b/.test(msgNorm)) {
+                return `¡Está perfecto! Es la mejor etapa para comparar tranquilo${activeModel ? ` con el ${activeModel}` : ''}. Contame un poco: ¿qué uso le darías principalmente (ciudad, ruta, familia) y tenés algún vehículo hoy para entregar o sería tu primer 0 km?`;
             }
 
-            const isAutomotiveOrCommercial = /\b(toyota|yaris|corolla|hilux|hiace|sw4|rav4|auto|camioneta|vehiculo|0km|0 km|usado|plan|cuota|financ|precio|valor|contado|convencional|permuta|entrega|concesionario|ginza|salon|test drive|manejar|ver|pasar|reunion|entrevista|horario|direccion|adjudica|licita|sorteo|service|garantia|70\/30|100%|comprar|quiero|modelo|version|caja|automatico|manual|hibrido|si|dale|bueno|ok)\b/.test(msgNorm);
-            if (!isAutomotiveOrCommercial && msgNorm.split(/\s+/).length >= 2) {
-                return `Entiendo perfectamente, gracias por contármelo. Desde mi lugar acá en ${branch} quedo a tu disposición para cuando quieras ver alguna opción de movilidad o pasar a charlar sin compromiso. ¿Tenés algún modelo en vista?`;
+            // 3. Si responde sobre el uso o entrega de usado / ahorro
+            if (/\b(ciudad|ruta|familia|trabajo|viajar|usado|permuta|ahorro|entrega|anticipo|tengo un|tengo una)\b/.test(msgNorm) && !/\b(cuota|precio|valor|sale|cuesta|plan)\b/.test(msgNorm)) {
+                return `Buenísimo, ese dato me sirve un montón para orientarte bien${activeModel ? ` con el ${activeModel}` : ''}. Con ese perfil podés armar algo súper cómodo sin descapitalizarte. ¿Te gustaría que veamos cómo quedaría una cuota aproximada o preferís darte una vuelta por ${branch} a verlo en persona?`;
             }
 
-            if (/\b(direccion|donde|ubicacion|horario|reunion|entrevista|pasar|visitar|salon|concesionario|test drive|manejar|verlo)\b/.test(msgNorm)) {
-                return `Cuando quieras te esperamos en ${branch} para tomar un café, subirte al ${detectedModel || 'Toyota'} y verlo en detalle sin compromiso. ¿Te queda mejor pasar por la mañana o por la tarde?`;
+            // 4. Agendamiento / Visita al concesionario
+            if (/\b(direccion|donde|ubicacion|horario|reunion|entrevista|pasar|visitar|salon|concesionario|test drive|manejar|verlo|lunes|martes|miercoles|jueves|viernes|sabado|manana)\b/.test(msgNorm)) {
+                return `Cuando quieras te espero en ${branch} para tomar un café, conocer el ${activeModel || 'vehículo'} en detalle y revisar juntos las opciones sin compromiso. ¿Qué día y horario te quedaría más cómodo?`;
             }
 
-            if (/\b(usado|permuta|parte de pago|tomar|cotizar|tasan|entrego)\b/.test(msgNorm)) {
-                return `Sí, tomamos usados en parte de pago y además te sirve para licitar y retirar tu 0 km muchísimo más rápido con Toyota Plan. Si querés decime qué año y modelo es el tuyo y cuando gustes lo tasamos en el salón.`;
-            }
-
-            if (/\b(contado|convencional|entrega inmediata|stock|disponibilidad)\b/.test(msgNorm)) {
-                return `Trabajamos operación convencional y entrega directa en ${branch}. Igual, si querés, cuando pases por el salón te muestro cómo muchos clientes combinan su capital con un Toyota Plan para no descapitalizarse y retirar rápido. ¿Qué versión te interesa?`;
-            }
-
-            const asksFinanceOrPrice = /\b(financ|plan|cuota|precio|valor|sale|cuesta|monto|plata|70\/30|100%|comprar|quiero|interesa)\b/.test(msgNorm);
-
-            if (detectedModel && (asksFinanceOrPrice || msgNorm === detectedModel.toLowerCase())) {
-                const matchedPdf = plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(detectedModel.toLowerCase()));
-                const matchedCatalog = marketPlansCatalog.filter(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()));
-
-                if (/\b(financ|plan|cuota|precio|valor|sale|cuesta|monto|70\/30|100%)\b/.test(msgNorm)) {
-                    const lines = [];
-                    if (matchedPdf && matchedPdf.price > 0) {
-                        lines.push(`• *${matchedPdf.vehicleName || matchedPdf.planName}* (${matchedPdf.modality || '70/30'}): Valor móvil $${Number(matchedPdf.vehicleValue || 0).toLocaleString('es-AR')} — Cuota ref. $${Number(matchedPdf.price).toLocaleString('es-AR')}`);
-                    } else {
-                        matchedCatalog.forEach(p => {
-                            lines.push(`• *${p.model}* (${p.modality}): Valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')} — Cuota pura ref. $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
-                        });
-                    }
-                    if (lines.length > 0) {
-                        return `Para el *Toyota ${detectedModel}* tenemos opciones muy cómodas en Toyota Plan (sin bancos ni tasas):\n\n${lines.join('\n')}\n\nSi te parece, podés darte una vuelta por ${branch} para verlo en salón y armamos el número exacto según lo que quieras entregar. ¿Qué día te queda cómodo?`;
-                    }
+            // 5. Consulta explícita de cuotas / precios / plan de ahorro
+            const asksPriceOrPlan = /\b(cuota|cuotas|precio|valor|sale|cuesta|monto|plan|financ|70\/30|100%)\b/.test(msgNorm);
+            if (asksPriceOrPlan) {
+                if (!activeModel) {
+                    return `Con gusto te paso los números. Decime primero qué modelo Toyota te interesa (Yaris, Yaris Cross, Corolla, Corolla Cross, Hilux o Hiace) y si tenés algún usado o anticipo en mente.`;
                 }
-
-                return `¡Muy lindo el *${detectedModel}*! Es súper confiable y mantiene excelente valor de reventa. Contame, ¿pensabas entregar un usado o arrancarlo en cuotas con un Toyota Plan? Si querés también podés pasar por ${branch} a verlo en persona.`;
+                const matchedPdf = plansHistory.find(p => (p.vehicleName || p.planName || '').toLowerCase().includes(activeModel.toLowerCase()));
+                const matchedCatalog = marketPlansCatalog.filter(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(activeModel.toLowerCase()));
+                const lines = [];
+                if (matchedPdf && matchedPdf.price > 0) {
+                    lines.push(`• *${matchedPdf.vehicleName || matchedPdf.planName}* (${matchedPdf.modality || '70/30'}): Valor móvil $${Number(matchedPdf.vehicleValue || 0).toLocaleString('es-AR')} — Cuota ref. $${Number(matchedPdf.price).toLocaleString('es-AR')}`);
+                } else {
+                    matchedCatalog.forEach(p => {
+                        lines.push(`• *${p.model}* (${p.modality}): Valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')} — Cuota pura ref. $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
+                    });
+                }
+                if (lines.length > 0) {
+                    return `Te cuento cómo se mueve hoy el *Toyota ${activeModel}* en Toyota Plan (cuotas puras sin interés bancario):\n\n${lines.join('\n')}\n\nPara ver cuál te calza mejor: ¿buscás la cuota más baja posible (70/30) o financiar el 100%? Si andás por la zona, también podés pasar por ${branch} y lo vemos en el salón.`;
+                }
             }
 
-            return `Contame un poco más qué idea tenés: ¿buscás algún modelo Toyota en particular, evaluar un plan en cuotas o entregar un usado? Si andás cerca de ${branch}, también estás invitado a pasar a verlo.`;
+            // 6. Si menciona el modelo por primera vez sin pedir precio todavía -> Preguntar para recolectar información primero
+            if (activeModel && clientTurns <= 2) {
+                return `¡Excelente elección el *${activeModel}*! Antes de tirarte números al aire, contame un poquito: ¿qué uso le vas a dar y cómo venís pensando la compra (si tenés un usado para entregar, algún ahorro o buscar cuotas bajas)?`;
+            }
+
+            // 7. Seguimiento natural manteniendo el modelo en memoria
+            return `Perfecto, tomo nota${activeModel ? ` para tu ${activeModel}` : ''}. ¿Qué es lo que más te importa priorizar hoy: mantener una cuota mensual baja, retirar rápido o analizar cuánto te tomamos tu usado?`;
         }
 
         async function generateGroundedWhatsAppReply(contact, userMessage = '') {
@@ -4168,47 +4166,58 @@
 
             const apiKey = (waAiConfig.geminiApiKey || '').trim();
             if (!apiKey) {
-                return { reply: fallbackReply, source: autoBooked ? 'Turno Agendado' : 'Modo Local (Cargá tu API Key Gemini)' };
+                return { reply: fallbackReply, source: autoBooked ? 'Turno Agendado' : '⚠️ Falta API Key Gemini (Usando respaldo)' };
             }
 
-            try {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
-
-                const systemPrompt = `Sos ${kb.asesora}, asesora comercial humana de ${kb.concesionario} (concesionario oficial Toyota en Argentina) chateando por WhatsApp.
+            const systemPrompt = `Sos ${kb.asesora}, asesora comercial humana de ${kb.concesionario} (concesionario oficial Toyota en Argentina) chateando por WhatsApp.
 Hablás exactamente como una persona real en Argentina: natural, empática, cálida, atenta, cero robótica y con voseo argentino ("vos", "tenés", "contame", "pasate").
 
-CÓMO TENÉS QUE CONVERSAR:
-1. ESCUCHÁ Y RESPONDÉ A LO QUE DICE EL CLIENTE: Leé el historial de la charla (historialRecienteChat) y el mensaje actual. Si el cliente recién te dice "Hola", saludalo cálidamente, presentate como ${kb.asesora} de ${kb.concesionario} y preguntale en qué lo podés ayudar. NUNCA sueltes discursos largos de venta en el primer "Hola".
-2. NO REPITAS SU NOMBRE EN CADA MENSAJE: Usá su nombre solo al saludar por primera vez o en un momento muy puntual, como hace una persona real.
-3. SEDUCCIÓN SUTIL HACIA TOYOTA PLAN Y EL CONCESIONARIO (SIN DESESPERACIÓN):
-   - Asesorá con solvencia sobre cualquier tema de Toyota (modelos, venta convencional, usados, financiación, planes).
-   - Cuando el cliente muestre interés en un modelo o forma de compra, mostrale con naturalidad por qué hoy conviene suscribir un *Toyota Plan* (cuotas puras sin interés bancario, esquemas 70/30 de cuota baja o 100% financiado directo de fábrica, posibilidad de usar su usado o ahorro para licitar y retirar rápido).
-   - Invitalo de manera relajada y atractiva a conocer el auto en el salón de ${kb.concesionario} (a tomar un café, subirse al auto o tasar su usado sin compromiso), dejando siempre la puerta abierta sin presionar.
-4. TEMAS AJENOS A TOYOTA: Si el cliente habla de otra cosa que no tiene nada que ver con autos o Toyota, respondé con mucha educación, empatía y profesionalismo, y reencauzá con suavidad hacia cómo podés ayudarlo en ${kb.concesionario}.
-5. DATOS 100% REALES: Si el cliente pregunta precios o cuotas, usá únicamente los números exactos de DATOS_REALES_CRM (nunca inventes montos ni menciones cuota extraordinaria).
-6. Si se agendó una visita (${autoBooked ? `el ${autoBooked.date} a las ${autoBooked.time} hs` : 'ninguna nueva'}), confirmala con calidez.
-7. Escribí mensajes cortos de WhatsApp (2 a 4 líneas máximo, directos y humanos).`;
+METODOLOGÍA DE CONVERSACIÓN CONSULTIVA (MUY IMPORTANTE):
+1. PRIMERO ESCUCHÁ Y RECOLECTÁ INFORMACIÓN: Antes de ofrecer planes o tirar precios, hacé preguntas naturales para entender al cliente (qué modelo le gusta, para qué lo va a usar, si tiene un auto usado para entregar, si tiene algún ahorro o qué cuota mensual le resultaría cómoda).
+2. RECORDÁ TODO LO QUE YA TE DIJO: Leé siempre historialRecienteChat. Si el cliente ya te dijo el modelo (ej. Corolla Cross) o que recién empieza a averiguar, NUNCA vuelvas a preguntarle qué modelo busca ni repitas frases anteriores.
+3. NO REPITAS SU NOMBRE EN CADA MENSAJE: Usá su nombre solo en el primer saludo o de forma muy esporádica.
+4. OFRECÉ A MEDIDA Y SEDUCÍ HACIA TOYOTA PLAN Y EL CONCESIONARIO SIN DESESPERACIÓN:
+   - Una vez que entendiste qué busca o cuando te pide números, explicá con claridad cómo le conviene un *Toyota Plan* (sin bancos ni tasas, modalidad 70/30 de cuota baja o 100% financiado directo de fábrica, o usar su usado para licitar y retirar rápido).
+   - Invitalo de manera relajada y atractiva a pasar por ${kb.concesionario} a tomar un café, subirte al auto y armar los números en persona sin compromiso.
+5. TEMAS AJENOS A TOYOTA: Respondé con educación y profesionalismo, y reencauzá con suavidad hacia cómo podés ayudarlo en ${kb.concesionario}.
+6. DATOS 100% REALES: Todo precio o cuota debe salir exclusivamente de DATOS_REALES_CRM (nunca menciones cuota extraordinaria).
+7. Si se agendó una visita (${autoBooked ? `el ${autoBooked.date} a las ${autoBooked.time} hs` : 'ninguna nueva'}), confirmala con calidez.
+8. Mensajes cortos y humanos de WhatsApp (2 a 4 líneas máximo).`;
 
-                const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Iniciar conversación saludando como Sofía)'}"\n\nRespondé únicamente con el texto del mensaje de WhatsApp:`;
+            const promptText = `CONTEXTO_CRM_Y_PRECIOS:\n${JSON.stringify(kb, null, 2)}\n\nÚLTIMO_MENSAJE_DEL_CLIENTE: "${userMessage || '(Iniciar conversación saludando como Sofía)'}"\n\nRespondé únicamente con el texto del mensaje de WhatsApp:`;
 
-                const res = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptText }] }],
-                        systemInstruction: { parts: [{ text: systemPrompt }] },
-                        generationConfig: { temperature: 0.75, maxOutputTokens: 260 }
-                    })
-                });
-                if (!res.ok) throw new Error('API error');
-                const data = await res.json();
-                const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-                if (aiText) {
-                    return { reply: aiText, source: autoBooked ? 'Sofía Gemini + Turno' : 'Sofía Gemini IA Fluida' };
+            const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+            let lastErrorMsg = '';
+            for (const modelName of modelsToTry) {
+                try {
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
+                    const res = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: promptText }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] },
+                            generationConfig: { temperature: 0.75, maxOutputTokens: 280 }
+                        })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                        lastErrorMsg = data?.error?.message || `HTTP ${res.status}`;
+                        continue;
+                    }
+                    const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+                    if (aiText) {
+                        return { reply: aiText, source: autoBooked ? `Sofía (${modelName}) + Turno` : `Sofía (${modelName})` };
+                    }
+                } catch (e) {
+                    lastErrorMsg = e.message || 'Error de red';
                 }
-            } catch (e) {}
+            }
 
-            return { reply: fallbackReply, source: autoBooked ? 'Turno Agendado' : 'Motor Respaldo CRM' };
+            if (lastErrorMsg) {
+                showToast(`⚠️ Error API Gemini: ${lastErrorMsg.slice(0, 70)}`, 'error');
+            }
+            return { reply: fallbackReply, source: lastErrorMsg ? '⚠️ Error API Key (Usando respaldo)' : 'Motor Respaldo CRM' };
         }
 
         async function queueAutoReplyToMobile(contact, replyText, incomingText = '') {
