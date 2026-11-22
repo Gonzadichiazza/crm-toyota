@@ -62,7 +62,7 @@
                     <button onclick="openPdfPriceChatbotModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 transition-colors flex items-center gap-1 shadow-sm shrink-0" title="Corregir precios leídos de los PDFs por chat">
                         <span>🛠️ Corregir Precio PDF</span>
                     </button>
-                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofi 2.3 • Humana y Consultiva">
+                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofi 2.3 • Persistencia 24/7">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
                         <span id="nav-wa-ai-label">🤖 Sofi 2.3 ON</span>
                     </button>
@@ -787,25 +787,25 @@
                                 <span><b>Seguimiento IA suave a las 24h</b> (máx. 1 toque, 9:30–19:30h)</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="wa-ai-allow-schedule" checked class="accent-[#EB0A1E]">
-                                <span>Agendar entrevistas automáticamente en mi Calendario</span>
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="wa-ai-allow-compare" checked class="accent-[#EB0A1E]">
-                                <span>Comparar contra rivales cuando el cliente pregunte</span>
-                            </label>
+                    <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold uppercase text-emerald-950">☁️ Persistencia 24/7 (Cloudflare Worker Gratis)</span>
+                            <span id="wa-ai-worker-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-200 text-emerald-950">Sin PC encendida</span>
                         </div>
-                        <button onclick="saveWaAiConfig()" class="w-full py-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl text-xs font-bold">💾 Guardar Preferencias</button>
-                    </div>
-
-                    <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-2">
-                        <span class="text-xs font-extrabold uppercase text-emerald-950">📲 URLs MacroDroid</span>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-700 uppercase">HTTP POST Entrada:</label>
+                            <label class="block text-[10px] font-bold text-slate-700 uppercase">URL de tu Worker 24/7 (Opcional — si usás Cloudflare):</label>
+                            <input type="text" id="wa-ai-worker-url" onchange="saveWaAiConfig()" placeholder="https://sofia-ginza.tu-usuario.workers.dev" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-emerald-300 rounded-lg outline-none">
+                        </div>
+                        <label class="flex items-center gap-2 cursor-pointer text-[11px] text-emerald-950">
+                            <input type="checkbox" id="wa-ai-cloud-worker-primary" onchange="saveWaAiConfig()" class="accent-emerald-600">
+                            <span><b>Delegar respuestas 24/7 al Worker en la nube</b> (evita duplicados cuando la PC está prendida)</span>
+                        </label>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-700 uppercase">HTTP POST Entrada (MacroDroid → Nube 24/7):</label>
                             <div class="flex gap-1"><input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-incoming-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-700 uppercase">HTTP GET Última Respuesta:</label>
+                            <label class="block text-[10px] font-bold text-slate-700 uppercase">HTTP GET Última Respuesta (Nube → MacroDroid):</label>
                             <div class="flex gap-1"><input type="text" id="wa-ai-outgoing-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-outgoing-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
                         </div>
                     </div>
@@ -1724,7 +1724,7 @@
                     });
                     if (result) {
                         anyUpdated = true;
-                        if (waAiConfig.autoReplyMobile && text) {
+                        if (waAiConfig.autoReplyMobile && text && !waAiConfig.cloudWorkerPrimary) {
                             SOFIA_AI.enqueueClientMessage(result.contact, text);
                         }
                     }
@@ -2419,6 +2419,8 @@
                 advisorName: 'Sofía',
                 branchName: 'Ginza Toyota',
                 geminiApiKey: '',
+                workerUrl: '',
+                cloudWorkerPrimary: false,
                 sandboxEnabled: true,
                 sandboxPhone: '',
                 ...JSON.parse(localStorage.getItem('crm_wa_ai_config') || '{}')
@@ -2511,6 +2513,9 @@
                             interestModel: c.interestModel || ''
                         }));
 
+                    const officialPricesText = this.buildOfficialPricesText();
+                    const systemPrompt = this.getSystemPrompt(officialPricesText);
+
                     await fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
@@ -2518,11 +2523,14 @@
                             updatedAt: Date.now(),
                             room: syncRoom,
                             active: Boolean(this.config.autoReplyMobile),
+                            cloudWorkerPrimary: Boolean(this.config.cloudWorkerPrimary),
                             sandboxEnabled: Boolean(this.config.sandboxEnabled),
                             sandboxPhone: formatPhoneAR(this.config.sandboxPhone || ''),
                             advisorName: this.config.advisorName || 'Sofía',
                             branchName: this.config.branchName || 'Ginza Toyota',
                             geminiApiKey: this.config.geminiApiKey || '',
+                            systemPrompt,
+                            officialPricesText,
                             authorizedContacts,
                             toyotaPlans: marketPlansCatalog.filter(p => p.brand === 'Toyota')
                         })
@@ -2531,7 +2539,7 @@
                     if (badge) {
                         badge.textContent = this.config.sandboxEnabled
                             ? `🧪 Sofi 2.3 Sandbox (${this.config.sandboxPhone || 'Hans / Prueba CRM'})`
-                            : `☁️ Sofi 2.3 Nube (${authorizedContacts.length} contactos CRM)`;
+                            : `☁️ Sofi 2.3 24/7 (${authorizedContacts.length} contactos en nube)`;
                     }
                 } catch (e) {}
             },
@@ -2866,7 +2874,15 @@ REGLAS DE RESPUESTA:
             document.getElementById('wa-ai-allow-compare').checked = SOFIA_AI.config.allowCompetitorCompare !== false;
             document.getElementById('wa-ai-sandbox-enabled').checked = Boolean(SOFIA_AI.config.sandboxEnabled);
             document.getElementById('wa-ai-sandbox-phone').value = SOFIA_AI.config.sandboxPhone || '';
-            document.getElementById('wa-ai-incoming-url').value = `${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`;
+            const workerInput = document.getElementById('wa-ai-worker-url');
+            if (workerInput) workerInput.value = SOFIA_AI.config.workerUrl || '';
+            const primaryChk = document.getElementById('wa-ai-cloud-worker-primary');
+            if (primaryChk) primaryChk.checked = Boolean(SOFIA_AI.config.cloudWorkerPrimary);
+
+            const cleanWorker = String(SOFIA_AI.config.workerUrl || '').trim().replace(/\/+$/, '');
+            document.getElementById('wa-ai-incoming-url').value = cleanWorker
+                ? `${cleanWorker}/incoming?room=${encodeURIComponent(syncRoom)}`
+                : `${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`;
             document.getElementById('wa-ai-outgoing-url').value = `${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest.json`;
 
             renderWaAiKbSummary();
@@ -2893,12 +2909,23 @@ REGLAS DE RESPUESTA:
             SOFIA_AI.config.allowCompetitorCompare = Boolean(document.getElementById('wa-ai-allow-compare')?.checked);
             SOFIA_AI.config.sandboxEnabled = Boolean(document.getElementById('wa-ai-sandbox-enabled')?.checked);
             SOFIA_AI.config.sandboxPhone = (document.getElementById('wa-ai-sandbox-phone')?.value || '').trim();
+            SOFIA_AI.config.workerUrl = (document.getElementById('wa-ai-worker-url')?.value || '').trim();
+            SOFIA_AI.config.cloudWorkerPrimary = Boolean(document.getElementById('wa-ai-cloud-worker-primary')?.checked);
+
+            const cleanWorker = SOFIA_AI.config.workerUrl.replace(/\/+$/, '');
+            const inEl = document.getElementById('wa-ai-incoming-url');
+            if (inEl) {
+                inEl.value = cleanWorker
+                    ? `${cleanWorker}/incoming?room=${encodeURIComponent(syncRoom)}`
+                    : `${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`;
+            }
+
             SOFIA_AI.cachedModels = null;
             SOFIA_AI.saveConfig();
             updateWaAiNavbarBadge();
             renderWaAiKbSummary();
             SOFIA_AI.syncBrainToFirebase();
-            showToast('🤖 Preferencias de Sofía IA guardadas');
+            showToast('🤖 Preferencias y Cerebro 24/7 sincronizados');
         };
 
         window.onWaAiContactChange = function() {
