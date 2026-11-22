@@ -2371,7 +2371,7 @@ GAMA OFICIAL TOYOTA ARGENTINA (NO COMETER ERRORES TÉCNICOS):
 
 FLUJO CONSULTIVO PASO A PASO Y CIERRE GRADUAL:
 1. INDAGACIÓN PREVIA (ANTES DE PROPONER): Preguntá de a una cosa por vez: qué modelo está evaluando, qué uso le va a dar (trabajo, uso personal o ambos), si tiene un vehículo usado para entregar o arranca de cero, y qué cuota mensual sentiría hoy cómoda para pagar.
-2. USADOS E INFOAUTO (REGLA OPERATIVA): En ${branch} NO tasamos en el aire ni citamos clientes al concesionario para tasar su auto (ya que la tasación formal llave por llave dentro del plan se pide una vez suscripto). Si menciona un usado, pedile como mínimo año, versión y kilómetros (de a un dato o de forma muy simple) para que Gonzalo tenga una referencia en InfoAuto, aclarando que sigue usando su auto hasta el retiro.
+2. USADOS E INFOAUTO (REGLA OPERATIVA): En ${branch} NO tasamos por chat ni citamos clientes al concesionario para tasar su auto. Si menciona un usado, pedile como mínimo año, versión y kilómetros (de a un dato o de forma muy simple) para registrar la referencia en el CRM. NUNCA digas que la tasación se hace recién una vez suscripto (porque genera desconfianza de que después le bajen el precio) ni prometas pasarle un valor de InfoAuto por WhatsApp. Si el cliente insiste en saber cuánto le dan por su auto antes de avanzar: obviá de forma inteligente dar un número, validá que es lógico querer claridad antes de decidir, recordale que nunca queda atado a entregar su auto en el concesionario (al retirar puede evaluar lo que más le convenga o venderlo particular por su cuenta) y llevá la charla hacia una entrevista con Gonzalo Dichiazza para ver toda la operación en limpio sin compromiso.
 3. PRESENTACIÓN NATURAL DE LA PROPUESTA: Recién cuando conocés su cuota cómoda y su situación, mostrale cómo con una cuota accesible (directo de fábrica y sin interés bancario) puede capitalizar mes a mes y usar su usado al momento de retirar, sin atarlo a una fecha fija.
 4. CIERRE SUAVE Y NO INVASIVO (OBLIGATORIO):
    - NUNCA presiones con preguntas invasivas como "¿te gustaría avanzar para arrancar?".
@@ -2433,7 +2433,7 @@ ${officialPricesText}`;
                     isFirstTurn
                         ? (cleanClientName ? `[Primer turno: saludá a ${cleanClientName} usando su nombre solo esta vez, pedile apellido completo si falta y preguntá en qué lo podés ayudar]` : '[Primer turno: saludá con naturalidad, pedile nombre y apellido completo para agendarlo y preguntá directamente en qué lo podés ayudar sin asumir que busca un auto]')
                         : '[Turno siguiente: PROHIBIDO volver a decir Hola, PROHIBIDO presentarte de nuevo, PROHIBIDO repetir el nombre del cliente y PROHIBIDO repetir argumentos ya enviados]',
-                    hasTradeInAlert ? '[Sistema: Se activó alerta InfoAuto para que Gonzalo tenga una referencia de su usado. Recordá NO citarlo al concesionario para tasar]' : '',
+                    hasTradeInAlert ? '[Sistema: Se registró el usado del cliente en el CRM para Gonzalo. NO des valores por chat, NO prometas cotización de InfoAuto ni digas que se tasa recién al suscribir]' : '',
                     autoBooked ? `[Sistema: Ya quedó agendada la reunión en ${this.config.branchName || 'Ginza Toyota'} con Gonzalo para el ${autoBooked.date} a las ${autoBooked.time} hs]` : ''
                 ].filter(Boolean).join(' ');
 
