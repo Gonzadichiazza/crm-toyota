@@ -804,7 +804,7 @@
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-slate-700 uppercase">URL de tu Worker 24/7 (Opcional — si usás Cloudflare):</label>
-                            <input type="text" id="wa-ai-worker-url" onchange="saveWaAiConfig()" placeholder="https://sofia-ginza.tu-usuario.workers.dev" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-emerald-300 rounded-lg outline-none">
+                            <input type="text" id="wa-ai-worker-url" onchange="saveWaAiConfig()" value="https://sofia-ginza.gonzalodichiazza2.workers.dev" placeholder="https://sofia-ginza.tu-usuario.workers.dev" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-emerald-300 rounded-lg outline-none">
                         </div>
                         <label class="flex items-center gap-2 cursor-pointer text-[11px] text-emerald-950">
                             <input type="checkbox" id="wa-ai-cloud-worker-primary" onchange="saveWaAiConfig()" class="accent-emerald-600">
@@ -2429,7 +2429,7 @@
                 advisorName: 'Sofía',
                 branchName: 'Ginza Toyota',
                 geminiApiKey: '',
-                workerUrl: '',
+                workerUrl: 'https://sofia-ginza.gonzalodichiazza2.workers.dev',
                 cloudWorkerPrimary: false,
                 sandboxEnabled: true,
                 sandboxPhone: '',
@@ -2885,7 +2885,7 @@ REGLAS DE RESPUESTA:
             document.getElementById('wa-ai-sandbox-enabled').checked = Boolean(SOFIA_AI.config.sandboxEnabled);
             document.getElementById('wa-ai-sandbox-phone').value = SOFIA_AI.config.sandboxPhone || '';
             const workerInput = document.getElementById('wa-ai-worker-url');
-            if (workerInput) workerInput.value = SOFIA_AI.config.workerUrl || '';
+            if (workerInput) workerInput.value = SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev';
             const primaryChk = document.getElementById('wa-ai-cloud-worker-primary');
             if (primaryChk) primaryChk.checked = Boolean(SOFIA_AI.config.cloudWorkerPrimary);
 
