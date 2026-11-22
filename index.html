@@ -62,9 +62,9 @@
                     <button onclick="openPdfPriceChatbotModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 transition-colors flex items-center gap-1 shadow-sm shrink-0" title="Corregir precios leídos de los PDFs por chat">
                         <span>🛠️ Corregir Precio PDF</span>
                     </button>
-                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofi 2.2 • Humana y Consultiva">
+                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofi 2.3 • Humana y Consultiva">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-                        <span id="nav-wa-ai-label">🤖 Sofi 2.2 ON</span>
+                        <span id="nav-wa-ai-label">🤖 Sofi 2.3 ON</span>
                     </button>
                     <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
@@ -96,6 +96,9 @@
                 </button>
                 <button id="tab-btn-objetivos" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('objetivos')">Objetivos</button>
                 <button id="tab-btn-planes" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('planes')">Planes & PDF</button>
+                <button id="tab-btn-financiaciones" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1" onclick="switchTab('financiaciones')">
+                    <span>🏦 Financiaciones & Bancos</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -589,6 +592,106 @@
         </div>
     </main>
 
+    <!-- TAB 7: FINANCIACIONES & BANCOS (TCFA + BNA + PRENDARIOS) -->
+    <main id="tab-financiaciones" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden space-y-6">
+        <div class="bg-gradient-to-r from-zinc-950 via-neutral-900 to-zinc-800 text-white rounded-3xl p-5 sm:p-6 shadow-md border border-zinc-800">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div>
+                    <span class="px-2.5 py-1 rounded-full bg-[#EB0A1E] text-white text-[10px] font-extrabold uppercase tracking-wider">Uso Interno • Simulador Rápido</span>
+                    <h2 class="text-lg sm:text-2xl font-extrabold mt-2">🏦 Financiación Convencional Toyota (TCFA) & Créditos Bancarios</h2>
+                    <p class="text-xs sm:text-sm text-zinc-300 mt-1">Calculá al instante cuánto necesita financiar el cliente descontando su usado (referencia InfoAuto) y su ahorro, y compará la cuota bancaria vs Toyota Plan.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CALCULADORA DE BRECHA A FINANCIAR -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900">🧮 Calculadora de Diferencia a Financiar & Cuota Estimada</h3>
+                    <p class="text-xs text-slate-500">Recordatorio: InfoAuto es el valor máximo vendiendo particular; en concesionario se toma por debajo (lo cotiza el sector de usados).</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">1. Valor 0 km Referencia ($)</label>
+                    <input type="number" id="fin-calc-0km" value="49621000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-slate-300 rounded-xl bg-white outline-none">
+                    <span class="text-[10px] text-slate-400">Ej: Hilux 4x2 DX ~$49.621.000</span>
+                </div>
+                <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
+                    <label class="block text-[11px] font-bold text-amber-900 uppercase mb-1">2. Usado InfoAuto / Toma ($)</label>
+                    <input type="number" id="fin-calc-used" value="18000000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-amber-300 rounded-xl bg-white outline-none">
+                    <span class="text-[10px] text-amber-800">Cargar valor InfoAuto o toma estimada</span>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                    <label class="block text-[11px] font-bold text-emerald-900 uppercase mb-1">3. Ahorro / Entrega Efectivo ($)</label>
+                    <input type="number" id="fin-calc-cash" value="6000000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-emerald-300 rounded-xl bg-white outline-none">
+                    <span class="text-[10px] text-emerald-800">Capital líquido adicional del cliente</span>
+                </div>
+                <div class="p-3 rounded-xl bg-zinc-900 text-white flex flex-col justify-between">
+                    <span class="text-[11px] font-bold text-zinc-400 uppercase">Saldo Real a Financiar</span>
+                    <div id="fin-calc-gap" class="text-xl sm:text-2xl font-extrabold text-[#EB0A1E] my-1">$25.621.000</div>
+                    <span id="fin-calc-gap-note" class="text-[10px] text-zinc-300">Capital faltante para retiro inmediato</span>
+                </div>
+            </div>
+
+            <div id="fin-calc-results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-2"></div>
+        </div>
+
+        <!-- TABLAS DE REFERENCIA OFICIAL TCFA Y BANCOS -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-5 py-3.5 bg-zinc-900 text-white flex items-center justify-between">
+                    <h3 class="text-sm font-bold">1. Toyota Compañía Financiera (TCFA)</h3>
+                    <span class="px-2 py-0.5 rounded bg-[#EB0A1E] text-[10px] font-bold">OFICIAL</span>
+                </div>
+                <div class="p-4 space-y-3 text-xs text-slate-700">
+                    <div class="p-3 rounded-xl bg-red-50/70 border border-red-200">
+                        <div class="font-extrabold text-[#EB0A1E]">Líneas Promocionales Tasa 0% TNA (Hilux)</div>
+                        <ul class="mt-1.5 space-y-1 list-disc list-inside">
+                            <li><b>18 meses Tasa 0% TNA:</b> tope <b>$25.000.000 a $30.000.000</b> según versión (capital puro: <b>$1.388.889 a $1.666.667/mes</b> + gastos, seguro y patente).</li>
+                            <li><b>24 meses Tasa 0% TNA:</b> tope <b>$18.500.000</b> (capital puro: <b>~$770.833/mes</b> + gastos, seguro y patente).</li>
+                            <li><b>18/24 meses Tasa 0% + UVA:</b> tope <b>$30.000.000</b> (cuota ajustable mensualmente por índice UVA).</li>
+                        </ul>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="font-extrabold text-slate-900">Líneas Tradicionales Tasa Fija en Pesos (TCFA)</div>
+                        <ul class="mt-1.5 space-y-1 list-disc list-inside">
+                            <li><b>18 meses (TNA 9,9%):</b> hasta $19.000.000.</li>
+                            <li><b>24 meses (TNA 19,0%):</b> hasta $24.000.000.</li>
+                            <li><b>36 meses (TNA 26,9% – 27,9%):</b> hasta $30.000.000 (~$1.220.000 a $1.320.000/mes por $30M + seguro/gastos).</li>
+                            <li><b>48 meses (TNA 27,9%):</b> hasta $27.000.000 (~$940.000 a $1.050.000/mes por $27M + seguro/gastos).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-5 py-3.5 bg-sky-950 text-white flex items-center justify-between">
+                    <h3 class="text-sm font-bold">2. Créditos Bancarios (+Autos BNA & Prendarios)</h3>
+                    <span class="px-2 py-0.5 rounded bg-sky-500 text-zinc-950 text-[10px] font-extrabold">MERCADO</span>
+                </div>
+                <div class="p-4 space-y-3 text-xs text-slate-700">
+                    <div class="p-3 rounded-xl bg-sky-50/70 border border-sky-200">
+                        <div class="font-extrabold text-sky-950">Banco Nación ("+Autos con BNA" — Hasta $50M / 72 meses sin prenda)</div>
+                        <ul class="mt-1.5 space-y-1 list-disc list-inside">
+                            <li><b>Tasa General (46% TNA / CFT TNA 55,66%):</b> <b>$491.203</b> cada $10M a 72 meses | <b>$597.227</b> cada $10M a 36 meses.</li>
+                            <li><b>Tasa Preferencial (25% TNA / CFT TNA 44,90% — solo haberes + tarjeta + seguro BNA):</b> <b>$313.122</b> cada $10M a 72 meses | <b>$441.348</b> cada $10M a 36 meses.</li>
+                        </ul>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="font-extrabold text-slate-900">Bancos Privados (Galicia, BBVA, Santander — Prendarios)</div>
+                        <ul class="mt-1.5 space-y-1 list-disc list-inside">
+                            <li><b>Tasa Fija (TNA 53% – 63% / CFTEA 86% – 114%):</b> entre <b>$515.000 y $608.000</b> cada $10M a 60 meses + seguro automotor obligatorio.</li>
+                            <li><b>Tasa UVA (TNA ~25% + UVA):</b> cuota inicial ~$335.000 cada $10M a 60 meses, ajustable todos los meses por inflación.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <!-- VENTANA CALENDARIO -->
     <div id="agenda-window-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[55] hidden flex items-center justify-center p-2 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden">
@@ -639,9 +742,9 @@
                     <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 2.2 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
+                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 2.3 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">HUMANA • ANTI-DUPLICADOS</span>
-                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Sofi 2.2 Nube</span>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Sofi 2.3 Nube</span>
                         </div>
                         <p class="text-xs text-zinc-300">Conversación 100% libre impulsada por Google Gemini • Valores y cuotas oficiales desde tu CRM.</p>
                     </div>
@@ -774,6 +877,24 @@
                 arrepentimientoYRescision: "Derecho de arrepentimiento dentro de los 10 días corridos con devolución del 100%.",
                 cancelacionYCesion: "Cancelación anticipada permitida a valor de Cuota Pura vigente sin cargos administrativos ni seguro; cesión permitida sin comisión de Toyota Plan."
             },
+            CONVENTIONAL_FINANCING_KNOWLEDGE: `FINANCIACIÓN CONVENCIONAL Y BANCARIA VERIFICADA (ARGENTINA - DATOS OFICIALES VIGENTES - USO EXCLUSIVO COMO REFERENCIA ESTIMADA Y ORIENTATIVA, NUNCA COMO OFERTA CERRADA):
+1. Toyota Compañía Financiera Argentina (TCFA - Venta Convencional):
+   - Líneas promocionales Tasa 0% TNA:
+     * Hasta 18 meses Tasa 0% TNA: tope de $25.000.000 a $30.000.000 según versión de Hilux (solo capital puro: $1.388.889/mes por $25M o $1.666.667/mes por $30M, más gastos de otorgamiento, seguro automotor y patente).
+     * Hasta 24 meses Tasa 0% TNA: tope de $18.500.000 (~$770.833/mes solo capital puro, sin gastos ni seguro).
+   - Líneas tradicionales Tasa Fija en pesos (TCFA):
+     * 18 meses (TNA 9,9%): tope $19.000.000.
+     * 24 meses (TNA 19%): tope $24.000.000.
+     * 36 meses (TNA 26,9% a 27,9%): tope $30.000.000 (cuota referencial ~$1.220.000 a $1.320.000/mes por $30M, más seguro y gastos).
+     * 48 meses (TNA 27,9%): tope $27.000.000 (cuota referencial ~$940.000 a $1.050.000/mes por $27M, más seguro y gastos).
+     * También existe línea UVA a 18/24 meses Tasa 0% + UVA (tope $30M, cuota ajustable por inflación UVA).
+2. Bancos Públicos y Privados (Créditos Personales sin prenda / Prendarios bancarios):
+   - Banco Nación ("+Autos con BNA" - préstamo personal hasta $50.000.000, hasta 72 meses tasa fija o 60 meses UVA):
+     * Tasa Preferencial (25% TNA fija, CFT TNA 44,90% — solo si cobra sueldo/jubilación en BNA, tiene tarjeta de crédito BNA y contrata seguro vía BNA): cada $10.000.000 financiados da una cuota inicial de $313.122 (a 72 meses) o $441.348 (a 36 meses).
+     * Tasa General (46% TNA fija, CFT TNA 55,66% — para público general sin haberes en BNA): cada $10.000.000 financiados da una cuota inicial de $491.203 (a 72 meses) o $597.227 (a 36 meses). Ejemplo: financiar $25.000.000 con tasa general BNA da ~$1.228.000/mes a 72 meses o ~$1.493.000/mes a 36 meses (más seguro automotor y patente).
+   - Bancos Privados (Galicia, BBVA, Santander - Préstamos Prendarios):
+     * Tasa Fija en pesos: TNA entre 53% y 63% (CFTEA con IVA entre 86% y 114%), plazos de 12 a 60 meses. Por cada $10.000.000 a 60 meses la cuota supera los $515.000–$608.000/mes (es decir, $20M-$25M financiados superan los $1.100.000 a $1.500.000/mes más seguro obligatorio).
+     * Tasa UVA bancarios: TNA ~24,9%–25% + ajuste mensual por índice UVA (cuota inicial ~$335.000 cada $10M a 60 meses, pero el capital y la cuota suben todos los meses con la inflación).`,
             DEFAULT_MARKET_PLANS: [
                 { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 528803 },
                 { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 891366 },
@@ -1169,18 +1290,18 @@
         // --- NAVEGACIÓN DE PESTAÑAS Y VENTANAS ---
         window.switchTab = function(tabName) {
             activeTab = tabName;
-            ['botonera', 'contactos', 'clientes', 'comparativa', 'objetivos', 'planes'].forEach(name => {
+            ['botonera', 'contactos', 'clientes', 'comparativa', 'objetivos', 'planes', 'financiaciones'].forEach(name => {
                 const el = document.getElementById(`tab-${name}`);
                 const btn = document.getElementById(`tab-btn-${name}`);
                 if (el) el.classList.add('hidden');
-                if (btn) btn.className = (name === 'clientes' || name === 'comparativa')
+                if (btn) btn.className = (name === 'clientes' || name === 'comparativa' || name === 'financiaciones')
                     ? 'tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5'
                     : 'tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap';
             });
             const targetTab = document.getElementById(`tab-${tabName}`);
             const targetBtn = document.getElementById(`tab-btn-${tabName}`);
             if (targetTab) targetTab.classList.remove('hidden');
-            if (targetBtn) targetBtn.className = (tabName === 'clientes' || tabName === 'comparativa')
+            if (targetBtn) targetBtn.className = (tabName === 'clientes' || tabName === 'comparativa' || tabName === 'financiaciones')
                 ? 'tab-active pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5'
                 : 'tab-active pb-2.5 px-1 transition-colors whitespace-nowrap';
             updateDashboard();
@@ -1190,6 +1311,66 @@
             else if (tabName === 'comparativa') renderComparativaSelectors();
             else if (tabName === 'objetivos') renderObjetivos();
             else if (tabName === 'planes') renderPlansHistory();
+            else if (tabName === 'financiaciones') recalcFinancingSimulator();
+        };
+
+        window.recalcFinancingSimulator = function() {
+            const v0km = Math.max(0, Number(document.getElementById('fin-calc-0km')?.value) || 0);
+            const vUsed = Math.max(0, Number(document.getElementById('fin-calc-used')?.value) || 0);
+            const vCash = Math.max(0, Number(document.getElementById('fin-calc-cash')?.value) || 0);
+            const gap = Math.max(0, v0km - vUsed - vCash);
+
+            const gapEl = document.getElementById('fin-calc-gap');
+            if (gapEl) gapEl.textContent = `$${gap.toLocaleString('es-AR')}`;
+
+            const grid = document.getElementById('fin-calc-results-grid');
+            if (!grid) return;
+
+            const factorMillions = gap / 10000000;
+            const tcfa18 = Math.round(Math.min(gap, 30000000) / 18);
+            const tcfa36 = Math.round(factorMillions * 425000);
+            const bna72Gen = Math.round(factorMillions * 491203);
+            const priv60 = Math.round(factorMillions * 560000);
+
+            const cards = [
+                {
+                    title: 'TCFA 18 cuotas Tasa 0%',
+                    sub: gap > 30000000 ? 'Tope $30M (falta efectivo)' : 'Solo capital puro (sin seguro)',
+                    quota: tcfa18,
+                    badge: 'Tasa 0% TNA'
+                },
+                {
+                    title: 'TCFA 36 cuotas Tasa Fija',
+                    sub: 'TNA ~27,9% + seguro y gastos',
+                    quota: tcfa36,
+                    badge: '36 meses'
+                },
+                {
+                    title: 'Banco Nación +Autos (72m)',
+                    sub: 'Tasa General 46% TNA (sin haberes BNA)',
+                    quota: bna72Gen,
+                    badge: '72 meses'
+                },
+                {
+                    title: 'Prendario Banco Privado (60m)',
+                    sub: 'TNA ~58% + seguro obligatorio',
+                    quota: priv60,
+                    badge: '60 meses'
+                }
+            ];
+
+            grid.innerHTML = cards.map(c => `
+                <div class="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/80 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-1">
+                            <span class="text-xs font-extrabold text-slate-900">${c.title}</span>
+                            <span class="px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 text-[10px] font-bold">${c.badge}</span>
+                        </div>
+                        <div class="text-lg font-extrabold text-[#EB0A1E] mt-2">$${c.quota.toLocaleString('es-AR')}<span class="text-xs font-normal text-slate-500">/mes</span></div>
+                    </div>
+                    <div class="text-[11px] text-slate-500 mt-1.5">${c.sub}</div>
+                </div>
+            `).join('');
         };
 
         window.openAgendaWindow = function() {
@@ -1538,7 +1719,7 @@
                     const result = processIncomingWhatsAppMessage(sender, text);
                     waIncomingLogs.unshift({
                         sender: sender || 'Desconocido',
-                        actionLabel: result ? `Atendido Sofía IA 2.2 (${result.contact.name})` : 'Ignorado (No está en CRM / Chat Personal)',
+                        actionLabel: result ? `Atendido Sofía IA 2.3 (${result.contact.name})` : 'Ignorado (No está en CRM / Chat Personal)',
                         time: new Date().toLocaleTimeString()
                     });
                     if (result) {
@@ -2349,8 +2530,8 @@
                     const badge = document.getElementById('wa-ai-cloud-brain-badge');
                     if (badge) {
                         badge.textContent = this.config.sandboxEnabled
-                            ? `🧪 Sofi 2.2 Sandbox (${this.config.sandboxPhone || 'Hans / Prueba CRM'})`
-                            : `☁️ Sofi 2.2 Nube (${authorizedContacts.length} contactos CRM)`;
+                            ? `🧪 Sofi 2.3 Sandbox (${this.config.sandboxPhone || 'Hans / Prueba CRM'})`
+                            : `☁️ Sofi 2.3 Nube (${authorizedContacts.length} contactos CRM)`;
                     }
                 } catch (e) {}
             },
@@ -2381,12 +2562,14 @@ ESTILO, VOCABULARIO Y NATURALIDAD (REGLAS ESTRICTAS):
 - CERO DATOS TÉCNICOS O JERGA NO CONSULTADA:
   * No tires datos técnicos de entrada si el cliente no los pidió (ej. no menciones caja automática, versiones ni equipamiento en el primer intercambio).
   * NUNCA digas "adjudicar" (decí "retirar el vehículo") ni menciones modalidades como "70/30" o "80/20".
+  * PROHIBIDO usar la palabra "competir" (genera sensación de timba o incertidumbre; usá "adelantar el retiro" o "presentar una oferta de capital").
   * NUNCA nombres "Toyota Plan" ni "plan de ahorro" antes de tiempo, ni menciones por iniciativa propia temas que generan miedo o conflicto (sorteo/licitación, demoras de entrega, plazo de 84/120 cuotas, gastos administrativos o seguro de vida). Respondé esos puntos ÚNICAMENTE si el cliente pregunta expresamente por ellos.
 - PROHIBIDO DEFENDERSE, ATRIBUIR CULPAS O ELOGIAR DECISIONES FINANCIERAS:
   * Nunca atribuyas el origen de una mala experiencia (jamás asumas "en otras marcas" ni "en otra agencia" antes de que el cliente lo diga) ni defiendas Toyota, Ginza o el plan antes de entender exactamente cuál es la objeción. Si dice que tuvo un problema en Ginza o con ustedes, frená cualquier argumento comercial y preguntá con empatía qué fue lo que pasó.
   * Validá sin especular ni rebatir anécdotas de terceros: si cuenta la mala experiencia de un amigo o conocido, aceptá que es lógico que le genere dudas y volvé directo a revisar qué tiene sentido para su familia.
   * No aconsejes ni elogies decisiones financieras del cliente (prohibido decir "es súper prudente", "es inteligente", "es una gran decisión" o "nadie quiere quedarse sin respaldo"); reflejá su situación de forma neutra sin juzgar.
   * Nunca prometas soluciones cerradas antes de conocer los datos reales (usá lenguaje prudente como "vemos qué escenario podría encajar mejor para ustedes").
+  * VOCABULARIO SEGURO EN LICITACIONES: Nunca uses la palabra "competir" (genera sensación de apuesta o incertidumbre) ni uses expresiones raras como "oferta de capital", ni aclares por iniciativa propia "si no ganás, no ponés nada". Mostrá con naturalidad que contando con un usado y un ahorro disponible tiene una muy buena base para armar un escenario concreto en los primeros meses mientras sigue usando su vehículo actual.
 
 GAMA OFICIAL TOYOTA ARGENTINA (NO COMETER ERRORES TÉCNICOS):
 - Yaris: Viene ÚNICAMENTE en carrocería Hatchback 5 puertas y ÚNICAMENTE con caja Automática CVT (ya no existe Yaris sedán ni caja manual).
@@ -2401,7 +2584,9 @@ FLUJO CONSULTIVO PASO A PASO, SEDUCCIÓN SUAVE Y CIERRE ACTIVO:
 1. ORDEN DE INDAGACIÓN Y GESTIÓN DE OBJECIONES DE CUOTA:
    - Primero indagá qué modelo está evaluando y **qué uso le va a dar** (uso personal, familia/viajes, trabajo o ambos).
    - Segundo indagá **en qué momento está** (si recién empieza a mirar opciones para más adelante o si piensa hacer el cambio en los próximos meses) ANTES de preguntar si tiene usado o cuánto puede pagar por mes.
-   - Cuando el cliente exprese una necesidad concreta y emocional (ej. que su auto actual le queda chico para viajar con los chicos), validá primero ese dolor familiar y el salto de comodidad antes de volver a los números o a la financiación.
+   - NO ASUMIR FINANCIACIÓN NI EXPLICAR MECÁNICAS ANTES DE TIEMPO: Antes de preguntar por una cuota mensual, indagá si piensa resolver el cambio entregando su usado más diferencia de contado o si busca financiar una parte. Al preguntar por ahorros adicionales, preguntá directo sin adelantar mecanismos de retiro.
+   - BLANQUEAR EL SISTEMA ANTES DE DAR EL VALOR DE CUOTA Y PRESENTARLO COMO UNA PROPUESTA: Cuando llegue el momento de hablar de cuotas, presentá **Toyota Plan** (financiación directa de fábrica) como **"una de las propuestas que te podemos ofrecer"** (nunca digas "nosotros trabajamos solo con planes", porque Toyota tiene otras líneas) y preguntá **si ya conoce cómo funciona o si estuvo en alguno** antes de invitarlo al salón.
+   - Cuando el cliente exprese una necesidad concreta y emocional (ej. que su auto actual le queda chico para viajar con los chicos, o que su camioneta es herramienta de trabajo y cada día de taller pierde plata), validá primero ese dolor antes de volver a los números.
    - Cuando acepte evaluar alternativas, pasá rápido a pedir datos concretos y accionables. Al preguntar por el presupuesto mensual, priorizá preguntas naturales como "¿Qué cuota mensual consideran razonable para ustedes?" (variando según cada charla, nunca uses palabras raras como "moviéndose"). Si responde que no sabe porque aún no tiene referencia, tomalo con total naturalidad, dale el valor de cuota de referencia del modelo y preguntale cómo lo ve respecto a su presupuesto.
    - PRIORIZAR EL MISMO SEGMENTO ANTES DE CAMBIAR DE CATEGORÍA: Si el cliente considera alta la cuota de un modelo, ofrecé primero la alternativa más accesible **dentro de su mismo segmento** (ej. si miraba Corolla Cross SUV, ofrecé primero **Yaris Cross** SUV antes de abrir el abanico a sedán o hatchback).
    - CONFIRMAR EL ENCAJE ECONÓMICO ANTES DE INVITAR AL CONCESIONARIO: Si ofreciste un modelo alternativo porque el anterior le pareció caro, primero confirmá expresamente que la nueva cuota ya le resulta más razonable antes de invitarlo a visitar Ginza Toyota.
@@ -2414,16 +2599,19 @@ FLUJO CONSULTIVO PASO A PASO, SEDUCCIÓN SUAVE Y CIERRE ACTIVO:
    - Reencuadrá el "sin apuro" como una ventaja: empezar a analizarlo con tiempo permite ir construyendo el camino hacia el auto de a poco, sin tener que esperar a tener todo resuelto de golpe.
    - Despertá el deseo antes de volver a los números: preguntale qué fue lo que le hizo mirar ese Toyota (el diseño, el consumo, la confiabilidad, la capacidad de trabajo, etc.).
    - SOSTENÉ LA EMOCIÓN: Cuando el cliente mencione un atributo (ej. confiabilidad o diseño), validá primero por qué tanta gente elige Toyota por esa razón y preguntale de forma natural si lo está comparando con algún otro modelo o si ese Toyota es el que más le viene gustando/transmitiendo confianza (NUNCA uses preguntas artificiales tipo "del 1 al 10 qué tan decidido estás").
-   - Si menciona competidores (Onix, Polo, Ranger, Amarok, Cronos, 208, Territory, Taos, Tracker, etc.): jamás los desacredites ni saltes a explicar cuotas; validá por qué Toyota le da esa tranquilidad, reflejá exactamente sus palabras sin exagerar, y recién ahí invitá a verlo en persona.
-4. USADOS E INFOAUTO (REGLA OPERATIVA Y PRUDENCIA ESTRICTA):
-   - En ${branch} NO tasamos por chat ni citamos clientes al concesionario para tasar su auto. NUNCA menciones la palabra "tasación" por iniciativa propia, ni digas que se tasa recién una vez dentro del plan, ni prometas pasar un valor de InfoAuto por WhatsApp.
-   - CERO CALIFICACIONES SOBRE EL VALOR DEL USADO: Nunca digas "es un buen punto de partida", "tienen una buena base" ni "les va a servir mucho" sin conocer su valor real. Tomá el usado con postura neutra como una variable más del escenario ("ya tenemos una referencia importante para entender cómo están parados hoy").
-   - Si el cliente menciona un usado y le falta algún dato para ubicarlo en InfoAuto (versión o caja manual/automática), pedile de forma natural año, versión y kilómetros "para dejar bien anotada la referencia en nuestra ficha" mientras seguís la charla.
-   - Si insiste en saber cuánto le dan antes de avanzar: validá que es lógico querer claridad y recordale que nunca queda atado a entregar su auto en el concesionario (al retirar puede evaluar lo que más le convenga o venderlo particular por su cuenta), confirmando primero si esa libertad le da tranquilidad.
-5. CIERRE ACTIVO HACIA LA VISITA CON INCENTIVO REAL Y PEDIDO FINAL DE DATOS:
-   - Nunca dejes la visita librada a "avisame cuando quieras". Avanzá siempre hacia coordinar un encuentro presencial con Gonzalo Dichiazza en ${branch}, pero **siempre acompañando la invitación con un motivo concreto** conectado con lo que buscaba el cliente: sentarse adentro, ver las terminaciones, el espacio trasero y el baúl en vivo frente a las otras opciones (aclarando que con 15 minutos alcanza y sin ningún compromiso).
-   - Recién cuando el cliente confirme intención de visita (y día/franja horaria), pedile su nombre y apellido completo con naturalidad ("Así Gonzalo los espera y les dedica el tiempo necesario, pasame tu nombre y apellido completo"). Si ya te los pasó, confirmá el día, el horario y cerrá con calidez.
-   - Si el cliente duda por falta de tiempo en la semana, validá su rutina, reforzá el incentivo de verlo en persona y cerrá con una propuesta concreta de franja (ej. "¿te quedaría más cómodo algún sábado por la mañana o una tarde en la semana?").
+   - DERIVACIÓN DIRECTA DE VENTA CONVENCIONAL (SIN CALCULAR CRÉDITOS BANCARIOS NI COTIZAR USADOS):
+     * Si el cliente manifiesta que prefiere **venta convencional / entrega inmediata** en lugar de evaluar el plan, **NO te pongas a calcular cuotas bancarias ni prendarias**.
+     * Validá su elección con calidez y naturalidad, avisale que ya le pasás sus datos y lo que viene buscando a un **asesor de venta convencional de ${branch}** para que lo contacte directamente con las opciones de entrega inmediata, y despedite cordialmente.
+     * Si en algún momento pregunta por el valor de su usado, aclarale con honestidad que la tasación presencial corresponde al sector de usados del concesionario y que por chat no podés darle una cifra cerrada.
+4. MANEJO DE PERFILES ESCÉPTICOS, POSTERGACIONES Y REGLA ANTI-ANSIEDAD DE CIERRE:
+   - **PREGUNTA PUENTE OBLIGATORIA ANTES DE INVITAR A UNA REUNIÓN:** Nunca saltes directo de explicar el mecanismo o recibir los datos del cliente (usado + ahorro) a proponer días/horarios de visita sin medir temperatura primero. Hacé que el cliente se posicione con sinceridad antes de invitarlo (ej.: *"Siendo sincero, después de lo que fuimos viendo, ¿sentís que esta alternativa podría ayudarte a resolver el cambio de tu usado o seguís viéndola lejos de lo que buscabas?"*). Recién cuando responda que sí le hace sentido, avanzá a la invitación.
+   - **MANEJO DEL "DEJAME PENSARLO / LO VEO TRANQUILO":** Nunca ofrezcas "armarte un resumen/más información" (quien dice "lo pienso" no pide más PDFs, está frenando por una duda oculta) ni lo aprietes con "mientras más pasa el tiempo...". Validá la pausa con calma, anclalo suavemente en el dolor real que él mismo confesó (ej. que el problema hoy no es falta de información sino que su vehículo actual ya le está haciendo perder días de trabajo) y cerrá con la pregunta de condición de avance: *"Siendo sincero, ¿qué es lo que tendrías que ver para decir 'sí, vale la pena que me siente 15 minutos con Gonzalo a revisar mi caso'?"*
+   - **REGLA ANTI-ANSIEDAD DE CIERRE (2 PASOS SEPARADOS):** Cuando respondas una objeción profunda (miedo a estar pagando cuotas un año entero sin tener el vehículo, desconfianza con el plan, dudas de plazos), **NO invites a la reunión en ese mismo mensaje**. Respondé la objeción con honestidad (ej. explicando que antes de tomar cualquier decisión se revisa qué porcentaje real representan su usado y su ahorro frente a lo que se viene necesitando en los primeros meses, y que si queda lejos del plazo que necesita no tiene sentido que avance) y **frená ahí en silencio** para que el propio cliente reaccione y pida ver ese cálculo.
+5. CIERRE ACTIVO HACIA LA VISITA (CON FLEXIBILIDAD PARA PERFILES OPERATIVOS):
+   - Nunca dejes la visita librada a "avisame cuando quieras". Avanzá hacia coordinar un encuentro de 15 minutos con Gonzalo Dichiazza en ${branch}, acompañando la invitación con un motivo concreto (revisar los números finos de su operación y ver el vehículo en vivo).
+   - **FLEXIBILIDAD PARA PERFILES OPERATIVOS / CON POCO TIEMPO:** Cuando el cliente use el vehículo para trabajar (pick-up / utilitario / comerciante / contratista / productor) o haya manifestado falta de tiempo, **NO insistas únicamente con que vaya al concesionario**. Ofrecé ambas opciones con naturalidad: acercarse 15 minutos a **${branch}** con Gonzalo Dichiazza **o coordinar para que Gonzalo se acerque donde al cliente le quede cómodo** y revisar juntos los números sin compromiso.
+   - Recién cuando el cliente confirme intención de reunión (y día/franja horaria o lugar), pedile su nombre y apellido completo con naturalidad ("Así Gonzalo lo agenda y le dedica el tiempo necesario, pasame tu nombre y apellido completo"). Si ya te los pasó, confirmá el día, el horario y cerrá con calidez.
+   - Si el cliente duda por falta de tiempo en la semana, validá su rutina, reforzá el incentivo o la posibilidad de que Gonzalo se acerque y cerrá con una propuesta concreta de franja.
    - Si dice que lo tiene que hablar con su pareja/familia, validá que es una decisión para compartir y proponé que se acerquen los dos un rato a ${branch} para verlo en vivo y sacarse cualquier duda sin compromiso.
    - Si responde que no le interesa, validá con respeto sin insistir e indagá con curiosidad genuina qué fue lo que no le terminó de cerrar.
 
@@ -2472,7 +2660,7 @@ REGLAS DE RESPUESTA:
                     return {
                         reply: '',
                         modelUsed: 'Sin API Key',
-                        error: 'Configurá tu API Key de Google AI Studio en el panel de Sofi 2.2 para generar respuestas.'
+                        error: 'Configurá tu API Key de Google AI Studio en el panel de Sofi 2.3 para generar respuestas.'
                     };
                 }
 
@@ -2592,7 +2780,7 @@ REGLAS DE RESPUESTA:
                 ? 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0'
                 : 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-zinc-700 hover:bg-zinc-600 text-zinc-200 border border-zinc-500/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
             if (dot) dot.className = isOn ? 'w-2 h-2 rounded-full bg-white animate-ping' : 'w-2 h-2 rounded-full bg-zinc-400';
-            lbl.textContent = isOn ? '🤖 Sofi 2.2 ON' : '🤖 Sofi 2.2 PAUSA';
+            lbl.textContent = isOn ? '🤖 Sofi 2.3 ON' : '🤖 Sofi 2.3 PAUSA';
         }
 
         function renderWaAiKbSummary() {
