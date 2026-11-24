@@ -67,7 +67,6 @@
         <div class="bg-gradient-to-r from-[#0A0A0C] via-[#141418] to-[#1C1C22] text-white border-b border-white/10">
             <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex justify-between items-center gap-2">
                 <div class="flex items-center gap-3 min-w-0">
-                    <!-- Emblema Oficial Toyota -->
                     <div class="w-11 h-8 toyota-emblem-badge rounded-xl flex items-center justify-center shrink-0 px-1.5">
                         <svg viewBox="0 0 120 76" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <ellipse cx="60" cy="38" rx="52" ry="31" stroke="#FFFFFF" stroke-width="6.5"/>
@@ -92,6 +91,10 @@
                     <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofi 2.7 • Persistencia 24/7">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
                         <span id="nav-wa-ai-label">🤖 Sofi 2.7 ON</span>
+                    </button>
+                    <button onclick="openMassCampaignModal()" id="nav-mass-campaign-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-zinc-950 border border-amber-300 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Envío Masivo Seguro Anti-Ban por Sofía IA">
+                        <span>📢 Masivos IA</span>
+                        <span id="nav-campaign-badge" class="px-1.5 py-0.2 text-[10px] font-extrabold bg-zinc-950 text-white rounded-full tabular-nums">0</span>
                     </button>
                     <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
@@ -126,7 +129,7 @@
         </div>
     </nav>
 
-    <!-- ÚNICAMENTE ALERTAS URGENTES EN VIVO ARRIBA (OCULTAS SI NO HAY PENDIENTES) -->
+    <!-- ALERTAS URGENTES EN VIVO -->
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div id="infoauto-alerts-banner" class="hidden mt-3 bg-amber-50 border-2 border-amber-400 rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div class="flex items-start sm:items-center gap-2.5">
@@ -136,9 +139,7 @@
                     <div id="infoauto-alerts-list" class="text-amber-900 mt-0.5 space-y-1"></div>
                 </div>
             </div>
-            <button onclick="dismissAllInfoAutoAlerts()" class="px-3 py-1.5 rounded-xl bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold shrink-0 self-end sm:self-center">
-                Marcar vistas
-            </button>
+            <button onclick="dismissAllInfoAutoAlerts()" class="px-3 py-1.5 rounded-xl bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold shrink-0 self-end sm:self-center">Marcar vistas</button>
         </div>
 
         <div id="commercial-live-alerts-banner" class="hidden mt-3 bg-rose-50 border-2 border-[#EB0A1E] rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
@@ -149,9 +150,7 @@
                     <div id="commercial-live-alerts-list" class="text-slate-900 mt-0.5 space-y-1"></div>
                 </div>
             </div>
-            <button onclick="dismissAllCommercialAlerts()" class="px-3 py-1.5 rounded-xl bg-red-100 hover:bg-red-200 text-[#EB0A1E] font-bold shrink-0 self-end sm:self-center">
-                Marcar vistas
-            </button>
+            <button onclick="dismissAllCommercialAlerts()" class="px-3 py-1.5 rounded-xl bg-red-100 hover:bg-red-200 text-[#EB0A1E] font-bold shrink-0 self-end sm:self-center">Marcar vistas</button>
         </div>
 
         <div id="audio-live-alerts-banner" class="hidden mt-3 bg-indigo-50 border-2 border-indigo-500 rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
@@ -162,9 +161,7 @@
                     <div id="audio-live-alerts-list" class="text-indigo-900 mt-0.5 space-y-1"></div>
                 </div>
             </div>
-            <button onclick="dismissAllAudioAlerts()" class="px-3 py-1.5 rounded-xl bg-indigo-200 hover:bg-indigo-300 text-indigo-950 font-bold shrink-0 self-end sm:self-center">
-                Marcar escuchados
-            </button>
+            <button onclick="dismissAllAudioAlerts()" class="px-3 py-1.5 rounded-xl bg-indigo-200 hover:bg-indigo-300 text-indigo-950 font-bold shrink-0 self-end sm:self-center">Marcar escuchados</button>
         </div>
     </div>
 
@@ -172,7 +169,6 @@
     <!-- TAB 1: PANEL PRINCIPAL EJECUTIVO GINZA TOYOTA (INCLUYE KPIS EXCLUSIVOS)   -->
     <!-- ========================================================================= -->
     <main id="tab-botonera" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-5">
-        <!-- 4 TARJETAS KPI EXCLUSIVAS DEL PANEL PRINCIPAL -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <button onclick="filterByStatus('Todos')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-slate-900 hover:shadow transition-all text-left group relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-1 h-full bg-[#0A0A0C]"></div>
@@ -215,7 +211,6 @@
             </button>
         </div>
 
-        <!-- BARRA DE SEGUIMIENTO AUTÓNOMO SOFÍA 2.7 -->
         <div id="wa-tracker-banner" class="bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -223,19 +218,13 @@
                 <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h (08:00–21:00h; Redes/IG 24/7).</span>
             </div>
             <div class="flex items-center gap-1.5 flex-wrap">
-                <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">
-                    🤖 Piloto Sofi 2.7
-                </button>
-                <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">
-                    🟢 Pestaña WA Web
-                </button>
-                <button onclick="checkWhatsApp48hTimeouts(true)" class="px-2.5 py-1 rounded-lg bg-red-50 text-[#EB0A1E] hover:bg-red-100 border border-red-200 font-semibold transition-colors">
-                    Verificar 24h/48h
-                </button>
+                <button onclick="openMassCampaignModal()" class="px-2.5 py-1 rounded-lg bg-amber-500 text-zinc-950 hover:bg-amber-600 font-bold transition-colors">📢 Campaña Masiva Anti-Ban</button>
+                <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">🤖 Piloto Sofi 2.7</button>
+                <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">🟢 Pestaña WA Web</button>
+                <button onclick="checkWhatsApp48hTimeouts(true)" class="px-2.5 py-1 rounded-lg bg-red-50 text-[#EB0A1E] hover:bg-red-100 border border-red-200 font-semibold transition-colors">Verificar 24h/48h</button>
             </div>
         </div>
 
-        <!-- BANNER SHOWROOM TOYOTA -->
         <div class="bg-gradient-to-br from-[#0A0A0C] via-[#151519] to-[#222229] rounded-3xl p-5 sm:p-7 text-white shadow-lg relative overflow-hidden border border-zinc-800">
             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                 <div class="max-w-2xl">
@@ -250,15 +239,10 @@
                         Sofía 2.7 conversa 100% impulsada por Google Gemini con los valores y cuotas oficiales cargados en tu CRM.
                     </p>
                     <div class="flex flex-wrap gap-2.5 mt-4">
-                        <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs sm:text-sm font-bold shadow-md transition-all">
-                            📋 Ir a Prospección (7 Canales)
-                        </button>
-                        <button onclick="openAgendaWindow()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">
-                            📅 Ventana Calendario (<span id="hero-agenda-count" class="tabular-nums">0</span>)
-                        </button>
-                        <button onclick="switchTab('comparativa')" class="px-4 py-2.5 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-xs sm:text-sm font-bold shadow-md transition-all">
-                            ⚖️ Comparar Planes
-                        </button>
+                        <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs sm:text-sm font-bold shadow-md transition-all">📋 Ir a Prospección (7 Canales)</button>
+                        <button onclick="openMassCampaignModal()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs sm:text-sm font-bold shadow-md transition-all">📢 Envío Masivo Seguro (Sofía IA)</button>
+                        <button onclick="openAgendaWindow()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">📅 Ventana Calendario (<span id="hero-agenda-count" class="tabular-nums">0</span>)</button>
+                        <button onclick="switchTab('comparativa')" class="px-4 py-2.5 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-xs sm:text-sm font-bold shadow-md transition-all">⚖️ Comparar Planes</button>
                     </div>
                 </div>
 
@@ -352,7 +336,10 @@
             <section id="section-block-crm" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="px-4 sm:px-6 py-4 bg-[#0A0A0C] text-white flex flex-wrap items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5"><span class="w-2.5 h-2.5 rounded-full bg-[#EB0A1E]"></span><h3 class="text-sm sm:text-base font-bold">1. Base de Datos — No Compra</h3></div>
-                    <button onclick="openWaTemplatesModal('crm')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openMassCampaignModal('crm')" class="bg-amber-500 hover:bg-amber-400 text-zinc-950 px-2.5 py-1 rounded-lg text-xs font-extrabold transition-colors">📢 Masivo Seguro</button>
+                        <button onclick="openWaTemplatesModal('crm')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
+                    </div>
                 </div>
                 <div class="p-4 border-b border-slate-200 bg-slate-50 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
                     <input type="text" id="search-crm" oninput="renderCrmTable()" placeholder="Buscar nombre o tel..." class="w-full lg:w-64 px-3.5 py-2 text-sm border border-slate-300 rounded-xl outline-none bg-white">
@@ -633,7 +620,6 @@
             </div>
         </div>
 
-        <!-- COTIZADOR PRENDARIO OFICIAL TCFA + EXPLICATIVO AMIGABLE -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-5">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
                 <div>
@@ -643,7 +629,6 @@
                 <span id="tcfa-model-price-badge" class="px-3 py-1 rounded-xl bg-slate-100 text-slate-900 text-xs font-extrabold tabular-nums">Lista: $49.621.000</span>
             </div>
 
-            <!-- Paso 1: Vehículo, Descuento, Usado y Anticipo -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 <div class="lg:col-span-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
                     <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">1. Modelo / Versión Toyota 0 km</label>
@@ -667,7 +652,6 @@
                 </div>
             </div>
 
-            <!-- Paso 2: Selector de las 5 Categorías TCFA + Bancos -->
             <div class="space-y-2">
                 <label class="block text-[11px] font-bold text-slate-600 uppercase">4. Elegí la Línea de Financiación (hacés clic y se explica abajo en lenguaje simple)</label>
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2" id="tcfa-cat-buttons">
@@ -698,10 +682,8 @@
                 </div>
             </div>
 
-            <!-- Paso 3: Sub-planes y plazos de la categoría elegida -->
             <div id="tcfa-subplans-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
 
-            <!-- Paso 4: Resultado Detallado + Explicativo Amigable para el Cliente + Pivote Toyota Plan -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-2">
                 <div class="lg:col-span-5 p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
                     <div class="flex items-center justify-between">
@@ -722,7 +704,7 @@
                     </div>
                     <div class="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-slate-800">
                         <div class="font-extrabold text-[#EB0A1E]">🔄 Comparativa Rápida vs Toyota Plan:</div>
-                        <p id="tcfa-vs-plan-note" class="mt-1 leading-relaxed">Mientras esta cuota convencional ronda los $1.388.889/mes, en Toyota Plan arrancás con una cuota mucho más liviana en pesos sin interés bancario y podés retirar desde la cuota 2.</p>
+                        <p id="tcfa-vs-plan-note" class="mt-1 leading-relaxed">Mientras esta cuota convencional ronda los $1.388.889/mes, en Toyota Plan arrancás con una cuota mucho más liviana en pesos sin interés bancario y podés licitar desde la cuota 2.</p>
                     </div>
                 </div>
 
@@ -794,7 +776,7 @@
         </div>
     </main>
 
-    <!-- BARRA DE NAVEGACIÓN INFERIOR MÓVIL (APP SHOWROOM TOYOTA) -->
+    <!-- BARRA DE NAVEGACIÓN INFERIOR MÓVIL -->
     <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg">
         <div class="grid grid-cols-5 h-16">
             <button onclick="switchTab('botonera')" id="mob-nav-botonera" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-[#EB0A1E]">
@@ -865,7 +847,125 @@
     <div id="wa-bridge-modal" class="fixed inset-0 bg-slate-900/60 z-[66] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-xl p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">📲 Vinculación MacroDroid</h3><button onclick="closeWaBridgeModal()">✕</button></div><div class="flex gap-2"><input type="text" id="wa-webhook-url" readonly class="flex-1 px-3 py-2 text-xs font-mono bg-slate-100 border rounded-xl"><button onclick="copyWaWebhookUrl()" class="px-3 py-2 bg-[#EB0A1E] text-white rounded-xl text-xs font-bold">Copiar URL</button></div><div id="wa-incoming-logs" class="max-h-36 overflow-y-auto border rounded-xl divide-y text-xs"></div></div></div>
     <div id="sf-sync-modal" class="fixed inset-0 bg-slate-900/60 z-[67] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-xl p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">🔄 Salesforce Sync</h3><button onclick="closeSalesforceSyncModal()">✕</button></div><input type="text" id="sf-inbound-url" readonly class="w-full px-2 py-1.5 text-xs font-mono bg-slate-100 border rounded-lg"><input type="text" id="sf-outbound-url" readonly class="w-full px-2 py-1.5 text-xs font-mono bg-slate-100 border rounded-lg"></div></div>
 
-    <!-- MODAL FICHA INDIVIDUAL DEL CLIENTE + RESUMEN EJECUTIVO + PAUSA / CONTINUIDAD IA -->
+    <!-- MODAL ENVÍO MASIVO ANTI-BAN POR SOFÍA IA + REGISTRO AUTOMÁTICO EN OBJETIVOS -->
+    <div id="mass-campaign-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
+            <div class="px-5 py-4 bg-gradient-to-r from-[#0A0A0C] via-[#151519] to-amber-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-500 text-zinc-950 flex items-center justify-center text-xl font-extrabold shadow">📢</div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h3 class="text-base sm:text-lg font-extrabold">Envío Masivo Seguro WhatsApp • Motor Anti-Ban Sofía IA</h3>
+                            <span id="campaign-status-pill" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-zinc-700 text-zinc-200">PAUSADO</span>
+                        </div>
+                        <p class="text-xs text-zinc-300">Intervalos humanos aleatorios, variación automática de texto con Gemini y registro directo en tus <b>Objetivos</b>.</p>
+                    </div>
+                </div>
+                <button onclick="closeMassCampaignModal()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">✕ Cerrar</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50">
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3">
+                        <div class="text-xs font-extrabold uppercase text-slate-800">🛡️ Parámetros de Protección Anti-Bloqueo</div>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Espera Mínima (seg)</label>
+                                <input type="number" id="camp-delay-min" value="45" min="25" max="300" onchange="saveCampaignConfig()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Espera Máxima (seg)</label>
+                                <input type="number" id="camp-delay-max" value="95" min="35" max="600" onchange="saveCampaignConfig()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Tope Diario Seguro</label>
+                                <input type="number" id="camp-daily-limit" value="40" min="5" max="150" onchange="saveCampaignConfig()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Pausa Lote (cada 10)</label>
+                                <input type="number" id="camp-batch-pause" value="4" min="1" max="15" onchange="saveCampaignConfig()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                            </div>
+                        </div>
+                        <div class="space-y-1.5 text-xs text-slate-700 pt-1">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="camp-ai-spin" checked onchange="saveCampaignConfig()" class="accent-emerald-600">
+                                <span><b>Variación natural con Gemini</b> (ningún mensaje es idéntico)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="camp-daytime-only" checked onchange="saveCampaignConfig()" class="accent-emerald-600">
+                                <span><b>Solo horario comercial (09:00 a 20:30 hs)</b></span>
+                            </label>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-950">
+                            📊 <b>Enviados hoy:</b> <span id="camp-sent-today-count" class="font-extrabold tabular-nums">0</span> / <span id="camp-daily-limit-label" class="tabular-nums">40</span> • Cada envío suma automáticamente +1 en <b>Objetivos (Mensajes WhatsApp)</b> y pasa el contacto a seguimiento 24h de Sofía.
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3">
+                        <div class="text-xs font-extrabold uppercase text-slate-800">🎯 1. Elegir Base y Cantidad a Encolar</div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="camp-source-select" onchange="previewCampaignCandidates()" class="px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-xl bg-white">
+                                <option value="crm">1. No Compra (Pendientes)</option>
+                                <option value="sin_respuesta_24h">1b. Sin Respuesta 24h</option>
+                                <option value="gestion">2. Gestión Personal</option>
+                                <option value="redes">3. Redes Sociales</option>
+                                <option value="salesforce">4. Salesforce Leads</option>
+                                <option value="convencional">5. Convencional</option>
+                                <option value="cancelados">6. Cancelados</option>
+                                <option value="rescindidos">7. Rescindidos</option>
+                            </select>
+                            <input type="number" id="camp-batch-size" value="15" min="1" max="100" onchange="previewCampaignCandidates()" class="px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-xl tabular-nums" placeholder="Cant. contactos">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Mensaje Base de Sofía (se personaliza por cliente)</label>
+                            <textarea id="camp-base-message" rows="3" class="w-full p-2.5 text-xs border border-slate-300 rounded-xl outline-none resize-none">Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Estamos actualizando nuestra base de clientes y vimos tu consulta anterior por un vehículo de la marca. Contame, ¿seguís evaluando cambiar o sumar un Toyota?</textarea>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-500">
+                            <span id="camp-candidates-info">0 pendientes disponibles en esta base</span>
+                            <button onclick="enqueueSelectedCampaignBatch()" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] hover:bg-zinc-800 text-white text-xs font-bold">+ Agregar a Cola</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden min-h-[420px]">
+                    <div class="p-3.5 bg-slate-100 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <span class="text-xs font-extrabold text-slate-900">📋 Cola de Envío Programado (<span id="camp-queue-count" class="tabular-nums">0</span>)</span>
+                            <div id="camp-next-countdown" class="text-[11px] text-emerald-700 font-bold">Listo para iniciar</div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <button id="btn-camp-start" onclick="startMassCampaignRunner()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-xs">▶ Iniciar Envío Automático</button>
+                            <button id="btn-camp-pause" onclick="pauseMassCampaignRunner()" class="hidden px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-zinc-950 text-xs font-extrabold">⏸️ Pausar</button>
+                            <button onclick="sendNextCampaignItemNow()" class="px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-800 text-xs font-bold hover:bg-slate-50" title="Disparar el próximo manualmente">⚡ Enviar 1 Ahora</button>
+                            <button onclick="clearMassCampaignQueue()" class="px-2.5 py-2 rounded-xl bg-red-50 text-red-600 text-xs font-bold">🗑️</button>
+                        </div>
+                    </div>
+
+                    <div class="px-4 py-2 bg-emerald-50/70 border-b border-emerald-200 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                        <span class="text-emerald-950"><b>Modo de despacho:</b> Envía al celular (MacroDroid / Cola Nube) o abre WhatsApp Web si el móvil no está activo.</span>
+                        <label class="inline-flex items-center gap-1.5 font-bold text-emerald-950 cursor-pointer">
+                            <input type="checkbox" id="camp-also-open-waweb" class="accent-emerald-600">
+                            <span>Abrir también en WA Web PC</span>
+                        </label>
+                    </div>
+
+                    <div id="camp-queue-list" class="flex-1 p-3.5 space-y-2 overflow-y-auto max-h-[260px]"></div>
+
+                    <div class="p-3 bg-slate-50 border-t border-slate-200">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[11px] font-extrabold uppercase text-slate-700">✅ Registro de Envíos Masivos (Impacta en Objetivos)</span>
+                            <button onclick="switchTab('objetivos'); closeMassCampaignModal();" class="text-[11px] font-bold text-[#EB0A1E] hover:underline">Ver avance en Objetivos →</button>
+                        </div>
+                        <div id="camp-sent-log-list" class="max-h-24 overflow-y-auto space-y-1 text-[11px] text-slate-600"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FICHA INDIVIDUAL DEL CLIENTE -->
     <div id="client-profile-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[71] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
             <div class="px-5 py-4 bg-[#0A0A0C] text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
@@ -877,9 +977,7 @@
                     <p id="profile-modal-subtitle" class="text-xs text-zinc-400 mt-0.5">Gestión individual, resumen Sofía 2.7 y control de intervención humana</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button id="profile-ai-toggle-btn" onclick="toggleClientAiPauseFromProfile()" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all shadow-sm flex items-center gap-1.5">
-                        🤖 Sofía Activa
-                    </button>
+                    <button id="profile-ai-toggle-btn" onclick="toggleClientAiPauseFromProfile()" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all shadow-sm flex items-center gap-1.5">🤖 Sofía Activa</button>
                     <button onclick="closeClientProfileModal()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">✕ Cerrar</button>
                 </div>
             </div>
@@ -977,7 +1075,7 @@
         </div>
     </div>
 
-    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA 2.7 • 100% GOOGLE GEMINI) -->
+    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA 2.7) -->
     <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
             <div class="px-5 py-4 bg-gradient-to-r from-[#0A0A0C] via-[#151519] to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
@@ -1171,7 +1269,7 @@
                 arrepentimientoYRescision: "Derecho de arrepentimiento dentro de los 10 días corridos con devolución del 100%.",
                 cancelacionYCesion: "Cancelación anticipada permitida a valor de Cuota Pura vigente sin cargos administrativos ni seguro; cesión permitida sin comisión de Toyota Plan."
             },
-            CONVENTIONAL_FINANCING_KNOWLEDGE: `FINANCIACIÓN CONVENCIONAL TCFA Y BANCARIA OFICIAL (NOVIEMBRE 2026 - USO EXCLUSIVO COMO REFERENCIA ORIENTATIVA; NUNCA REVELAR QUEBRANTO INTERNO):
+            CONVENTIONAL_FINANCING_KNOWLEDGE: `FINANCIACIÓN CONVENCIONAL TCFA Y BANCARIA OFICIAL (NOVIEMBRE 2026 - USO EXCLUSIVO COMO CONTRASTE DE NO VENTA; NUNCA OFRECER DE ENTRADA NI REVELAR QUEBRANTO INTERNO):
 - Lista Oficial 0 km Noviembre 2026:
   * Yaris 5P MY'27: XS $36.315.000 | XLS+ $40.340.000 | S $43.255.000.
   * Yaris Cross MY'27: XLI CVT $41.464.000 | XEI CVT $45.260.000 | XEI HEV $48.457.000 | SEG CVT $50.224.000 | SEG HEV $54.020.000.
@@ -1181,17 +1279,15 @@
   * Hilux 4x4 MY'26: CC DX $50.227.000 | CS DX $52.934.000 | DC DX MT $58.116.000 | DC DX AT $59.739.000 | DC SR MT $66.856.000 | DC SR AT $69.742.000 | DC SRV AT $76.381.000 | DC SRV+ AT $80.317.000 | DC SRX AT $84.855.000 | GR-Sport IV $89.863.000.
   * SW4 MY'27: SRX $91.585.000 | Diamond II $92.508.000 | GR-Sport $97.092.000.
   * Hiace MY'26: Furgón L2H2 $72.798.000 | Commuter $87.882.000.
-- Regla general prendaria TCFA: se puede financiar hasta el 75% del valor de lista de la unidad (o el tope fijo del plan promocional, el que sea menor). Sistema francés + IVA 21% sobre intereses (10,5% Responsable Inscripto) + impuesto Débitos y Créditos 1,2% sobre capital en primera cuota + seguro automotor y gastos.
-- Las 5 Líneas TCFA vigentes:
-  1) Promocionales TCFA:
-     - Cupo Especial 0% TNA 18 meses (cupo 500 unidades): Hilux, SW4, Corolla y Corolla Cross hasta $30.000.000 ($1.666.667/mes capital puro).
-     - Grupo A (Yaris y Yaris Cross): 12m TNA 0% hasta $15.000.000 | 18m TNA 9,9% hasta $20.000.000 | 24m TNA 19,0% hasta $25.000.000.
-     - Grupo B (Hilux, Corolla, Corolla Cross, SW4, Hiace): 12m TNA 0% hasta $25.000.000 | 18m TNA 9,9% hasta $19.000.000 | 24m TNA 19,0% hasta $24.000.000.
-  2) Tasa Subsidiada hasta 75% del vehículo: TNA 0% (12/18/24m), TNA 9,9% (12/18/24/36m), TNA Escalonada (12m 12,25%, 18m 20,9%, 24m 25,3%) y TNA 29,9% (6 a 60m).
-  3) Sin Subsidio hasta 75% del vehículo: Promo (TNA 38,9%, 6 a 60m), Tradicional (TNA 41,9%, 6 a 60m), Agro (TNA 41,9%, 12 a 48m con amortización de capital semestral cada 6 meses e intereses mensuales), Ciclo Toyota (TNA 39,9% a 36 meses: 50% en 35 cuotas mensuales + 50% cuota balón en el mes 36 para renovar o cancelar) y Ciclo Flat (TNA 39,9% a 36 meses).
-  4) Tasa Variable (TAMCOR + 6,5%): 6 a 60 meses hasta el 75% del valor de lista.
-  5) Planes UVA: Promo UVA Yaris 0% TNA (18m hasta $25M), Promo UVA Noviembre 0% TNA (18m hasta $30M para Hilux/Corolla/CC/SW4), UVA TNA 0% (12/18/24/36m hasta 75%) y UVA Tradicional TNA 13,9% (12 a 60m hasta 75%).
-- Bancos: Banco Nación "+Autos con BNA" hasta $50M / 72 meses (Tasa General 46% TNA: $491.203 cada $10M a 72m; Tasa Preferencial haberes BNA 25% TNA: $313.122 cada $10M a 72m).`,
+- Regla general prendaria TCFA: tope máximo 75% del valor de lista o tope del plan promocional, sistema francés + IVA 21% s/intereses + 1,2% Débitos y Créditos en primera cuota + seguro.
+- Líneas TCFA:
+  * Cupo Especial 0% TNA 18 meses (cupo 500 unid.): Hilux, SW4, Corolla y Corolla Cross hasta $30.000.000 ($1.666.667/mes capital puro).
+  * Grupo A (Yaris y Yaris Cross): 12m TNA 0% hasta $15M | 18m TNA 9,9% hasta $20M | 24m TNA 19,0% hasta $25M.
+  * Grupo B (Hilux, Corolla, Corolla Cross, SW4, Hiace): 12m TNA 0% hasta $25M | 18m TNA 9,9% hasta $19M | 24m TNA 19,0% hasta $24M.
+  * Subsidiadas hasta 75%: TNA 0% (12/18/24m), TNA 9,9% (12 a 36m), Escalonada (hasta 25,3%) y TNA 29,9% (6 a 60m).
+  * Sin Subsidio hasta 75%: Promo (38,9%), Tradicional (41,9%), Agro Semestral (41,9%), Ciclo Toyota 36m (39,9%, 50% en 35 cuotas + 50% cuota balón en mes 36) y TAMCOR + 6,5%.
+  * Planes UVA: Promo UVA 0% 18m ($25M Grupo A / $30M Grupo B), UVA 0% hasta 75% (12-36m) y UVA Tradicional 13,9% (12-60m).
+- Banco Nación "+Autos con BNA": Tasa General 46% TNA ($491.203 cada $10M a 72m) | Tasa Preferencial haberes BNA 25% TNA ($313.122 cada $10M a 72m).`,
             DEFAULT_MARKET_PLANS: [
                 { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 528803 },
                 { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 891366 },
@@ -1608,6 +1704,7 @@
             else if (tabName === 'financiaciones') initTcfaSimulator();
         };
 
+        // --- COTIZADOR TCFA NOVIEMBRE 2026 ---
         let tcfaState = {
             modelId: 'hilux-4x2-dx-mt',
             category: 'promo',
@@ -1822,15 +1919,15 @@
 
             const vsNote = document.getElementById('tcfa-vs-plan-note');
             if (vsNote) {
-                vsNote.textContent = `Cuota convencional: $${quotaVal.toLocaleString('es-AR')}/mes (${activePlan.plazo}m). En Toyota Plan (${matchingToyotaPlan.model}), la cuota de referencia es de $${planQuotaRef.toLocaleString('es-AR')}/mes en pesos sin interés bancario y podés retirar desde la cuota 2.`;
+                vsNote.textContent = `Cuota convencional: $${quotaVal.toLocaleString('es-AR')}/mes (${activePlan.plazo}m). En Toyota Plan (${matchingToyotaPlan.model}), la cuota de referencia es de $${planQuotaRef.toLocaleString('es-AR')}/mes en pesos sin interés bancario y podés licitar desde la cuota 2.`;
             }
 
             const friendlyBox = document.getElementById('tcfa-friendly-explanation');
             if (friendlyBox) {
                 const extraGapText = exceedsCap
-                    ? `\n⚠️ Como el tope de esta línea es $${activePlan.maxCap.toLocaleString('es-AR')}, además de tu usado/anticipo necesitarías sumar $${(rawCapital - activePlan.maxCap).toLocaleString('es-AR')} en efectivo para retirar.`
+                    ? `\n⚠️ Como el tope de esta línea es $${activePlan.maxCap.toLocaleString('es-AR')}, además de tu usado/anticipo necesitarías sumar $${(rawCapital - activePlan.maxCap).toLocaleString('es-AR')} en efectivo.`
                     : '';
-                friendlyBox.textContent = `Para llevar tu ${modelObj.modelo} (${modelObj.version}) con entrega inmediata mediante ${activePlan.title}:\n• Financiamos $${effectiveCap.toLocaleString('es-AR')} en ${activePlan.plazo} cuotas de aproximadamente $${quotaVal.toLocaleString('es-AR')} por mes (a eso se suma el seguro del auto y el 1,2% de impuesto en la primera cuota).${extraGapText}\n• ¿Cómo funciona? ${activePlan.plainExplain}\n\n💡 Y si preferís una cuota mensual bastante más baja sin descapitalizarte hoy, lo armamos por Toyota Plan (cuota aprox. $${planQuotaRef.toLocaleString('es-AR')}/mes en pesos sin interés bancario) y a partir de la cuota 2 ya podés programar el retiro.`;
+                friendlyBox.textContent = `Para financiar tu ${modelObj.modelo} (${modelObj.version}) mediante ${activePlan.title}:\n• Financiamos $${effectiveCap.toLocaleString('es-AR')} en ${activePlan.plazo} cuotas de aproximadamente $${quotaVal.toLocaleString('es-AR')} por mes (a eso se suma el seguro del auto y el 1,2% de impuesto en la primera cuota).${extraGapText}\n• ¿Cómo funciona? ${activePlan.plainExplain}\n\n💡 Y si preferís una cuota mensual bastante más baja sin descapitalizarte hoy, lo armamos por Toyota Plan (cuota aprox. $${planQuotaRef.toLocaleString('es-AR')}/mes en pesos sin interés bancario) con posibilidad de licitar a partir de la cuota 2.`;
             }
         };
 
@@ -1865,7 +1962,7 @@
                         contents: [{
                             role: 'user',
                             parts: [{
-                                text: `Sos Sofía, asesora comercial de Ginza Toyota en Rosario. Reescribí esta explicación financiera en un mensaje cálido, súper claro y cotidiano de WhatsApp (sin tecnicismos difíciles, sin mencionar quebrantos internos) para que alguien que no sabe de finanzas entienda perfecto cómo funciona esta línea convencional, y dejale abierta la puerta para volver a Toyota Plan si la cuota le resulta alta:\n\n${baseText}`
+                                text: `Sos Sofía, asesora comercial de Ginza Toyota en Rosario. Reescribí esta explicación financiera en un mensaje cálido, súper claro y cotidiano de WhatsApp (sin tecnicismos difíciles, sin mencionar quebrantos internos ni prometer plazos rápidos de entrega) para que alguien que no sabe de finanzas entienda perfecto cómo funciona esta línea convencional, y dejale abierta la puerta para volver a Toyota Plan si la cuota le resulta alta:\n\n${baseText}`
                             }]
                         }],
                         generationConfig: { temperature: 0.6, maxOutputTokens: 450, thinkingConfig: { thinkingBudget: 0 } }
@@ -1881,45 +1978,6 @@
                 }
             } catch (e) {}
             if (btn) { btn.disabled = false; btn.textContent = '✨ Personalizar con Sofía IA'; }
-        };
-
-        window.recalcFinancingSimulator = function() {
-            const v0km = Math.max(0, Number(document.getElementById('fin-calc-0km')?.value) || 0);
-            const vUsed = Math.max(0, Number(document.getElementById('fin-calc-used')?.value) || 0);
-            const vCash = Math.max(0, Number(document.getElementById('fin-calc-cash')?.value) || 0);
-            const gap = Math.max(0, v0km - vUsed - vCash);
-
-            const gapEl = document.getElementById('fin-calc-gap');
-            if (gapEl) gapEl.textContent = `$${gap.toLocaleString('es-AR')}`;
-
-            const grid = document.getElementById('fin-calc-results-grid');
-            if (!grid) return;
-
-            const factorMillions = gap / 10000000;
-            const tcfa18 = Math.round(Math.min(gap, 30000000) / 18);
-            const tcfa36 = Math.round(factorMillions * 425000);
-            const bna72Gen = Math.round(factorMillions * 491203);
-            const priv60 = Math.round(factorMillions * 560000);
-
-            const cards = [
-                { title: 'TCFA 18 cuotas Tasa 0%', sub: gap > 30000000 ? 'Tope $30M (falta efectivo)' : 'Solo capital puro (sin seguro)', quota: tcfa18, badge: 'Tasa 0% TNA' },
-                { title: 'TCFA 36 cuotas Tasa Fija', sub: 'TNA ~27,9% + seguro y gastos', quota: tcfa36, badge: '36 meses' },
-                { title: 'Banco Nación +Autos (72m)', sub: 'Tasa General 46% TNA (sin haberes BNA)', quota: bna72Gen, badge: '72 meses' },
-                { title: 'Prendario Banco Privado (60m)', sub: 'TNA ~58% + seguro obligatorio', quota: priv60, badge: '60 meses' }
-            ];
-
-            grid.innerHTML = cards.map(c => `
-                <div class="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/80 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between gap-1">
-                            <span class="text-xs font-extrabold text-slate-900">${c.title}</span>
-                            <span class="px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 text-[10px] font-bold">${c.badge}</span>
-                        </div>
-                        <div class="text-lg font-extrabold text-[#EB0A1E] mt-2 tabular-nums">$${c.quota.toLocaleString('es-AR')}<span class="text-xs font-normal text-slate-500">/mes</span></div>
-                    </div>
-                    <div class="text-[11px] text-slate-500 mt-1.5">${c.sub}</div>
-                </div>
-            `).join('');
         };
 
         window.openAgendaWindow = function() {
@@ -1968,6 +2026,8 @@
             const upcomingCount = getScheduledCommitments().filter(c => c.scheduleDate >= getTodayISODate()).length;
             setTxt('nav-agenda-badge', upcomingCount);
             setTxt('hero-agenda-count', upcomingCount);
+            const campPending = Array.isArray(massCampaignState?.queue) ? massCampaignState.queue.filter(q => q.status === 'pending').length : 0;
+            setTxt('nav-campaign-badge', campPending);
         };
 
         // --- DASHBOARD & PANEL PRINCIPAL ---
@@ -2193,8 +2253,8 @@
         function isSystemOrSummaryNotification(sender, text) {
             const combined = `${sender || ''} ${text || ''}`.toLowerCase();
             const systemPatterns = [
-                'buscando mensajes', 'realizando copia',
-                'whatsapp web', 'illegalstateexception', 'scheme == null', 'undefined'
+                'mensajes nuevos', 'mensajes de', 'buscando mensajes', 'realizando copia',
+                'enviando', 'llamando', 'whatsapp web', 'illegalstateexception', 'scheme == null', 'undefined'
             ];
             return systemPatterns.some(pattern => combined.includes(pattern));
         }
@@ -2882,11 +2942,13 @@
         function getCurrentFunnelActuals() {
             const all = getAllListsCombined();
             const llamadas = all.filter(c => (c.method || '').toLowerCase().includes('llamada')).length;
-            const mensajes = all.filter(c => (c.method || '').toLowerCase().includes('mensaje') || c.status === 'Mensaje Enviado (48h)').length;
+            const crmMensajes = all.filter(c => (c.method || '').toLowerCase().includes('mensaje') || c.status === 'Mensaje Enviado (48h)' || c.status === 'Sin Respuesta 24h').length;
+            const massLogCount = Array.isArray(massCampaignState?.sentLogs) ? massCampaignState.sentLogs.length : 0;
+            const mensajes = Math.max(crmMensajes, crmMensajes + massLogCount - all.filter(c => c.massCampaignSent).length);
             const interesados = all.filter(c => c.status === 'Interesado' || c.status === 'Interesado a Futuro').length;
             const entrevistas = all.filter(c => c.status === 'Entrevista').length;
             const ventas = all.filter(c => c.status === 'Venta').length;
-            return { llamadas, mensajes, interesados, entrevistas, ventas, totalContactados: Math.max(1, llamadas + mensajes) };
+            return { llamadas, mensajes, interesados, entrevistas, ventas, totalContactados: Math.max(1, llamadas + mensajes), massLogCount };
         }
         window.renderObjetivos = function() {
             const biz = getBusinessDaysStats();
@@ -2914,7 +2976,7 @@
             const sugContactsW = Math.ceil(sugIntW / Math.max(0.15, rateInt / 100));
             latestAiSuggestedWeekly = { llamadas: Math.max(40, Math.round(sugContactsW * 0.4)), mensajes: Math.max(60, Math.round(sugContactsW * 0.6)), interesados: sugIntW, entrevistas: sugEntW, ventas: targetVentasW };
             const insightsEl = document.getElementById('ai-coach-insights-list');
-            if (insightsEl) insightsEl.innerHTML = `<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">🎯 <b>Calibración IA sugerida:</b> ${latestAiSuggestedWeekly.llamadas} llamadas • ${latestAiSuggestedWeekly.mensajes} mensajes → ${latestAiSuggestedWeekly.interesados} interesados → ${latestAiSuggestedWeekly.entrevistas} entrevistas → <b>${latestAiSuggestedWeekly.ventas} ventas</b>.</div>`;
+            if (insightsEl) insightsEl.innerHTML = `<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1"><div>🎯 <b>Calibración IA sugerida:</b> ${latestAiSuggestedWeekly.llamadas} llamadas • ${latestAiSuggestedWeekly.mensajes} mensajes → ${latestAiSuggestedWeekly.interesados} interesados → ${latestAiSuggestedWeekly.entrevistas} entrevistas → <b>${latestAiSuggestedWeekly.ventas} ventas</b>.</div><div class="text-emerald-800 font-semibold">📢 <b>Registro Masivos Sofía IA:</b> ${act.massLogCount} mensaje(s) masivo(s) despachado(s) y contabilizado(s) automáticamente en tu objetivo de mensajes.</div></div>`;
 
             const metricDefs = [
                 { key: 'llamadas', label: 'Llamadas Realizadas', actual: act.llamadas, color: 'bg-[#0A0A0C]' },
@@ -3059,7 +3121,7 @@
                 } catch (err) {}
             }
             document.getElementById('pdf-processing-status')?.classList.add('hidden');
-            saveLocalData(true); renderPlansHistory(); showToast(`✅ ${files.length} PDF(s) procesado(s) y valores actualizados para Sofía 2.7`);
+            saveLocalData(true); renderPlansHistory(); showToast(`✅ ${files.length} PDF(s) procesado(s)`);
         };
         window.renderVehiclePriceEvolutionChart = function() {
             const chartBox = document.getElementById('vehicle-price-chart-box'), modelSel = document.getElementById('plan-chart-model-select');
@@ -3286,7 +3348,7 @@
                             geminiApiKey: effectiveApiKey,
                             systemPrompt,
                             officialPricesText,
-                            availablePlanJpgs,
+                            availablePlanJpgs: [],
                             authorizedContacts,
                             toyotaPlans: marketPlansCatalog.filter(p => p.brand === 'Toyota')
                         })
@@ -3333,45 +3395,41 @@ REGLAS DE ORO DE CONVERSACIÓN (CUMPLIMIENTO ESTRICTO):
 0. SALUDO INICIAL PURO ("Hola", "Buenas", "Hola cómo estás" sin mencionar ningún auto ni consulta): Respondé únicamente saludando según la hora de Argentina ("Hola, buen día" / "Hola, buenas tardes" / "Hola, buenas noches"), presentándote como ${advisor}, asistente de Gonzalo Dichiazza en ${branch}, y cerrando EXCLUSIVAMENTE con "¿En qué te puedo ayudar?". PROHIBIDO preguntar "¿En qué modelo estás interesado?" o mencionar vehículos cuando el cliente solo saludó.
 1. Mensajes cortos y naturales de WhatsApp (1 a 3 renglones máximo), sin sonar a robot ni poner comillas alrededor del texto.
 2. Postura profesional y respetuosa: evitá expresiones informales como "te calza", "de una", "es un caño" o repetir muletillas como "Siendo sincero", "Excelente opción" o "Perfecto, ideal entonces".
-3. UNA ÚNICA PREGUNTA POR TURNO: Hacé solo 1 pregunta inteligente y directa por mensaje. Podés usar "o" de forma natural cuando aclara una elección puntual (ej: "¿La buscás en versión naftera o híbrida?").
+3. UNA ÚNICA PREGUNTA POR TURNO: Hacé solo 1 pregunta inteligente y directa por mensaje. Podés usar "o" de forma natural cuando aclara una elección puntual (ej: "¿La buscás 4x2 o 4x4?").
 4. REGLA DE ORO - DEFENSA DEL TOYOTA PLAN Y TRANSPARENCIA (OBJETIVO ÚNICO):
-  - Tu objetivo único y exclusivo es asesorar y derivar leads interesados en **Toyota Plan** (70/30 o 100%).
-  - **ALTERNATIVAS DENTRO DEL PLAN:** Si el cliente dice "otra alternativa" o no quiere/no puede cubrir el 30% de integración del plan 70/30, ofrecé SIEMPRE el **Toyota Plan 100%** como segunda opción (destacando que no exige integración obligatoria del 30%, que puede salir adjudicado por sorteo o licitando con el monto que disponga, todo en pesos y sin interés bancario).
+  - Tu objetivo único es asesorar y derivar leads interesados en **Toyota Plan (70/30 o 100%)**.
+  - **ALTERNATIVAS DENTRO DEL PLAN:** Si el cliente no quiere o no puede cubrir el 30% de integración del plan 70/30, o pide "otra alternativa" tras escuchar el 70/30, ofrecé **SIEMPRE el Toyota Plan 100% financiado** como segunda opción (destacando que no exige integración obligatoria del 30%, puede salir adjudicado por sorteo o licitación con el monto que disponga y la cuota sigue siendo en pesos sin interés bancario) y preguntá: "¿Qué valor de cuota mensual te quedaría cómodo pagar?".
   - **CERO OFERTA ESPONTÁNEA DE CONVENCIONAL:** NUNCA ofrezcas financiación convencional/prendaria ni tasa fija por iniciativa propia.
-  - **FILTRO PREVIO DE CUOTA Y ANTICIPO:** Si el cliente pide explícitamente financiación convencional o tasa fija, NO le des detalles de plazos ni porcentajes de financiación aún. Primero preguntale: "¿Qué valor de cuota mensual te gustaría pagar y con cuánto anticipo contás?".
-  - **ARGUMENTO DE NO VENTA DE CONVENCIONAL:** Usá los datos de financiación convencional SOLO para contrastar cuando ya te dio su anticipo/cuota: mostrale que, con su anticipo, la cuota bancaria quedaría muy alta por los intereses (ej. arriba de $1.500.000/mes) y redirigilo a usar ese mismo capital para presentar una oferta de licitación dentro del Toyota Plan (habilitado desde la cuota 2), manteniendo una cuota mensual mucho más baja y sin interés bancario.
-  - **PROHIBICIÓN ABSOLUTA DE PROMESAS DE ENTREGA RÁPIDA:** Nunca digas "retirás rápido", "lo sacás ya", "entrega rápida", "entrega inmediata en plan" ni prometas plazos exactos de entrega dentro del Toyota Plan. Hablá siempre de "posibilidad de licitar a partir de la cuota 2", "participar por sorteo o licitación" o "tener un buen capital para presentar oferta de licitación".
+  - **FILTRO DE CUOTA:** Si el cliente pide explícitamente financiación convencional o tasa fija, NO le des detalles de plazos ni porcentajes de financiación todavía. Primero preguntale: "¿Qué cuota mensual aproximada tenías en mente pagar y con qué anticipo contás?".
+  - **ARGUMENTO DE NO VENTA DE CONVENCIONAL:** Usá los datos de financiación convencional SOLO para contrastar cuando el cliente te pase su anticipo: mostrale que, con su anticipo, la cuota bancaria/prendaria quedaría muy alta por los intereses (ej. arriba de $1.500.000/mes) y redirigilo a usar ese mismo capital para presentar una oferta de licitación dentro del Toyota Plan (habilitado desde la cuota 2), manteniendo una cuota mensual muchísimo más baja y sin interés bancario. JAMÁS menciones quebrantos concesionarios ni márgenes internos.
+  - **PROHIBICIÓN DE PROMESAS DE ENTREGA RÁPIDA:** Nunca digas "retirás rápido", "lo sacás ya", "entrega rápida" ni prometas plazos exactos de entrega dentro del Toyota Plan. Hablá siempre de "posibilidad de licitar a partir de la cuota 2", "participar por sorteo o licitación" o "tener un buen capital para presentar oferta de licitación".
 5. YARIS CROSS (DOS PLANES DIFERENCIADOS):
   - En **Yaris Cross** tenemos dos planes distintos según la motorización: la **versión Naftera (XLI CVT)** en modalidad **70/30** (integrando como mínimo el 30% de la unidad al retirar) y la **versión Híbrida (XEI HEV)** en modalidad **100%** (sin cuota complementaria del 30%). Cuando pregunten por Yaris Cross, aclaralo brevemente y preguntá cuál de las dos versiones busca.
-6. MODALIDAD 70/30 vs PLAN 100% Y CAMBIO DE MODELO (REGLAS CONTRACTUALES ESTRICTAS):
+6. MODALIDAD 70/30 vs PLAN 100% Y CAMBIO DE MODELO:
   - En la modalidad 70/30, al momento de retirar la unidad se necesita integrar **como mínimo el 30% de la unidad** (NO digas "del valor móvil", decí "de la unidad"). Cuando tengas el dato exacto extraído del PDF, poné entre paréntesis **únicamente el valor numérico** sin texto extra dentro del paréntesis, por ejemplo: "como mínimo el 30% de la unidad ($14.886.300)". Si no hay PDF cargado para ese modelo, decí solo "como mínimo el 30% de la unidad" sin calcular ni inventar el importe.
-  - CAMBIO DE MODELO O VERSIÓN: Los planes vigentes son los de la lista oficial, pero gracias al Plan Flexible el cliente puede suscribirse a un plan base y **al retirar puede elegir cualquier otra versión o modelo de Toyota abonando la diferencia de valor en efectivo**.
-  - Si el cliente dice que **no tiene capital inicial para entregar ni un vehículo usado**: explicale que la modalidad 70/30 no le convendría porque al retirar pide integrar como mínimo el 30% de la unidad, y recomendale el **Plan 100%**, aclarando que puede arrancar sin capital ni usado pagando cuotas mensuales en pesos sin interés bancario y que **a medida que va pagando cada vez necesita menos integración mínima** para programar el retiro.
-  - El retiro anticipado está habilitado recién **a partir de la cuota número 2** (nunca en la cuota 1). NUNCA digas "ir pagándolo mes a mes o retirarlo antes".
+  - CAMBIO DE MODELO O VERSIÓN: Gracias al Plan Flexible el cliente puede suscribirse a un plan base y **al retirar puede elegir cualquier otra versión o modelo de Toyota abonando la diferencia de valor en efectivo**.
+  - Si el cliente dice que **no tiene capital inicial para entregar ni un vehículo usado**: recomendale el **Plan 100%**, aclarando que puede arrancar sin capital ni usado pagando cuotas mensuales en pesos sin interés bancario y que **a medida que va pagando cada vez necesita menos integración mínima** para participar por licitación o sorteo.
+  - El retiro anticipado por licitación está habilitado recién **a partir de la cuota número 2** (nunca en la cuota 1).
 7. CUOTA FINAL vs CUOTA PURA (ADELANTO DE CUOTAS DE ATRÁS HACIA ADELANTE):
   - La cuota informada en la lista es la **cuota final** (que varía mensualmente según el valor móvil de la unidad, sin interés bancario).
-  - Si el cliente pregunta por la **cuota pura** o le preocupa que sean 84 cuotas (plazo largo) teniendo capacidad de pago mensual más alta: informale el valor de la **Cuota Pura** del PDF y explicale que **puede adelantar cuotas de atrás hacia adelante (sistema francés) abonando solo Cuota Pura**, achicando mucho el plazo sin pagar gastos administrativos ni seguros sobre las cuotas adelantadas.
+  - Si el cliente pregunta por la **cuota pura** o le preocupa que sean 84 cuotas teniendo capacidad de pago mensual más alta: informale el valor de la **Cuota Pura** del PDF y explicale que **puede adelantar cuotas de atrás hacia adelante (sistema francés) abonando solo Cuota Pura**, achicando mucho el plazo sin pagar gastos administrativos ni seguros sobre las cuotas adelantadas.
 8. MANEJO DIFERENCIADO DE USADOS Y BASE "NO COMPRA":
   - **Caso A — Cliente molesto porque antes le cotizaron bajo su usado:** NUNCA menciones "InfoAuto", NUNCA le pidas marca/modelo/año ahora, y NUNCA nombres "plan" ni "este sistema" de entrada. Quitá la presión de entregar el auto y preguntá qué vehículo de Toyota estaba evaluando ("Te entiendo perfectamente, por eso hoy no hace falta que entregues ni malvendas tu auto. Contame, ¿qué vehículo de Toyota estabas evaluando?"). Recién cuando responda el modelo, proponé avanzar con una cuota mensual accesible mientras sigue usando su auto para venderlo por su cuenta al valor real de mercado.
-  - **Caso B — Cliente que pregunta cuánto le toman su usado o quiere entregarlo en parte de pago:** pedile **marca, modelo, año y kilómetros** para cotizarlo con Gonzalo y evaluar cuánto cubre del vehículo nuevo.
+  - **Caso B — Cliente que pregunta cuánto le toman su usado o quiere entregarlo en parte de pago:** pedile **marca, modelo, año y kilómetros** para cotizarlo con Gonzalo.
   - Si dice que ya compró otro vehículo: felicitalo, agradecé el aviso y cerrá cordial sin insistir.
   - Si dice que averiguaba para un tercero: preguntá simple y directo "¿Sabés si siguen buscando?".
   - Si pide volver a hablar más adelante / en unos meses: preguntale cuándo prefiere que lo volvamos a contactar ("Entiendo perfectamente. ¿Para qué mes o fecha aproximada te gustaría que te vuelva a escribir sin compromiso?").
 9. HONESTIDAD TOTAL SOBRE DÓLARES: Si pregunta si toman dólares, respondé: "No, no tomamos dólares; toda la operatoria del plan es únicamente en pesos argentinos."
-10. SORTEO Y LICITACIÓN (SOLO SI EL CLIENTE PREGUNTA CÓMO FUNCIONA EL RETIRO):
-  - No menciones sorteo ni licitación por iniciativa propia; **pero si el cliente pregunta cómo es el retiro anticipado en la cuota 2 o cómo se adjudica**, explicalo con claridad: todos los meses hay dos vías, **sorteo** (por azar entre los integrantes al día) y **licitación** (funciona como una subasta silenciosa entre los miembros del grupo: quien ofrece adelantar mayor porcentaje de capital gana la adjudicación, y esa plata que ofrecés NO se pierde ni es un gasto extra, sino que se aplica directo a cancelar cuotas de tu propio auto).
+10. SORTEO Y LICITACIÓN (SOLO SI EL CLIENTE PREGUNTA CÓMO FUNCIONA):
+  - No menciones sorteo ni licitación por iniciativa propia; **pero si el cliente pregunta cómo es la adjudicación en la cuota 2**, explicalo con claridad: todos los meses hay dos vías, **sorteo** (por azar entre los integrantes al día) y **licitación** (funciona como una subasta silenciosa entre los miembros del grupo: quien ofrece adelantar mayor porcentaje de capital gana la adjudicación, y esa plata que ofrecés NO se pierde ni es un gasto extra, sino que se aplica directo a cancelar cuotas de tu propio auto).
 11. CALIFICACIÓN ANTES DE INVITAR AL CONCESIONARIO: En Hilux preguntá primero tracción (ej. 4x2 o 4x4) y uso; en todos los modelos conocé primero versión, uso, presupuesto mensual y si tiene usado o ahorro antes de preguntar si prefiere seguir por acá o coordinar una entrevista con Gonzalo.
-12. COMPARACIÓN INTELIGENTE CON OTRAS MARCAS: Si nombra un modelo de la competencia (ej. Territory, Amarok, Ranger, Cronos, 208), comparalo positivamente con su equivalente Toyota (Territory → Corolla Cross, Ranger/Amarok → Hilux, Cronos/208 → Yaris/Corolla) resaltando valor de reventa, confiabilidad y garantía oficial Toyota, y hacé 1 pregunta sobre qué atributo valora más.
+12. COMPARACIÓN INTELIGENTE CON OTRAS MARCAS: Si nombra un modelo de la competencia (ej. Territory, Amarok, Ranger, Cronos, 208), comparalo positivamente con su equivalente Toyota resaltando valor de reventa, confiabilidad y garantía oficial Toyota, y hacé 1 pregunta sobre qué atributo valora más.
 13. CIERRE CORDIAL ANTE UN "NO": Si responde seco "No", despedite amablemente en 1 renglón sin volver a repreguntar.
-14. NO ENVIAR IMÁGENES NI LINKS DE PLANES POR AHORA: Prohibido enviar URLs de imágenes o folletos JPG en esta etapa; informá todos los valores y condiciones por texto claro.
-15. GUIONES DE REFERENCIA PARA CONTRASTE CONVENCIONAL (NO VENTA):
-  - Si dice "Otra alternativa" tras escuchar el 70/30: "La otra alternativa dentro de Toyota Plan es la modalidad 100% financiado. A diferencia del 70/30, acá no tenés la obligación de integrar un 30% para retirar: podés salir adjudicado por sorteo o licitando con el monto que vos dispongas, todo en pesos y sin interés bancario. Para orientarte mejor, ¿qué valor de cuota mensual te quedaría cómodo pagar?"
-  - Si pide explícitamente "Tasa fija / Convencional": "Podemos evaluar financiación convencional con tasa fija, aunque tené en cuenta que al llevar interés bancario las cuotas suelen ser bastante más elevadas que en el plan. Para decirte si te conviene o no, ¿qué cuota mensual aproximada tenías en mente pagar y con qué anticipo contás?"
-  - Cuando pasa un anticipo (ej. $8.000.000): contrastá que en convencional a tasa fija la cuota sube mucho por los intereses (ej. arriba de $1.500.000/mes) y proponé destinar ese mismo capital para ofertar en licitación dentro de Toyota Plan (desde cuota 2) con cuota mucho más baja y sin interés bancario, preguntando si quiere que Gonzalo le arme la simulación exacta.
-16. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
+14. NO ENVIAR IMÁGENES NI LINKS DE PLANES POR AHORA: Prohibido enviar URLs de imágenes o folletos JPG en esta etapa.
+15. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
 ${officialPricesText}
 
-FINANCIACIÓN CONVENCIONAL Y BANCARIA DE REFERENCIA (USAR SOLO SI RECHAZA PLAN DE AHORRO):
+FINANCIACIÓN CONVENCIONAL Y BANCARIA DE REFERENCIA (SOLO PARA CONTRASTE DE NO VENTA):
 ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             },
 
@@ -3915,6 +3973,374 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             updateDashboard();
             showToast("Base No Compra vaciada");
         };
+
+        // ============================================================================
+        // MÓDULO 5: MOTOR DE ENVÍO MASIVO ANTI-BAN POR SOFÍA IA + REGISTRO OBJETIVOS
+        // ============================================================================
+        let massCampaignState = {
+            config: {
+                delayMinSec: 45,
+                delayMaxSec: 95,
+                dailyLimit: 40,
+                batchPauseMin: 4,
+                aiSpin: true,
+                daytimeOnly: true,
+                alsoOpenWaWeb: false,
+                ...(JSON.parse(localStorage.getItem('crm_mass_campaign_cfg') || '{}'))
+            },
+            queue: JSON.parse(localStorage.getItem('crm_mass_campaign_queue') || '[]'),
+            sentLogs: JSON.parse(localStorage.getItem('crm_mass_campaign_logs') || '[]'),
+            running: false,
+            timerId: null,
+            countdownId: null,
+            nextRunAt: 0,
+            batchSentCounter: 0
+        };
+
+        function persistMassCampaignState() {
+            try {
+                localStorage.setItem('crm_mass_campaign_cfg', JSON.stringify(massCampaignState.config));
+                localStorage.setItem('crm_mass_campaign_queue', JSON.stringify(massCampaignState.queue.slice(0, 300)));
+                localStorage.setItem('crm_mass_campaign_logs', JSON.stringify(massCampaignState.sentLogs.slice(0, 500)));
+            } catch (e) {}
+            updateContactosSubCounts();
+        }
+
+        function getTodaySentCampaignCount() {
+            const today = getTodayISODate();
+            return massCampaignState.sentLogs.filter(l => l.dateIso === today).length;
+        }
+
+        window.openMassCampaignModal = function(defaultSource = null) {
+            const cfg = massCampaignState.config;
+            document.getElementById('camp-delay-min').value = cfg.delayMinSec || 45;
+            document.getElementById('camp-delay-max').value = cfg.delayMaxSec || 95;
+            document.getElementById('camp-daily-limit').value = cfg.dailyLimit || 40;
+            document.getElementById('camp-batch-pause').value = cfg.batchPauseMin || 4;
+            document.getElementById('camp-ai-spin').checked = cfg.aiSpin !== false;
+            document.getElementById('camp-daytime-only').checked = cfg.daytimeOnly !== false;
+            document.getElementById('camp-also-open-waweb').checked = Boolean(cfg.alsoOpenWaWeb);
+            if (defaultSource) {
+                const srcSel = document.getElementById('camp-source-select');
+                if (srcSel) srcSel.value = defaultSource;
+                const tpl = waTemplates[defaultSource];
+                if (tpl) document.getElementById('camp-base-message').value = tpl;
+            }
+            previewCampaignCandidates();
+            renderMassCampaignUI();
+            document.getElementById('mass-campaign-modal')?.classList.remove('hidden');
+        };
+
+        window.closeMassCampaignModal = function() {
+            document.getElementById('mass-campaign-modal')?.classList.add('hidden');
+        };
+
+        window.saveCampaignConfig = function() {
+            const minS = Math.max(20, Number(document.getElementById('camp-delay-min')?.value) || 45);
+            const maxS = Math.max(minS + 10, Number(document.getElementById('camp-delay-max')?.value) || 95);
+            massCampaignState.config = {
+                delayMinSec: minS,
+                delayMaxSec: maxS,
+                dailyLimit: Math.max(5, Number(document.getElementById('camp-daily-limit')?.value) || 40),
+                batchPauseMin: Math.max(1, Number(document.getElementById('camp-batch-pause')?.value) || 4),
+                aiSpin: Boolean(document.getElementById('camp-ai-spin')?.checked),
+                daytimeOnly: Boolean(document.getElementById('camp-daytime-only')?.checked),
+                alsoOpenWaWeb: Boolean(document.getElementById('camp-also-open-waweb')?.checked)
+            };
+            persistMassCampaignState();
+            renderMassCampaignUI();
+        };
+
+        function getCampaignSourceList(sourceKey) {
+            if (sourceKey === 'sin_respuesta_24h') return crmContacts.filter(c => c.status === 'Sin Respuesta 24h');
+            const map = {
+                crm: crmContacts,
+                gestion: gestionContacts,
+                redes: redesContacts,
+                salesforce: salesforceContacts,
+                convencional: convencionalContacts,
+                cancelados: canceladosContacts,
+                rescindidos: rescindidosContacts
+            };
+            const list = map[sourceKey] || [];
+            return list.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)' && c.status !== 'Sin Respuesta 24h' && c.phone);
+        }
+
+        window.previewCampaignCandidates = function() {
+            const srcKey = document.getElementById('camp-source-select')?.value || 'crm';
+            const candidates = getCampaignSourceList(srcKey);
+            const infoEl = document.getElementById('camp-candidates-info');
+            if (infoEl) infoEl.textContent = `${candidates.length} contacto(s) listo(s) para recibir mensaje`;
+        };
+
+        window.enqueueSelectedCampaignBatch = function() {
+            const srcKey = document.getElementById('camp-source-select')?.value || 'crm';
+            const batchSize = Math.max(1, Math.min(100, Number(document.getElementById('camp-batch-size')?.value) || 15));
+            const baseMsg = String(document.getElementById('camp-base-message')?.value || '').trim();
+            if (!baseMsg) { showToast("⚠️ Escribí el mensaje base para la campaña"); return; }
+
+            const existingIds = new Set(massCampaignState.queue.filter(q => q.status === 'pending').map(q => q.contactId));
+            const candidates = getCampaignSourceList(srcKey).filter(c => !existingIds.has(c.id)).slice(0, batchSize);
+            if (candidates.length === 0) {
+                showToast("No hay contactos pendientes nuevos en esa base");
+                return;
+            }
+
+            candidates.forEach(c => {
+                massCampaignState.queue.push({
+                    queueId: `${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+                    contactId: c.id,
+                    sourceKey: srcKey,
+                    name: c.name || 'Sin Nombre',
+                    phone: formatPhoneAR(c.phone),
+                    baseMessage: baseMsg,
+                    status: 'pending',
+                    createdAt: Date.now()
+                });
+            });
+
+            persistMassCampaignState();
+            renderMassCampaignUI();
+            showToast(`✅ ${candidates.length} contacto(s) agregados a la cola segura de Sofía`);
+        };
+
+        async function personalizeCampaignTextWithSofia(contactName, baseMessage) {
+            const cleanName = String(contactName || '').trim();
+            const hasValidName = cleanName && !['sin nombre', 'lead salesforce'].includes(cleanName.toLowerCase());
+            let personalized = hasValidName
+                ? baseMessage.replace(/\{nombre\}/gi, cleanName)
+                : baseMessage.replace(/\s*\{nombre\}\s*,?/gi, '').replace(/\s{2,}/g, ' ').trim();
+
+            const apiKey = String(SOFIA_AI.config.geminiApiKey || '').trim();
+            if (!massCampaignState.config.aiSpin || !apiKey) return personalized;
+
+            try {
+                const models = await SOFIA_AI.resolveModels(apiKey);
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(models[0])}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            role: 'user',
+                            parts: [{
+                                text: `Reescribí ligeramente este primer mensaje de WhatsApp de Sofía (asistente de Gonzalo Dichiazza en Ginza Toyota) manteniendo exactamente la misma intención, calidez profesional y brevedad (2 renglones máximo), cambiando levemente el fraseo para que cada envío sea natural y único. No agregues comillas ni emojis excesivos:\n\n"${personalized}"`
+                            }]
+                        }],
+                        generationConfig: { temperature: 0.75, maxOutputTokens: 160, thinkingConfig: { thinkingBudget: 0 } }
+                    })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    const alt = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim().replace(/^["'«“]+|["'»”]+$/g, '');
+                    if (alt && alt.length >= 20) return alt;
+                }
+            } catch (e) {}
+            return personalized;
+        }
+
+        async function dispatchSingleCampaignItem(item) {
+            if (!item) return false;
+            const finalMessage = await personalizeCampaignTextWithSofia(item.name, item.baseMessage);
+            const digits = formatPhoneAR(item.phone).replace(/\D/g, '');
+            const found = findContactGlobal(item.contactId);
+            const contactObj = found ? found.contact : { id: item.contactId, name: item.name, phone: item.phone };
+
+            contactObj.status = 'Mensaje Enviado (48h)';
+            contactObj.method = 'Mensaje';
+            contactObj.waSentAt = Date.now();
+            contactObj.massCampaignSent = true;
+            contactObj.lastOutreachMsg = finalMessage;
+            contactObj.lastOutreachChannel = item.sourceKey || 'crm';
+            await SOFIA_AI.recordInitialOutreachInHistory(contactObj, finalMessage);
+
+            const outPayload = {
+                id: `camp_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+                contactId: contactObj.id,
+                name: contactObj.name || item.name,
+                phone: formatPhoneAR(item.phone),
+                digits,
+                reply: finalMessage,
+                isCampaignOutreach: true,
+                source: 'sofia_mass_campaign_antiban',
+                timestamp: Date.now()
+            };
+            try {
+                await Promise.all([
+                    fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest.json`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(outPayload)
+                    }),
+                    fetch(`${FIREBASE_DB_URL}/wa_campaign_queue/${encodeURIComponent(syncRoom)}.json`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(outPayload)
+                    })
+                ]);
+            } catch (e) {}
+
+            if (document.getElementById('camp-also-open-waweb')?.checked && digits) {
+                const url = `https://web.whatsapp.com/send?phone=${digits}&text=${encodeURIComponent(finalMessage)}`;
+                if (waTabRef && !waTabRef.closed) { try { waTabRef.location.href = url; waTabRef.focus(); } catch (e) {} }
+                else waTabRef = window.open(url, 'crm_whatsapp_web_singleton');
+            }
+
+            item.status = 'sent';
+            item.sentAt = Date.now();
+            item.finalText = finalMessage;
+            massCampaignState.sentLogs.unshift({
+                id: item.queueId,
+                contactId: contactObj.id,
+                name: item.name,
+                phone: item.phone,
+                sourceKey: item.sourceKey,
+                text: finalMessage,
+                dateIso: getTodayISODate(),
+                time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+            });
+            massCampaignState.batchSentCounter++;
+
+            persistMassCampaignState();
+            saveLocalData(true);
+            renderAllTables();
+            updateDashboard();
+            if (activeTab === 'objetivos') renderObjetivos();
+            renderMassCampaignUI();
+            return true;
+        }
+
+        window.sendNextCampaignItemNow = async function() {
+            const nextItem = massCampaignState.queue.find(q => q.status === 'pending');
+            if (!nextItem) { showToast("No hay mensajes pendientes en la cola"); return; }
+            await dispatchSingleCampaignItem(nextItem);
+            showToast(`📤 Enviado a ${nextItem.name} y registrado en Objetivos`);
+        };
+
+        function scheduleNextCampaignTick() {
+            clearTimeout(massCampaignState.timerId);
+            clearInterval(massCampaignState.countdownId);
+            if (!massCampaignState.running) return;
+
+            const nextItem = massCampaignState.queue.find(q => q.status === 'pending');
+            if (!nextItem) {
+                pauseMassCampaignRunner();
+                showToast("🎉 Campaña masiva completada y registrada en Objetivos");
+                return;
+            }
+
+            if (getTodaySentCampaignCount() >= massCampaignState.config.dailyLimit) {
+                pauseMassCampaignRunner();
+                showToast(`🛡️ Tope diario seguro (${massCampaignState.config.dailyLimit}) alcanzado para proteger tu WhatsApp`);
+                return;
+            }
+
+            if (massCampaignState.config.daytimeOnly) {
+                const now = new Date();
+                const decHour = now.getHours() + now.getMinutes() / 60;
+                if (decHour < 9.0 || decHour > 20.5) {
+                    pauseMassCampaignRunner();
+                    showToast("🌙 Campaña pausada automáticamente fuera del horario seguro (09:00 a 20:30 hs)");
+                    return;
+                }
+            }
+
+            let waitSec = Math.floor(Math.random() * (massCampaignState.config.delayMaxSec - massCampaignState.config.delayMinSec + 1)) + massCampaignState.config.delayMinSec;
+            if (massCampaignState.batchSentCounter > 0 && massCampaignState.batchSentCounter % 10 === 0) {
+                waitSec += (massCampaignState.config.batchPauseMin || 4) * 60;
+            }
+
+            massCampaignState.nextRunAt = Date.now() + waitSec * 1000;
+            massCampaignState.countdownId = setInterval(() => {
+                const rem = Math.max(0, Math.ceil((massCampaignState.nextRunAt - Date.now()) / 1000));
+                const cdEl = document.getElementById('camp-next-countdown');
+                if (cdEl && massCampaignState.running) {
+                    cdEl.textContent = `⏳ Próximo envío anti-ban a ${nextItem.name} en ${rem}s...`;
+                }
+            }, 1000);
+
+            massCampaignState.timerId = setTimeout(async () => {
+                clearInterval(massCampaignState.countdownId);
+                if (!massCampaignState.running) return;
+                await dispatchSingleCampaignItem(nextItem);
+                scheduleNextCampaignTick();
+            }, waitSec * 1000);
+        }
+
+        window.startMassCampaignRunner = function() {
+            saveCampaignConfig();
+            const hasPending = massCampaignState.queue.some(q => q.status === 'pending');
+            if (!hasPending) {
+                showToast("⚠️ Primero agregá contactos a la cola");
+                return;
+            }
+            massCampaignState.running = true;
+            renderMassCampaignUI();
+            scheduleNextCampaignTick();
+            showToast("🚀 Campaña masiva segura iniciada por Sofía IA");
+        };
+
+        window.pauseMassCampaignRunner = function() {
+            massCampaignState.running = false;
+            clearTimeout(massCampaignState.timerId);
+            clearInterval(massCampaignState.countdownId);
+            renderMassCampaignUI();
+        };
+
+        window.clearMassCampaignQueue = function() {
+            pauseMassCampaignRunner();
+            massCampaignState.queue = [];
+            persistMassCampaignState();
+            renderMassCampaignUI();
+            showToast("🗑️ Cola de campaña vaciada");
+        };
+
+        function renderMassCampaignUI() {
+            const pending = massCampaignState.queue.filter(q => q.status === 'pending');
+            const sentToday = getTodaySentCampaignCount();
+            const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+            setTxt('camp-sent-today-count', sentToday);
+            setTxt('camp-daily-limit-label', massCampaignState.config.dailyLimit);
+            setTxt('camp-queue-count', pending.length);
+
+            const pill = document.getElementById('campaign-status-pill');
+            const btnStart = document.getElementById('btn-camp-start');
+            const btnPause = document.getElementById('btn-camp-pause');
+            const cdEl = document.getElementById('camp-next-countdown');
+
+            if (massCampaignState.running) {
+                if (pill) { pill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500 text-zinc-950 animate-pulse'; pill.textContent = 'ENVIANDO SEGURO'; }
+                btnStart?.classList.add('hidden');
+                btnPause?.classList.remove('hidden');
+            } else {
+                if (pill) { pill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-zinc-700 text-zinc-200'; pill.textContent = 'PAUSADO'; }
+                btnStart?.classList.remove('hidden');
+                btnPause?.classList.add('hidden');
+                if (cdEl) cdEl.textContent = pending.length > 0 ? `${pending.length} mensaje(s) listos para iniciar` : 'Cola vacía';
+            }
+
+            const qList = document.getElementById('camp-queue-list');
+            if (qList) {
+                qList.innerHTML = pending.length === 0
+                    ? `<div class="p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">Seleccioná una base a la izquierda y tocá <b>"+ Agregar a Cola"</b>.</div>`
+                    : pending.slice(0, 40).map((item, idx) => `<div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 flex items-center justify-between gap-2 text-xs">
+                        <div class="min-w-0">
+                            <span class="font-bold text-slate-900">#${idx + 1} ${item.name}</span>
+                            <span class="text-slate-500 ml-1.5 tabular-nums">${item.phone}</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold">En cola</span>
+                    </div>`).join('');
+            }
+
+            const logList = document.getElementById('camp-sent-log-list');
+            if (logList) {
+                logList.innerHTML = massCampaignState.sentLogs.length === 0
+                    ? `<div class="text-slate-400">Aún no se despacharon mensajes masivos hoy.</div>`
+                    : massCampaignState.sentLogs.slice(0, 20).map(l => `<div class="flex items-center justify-between gap-2 bg-white px-2.5 py-1 rounded border border-slate-200">
+                        <span class="truncate"><b>${l.name}</b> (${l.phone}) — "${l.text.slice(0, 55)}..."</span>
+                        <span class="text-[10px] text-emerald-700 font-bold shrink-0">✓ ${l.time}</span>
+                    </div>`).join('');
+            }
+        }
 
         // --- TOAST & RENDER GLOBAL ---
         function showToast(msg) {
