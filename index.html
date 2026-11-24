@@ -1092,9 +1092,10 @@
                             <span id="wa-ai-sandbox-count" class="px-2 py-0.5 rounded bg-amber-200 text-amber-950 text-[10px] font-extrabold">0 testers</span>
                         </div>
                         <div class="flex gap-1.5">
-                            <input type="text" id="wa-ai-new-tester-input" onkeydown="if(event.key==='Enter') addSandboxTester()" placeholder="Agregar tel (+549341...) o nombre exacto de WA..." class="flex-1 px-2.5 py-1.5 text-xs font-bold border border-amber-300 rounded-xl bg-white outline-none">
-                            <button onclick="addSandboxTester()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold shrink-0">+ Sumar Tester</button>
+                            <input type="text" id="wa-ai-new-tester-input" onkeydown="if(event.key==='Enter') addSandboxTester()" placeholder="Ingresá celular del tester (ej: 3415551234)..." class="flex-1 px-2.5 py-1.5 text-xs font-bold border border-amber-300 rounded-xl bg-white outline-none">
+                            <button onclick="addSandboxTester()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold shrink-0">+ Sumar Celular</button>
                         </div>
+                        <p class="text-[10px] text-amber-900">💡 Si el tester NO está agendado en tu celular, WhatsApp muestra su número y activa automático por celular. (Si ya lo tenés agendado con nombre en tu teléfono, WhatsApp muestra ese nombre).</p>
                         <div id="wa-ai-sandbox-testers-list" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto"></div>
                         <input type="hidden" id="wa-ai-sandbox-phone">
                     </div>
