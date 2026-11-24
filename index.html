@@ -732,6 +732,96 @@
     <div id="wa-bridge-modal" class="fixed inset-0 bg-slate-900/60 z-[66] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-xl p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">📲 Vinculación MacroDroid</h3><button onclick="closeWaBridgeModal()">✕</button></div><div class="flex gap-2"><input type="text" id="wa-webhook-url" readonly class="flex-1 px-3 py-2 text-xs font-mono bg-slate-100 border rounded-xl"><button onclick="copyWaWebhookUrl()" class="px-3 py-2 bg-[#EB0A1E] text-white rounded-xl text-xs font-bold">Copiar URL</button></div><div id="wa-incoming-logs" class="max-h-36 overflow-y-auto border rounded-xl divide-y text-xs"></div></div></div>
     <div id="sf-sync-modal" class="fixed inset-0 bg-slate-900/60 z-[67] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-xl p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">🔄 Salesforce Sync</h3><button onclick="closeSalesforceSyncModal()">✕</button></div><input type="text" id="sf-inbound-url" readonly class="w-full px-2 py-1.5 text-xs font-mono bg-slate-100 border rounded-lg"><input type="text" id="sf-outbound-url" readonly class="w-full px-2 py-1.5 text-xs font-mono bg-slate-100 border rounded-lg"></div></div>
 
+    <!-- MODAL FICHA INDIVIDUAL DEL CLIENTE + PAUSA / CONTINUIDAD IA -->
+    <div id="client-profile-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[71] hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
+            <div class="px-5 py-4 bg-zinc-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#EB0A1E] text-white uppercase">Ficha Cliente</span>
+                        <h3 id="profile-modal-title" class="text-base sm:text-lg font-extrabold truncate">Cliente</h3>
+                    </div>
+                    <p id="profile-modal-subtitle" class="text-xs text-zinc-400 mt-0.5">Gestión individual y control de intervención humana</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="profile-ai-toggle-btn" onclick="toggleClientAiPauseFromProfile()" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all shadow-sm flex items-center gap-1.5">
+                        🤖 Sofía Activa
+                    </button>
+                    <button onclick="closeClientProfileModal()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">✕ Cerrar</button>
+                </div>
+            </div>
+
+            <div id="profile-ai-paused-banner" class="hidden px-5 py-2.5 bg-amber-100 border-b border-amber-300 text-amber-950 text-xs font-bold flex flex-wrap items-center justify-between gap-2">
+                <span>⏸️ SOFÍA PAUSADA PARA ESTE CLIENTE — Podés chatear vos manualmente sin que la IA intervenga.</span>
+                <button onclick="toggleClientAiPauseFromProfile()" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold">▶ Dar Continuidad a Sofía</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50">
+                <div class="lg:col-span-5 space-y-3 bg-white p-4 rounded-2xl border border-slate-200">
+                    <input type="hidden" id="profile-contact-id">
+                    <div class="text-xs font-extrabold uppercase text-slate-700 border-b pb-2">Datos Comerciales</div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nombre y Apellido</label>
+                        <input type="text" id="profile-name" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">WhatsApp</label>
+                        <input type="text" id="profile-phone" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl outline-none">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Modelo Interés</label>
+                            <select id="profile-model" class="w-full px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Etapa</label>
+                            <select id="profile-status" class="w-full px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none">
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Mensaje Enviado (48h)">Mensaje Enviado (48h)</option>
+                                <option value="Contestó">Contestó</option>
+                                <option value="Interesado">Interesado</option>
+                                <option value="Interesado a Futuro">Interesado a Futuro</option>
+                                <option value="Entrevista">Entrevista</option>
+                                <option value="Venta">Venta</option>
+                                <option value="No Compra">No Compra</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Fecha Agenda</label>
+                            <input type="date" id="profile-schedule-date" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-xl">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Hora</label>
+                            <input type="time" id="profile-schedule-time" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-xl">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Notas / Contexto para Gonzalo & Sofía</label>
+                        <textarea id="profile-obs" rows="3" placeholder="Ej: Tiene un usado 2019, prefiere cuota hasta $550.000..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none resize-none"></textarea>
+                    </div>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="saveClientProfileChanges()" class="flex-1 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs font-bold">💾 Guardar Ficha</button>
+                        <button onclick="openProfileWhatsAppChat()" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">🟢 Abrir WA</button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden min-h-[340px]">
+                    <div class="px-4 py-3 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
+                        <span class="text-xs font-extrabold text-slate-800">💬 Conversación con el Cliente</span>
+                        <button onclick="refreshClientProfileChatFromCloud()" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-[11px] font-bold text-slate-700 hover:bg-slate-50">🔄 Actualizar</button>
+                    </div>
+                    <div id="profile-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[300px]"></div>
+                    <div class="p-3 bg-white border-t border-slate-200 flex gap-2">
+                        <input type="text" id="profile-manual-note-input" onkeydown="if(event.key==='Enter') logManualAdvisorMessage()" placeholder="Registrar lo que hablaste vos manualmente (para darle contexto a Sofía)..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
+                        <button onclick="logManualAdvisorMessage()" class="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-bold shrink-0">+ Contexto IA</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA • 100% GOOGLE GEMINI) -->
     <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
@@ -1741,7 +1831,9 @@
                     });
                     if (result) {
                         anyUpdated = true;
-                        if (waAiConfig.autoReplyMobile && text && !waAiConfig.cloudWorkerPrimary) {
+                        if (result.contact.aiPaused) {
+                            waIncomingLogs[0].actionLabel = `⏸️ Pausada para ${result.contact.name} (Intervención manual)`;
+                        } else if (waAiConfig.autoReplyMobile && text && !waAiConfig.cloudWorkerPrimary) {
                             SOFIA_AI.enqueueClientMessage(result.contact, text);
                         }
                     }
@@ -1921,11 +2013,12 @@
         }
         window.renderActions = function(contact, channelKey = 'gestion') {
             const safeCh = String(channelKey || 'gestion').replace(/'/g, "\\'");
+            const isPaused = Boolean(contact.aiPaused);
             return `<div class="flex flex-wrap items-center gap-1">
-                <button onclick="openEditModal('${contact.id}')" class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium">Editar</button>
-                <button onclick="openWaAiForContact('${contact.id}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold">🤖 Sofía</button>
+                <button onclick="openClientProfileModal('${contact.id}')" class="px-2.5 py-1 ${isPaused ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-slate-900 text-white'} rounded-lg text-xs font-bold">${isPaused ? '⏸️ Ficha (IA Pausada)' : '👤 Ficha'}</button>
+                <button onclick="toggleContactAiPause('${contact.id}')" class="px-2 py-1 ${isPaused ? 'bg-emerald-600 text-white' : 'bg-amber-50 text-amber-800 border border-amber-200'} rounded-lg text-xs font-bold" title="${isPaused ? 'Reactivar Sofía IA' : 'Pausar Sofía IA para intervenir'}">${isPaused ? '▶ Reanudar IA' : '⏸️ Pausar IA'}</button>
                 <button onclick="openWhatsAppSingleTab('${formatPhoneAR(contact.phone).replace(/\D/g, '')}', '${contact.id}', '${safeCh}', '${(contact.name||'').replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-semibold">💬 WA</button>
-                <button onclick="updateStatus('${contact.id}', 'Interesado')" class="px-2.5 py-1 bg-zinc-900 text-white rounded-lg text-xs font-semibold">✓ Interesado</button>
+                <button onclick="updateStatus('${contact.id}', 'Interesado')" class="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-lg text-xs font-semibold">✓ Interesado</button>
                 <button onclick="deleteContact('${contact.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-xs">🗑️</button>
             </div>`;
         };
@@ -1936,11 +2029,11 @@
             if (filtered.length === 0) { tbody.innerHTML = ''; emptyEl?.classList.remove('hidden'); }
             else {
                 emptyEl?.classList.add('hidden');
-                tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold">${c.name || 'Sin Nombre'}<div class="mt-0.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status, channelKey, c.name || '')}</div></td><td class="p-3.5 text-xs">${c.method || channelKey}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5">${renderActions(c, channelKey)}</td></tr>`).join('');
+                tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold"><button onclick="openClientProfileModal('${c.id}')" class="text-left hover:text-[#EB0A1E] underline decoration-slate-300">${c.name || 'Sin Nombre'}</button>${c.aiPaused ? ' <span class="ml-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-extrabold">⏸️ IA Pausada</span>' : ''}<div class="mt-0.5">${renderWhatsAppLink(c.phone, c.id, c.waSentAt, c.status, channelKey, c.name || '')}</div></td><td class="p-3.5 text-xs">${c.method || channelKey}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5">${renderActions(c, channelKey)}</td></tr>`).join('');
             }
             const box = document.getElementById(waitingBoxId);
             const waiting = list.filter(c => c.status === 'Mensaje Enviado (48h)');
-            if (box) box.innerHTML = waiting.length === 0 ? '' : `<div class="p-3 bg-teal-50/50 border-t border-teal-200 text-xs"><div class="font-bold text-teal-900 mb-1">⏳ En espera (48h) — ${waiting.length}</div>${waiting.map(w => `<div class="flex justify-between items-center bg-white p-2 rounded border mb-1"><span><b>${w.name}</b> (${w.phone})</span><button onclick="openWaAiForContact('${w.id}')" class="px-2 py-0.5 bg-emerald-600 text-white rounded font-bold">🤖 Sofía</button></div>`).join('')}</div>`;
+            if (box) box.innerHTML = waiting.length === 0 ? '' : `<div class="p-3 bg-teal-50/50 border-t border-teal-200 text-xs"><div class="font-bold text-teal-900 mb-1">⏳ En espera (48h) — ${waiting.length}</div>${waiting.map(w => `<div class="flex justify-between items-center bg-white p-2 rounded border mb-1"><span><b>${w.name}</b> (${w.phone}) ${w.aiPaused ? '<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold">⏸️ IA Pausada</span>' : ''}</span><div class="flex gap-1"><button onclick="openClientProfileModal('${w.id}')" class="px-2 py-0.5 bg-zinc-900 text-white rounded font-bold">👤 Ficha</button><button onclick="toggleContactAiPause('${w.id}')" class="px-2 py-0.5 ${w.aiPaused ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-900'} rounded font-bold">${w.aiPaused ? '▶ IA' : '⏸️ IA'}</button></div></div>`).join('')}</div>`;
         }
         window.renderCrmTable = () => renderSimpleChannelTable(crmContacts, 'crm-table-body', 'crm-empty-state', 'crm', 'crm-waiting-sublist');
         window.renderGestionTable = () => renderSimpleChannelTable(gestionContacts, 'gestion-table-body', 'gestion-empty-state', 'gestion', 'gestion-waiting-sublist');
@@ -1962,7 +2055,7 @@
         function getAllClientesWithSource() { return getAllListsCombined().filter(c => isClientStatus(c.status)).map(c => ({ ...c, sourceLabel: c.method || 'CRM' })); }
         window.setClientesStageFilter = (s) => { currentClientesStage = s; renderClientesTable(); };
         window.addDirectCliente = () => { const name = document.getElementById('cli-direct-name').value.trim(), phone = formatPhoneAR(document.getElementById('cli-direct-phone').value.trim()); if (name || phone) { gestionContacts.unshift({ id: Date.now().toString(), name: name || 'Cliente', phone, interestModel: document.getElementById('cli-direct-model').value, status: document.getElementById('cli-direct-status').value }); saveLocalData(true); renderAllTables(); updateDashboard(); } };
-        window.renderClientesTable = () => { const tb = document.getElementById('clientes-table-body'); if (!tb) return; const act = getAllClientesWithSource().filter(c => c.status !== 'No Compra'); document.getElementById('cli-count-Todos').textContent = act.length; tb.innerHTML = act.map(c => `<tr><td class="p-3.5 font-bold">${c.name}</td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel||'-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><button onclick="openWaAiForContact('${c.id}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold">🤖 Sofía</button> <button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button></td></tr>`).join(''); };
+        window.renderClientesTable = () => { const tb = document.getElementById('clientes-table-body'); if (!tb) return; const act = getAllClientesWithSource().filter(c => c.status !== 'No Compra'); document.getElementById('cli-count-Todos').textContent = act.length; tb.innerHTML = act.map(c => `<tr><td class="p-3.5 font-bold"><button onclick="openClientProfileModal('${c.id}')" class="text-left hover:text-[#EB0A1E] underline decoration-slate-300">${c.name}</button>${c.aiPaused ? ' <span class="ml-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-extrabold">⏸️ IA Pausada</span>' : ''}<div class="text-[11px] font-normal text-slate-500">${c.phone || ''}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel||'-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><div class="flex flex-wrap gap-1"><button onclick="openClientProfileModal('${c.id}')" class="px-2.5 py-1 bg-zinc-900 text-white rounded-lg text-xs font-bold">👤 Ficha</button><button onclick="toggleContactAiPause('${c.id}')" class="px-2.5 py-1 ${c.aiPaused ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-900 border border-amber-300'} rounded-lg text-xs font-bold">${c.aiPaused ? '▶ Reanudar IA' : '⏸️ Pausar IA'}</button><button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button></div></td></tr>`).join(''); };
         window.updateStatus = (id, s) => { const f = findContactGlobal(id); if (f) { f.contact.status = s; saveLocalData(true); renderAllTables(); updateDashboard(); } };
         window.closeModelModal = () => document.getElementById('model-modal')?.classList.add('hidden');
         window.confirmInterestModel = () => closeModelModal();
@@ -2578,6 +2671,8 @@
                             status: c.status || 'Pendiente',
                             channel: c.lastOutreachChannel || c.method || 'CRM',
                             interestModel: c.interestModel || '',
+                            observations: c.observations || '',
+                            aiPaused: Boolean(c.aiPaused),
                             lastOutreachMsg: c.lastOutreachMsg || ''
                         }));
 
@@ -2744,7 +2839,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
                     systemPrompt += `\n\nCONTEXTO DE MENSAJE PREVIO ENVIADO AL CLIENTE:\n"${contact.lastOutreachMsg}"\nRespondé en base a ese mensaje sin volver a saludar ni presentarte.`;
                 }
                 if (contact?.name && !['sin nombre', 'lead salesforce', 'hans', 'prueba crm'].includes(contact.name.toLowerCase().trim())) {
-                    systemPrompt += `\n\nCONTEXTO DEL CLIENTE: Nombre ${contact.name}${contact.interestModel ? `, modelo de interés: ${contact.interestModel}` : ''}.`;
+                    systemPrompt += `\n\nCONTEXTO DEL CLIENTE: Nombre ${contact.name}${contact.interestModel ? `, modelo de interés: ${contact.interestModel}` : ''}${contact.observations ? `, notas internas del asesor: ${contact.observations}` : ''}.`;
                 }
                 if (autoSched) {
                     systemPrompt += `\n\nNOTA DE AGENDA: Ya quedó agendado (${autoSched.type}) para el ${autoSched.date} a las ${autoSched.time} hs. Confirmale brevemente el día y horario.`;
@@ -2982,6 +3077,169 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             const digits = formatPhoneAR(contact.phone || '').replace(/\D/g, '');
             if (!digits || !text) { showToast("Falta teléfono o mensaje"); return; }
             window.open(`https://web.whatsapp.com/send?phone=${digits}&text=${encodeURIComponent(text)}`, 'crm_whatsapp_web_singleton');
+        };
+
+        // --- FICHA INDIVIDUAL POR CLIENTE + PAUSA / CONTINUIDAD DE SOFÍA IA ---
+        async function syncClientPauseStateToCloud(contact) {
+            if (!contact) return;
+            const cKey = sanitizeFirebaseKey(contact.id || 'default');
+            const tail = String(contact.phone || '').replace(/\D/g, '').slice(-7);
+            try {
+                await fetch(`${FIREBASE_DB_URL}/ai_paused/${encodeURIComponent(syncRoom)}/${encodeURIComponent(cKey)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        paused: Boolean(contact.aiPaused),
+                        name: contact.name || '',
+                        phone: contact.phone || '',
+                        digitsTail: tail,
+                        updatedAt: Date.now()
+                    })
+                });
+            } catch (e) {}
+            await SOFIA_AI.syncBrainToFirebase();
+        }
+
+        window.toggleContactAiPause = async function(contactId) {
+            const found = findContactGlobal(contactId);
+            if (!found) return;
+            found.contact.aiPaused = !Boolean(found.contact.aiPaused);
+            saveLocalData(true);
+            renderAllTables();
+            await syncClientPauseStateToCloud(found.contact);
+            if (document.getElementById('profile-contact-id')?.value === contactId) {
+                updateClientProfileAiUi(found.contact);
+            }
+            showToast(found.contact.aiPaused
+                ? `⏸️ Sofía pausada para ${found.contact.name || 'este cliente'} — Podés responder vos`
+                : `▶️ Sofía reactivada para ${found.contact.name || 'este cliente'} con continuidad`);
+        };
+
+        function updateClientProfileAiUi(contact) {
+            const btn = document.getElementById('profile-ai-toggle-btn');
+            const banner = document.getElementById('profile-ai-paused-banner');
+            const isPaused = Boolean(contact?.aiPaused);
+            if (btn) {
+                btn.className = isPaused
+                    ? 'px-3.5 py-2 rounded-xl text-xs font-extrabold bg-amber-400 hover:bg-amber-300 text-zinc-950 transition-all shadow-sm flex items-center gap-1.5'
+                    : 'px-3.5 py-2 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-sm flex items-center gap-1.5';
+                btn.textContent = isPaused ? '⏸️ IA Pausada (Reanudar)' : '🤖 Sofía Activa (Pausar)';
+            }
+            if (banner) {
+                if (isPaused) banner.classList.remove('hidden');
+                else banner.classList.add('hidden');
+            }
+        }
+
+        window.openClientProfileModal = async function(contactId) {
+            const found = findContactGlobal(contactId);
+            if (!found) return;
+            const c = found.contact;
+            const modSel = document.getElementById('profile-model');
+            if (modSel) {
+                modSel.innerHTML = `<option value="">Sin definir</option>` + FIXED_INTEREST_MODELS.map(m => `<option value="${m}">${m}</option>`).join('');
+            }
+            document.getElementById('profile-contact-id').value = c.id;
+            document.getElementById('profile-modal-title').textContent = c.name || 'Cliente sin nombre';
+            document.getElementById('profile-modal-subtitle').textContent = `${c.phone || 'Sin teléfono'} • Canal: ${c.method || found.source}`;
+            document.getElementById('profile-name').value = c.name || '';
+            document.getElementById('profile-phone').value = c.phone || '';
+            document.getElementById('profile-model').value = c.interestModel || '';
+            document.getElementById('profile-status').value = c.status || 'Pendiente';
+            document.getElementById('profile-schedule-date').value = c.scheduleDate || '';
+            document.getElementById('profile-schedule-time').value = c.scheduleTime || '';
+            document.getElementById('profile-obs').value = c.observations || '';
+            updateClientProfileAiUi(c);
+            document.getElementById('client-profile-modal')?.classList.remove('hidden');
+            await refreshClientProfileChatFromCloud();
+        };
+
+        window.closeClientProfileModal = function() {
+            document.getElementById('client-profile-modal')?.classList.add('hidden');
+        };
+
+        window.toggleClientAiPauseFromProfile = async function() {
+            const id = document.getElementById('profile-contact-id')?.value;
+            if (id) await toggleContactAiPause(id);
+        };
+
+        window.saveClientProfileChanges = async function() {
+            const id = document.getElementById('profile-contact-id')?.value;
+            const found = findContactGlobal(id);
+            if (!found) return;
+            const c = found.contact;
+            c.name = document.getElementById('profile-name').value.trim() || c.name;
+            c.phone = formatPhoneAR(document.getElementById('profile-phone').value.trim()) || c.phone;
+            c.interestModel = document.getElementById('profile-model').value;
+            c.status = document.getElementById('profile-status').value;
+            c.scheduleDate = document.getElementById('profile-schedule-date').value;
+            c.scheduleTime = document.getElementById('profile-schedule-time').value;
+            c.observations = document.getElementById('profile-obs').value.trim();
+            document.getElementById('profile-modal-title').textContent = c.name;
+            saveLocalData(true);
+            renderAllTables();
+            updateDashboard();
+            await SOFIA_AI.syncBrainToFirebase();
+            showToast(`💾 Ficha actualizada para ${c.name}`);
+        };
+
+        window.openProfileWhatsAppChat = function() {
+            const phone = document.getElementById('profile-phone')?.value || '';
+            const digits = formatPhoneAR(phone).replace(/\D/g, '');
+            if (!digits) { showToast("El cliente no tiene teléfono válido"); return; }
+            window.open(`https://web.whatsapp.com/send?phone=${digits}`, 'crm_whatsapp_web_singleton');
+        };
+
+        window.refreshClientProfileChatFromCloud = async function() {
+            const id = document.getElementById('profile-contact-id')?.value;
+            const box = document.getElementById('profile-chat-history');
+            if (!id || !box) return;
+            const cKey = sanitizeFirebaseKey(id);
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(cKey)}.json`);
+                const remoteMsgs = await res.json();
+                if (Array.isArray(remoteMsgs) && remoteMsgs.length > 0) {
+                    SOFIA_AI.chats[id] = remoteMsgs.filter(Boolean);
+                    SOFIA_AI.saveChats();
+                }
+            } catch (e) {}
+            const msgs = SOFIA_AI.chats[id] || [];
+            if (msgs.length === 0) {
+                box.innerHTML = `<div class="text-center text-xs text-slate-500 py-8">Todavía no hay mensajes registrados con este cliente.</div>`;
+                return;
+            }
+            box.innerHTML = msgs.map(m => m.role === 'user'
+                ? `<div class="flex justify-start"><div class="max-w-[82%] px-3 py-2 rounded-2xl bg-white border border-slate-200 text-xs text-slate-800 shadow-xs"><div>${m.text}</div><div class="text-[9px] text-slate-400 mt-0.5">Cliente ${m.time ? '• ' + m.time : ''}</div></div></div>`
+                : `<div class="flex justify-end"><div class="max-w-[82%] px-3 py-2 rounded-2xl ${m.manualAdvisor ? 'bg-zinc-900 text-white' : 'bg-emerald-600 text-white'} text-xs shadow-xs"><div>${m.text}</div><div class="text-[9px] opacity-80 text-right mt-0.5">${m.manualAdvisor ? 'Gonzalo (Manual)' : 'Sofía IA'} ${m.time ? '• ' + m.time : ''}</div></div></div>`
+            ).join('');
+            box.scrollTop = box.scrollHeight;
+        };
+
+        window.logManualAdvisorMessage = async function() {
+            const id = document.getElementById('profile-contact-id')?.value;
+            const inp = document.getElementById('profile-manual-note-input');
+            const text = String(inp?.value || '').trim();
+            if (!id || !text) return;
+            inp.value = '';
+            if (!Array.isArray(SOFIA_AI.chats[id])) SOFIA_AI.chats[id] = [];
+            SOFIA_AI.chats[id].push({
+                role: 'model',
+                manualAdvisor: true,
+                text: `[Intervención de Gonzalo]: ${text}`,
+                ts: Date.now(),
+                time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+            });
+            SOFIA_AI.saveChats();
+            const cKey = sanitizeFirebaseKey(id);
+            try {
+                await fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(cKey)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(SOFIA_AI.chats[id].slice(-40))
+                });
+            } catch (e) {}
+            await refreshClientProfileChatFromCloud();
+            showToast("✅ Contexto guardado para que Sofía continúe desde acá");
         };
 
         // --- RESPALDO Y SALA FIREBASE ---
