@@ -1088,9 +1088,15 @@
                 <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden min-h-[400px]">
                     <div class="p-3 bg-amber-50 border-b-2 border-amber-300 space-y-2">
                         <div class="flex items-center justify-between">
-                            <label class="inline-flex items-center gap-2 text-xs font-extrabold text-amber-950"><input type="checkbox" id="wa-ai-sandbox-enabled" checked onchange="saveWaAiConfig()"><span>🧪 MODO PRUEBA AISLADO (SANDBOX)</span></label>
+                            <label class="inline-flex items-center gap-2 text-xs font-extrabold text-amber-950"><input type="checkbox" id="wa-ai-sandbox-enabled" checked onchange="saveWaAiConfig()"><span>🧪 MODO PRUEBA AISLADO (MÚLTIPLES TESTERS)</span></label>
+                            <span id="wa-ai-sandbox-count" class="px-2 py-0.5 rounded bg-amber-200 text-amber-950 text-[10px] font-extrabold">0 testers</span>
                         </div>
-                        <input type="text" id="wa-ai-sandbox-phone" onchange="saveWaAiConfig()" placeholder="+549341..." class="w-full px-2.5 py-1.5 text-xs font-bold border border-amber-300 rounded-xl bg-white">
+                        <div class="flex gap-1.5">
+                            <input type="text" id="wa-ai-new-tester-input" onkeydown="if(event.key==='Enter') addSandboxTester()" placeholder="Agregar tel (+549341...) o nombre exacto de WA..." class="flex-1 px-2.5 py-1.5 text-xs font-bold border border-amber-300 rounded-xl bg-white outline-none">
+                            <button onclick="addSandboxTester()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold shrink-0">+ Sumar Tester</button>
+                        </div>
+                        <div id="wa-ai-sandbox-testers-list" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto"></div>
+                        <input type="hidden" id="wa-ai-sandbox-phone">
                     </div>
 
                     <div class="p-3.5 bg-slate-50 border-b flex flex-wrap items-center justify-between gap-2">
@@ -2769,6 +2775,7 @@
                 cloudWorkerPrimary: false,
                 sandboxEnabled: true,
                 sandboxPhone: '',
+                sandboxTesters: [],
                 ...JSON.parse(localStorage.getItem('crm_wa_ai_config') || '{}')
             },
             chats: JSON.parse(localStorage.getItem('crm_wa_ai_chats') || '{}'),
@@ -2817,6 +2824,7 @@
 
                     const officialPricesText = this.buildOfficialPricesText();
                     const systemPrompt = this.getSystemPrompt(officialPricesText);
+                    const normalizedTesters = this.getAllSandboxTesters();
 
                     let effectiveApiKey = String(this.config.geminiApiKey || '').trim();
                     if (!effectiveApiKey) {
@@ -2840,7 +2848,8 @@
                             active: Boolean(this.config.autoReplyMobile),
                             cloudWorkerPrimary: true,
                             sandboxEnabled: Boolean(this.config.sandboxEnabled),
-                            sandboxPhone: formatPhoneAR(this.config.sandboxPhone || ''),
+                            sandboxPhone: formatPhoneAR(normalizedTesters[0] || this.config.sandboxPhone || ''),
+                            sandboxTesters: normalizedTesters,
                             advisorName: this.config.advisorName || 'Sofía',
                             branchName: this.config.branchName || 'Ginza Toyota',
                             geminiApiKey: effectiveApiKey,
@@ -2851,6 +2860,17 @@
                         })
                     });
                 } catch (e) {}
+            },
+
+            getAllSandboxTesters() {
+                const list = Array.isArray(this.config.sandboxTesters) ? [...this.config.sandboxTesters] : [];
+                const legacy = String(this.config.sandboxPhone || '').split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+                const merged = [];
+                for (const item of [...list, ...legacy]) {
+                    const formatted = /\d{6,}/.test(item) ? formatPhoneAR(item) : item.trim();
+                    if (formatted && !merged.includes(formatted)) merged.push(formatted);
+                }
+                return merged;
             },
 
             buildOfficialPricesText() {
@@ -2949,6 +2969,66 @@ ${officialPricesText}`;
         const waAiConfig = SOFIA_AI.config;
 
         // --- CONTROLES MODALES SOFÍA 2.7 ---
+        window.renderSandboxTestersList = function() {
+            const listEl = document.getElementById('wa-ai-sandbox-testers-list');
+            const countEl = document.getElementById('wa-ai-sandbox-count');
+            const testers = SOFIA_AI.getAllSandboxTesters();
+            if (countEl) countEl.textContent = `${testers.length} tester(s)`;
+            if (!listEl) return;
+            listEl.innerHTML = testers.length === 0
+                ? `<span class="text-[11px] text-amber-800">Solo Hans / Prueba CRM activos. Agregá teléfonos o nombres arriba para que testeen.</span>`
+                : testers.map((t, idx) => `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-amber-300 text-[11px] font-bold text-slate-900">
+                    <span>🧪 ${t}</span>
+                    <button onclick="removeSandboxTester(${idx})" class="text-red-600 hover:text-red-800 font-extrabold">✕</button>
+                </span>`).join('');
+        };
+
+        window.addSandboxTester = async function() {
+            const inp = document.getElementById('wa-ai-new-tester-input');
+            const raw = String(inp?.value || '').trim();
+            if (!raw) return;
+            inp.value = '';
+            const current = SOFIA_AI.getAllSandboxTesters();
+            raw.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean).forEach(entry => {
+                const formatted = /\d{6,}/.test(entry) ? formatPhoneAR(entry) : entry;
+                if (formatted && !current.includes(formatted)) current.push(formatted);
+            });
+            SOFIA_AI.config.sandboxTesters = current;
+            SOFIA_AI.config.sandboxPhone = current[0] || '';
+            SOFIA_AI.saveConfig();
+            renderSandboxTestersList();
+            refreshWaAiContactSelect();
+            await SOFIA_AI.syncBrainToFirebase();
+            showToast(`🧪 Tester(s) sumado(s) y sincronizado(s) con Sofía 2.7`);
+        };
+
+        window.removeSandboxTester = async function(idx) {
+            const current = SOFIA_AI.getAllSandboxTesters();
+            current.splice(idx, 1);
+            SOFIA_AI.config.sandboxTesters = current;
+            SOFIA_AI.config.sandboxPhone = current[0] || '';
+            SOFIA_AI.saveConfig();
+            renderSandboxTestersList();
+            refreshWaAiContactSelect();
+            await SOFIA_AI.syncBrainToFirebase();
+        };
+
+        function refreshWaAiContactSelect() {
+            const sel = document.getElementById('wa-ai-contact-select');
+            if (!sel) return;
+            const prev = sel.value;
+            const testers = SOFIA_AI.getAllSandboxTesters();
+            const testerOpts = testers.map(t => {
+                const digits = t.replace(/\D/g, '');
+                const key = digits.length >= 6 ? digits.slice(-7) : t.toLowerCase().replace(/\s+/g, '_');
+                return `<option value="sandbox_tester_${key}">🧪 Tester: ${t}</option>`;
+            }).join('');
+            sel.innerHTML = `<option value="sandbox_test_user">🧪 Simulador Prueba CRM (Hans)</option>` +
+                testerOpts +
+                getAllListsCombined().map(c => `<option value="${c.id}">${c.name || 'Sin Nombre'} (${c.phone || ''})</option>`).join('');
+            if (prev) sel.value = prev;
+        }
+
         window.openWaAiAssistantModal = function() {
             document.getElementById('wa-ai-auto-reply').checked = Boolean(SOFIA_AI.config.autoReplyMobile);
             document.getElementById('wa-ai-gemini-key').value = SOFIA_AI.config.geminiApiKey || '';
@@ -2961,11 +3041,8 @@ ${officialPricesText}`;
             document.getElementById('wa-ai-incoming-url').value = `${(SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '')}/incoming?room=${encodeURIComponent(syncRoom)}&format=text`;
             document.getElementById('wa-ai-outgoing-url').value = `${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest/reply.json`;
 
-            const sel = document.getElementById('wa-ai-contact-select');
-            if (sel) {
-                sel.innerHTML = `<option value="sandbox_test_user">🧪 Simulador Prueba CRM (Hans)</option>` +
-                    getAllListsCombined().map(c => `<option value="${c.id}">${c.name || 'Sin Nombre'} (${c.phone || ''})</option>`).join('');
-            }
+            renderSandboxTestersList();
+            refreshWaAiContactSelect();
             onWaAiContactChange();
             document.getElementById('wa-ai-assistant-modal')?.classList.remove('hidden');
         };
@@ -2978,7 +3055,6 @@ ${officialPricesText}`;
             SOFIA_AI.config.workerUrl = String(document.getElementById('wa-ai-worker-url')?.value || '').trim();
             SOFIA_AI.config.cloudWorkerPrimary = Boolean(document.getElementById('wa-ai-cloud-worker-primary')?.checked);
             SOFIA_AI.config.sandboxEnabled = Boolean(document.getElementById('wa-ai-sandbox-enabled')?.checked);
-            SOFIA_AI.config.sandboxPhone = String(document.getElementById('wa-ai-sandbox-phone')?.value || '').trim();
             SOFIA_AI.saveConfig();
             await SOFIA_AI.syncBrainToFirebase();
             showToast("🤖 Cerebro Sofi 2.7 sincronizado");
@@ -2986,6 +3062,10 @@ ${officialPricesText}`;
         function getSelectedWaAiContact() {
             const id = document.getElementById('wa-ai-contact-select')?.value || 'sandbox_test_user';
             if (id === 'sandbox_test_user') return { id: 'sandbox_test_user', name: 'Hans', phone: SOFIA_AI.config.sandboxPhone || '' };
+            if (id.startsWith('sandbox_tester_')) {
+                const label = document.getElementById('wa-ai-contact-select')?.selectedOptions?.[0]?.textContent?.replace(/^🧪 Tester:\s*/, '') || 'Tester';
+                return { id, name: label, phone: label };
+            }
             const found = findContactGlobal(id);
             return found ? found.contact : { id, name: 'Cliente', phone: '' };
         }
