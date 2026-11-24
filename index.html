@@ -2250,6 +2250,35 @@
         async function savePlanBlobsToIndexedDB(planId, pdfDataUrl, jpgPages) {
             try { const db = await openPlansIndexedDB(); const tx = db.transaction(PLAN_IDB_STORE, 'readwrite'); tx.objectStore(PLAN_IDB_STORE).put({ id: planId, pdfDataUrl, jpgPages }); } catch (e) {}
         }
+        function buildPlanJpgSlug(vehicleName, modality = '70/30') {
+            const cleanModel = String(vehicleName || 'modelo').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+            const cleanMod = String(modality || '70_30').toLowerCase().replace(/[^a-z0-9]+/g, '_');
+            return `${cleanModel}_${cleanMod}`;
+        }
+        async function syncPlanJpgsToCloud(planRecord) {
+            if (!planRecord || !Array.isArray(planRecord.jpgPages) || planRecord.jpgPages.length === 0) return;
+            const slug = buildPlanJpgSlug(planRecord.vehicleName || planRecord.planName, planRecord.modality || '70/30');
+            try {
+                await fetch(`${FIREBASE_DB_URL}/plan_jpgs/${encodeURIComponent(syncRoom)}/${encodeURIComponent(slug)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        planId: planRecord.id,
+                        slug,
+                        vehicleName: planRecord.vehicleName || planRecord.planName,
+                        modality: planRecord.modality || '70/30',
+                        period: planRecord.period || '',
+                        pageCount: planRecord.jpgPages.length,
+                        pages: planRecord.jpgPages.map(pg => ({
+                            pageNum: pg.pageNum,
+                            fileName: pg.fileName,
+                            dataUrl: pg.dataUrl
+                        })),
+                        updatedAt: Date.now()
+                    })
+                });
+            } catch (e) {}
+        }
         async function deletePlanBlobsFromIndexedDB(planId) {
             try { const db = await openPlansIndexedDB(); const tx = db.transaction(PLAN_IDB_STORE, 'readwrite'); tx.objectStore(PLAN_IDB_STORE).delete(planId); } catch (e) {}
         }
@@ -2317,12 +2346,13 @@
                     const newPlan = { id: Date.now().toString() + Math.random().toString(36).substr(2, 4), period, month: monthVal, year: Number(yearVal), planName: file.name.replace(/\.pdf$/i, ''), ...parsed, pdfDataUrl, jpgPages: pages, uploadedAt: Date.now() };
                     plansHistory.unshift(newPlan);
                     await savePlanBlobsToIndexedDB(newPlan.id, pdfDataUrl, pages);
+                    await syncPlanJpgsToCloud(newPlan);
                     currentPlanJpgs = pages;
                     renderCurrentJpgGallery(`${newPlan.vehicleName} (${newPlan.modality})`, period);
                 } catch (err) {}
             }
             document.getElementById('pdf-processing-status')?.classList.add('hidden');
-            saveLocalData(true); renderPlansHistory(); showToast(`✅ ${files.length} PDF(s) procesado(s)`);
+            saveLocalData(true); renderPlansHistory(); showToast(`✅ ${files.length} PDF(s) procesado(s) y JPGs publicados para Sofía`);
         };
         window.renderVehiclePriceEvolutionChart = function() {
             const chartBox = document.getElementById('vehicle-price-chart-box'), modelSel = document.getElementById('plan-chart-model-select');
@@ -2551,8 +2581,26 @@
                             lastOutreachMsg: c.lastOutreachMsg || ''
                         }));
 
+                    const availablePlanJpgs = [];
+                    const seenJpgSlugs = new Set();
+                    const workerBase = String(this.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '');
+                    for (const p of plansHistory) {
+                        if (!Array.isArray(p.jpgPages) || p.jpgPages.length === 0) continue;
+                        const slug = buildPlanJpgSlug(p.vehicleName || p.planName, p.modality || '70/30');
+                        if (seenJpgSlugs.has(slug)) continue;
+                        seenJpgSlugs.add(slug);
+                        availablePlanJpgs.push({
+                            slug,
+                            vehicleName: p.vehicleName || p.planName,
+                            modality: p.modality || '70/30',
+                            period: p.period || '',
+                            pageCount: p.jpgPages.length,
+                            jpgUrlPage1: `${workerBase}/plan-jpg?room=${encodeURIComponent(syncRoom)}&slug=${encodeURIComponent(slug)}&page=1`
+                        });
+                    }
+
                     const officialPricesText = this.buildOfficialPricesText();
-                    const systemPrompt = this.getSystemPrompt(officialPricesText);
+                    const systemPrompt = this.getSystemPrompt(officialPricesText, availablePlanJpgs);
 
                     // Si este navegador no tiene la API Key cargada, heredarla de Firebase para nunca pisarla vacía
                     let effectiveApiKey = String(this.config.geminiApiKey || '').trim();
@@ -2583,6 +2631,7 @@
                             geminiApiKey: effectiveApiKey,
                             systemPrompt,
                             officialPricesText,
+                            availablePlanJpgs,
                             authorizedContacts,
                             toyotaPlans: marketPlansCatalog.filter(p => p.brand === 'Toyota')
                         })
@@ -2591,7 +2640,7 @@
                     if (badge) {
                         badge.textContent = this.config.sandboxEnabled
                             ? `🧪 Sofi 2.6 Sandbox (${this.config.sandboxPhone || 'Hans / Prueba CRM'})`
-                            : `☁️ Sofi 2.6 24/7 (${authorizedContacts.length} contactos en nube)`;
+                            : `☁️ Sofi 2.6 24/7 (${authorizedContacts.length} contactos • ${availablePlanJpgs.length} JPGs)`;
                     }
                 } catch (e) {}
             },
@@ -2601,23 +2650,27 @@
                 if (plansHistory.length > 0) {
                     const seen = new Set();
                     for (const p of plansHistory) {
-                        const key = `${p.vehicleName || p.planName}_${p.modality || '70/30'}`;
+                        const key = `${p.vehicleName || p.planName} (${p.modality || '70/30'})`;
                         if (seen.has(key)) continue;
                         seen.add(key);
-                        lines.push(`- ${p.vehicleName || p.planName} (${p.modality || '70/30'}): Valor Móvil $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Cuota Máxima Ref. $${Number(p.price || 0).toLocaleString('es-AR')}`);
+                        lines.push(`- ${key} [${p.period}]: Valor Móvil $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Cuota Máx. Referencia: $${Number(p.price || 0).toLocaleString('es-AR')}`);
                     }
                 }
-                if (lines.length === 0) {
-                    marketPlansCatalog.filter(p => p.brand === 'Toyota').forEach(p => {
-                        lines.push(`- ${p.model} (${p.modality}): Valor Móvil $${Number(p.valorMovil || 0).toLocaleString('es-AR')} | Cuota Máxima Ref. $${Number(p.cuotaPura || 0).toLocaleString('es-AR')}`);
-                    });
+                const existingUpper = lines.join('\n').toUpperCase();
+                for (const def of marketPlansCatalog.filter(m => m.brand === 'Toyota')) {
+                    if (!existingUpper.includes(def.model.toUpperCase())) {
+                        lines.push(`- ${def.model} (${def.modality}): Valor Móvil $${Number(def.valorMovil).toLocaleString('es-AR')} | Cuota Máx. Referencia: $${Number(def.cuotaPura).toLocaleString('es-AR')}`);
+                    }
                 }
-                return lines.join('\n');
+                return `LISTA OFICIAL DE VALORES Y CUOTAS TOYOTA PLAN (GINZA TOYOTA):\n${lines.join('\n')}`;
             },
 
-            getSystemPrompt(officialPricesText) {
+            getSystemPrompt(officialPricesText, availablePlanJpgs = []) {
                 const advisor = this.config.advisorName || 'Sofía';
                 const branch = this.config.branchName || 'Ginza Toyota';
+                const jpgCatalogLines = Array.isArray(availablePlanJpgs) && availablePlanJpgs.length > 0
+                    ? availablePlanJpgs.map(j => `- Modelo exacto: "${j.vehicleName}" (${j.modality} - ${j.period}) → URL JPG: ${j.jpgUrlPage1}`).join('\n')
+                    : '(Aún no hay hojas JPG subidas en Planes & PDF)';
                 return `Sos ${advisor}, asistente comercial senior de Gonzalo Dichiazza en ${branch} (concesionario oficial Toyota en Rosario), chateando por WhatsApp como una persona real, breve, cálida y 100% profesional.
 
 REGLAS DE ORO DE CONVERSACIÓN (CUMPLIMIENTO ESTRICTO):
@@ -2641,7 +2694,18 @@ REGLAS DE ORO DE CONVERSACIÓN (CUMPLIMIENTO ESTRICTO):
 10. NO APURAR LA VISITA PRESENCIAL: Preguntá primero si prefiere seguir revisando los números por acá o coordinar una entrevista con Gonzalo. Recién si confirma que quiere reunirse, pedí nombre y apellido (si no lo tenemos). Si dice que todavía no quiere ir al concesionario, acompañalo por WhatsApp sin insistir.
 11. COMPARACIÓN INTELIGENTE CON OTRAS MARCAS: Si el cliente nombra un modelo de la competencia (ej. Territory, Amarok, Ranger, Cronos, 208), NUNCA respondas frío "no trabajamos otras marcas"; comparalo de forma positiva con su equivalente Toyota (Territory → Corolla Cross, Ranger/Amarok → Hilux, Cronos/208 → Yaris/Corolla) resaltando valor de reventa, confiabilidad y garantía oficial Toyota, y hacé 1 pregunta sobre qué atributo valora más.
 12. CIERRE CORDIAL ANTE UN "NO": Si el cliente responde seco "No" cuando le ofrecés más información, no vuelvas a repreguntar; despedite amablemente en 1 renglón dejando la puerta abierta.
-13. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
+13. ENVÍO EXACTO DE EXPLICATIVOS JPG DE PLANES (REGLA ANTI-CRUCE DE MODELO):
+   - Podés compartir el explicativo en imagen JPG del plan ÚNICAMENTE cuando el cliente pida ver el folleto/explicativo/detalle de cuotas de un modelo Toyota específico y ese modelo exista con coincidencia EXACTA en la lista de hojas JPG disponibles abajo.
+   - PROHIBICIÓN ABSOLUTA DE MEZCLAR MODELOS:
+     * Si el cliente habla de **Corolla** (sedán), NUNCA le pases el explicativo de **Corolla Cross** ni de **Hilux**.
+     * Si habla de **Corolla Cross**, NUNCA le pases el de **Corolla** sedán.
+     * Si habla de **Yaris**, NUNCA le pases el de **Yaris Cross**.
+     * Si habla de **Hilux**, NUNCA le pases el de otro vehículo.
+   - Si existe la hoja JPG exacta para el modelo que pidió el cliente, incluí el link exacto de su URL JPG en tu respuesta (sin paréntesis alrededor del link) junto con una breve explicación y 1 pregunta.
+   - Si el cliente pide el explicativo de un modelo Toyota cuya hoja JPG todavía NO está cargada en la lista de abajo, jamás mandes el JPG de otro modelo: informale por texto la cuota oficial de ese modelo y preguntale si ese valor se ajusta a su presupuesto mensual.
+   Hojas JPG disponibles hoy:
+${jpgCatalogLines}
+14. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
 ${officialPricesText}
 
 FINANCIACIÓN CONVENCIONAL Y BANCARIA DE REFERENCIA:
