@@ -12,30 +12,63 @@
     <title>Crm Ginza Toyota — Gestión Comercial & Planes</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; overflow-x: hidden; background-color: #f4f5f7; }
-        .tab-active { border-bottom: 3px solid #EB0A1E; color: #EB0A1E; font-weight: 700; }
-        .tab-inactive { color: #64748b; font-weight: 500; border-bottom: 3px solid transparent; }
-        .tab-inactive:hover { color: #0f172a; }
+        :root {
+            --toyota-red: #EB0A1E;
+            --toyota-red-dark: #C80818;
+            --toyota-obsidian: #0A0A0C;
+            --toyota-carbon: #16161A;
+            --toyota-platinum: #F5F6F8;
+            --toyota-border: #E4E7EC;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+            background-color: var(--toyota-platinum);
+            color: #111827;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, .font-toyota-display {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            letter-spacing: -0.02em;
+        }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+        .tab-active {
+            border-bottom: 3px solid var(--toyota-red);
+            color: var(--toyota-red);
+            font-weight: 700;
+        }
+        .tab-inactive {
+            color: #525866;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-inactive:hover { color: #0A0A0C; }
+        .toyota-emblem-badge {
+            background: linear-gradient(145deg, #FF1E32 0%, #EB0A1E 55%, #B80615 100%);
+            box-shadow: 0 4px 14px rgba(235, 10, 30, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         @keyframes slideUp {
             from { transform: translateY(100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        .toast-animate { animation: slideUp 0.3s ease-out forwards; }
+        .toast-animate { animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 pb-12">
+<body class="min-h-screen text-slate-800 pb-24 md:pb-12">
 
-    <!-- NAVBAR CORPORATIVO GINZA TOYOTA -->
+    <!-- NAVBAR CORPORATIVO GINZA TOYOTA (SHOWROOM EDITION) -->
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div class="bg-gradient-to-r from-zinc-950 via-neutral-900 to-zinc-900 text-white">
+        <div class="bg-gradient-to-r from-[#0A0A0C] via-[#141418] to-[#1C1C22] text-white border-b border-white/10">
             <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex justify-between items-center gap-2">
                 <div class="flex items-center gap-3 min-w-0">
                     <!-- Emblema Oficial Toyota -->
-                    <div class="w-11 h-8 bg-[#EB0A1E] rounded-xl flex items-center justify-center shadow-md shadow-red-950/50 shrink-0 px-1.5">
+                    <div class="w-11 h-8 toyota-emblem-badge rounded-xl flex items-center justify-center shrink-0 px-1.5">
                         <svg viewBox="0 0 120 76" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <ellipse cx="60" cy="38" rx="52" ry="31" stroke="#FFFFFF" stroke-width="6.5"/>
                             <ellipse cx="60" cy="38" rx="15" ry="31" stroke="#FFFFFF" stroke-width="6"/>
@@ -44,10 +77,10 @@
                     </div>
                     <div class="min-w-0">
                         <div class="flex items-center gap-2">
-                            <span class="font-extrabold text-base sm:text-xl tracking-tight text-white truncate">Crm Ginza Toyota</span>
+                            <span class="font-toyota-display font-extrabold text-base sm:text-xl tracking-tight text-white truncate">Crm Ginza Toyota</span>
                             <span class="px-2 py-0.5 text-[10px] font-extrabold bg-[#EB0A1E] text-white rounded-full tracking-wider uppercase shrink-0">OFICIAL</span>
                         </div>
-                        <p class="text-[11px] text-zinc-400 hidden sm:block">Concesionario Oficial Toyota • Gestión Integral & Plan de Ahorro</p>
+                        <p class="text-[11px] text-zinc-400 hidden sm:block">Concesionario Oficial Toyota • Gestión Comercial & Toyota Plan</p>
                     </div>
                 </div>
 
@@ -62,7 +95,7 @@
                     </button>
                     <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
-                        <span id="nav-agenda-badge" class="px-1.5 py-0.2 text-[10px] font-extrabold bg-white text-purple-800 rounded-full">0</span>
+                        <span id="nav-agenda-badge" class="px-1.5 py-0.2 text-[10px] font-extrabold bg-white text-purple-800 rounded-full tabular-nums">0</span>
                     </button>
                     <button onclick="openBackupModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-zinc-200 hover:bg-white/20 transition-colors flex items-center gap-1 shrink-0" title="Respaldo, Sala y Vinculación Móvil">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
@@ -72,14 +105,14 @@
             </div>
         </div>
 
-        <!-- Tabs de Navegación -->
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <!-- Tabs de Navegación Superior -->
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 bg-white">
             <div class="flex space-x-5 sm:space-x-7 pt-2 overflow-x-auto no-scrollbar text-sm">
                 <button id="tab-btn-botonera" class="tab-active pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('botonera')">Panel Principal</button>
                 <button id="tab-btn-contactos" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('contactos')">Base de Datos / Contactos</button>
                 <button id="tab-btn-clientes" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5" onclick="switchTab('clientes')">
                     <span>Clientes</span>
-                    <span id="nav-clientes-badge" class="px-1.5 py-0.2 text-[10px] font-bold bg-red-100 text-[#EB0A1E] rounded-full">0</span>
+                    <span id="nav-clientes-badge" class="px-1.5 py-0.2 text-[10px] font-bold bg-red-100 text-[#EB0A1E] rounded-full tabular-nums">0</span>
                 </button>
                 <button id="tab-btn-comparativa" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1" onclick="switchTab('comparativa')">
                     <span>⚖️ Comparativa de Planes</span>
@@ -93,71 +126,8 @@
         </div>
     </nav>
 
-    <!-- TARJETAS GLOBALES SUPERIORES Y ALERTAS EN VIVO -->
-    <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-5">
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <button onclick="filterByStatus('Todos')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-slate-900 hover:shadow transition-all text-left group relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-slate-800"></div>
-                <div class="flex items-center justify-between">
-                    <span class="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">Base Total</span>
-                    <span class="text-xs px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-semibold">100%</span>
-                </div>
-                <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" id="stat-total">0</div>
-                <div class="text-[11px] text-slate-400 mt-0.5">Todos los canales activos</div>
-            </button>
-
-            <button onclick="filterByStatus('Interesados')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-emerald-500 hover:shadow transition-all text-left group relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
-                <div class="flex items-center justify-between">
-                    <span class="text-[11px] sm:text-xs font-bold text-emerald-700 uppercase tracking-wider">Interesados</span>
-                    <span class="text-xs px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold" id="stat-rate-interes">0%</span>
-                </div>
-                <div class="text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1" id="stat-interesados">0</div>
-                <div class="text-[11px] text-slate-400 mt-0.5">En seguimiento y a futuro</div>
-            </button>
-
-            <button onclick="filterByStatus('Entrevistas')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-purple-500 hover:shadow transition-all text-left group relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-purple-600"></div>
-                <div class="flex items-center justify-between">
-                    <span class="text-[11px] sm:text-xs font-bold text-purple-700 uppercase tracking-wider">Entrevistas</span>
-                    <span class="text-xs px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 font-bold" id="stat-rate-entrevista">0%</span>
-                </div>
-                <div class="text-2xl sm:text-3xl font-extrabold text-purple-700 mt-1" id="stat-entrevistas">0</div>
-                <div class="text-[11px] text-slate-400 mt-0.5">Reuniones y cotizaciones</div>
-            </button>
-
-            <button onclick="filterByStatus('Ventas')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-[#EB0A1E] hover:shadow transition-all text-left group relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-[#EB0A1E]"></div>
-                <div class="flex items-center justify-between">
-                    <span class="text-[11px] sm:text-xs font-bold text-[#EB0A1E] uppercase tracking-wider">Ventas Cerradas</span>
-                    <span class="text-xs px-2 py-0.5 rounded-md bg-red-50 text-[#EB0A1E] font-bold" id="stat-rate-venta">0%</span>
-                </div>
-                <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" id="stat-ventas">0</div>
-                <div class="text-[11px] text-slate-400 mt-0.5">Suscripciones Toyota Plan</div>
-            </button>
-        </div>
-
-        <!-- Barra de Seguimiento Automático WhatsApp 24hs IA + 48hs -->
-        <div id="wa-tracker-banner" class="mt-3 bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
-            <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="font-bold text-slate-900">Seguimiento Autónomo Sofía IA (100% Google Gemini):</span>
-                <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h sin insistir.</span>
-            </div>
-            <div class="flex items-center gap-1.5 flex-wrap">
-                <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">
-                    🤖 Piloto Sofía IA 24/7
-                </button>
-                <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">
-                    🟢 Pestaña WA Web
-                </button>
-                <button onclick="checkWhatsApp48hTimeouts(true)" class="px-2.5 py-1 rounded-lg bg-red-50 text-[#EB0A1E] hover:bg-red-100 border border-red-200 font-semibold transition-colors">
-                    Verificar 48h
-                </button>
-            </div>
-        </div>
-
-        <!-- ALERTA DE TASACIÓN INFOAUTO -->
+    <!-- ÚNICAMENTE ALERTAS URGENTES EN VIVO ARRIBA (OCULTAS SI NO HAY PENDIENTES) -->
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div id="infoauto-alerts-banner" class="hidden mt-3 bg-amber-50 border-2 border-amber-400 rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div class="flex items-start sm:items-center gap-2.5">
                 <span class="text-xl shrink-0">🚗</span>
@@ -171,7 +141,6 @@
             </button>
         </div>
 
-        <!-- ALERTA COMERCIAL EN VIVO -->
         <div id="commercial-live-alerts-banner" class="hidden mt-3 bg-rose-50 border-2 border-[#EB0A1E] rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div class="flex items-start sm:items-center gap-2.5">
                 <span class="text-xl shrink-0">🔔</span>
@@ -185,7 +154,6 @@
             </button>
         </div>
 
-        <!-- ALERTA DE AUDIO RECIBIDO EN WHATSAPP -->
         <div id="audio-live-alerts-banner" class="hidden mt-3 bg-indigo-50 border-2 border-indigo-500 rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div class="flex items-start sm:items-center gap-2.5">
                 <span class="text-xl shrink-0">🎙️</span>
@@ -198,29 +166,95 @@
                 Marcar escuchados
             </button>
         </div>
-    </section>
+    </div>
 
-    <!-- TAB 1: PANEL PRINCIPAL EJECUTIVO GINZA TOYOTA -->
-    <main id="tab-botonera" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-6">
-        <div class="bg-gradient-to-br from-zinc-950 via-neutral-900 to-zinc-800 rounded-3xl p-5 sm:p-7 text-white shadow-lg relative overflow-hidden border border-zinc-800">
+    <!-- ========================================================================= -->
+    <!-- TAB 1: PANEL PRINCIPAL EJECUTIVO GINZA TOYOTA (INCLUYE KPIS EXCLUSIVOS)   -->
+    <!-- ========================================================================= -->
+    <main id="tab-botonera" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-5">
+        <!-- 4 TARJETAS KPI EXCLUSIVAS DEL PANEL PRINCIPAL -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <button onclick="filterByStatus('Todos')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-slate-900 hover:shadow transition-all text-left group relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#0A0A0C]"></div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">Base Total</span>
+                    <span class="text-xs px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-semibold tabular-nums">100%</span>
+                </div>
+                <div class="font-toyota-display tabular-nums text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" id="stat-total">0</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">Todos los canales activos</div>
+            </button>
+
+            <button onclick="filterByStatus('Interesados')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-emerald-500 hover:shadow transition-all text-left group relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] sm:text-xs font-bold text-emerald-700 uppercase tracking-wider">Interesados</span>
+                    <span class="text-xs px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold tabular-nums" id="stat-rate-interes">0%</span>
+                </div>
+                <div class="font-toyota-display tabular-nums text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1" id="stat-interesados">0</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">En seguimiento y a futuro</div>
+            </button>
+
+            <button onclick="filterByStatus('Entrevistas')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-purple-500 hover:shadow transition-all text-left group relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-purple-600"></div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] sm:text-xs font-bold text-purple-700 uppercase tracking-wider">Entrevistas</span>
+                    <span class="text-xs px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 font-bold tabular-nums" id="stat-rate-entrevista">0%</span>
+                </div>
+                <div class="font-toyota-display tabular-nums text-2xl sm:text-3xl font-extrabold text-purple-700 mt-1" id="stat-entrevistas">0</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">Reuniones y cotizaciones</div>
+            </button>
+
+            <button onclick="filterByStatus('Ventas')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-[#EB0A1E] hover:shadow transition-all text-left group relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#EB0A1E]"></div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] sm:text-xs font-bold text-[#EB0A1E] uppercase tracking-wider">Ventas Cerradas</span>
+                    <span class="text-xs px-2 py-0.5 rounded-md bg-red-50 text-[#EB0A1E] font-bold tabular-nums" id="stat-rate-venta">0%</span>
+                </div>
+                <div class="font-toyota-display tabular-nums text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" id="stat-ventas">0</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">Suscripciones Toyota Plan</div>
+            </button>
+        </div>
+
+        <!-- BARRA DE SEGUIMIENTO AUTÓNOMO SOFÍA 2.7 -->
+        <div id="wa-tracker-banner" class="bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="font-bold text-slate-900">Seguimiento Autónomo Sofi 2.7 (Google Gemini):</span>
+                <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h sin insistir.</span>
+            </div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+                <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">
+                    🤖 Piloto Sofi 2.7
+                </button>
+                <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">
+                    🟢 Pestaña WA Web
+                </button>
+                <button onclick="checkWhatsApp48hTimeouts(true)" class="px-2.5 py-1 rounded-lg bg-red-50 text-[#EB0A1E] hover:bg-red-100 border border-red-200 font-semibold transition-colors">
+                    Verificar 24h/48h
+                </button>
+            </div>
+        </div>
+
+        <!-- BANNER SHOWROOM TOYOTA -->
+        <div class="bg-gradient-to-br from-[#0A0A0C] via-[#151519] to-[#222229] rounded-3xl p-5 sm:p-7 text-white shadow-lg relative overflow-hidden border border-zinc-800">
             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                 <div class="max-w-2xl">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-zinc-200 mb-3">
                         <span class="w-2 h-2 rounded-full bg-[#EB0A1E]"></span>
                         <span id="hero-date-label">Centro de Comando Comercial • Ginza Toyota</span>
                     </div>
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
+                    <h1 class="font-toyota-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
                         Gestión Comercial & Asesoramiento IA <span class="text-[#EB0A1E]">Toyota Plan</span>
                     </h1>
                     <p class="text-xs sm:text-sm text-zinc-300 mt-2 leading-relaxed">
-                        Sofía conversa 100% impulsada por Google Gemini con los valores y cuotas oficiales cargados en tu CRM.
+                        Sofía 2.7 conversa 100% impulsada por Google Gemini con los valores y cuotas oficiales cargados en tu CRM.
                     </p>
                     <div class="flex flex-wrap gap-2.5 mt-4">
-                        <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">
+                        <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs sm:text-sm font-bold shadow-md transition-all">
                             📋 Ir a Prospección (7 Canales)
                         </button>
                         <button onclick="openAgendaWindow()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">
-                            📅 Ventana Calendario (<span id="hero-agenda-count">0</span>)
+                            📅 Ventana Calendario (<span id="hero-agenda-count" class="tabular-nums">0</span>)
                         </button>
                         <button onclick="switchTab('comparativa')" class="px-4 py-2.5 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-xs sm:text-sm font-bold shadow-md transition-all">
                             ⚖️ Comparar Planes
@@ -285,54 +319,54 @@
         </div>
     </main>
 
-    <!-- TAB 2: BASE DE DATOS / CONTACTOS -->
-    <main id="tab-contactos" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
+    <!-- ========================================================================= -->
+    <!-- TAB 2: BASE DE DATOS / CONTACTOS (7 CANALES + CLASIFICACIÓN NO COMPRA)    -->
+    <!-- ========================================================================= -->
+    <main id="tab-contactos" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 hidden">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
                 <div>
                     <h2 class="text-base sm:text-lg font-bold text-slate-900">Base de Datos de Prospección (7 Canales)</h2>
-                    <p class="text-xs text-slate-500">Al enviar un mensaje pasa a <b>espera (48 hs)</b>. Sofía IA hace <b>1 seguimiento suave a las 24 hs</b> sin insistir.</p>
+                    <p class="text-xs text-slate-500">Al enviar un mensaje pasa a <b>espera</b>. Sofía 2.7 clasifica automáticamente <b>No Compra</b> en Sin Respuesta (+24h), Interesados, Contactar a Futuro y No Interesados por motivo.</p>
                 </div>
                 <button onclick="switchTab('clientes')" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-red-50 text-[#EB0A1E] border border-red-200 hover:bg-red-100 transition-colors self-start sm:self-auto">
                     <span>Ver derivados en Clientes:</span>
-                    <span id="contactos-moved-count" class="px-2 py-0.5 rounded-full bg-[#EB0A1E] text-white font-bold">0</span>
+                    <span id="contactos-moved-count" class="px-2 py-0.5 rounded-full bg-[#EB0A1E] text-white font-bold tabular-nums">0</span>
                     <span>→</span>
                 </button>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
-                <button onclick="setContactosSubView('all')" id="subnav-all" class="p-2.5 rounded-xl border-2 border-[#EB0A1E] bg-red-50 text-left transition-all"><div class="text-[10px] font-bold text-[#EB0A1E] uppercase">Todos</div><div class="text-base font-bold text-slate-900 mt-0.5" id="subcount-all">0</div></button>
-                <button onclick="setContactosSubView('crm')" id="subnav-crm" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-400 text-left transition-all"><div class="text-[10px] font-bold text-slate-600 uppercase">1. No Compra</div><div class="text-base font-bold text-slate-900 mt-0.5" id="subcount-crm">0</div></button>
-                <button onclick="setContactosSubView('gestion')" id="subnav-gestion" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-indigo-400 text-left transition-all"><div class="text-[10px] font-bold text-indigo-600 uppercase">2. Gestión</div><div class="text-base font-bold text-slate-900 mt-0.5" id="subcount-gestion">0</div></button>
-                <button onclick="setContactosSubView('redes')" id="subnav-redes" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-pink-400 text-left transition-all"><div class="text-[10px] font-bold text-pink-600 uppercase">3. Redes</div><div class="text-base font-bold text-slate-900 mt-0.5" id="subcount-redes">0</div></button>
-                <button onclick="setContactosSubView('salesforce')" id="subnav-salesforce" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-sky-400 text-left transition-all"><div class="text-[10px] font-bold text-sky-600 uppercase">4. Salesforce</div><div class="text-base font-bold text-slate-900 mt-0.5" id="subcount-salesforce">0</div></button>
-                <button onclick="setContactosSubView('convencional')" id="subnav-convencional" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-emerald-400 text-left transition-all"><div class="text-[10px] font-bold text-emerald-600 uppercase">5. Convenc.</div><div class="text-base font-bold text-slate-900 mt-0.5" id="subcount-convencional">0</div></button>
-                <button onclick="setContactosSubView('cancelados')" id="subnav-cancelados" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-amber-400 text-left transition-all"><div class="text-[10px] font-bold text-amber-700 uppercase">6. Cancelados</div><div class="text-base font-bold text-slate-900 mt-0.5" id="subcount-cancelados">0</div></button>
-                <button onclick="setContactosSubView('rescindidos')" id="subnav-rescindidos" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-rose-400 text-left transition-all"><div class="text-[10px] font-bold text-rose-700 uppercase">7. Rescindidos</div><div class="text-base font-bold text-slate-900 mt-0.5" id="subcount-rescindidos">0</div></button>
+                <button onclick="setContactosSubView('all')" id="subnav-all" class="p-2.5 rounded-xl border-2 border-[#EB0A1E] bg-red-50 text-left transition-all"><div class="text-[10px] font-bold text-[#EB0A1E] uppercase">Todos</div><div class="text-base font-bold text-slate-900 mt-0.5 tabular-nums" id="subcount-all">0</div></button>
+                <button onclick="setContactosSubView('crm')" id="subnav-crm" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-400 text-left transition-all"><div class="text-[10px] font-bold text-slate-600 uppercase">1. No Compra</div><div class="text-base font-bold text-slate-900 mt-0.5 tabular-nums" id="subcount-crm">0</div></button>
+                <button onclick="setContactosSubView('gestion')" id="subnav-gestion" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-indigo-400 text-left transition-all"><div class="text-[10px] font-bold text-indigo-600 uppercase">2. Gestión</div><div class="text-base font-bold text-slate-900 mt-0.5 tabular-nums" id="subcount-gestion">0</div></button>
+                <button onclick="setContactosSubView('redes')" id="subnav-redes" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-pink-400 text-left transition-all"><div class="text-[10px] font-bold text-pink-600 uppercase">3. Redes</div><div class="text-base font-bold text-slate-900 mt-0.5 tabular-nums" id="subcount-redes">0</div></button>
+                <button onclick="setContactosSubView('salesforce')" id="subnav-salesforce" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-sky-400 text-left transition-all"><div class="text-[10px] font-bold text-sky-600 uppercase">4. Salesforce</div><div class="text-base font-bold text-slate-900 mt-0.5 tabular-nums" id="subcount-salesforce">0</div></button>
+                <button onclick="setContactosSubView('convencional')" id="subnav-convencional" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-emerald-400 text-left transition-all"><div class="text-[10px] font-bold text-emerald-600 uppercase">5. Convenc.</div><div class="text-base font-bold text-slate-900 mt-0.5 tabular-nums" id="subcount-convencional">0</div></button>
+                <button onclick="setContactosSubView('cancelados')" id="subnav-cancelados" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-amber-400 text-left transition-all"><div class="text-[10px] font-bold text-amber-700 uppercase">6. Cancelados</div><div class="text-base font-bold text-slate-900 mt-0.5 tabular-nums" id="subcount-cancelados">0</div></button>
+                <button onclick="setContactosSubView('rescindidos')" id="subnav-rescindidos" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-rose-400 text-left transition-all"><div class="text-[10px] font-bold text-rose-700 uppercase">7. Rescindidos</div><div class="text-base font-bold text-slate-900 mt-0.5 tabular-nums" id="subcount-rescindidos">0</div></button>
             </div>
         </div>
 
         <div class="space-y-8">
             <!-- SECCIÓN 1: NO COMPRA -->
             <section id="section-block-crm" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-4 sm:px-6 py-4 bg-zinc-900 text-white flex flex-wrap items-center justify-between gap-2">
+                <div class="px-4 sm:px-6 py-4 bg-[#0A0A0C] text-white flex flex-wrap items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5"><span class="w-2.5 h-2.5 rounded-full bg-[#EB0A1E]"></span><h3 class="text-sm sm:text-base font-bold">1. Base de Datos — No Compra</h3></div>
                     <button onclick="openWaTemplatesModal('crm')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
                 </div>
                 <div class="p-4 border-b border-slate-200 bg-slate-50 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
-                    <input type="text" id="search-crm" placeholder="Buscar nombre o tel..." class="w-full lg:w-64 px-3.5 py-2 text-sm border border-slate-300 rounded-xl outline-none bg-white">
+                    <input type="text" id="search-crm" oninput="renderCrmTable()" placeholder="Buscar nombre o tel..." class="w-full lg:w-64 px-3.5 py-2 text-sm border border-slate-300 rounded-xl outline-none bg-white">
                     <div class="flex flex-wrap items-center gap-2">
-                        <label class="cursor-pointer bg-[#EB0A1E] text-white hover:bg-red-700 px-3.5 py-2 rounded-xl font-medium text-xs sm:text-sm">Cargar CSVs<input type="file" id="csv-upload" accept=".csv" multiple class="hidden"></label>
+                        <label class="cursor-pointer bg-[#EB0A1E] text-white hover:bg-[#C80818] px-3.5 py-2 rounded-xl font-medium text-xs sm:text-sm">Cargar CSVs<input type="file" id="csv-upload" accept=".csv" multiple class="hidden"></label>
                         <button onclick="normalizeAllStoredPhones()" class="bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-2 rounded-xl font-medium text-xs sm:text-sm">Formatear (+549)</button>
                         <button onclick="exportSectionCSV('crm')" class="bg-slate-100 border border-slate-300 text-slate-700 px-3 py-2 rounded-xl font-medium text-xs sm:text-sm">Exportar CSV</button>
                         <button onclick="requestDeleteAll()" class="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl font-medium text-xs sm:text-sm">Vaciar</button>
                     </div>
                 </div>
-                <div class="bg-slate-50 border-b border-slate-200 p-3 sm:p-4"><div id="crm-folders-container" class="flex flex-wrap gap-1.5 sm:gap-2"></div></div>
                 <div class="overflow-x-auto"><table class="w-full text-left border-collapse min-w-[640px]"><thead><tr class="bg-white border-b border-slate-200 text-xs sm:text-sm font-semibold text-slate-600"><th class="p-3.5">Contacto & WhatsApp</th><th class="p-3.5">Origen / Loc.</th><th class="p-3.5">Estado</th><th class="p-3.5">Acciones y Avance</th></tr></thead><tbody id="crm-table-body" class="divide-y divide-slate-100 text-sm"></tbody></table></div>
                 <div id="crm-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay datos pendientes de envío en No Compra.</div>
                 <div id="crm-waiting-sublist"></div>
                 <div id="crm-classification-sublists" class="p-4 bg-slate-50/70 border-t border-slate-200 space-y-4"></div>
-                <div id="crm-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 2: GESTIÓN PERSONAL -->
@@ -351,7 +385,6 @@
                 <div class="overflow-x-auto"><table class="w-full text-left border-collapse min-w-[640px]"><thead><tr class="bg-white border-b border-slate-200 text-xs sm:text-sm font-semibold text-slate-600"><th class="p-3.5">Contacto (Gestión)</th><th class="p-3.5">Origen / Loc.</th><th class="p-3.5">Estado</th><th class="p-3.5">Acciones y Avance</th></tr></thead><tbody id="gestion-table-body" class="divide-y divide-slate-100 text-sm"></tbody></table></div>
                 <div id="gestion-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay datos pendientes de envío en Gestión Personal.</div>
                 <div id="gestion-waiting-sublist"></div>
-                <div id="gestion-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 3: REDES SOCIALES -->
@@ -368,7 +401,6 @@
                 <div class="overflow-x-auto"><table class="w-full text-left border-collapse min-w-[640px]"><thead><tr class="bg-white border-b border-slate-200 text-xs sm:text-sm font-semibold text-slate-600"><th class="p-3.5">Contacto (Redes)</th><th class="p-3.5">Origen / Loc.</th><th class="p-3.5">Estado</th><th class="p-3.5">Acciones y Avance</th></tr></thead><tbody id="redes-table-body" class="divide-y divide-slate-100 text-sm"></tbody></table></div>
                 <div id="redes-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay contactos pendientes de envío desde Redes Sociales.</div>
                 <div id="redes-waiting-sublist"></div>
-                <div id="redes-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 4: SALESFORCE -->
@@ -376,7 +408,7 @@
                 <div class="px-4 sm:px-6 py-4 bg-sky-950 text-white flex flex-wrap items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span><h3 class="text-sm sm:text-base font-bold">4. Salesforce Leads</h3></div>
                     <div class="flex items-center gap-2">
-                        <button onclick="openWaAiAssistantModal()" class="bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold">🤖 Sofía IA</button>
+                        <button onclick="openWaAiAssistantModal()" class="bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold">🤖 Sofi 2.7</button>
                         <button onclick="openSalesforceSyncModal()" class="bg-sky-500 text-zinc-950 px-3 py-1 rounded-lg text-xs font-extrabold">🔄 Conectar SF</button>
                         <button onclick="openWaTemplatesModal('salesforce')" class="bg-white/10 text-white px-2.5 py-1 rounded-lg text-xs font-medium">💬 Mensaje WA</button>
                     </div>
@@ -395,7 +427,6 @@
                 <div class="overflow-x-auto"><table class="w-full text-left border-collapse min-w-[640px]"><thead><tr class="bg-white border-b border-slate-200 text-xs sm:text-sm font-semibold text-slate-600"><th class="p-3.5">Lead (Salesforce)</th><th class="p-3.5">Origen / Ref.</th><th class="p-3.5">Estado</th><th class="p-3.5">Acciones y Avance</th></tr></thead><tbody id="salesforce-table-body" class="divide-y divide-slate-100 text-sm"></tbody></table></div>
                 <div id="salesforce-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay leads de Salesforce pendientes de envío.</div>
                 <div id="salesforce-waiting-sublist"></div>
-                <div id="salesforce-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 5: CONVENCIONAL -->
@@ -425,7 +456,6 @@
                     <div class="border border-slate-200 rounded-xl overflow-hidden"><div class="p-3 bg-emerald-50 font-bold text-xs text-emerald-900 flex justify-between"><span>Recibidos del vendedor</span><span id="conv-received-count">0</span></div><table class="w-full text-left text-sm"><tbody id="conv-received-body" class="divide-y divide-slate-100"></tbody></table><div id="conv-received-empty" class="p-4 text-center text-xs text-slate-400">Sin datos.</div></div>
                 </div>
                 <div id="convencional-waiting-sublist"></div>
-                <div id="convencional-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 6: CANCELADOS -->
@@ -440,7 +470,6 @@
                 <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="cancelados-table-body" class="divide-y divide-slate-100"></tbody></table></div>
                 <div id="cancelados-empty-state" class="hidden p-6 text-center text-slate-500 text-sm">Sin pendientes en Cancelados.</div>
                 <div id="cancelados-waiting-sublist"></div>
-                <div id="cancelados-nocompra48-sublist"></div>
             </section>
 
             <!-- SECCIÓN 7: RESCINDIDOS -->
@@ -455,13 +484,14 @@
                 <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="rescindidos-table-body" class="divide-y divide-slate-100"></tbody></table></div>
                 <div id="rescindidos-empty-state" class="hidden p-6 text-center text-slate-500 text-sm">Sin pendientes en Rescindidos.</div>
                 <div id="rescindidos-waiting-sublist"></div>
-                <div id="rescindidos-nocompra48-sublist"></div>
             </section>
         </div>
     </main>
 
-    <!-- TAB 3: CLIENTES -->
-    <main id="tab-clientes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
+    <!-- ========================================================================= -->
+    <!-- TAB 3: CLIENTES                                                           -->
+    <!-- ========================================================================= -->
+    <main id="tab-clientes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 hidden">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
                 <div>
@@ -474,12 +504,12 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
-                <button onclick="setClientesStageFilter('Todos')" id="cli-stage-Todos" class="p-3 rounded-xl border-2 border-zinc-900 bg-zinc-900 text-white text-left"><div class="text-[11px] font-bold uppercase opacity-80">Activos Total</div><div class="text-lg font-bold mt-0.5" id="cli-count-Todos">0</div></button>
-                <button onclick="setClientesStageFilter('Interesado')" id="cli-stage-Interesado" class="p-3 rounded-xl border border-emerald-200 bg-emerald-50/60 text-left"><div class="text-[11px] font-bold text-emerald-700 uppercase">Interesados</div><div class="text-lg font-bold text-emerald-900 mt-0.5" id="cli-count-Interesado">0</div></button>
-                <button onclick="setClientesStageFilter('Interesado a Futuro')" id="cli-stage-Interesado a Futuro" class="p-3 rounded-xl border border-amber-200 bg-amber-50/60 text-left"><div class="text-[11px] font-bold text-amber-700 uppercase">A Futuro</div><div class="text-lg font-bold text-amber-900 mt-0.5" id="cli-count-Futuro">0</div></button>
-                <button onclick="setClientesStageFilter('Entrevista')" id="cli-stage-Entrevista" class="p-3 rounded-xl border border-purple-200 bg-purple-50/60 text-left"><div class="text-[11px] font-bold text-purple-700 uppercase">Entrevistas</div><div class="text-lg font-bold text-purple-900 mt-0.5" id="cli-count-Entrevista">0</div></button>
-                <button onclick="setClientesStageFilter('Venta')" id="cli-stage-Venta" class="p-3 rounded-xl border border-yellow-300 bg-yellow-50/70 text-left"><div class="text-[11px] font-bold text-yellow-800 uppercase">Ventas</div><div class="text-lg font-bold text-yellow-900 mt-0.5" id="cli-count-Venta">0</div></button>
-                <a href="#clientes-nocompra-section" class="p-3 rounded-xl border border-rose-200 bg-rose-50/60 text-left block"><div class="text-[11px] font-bold text-rose-700 uppercase">No Compra</div><div class="text-lg font-bold text-rose-900 mt-0.5" id="cli-count-NoCompra">0</div></a>
+                <button onclick="setClientesStageFilter('Todos')" id="cli-stage-Todos" class="p-3 rounded-xl border-2 border-[#0A0A0C] bg-[#0A0A0C] text-white text-left"><div class="text-[11px] font-bold uppercase opacity-80">Activos Total</div><div class="text-lg font-bold mt-0.5 tabular-nums" id="cli-count-Todos">0</div></button>
+                <button onclick="setClientesStageFilter('Interesado')" id="cli-stage-Interesado" class="p-3 rounded-xl border border-emerald-200 bg-emerald-50/60 text-left"><div class="text-[11px] font-bold text-emerald-700 uppercase">Interesados</div><div class="text-lg font-bold text-emerald-900 mt-0.5 tabular-nums" id="cli-count-Interesado">0</div></button>
+                <button onclick="setClientesStageFilter('Interesado a Futuro')" id="cli-stage-Interesado a Futuro" class="p-3 rounded-xl border border-amber-200 bg-amber-50/60 text-left"><div class="text-[11px] font-bold text-amber-700 uppercase">A Futuro</div><div class="text-lg font-bold text-amber-900 mt-0.5 tabular-nums" id="cli-count-Futuro">0</div></button>
+                <button onclick="setClientesStageFilter('Entrevista')" id="cli-stage-Entrevista" class="p-3 rounded-xl border border-purple-200 bg-purple-50/60 text-left"><div class="text-[11px] font-bold text-purple-700 uppercase">Entrevistas</div><div class="text-lg font-bold text-purple-900 mt-0.5 tabular-nums" id="cli-count-Entrevista">0</div></button>
+                <button onclick="setClientesStageFilter('Venta')" id="cli-stage-Venta" class="p-3 rounded-xl border border-yellow-300 bg-yellow-50/70 text-left"><div class="text-[11px] font-bold text-yellow-800 uppercase">Ventas</div><div class="text-lg font-bold text-yellow-900 mt-0.5 tabular-nums" id="cli-count-Venta">0</div></button>
+                <a href="#clientes-nocompra-section" class="p-3 rounded-xl border border-rose-200 bg-rose-50/60 text-left block"><div class="text-[11px] font-bold text-rose-700 uppercase">No Compra</div><div class="text-lg font-bold text-rose-900 mt-0.5 tabular-nums" id="cli-count-NoCompra">0</div></a>
             </div>
         </div>
 
@@ -491,7 +521,7 @@
                 <select id="cli-direct-model" class="px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none"><option value="">Seleccionar modelo...</option></select>
                 <select id="cli-direct-status" class="px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none"><option value="Interesado">Interesado</option><option value="Interesado a Futuro">Interesado a Futuro</option><option value="Entrevista">Entrevista</option><option value="Venta">Venta</option></select>
                 <select id="cli-direct-channel" class="px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white outline-none"><option value="gestion">Gestión Personal</option><option value="redes">Redes Sociales</option><option value="salesforce">Salesforce</option></select>
-                <button onclick="addDirectCliente()" class="bg-[#EB0A1E] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-red-700">+ Añadir Cliente</button>
+                <button onclick="addDirectCliente()" class="bg-[#EB0A1E] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#C80818]">+ Añadir Cliente</button>
             </div>
         </div>
 
@@ -510,12 +540,14 @@
         </div>
     </main>
 
-    <!-- TAB 4: COMPARATIVA DE PLANES -->
-    <main id="tab-comparativa" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
+    <!-- ========================================================================= -->
+    <!-- TAB 4: COMPARATIVA DE PLANES                                              -->
+    <!-- ========================================================================= -->
+    <main id="tab-comparativa" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 hidden">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-6">
             <div class="flex flex-wrap items-center justify-between gap-4 pb-4 mb-5 border-b border-slate-100">
                 <div><h2 class="text-base sm:text-xl font-extrabold text-slate-900">⚖️ Comparativa de Planes: Toyota vs Competencia</h2></div>
-                <button onclick="syncPlaneroDeLeyLive(true)" class="px-3.5 py-2 rounded-xl bg-zinc-900 text-white text-xs font-semibold">🔄 Actualizar Lista</button>
+                <button onclick="syncPlaneroDeLeyLive(true)" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] text-white text-xs font-semibold">🔄 Actualizar Lista</button>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="p-3.5 rounded-xl bg-slate-50 border"><label class="block text-xs font-bold uppercase mb-1.5">1. Segmento</label><select id="comp-segment-select" onchange="onCompSegmentChange()" class="w-full px-3 py-2 text-sm font-semibold border rounded-xl bg-white"><option value="Pick Up">Pick Up</option><option value="SUV">SUV</option><option value="Hatchback">Hatchback</option><option value="Sedán">Sedán</option><option value="Furgón">Furgón</option></select></div>
@@ -526,15 +558,17 @@
         </div>
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-4 py-3 bg-slate-50 border-b flex justify-between items-center"><h3 class="text-sm font-bold">Listado del Segmento</h3><span class="text-xs text-slate-500" id="comp-table-count">0 planes</span></div>
-            <div class="overflow-x-auto"><table class="w-full text-left text-sm"><thead><tr class="border-b text-xs uppercase text-slate-600"><th class="p-3.5">Marca</th><th class="p-3.5">Modelo</th><th class="p-3.5">Modalidad</th><th class="p-3.5">Valor Móvil</th><th class="p-3.5">Cuota Máx. Ref.</th><th class="p-3.5">Acción</th></tr></thead><tbody id="comp-segment-table-body" class="divide-y divide-slate-100"></tbody></table></div>
+            <div class="overflow-x-auto"><table class="w-full text-left text-sm"><thead><tr class="border-b text-xs uppercase text-slate-600"><th class="p-3.5">Marca</th><th class="p-3.5">Modelo</th><th class="p-3.5">Modalidad</th><th class="p-3.5">Valor Unidad</th><th class="p-3.5">Cuota Máx. Ref.</th><th class="p-3.5">Acción</th></tr></thead><tbody id="comp-segment-table-body" class="divide-y divide-slate-100"></tbody></table></div>
         </div>
     </main>
 
-    <!-- TAB 5: OBJETIVOS -->
-    <main id="tab-objetivos" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden">
-        <div class="bg-gradient-to-r from-zinc-950 via-neutral-900 to-zinc-800 text-white rounded-2xl p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+    <!-- ========================================================================= -->
+    <!-- TAB 5: OBJETIVOS                                                          -->
+    <!-- ========================================================================= -->
+    <main id="tab-objetivos" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 hidden">
+        <div class="bg-gradient-to-r from-[#0A0A0C] via-[#151519] to-zinc-800 text-white rounded-2xl p-5 mb-5 flex flex-wrap items-center justify-between gap-3">
             <div><h3 class="text-base font-bold">Proyección Diaria según Días Hábiles (Lunes a Viernes)</h3><p class="text-xs text-zinc-300 mt-1" id="objetivos-pace-summary">Calculando...</p></div>
-            <span id="objetivos-dias-restantes-badge" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/10 text-emerald-300">- días</span>
+            <span id="objetivos-dias-restantes-badge" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/10 text-emerald-300 tabular-nums">- días</span>
         </div>
         <div class="bg-white rounded-2xl border p-5 mb-5">
             <div class="flex justify-between items-center pb-4 mb-4 border-b"><h3 class="text-base font-bold">Coach IA de Rendimiento</h3><button onclick="applyAiSuggestedGoals()" class="bg-[#EB0A1E] text-white px-4 py-2 rounded-xl text-xs font-semibold">✨ Aplicar Metas IA</button></div>
@@ -542,29 +576,31 @@
             <div id="ai-coach-insights-list" class="space-y-2"></div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <div class="bg-white rounded-2xl border p-5"><div class="flex justify-between items-center mb-4 pb-3 border-b"><h2 class="text-base font-bold">Objetivos Semanales</h2><button onclick="saveGoalsConfig()" class="bg-zinc-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Guardar</button></div><div id="weekly-goals-container" class="space-y-3"></div></div>
+            <div class="bg-white rounded-2xl border p-5"><div class="flex justify-between items-center mb-4 pb-3 border-b"><h2 class="text-base font-bold">Objetivos Semanales</h2><button onclick="saveGoalsConfig()" class="bg-[#0A0A0C] text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Guardar</button></div><div id="weekly-goals-container" class="space-y-3"></div></div>
             <div class="bg-white rounded-2xl border p-5"><div class="flex justify-between items-center mb-4 pb-3 border-b"><h2 class="text-base font-bold">Objetivos Mensuales</h2><span id="objetivos-dias-habiles-badge" class="text-xs font-bold text-[#EB0A1E]">Lun-Vie</span></div><div id="monthly-goals-container" class="space-y-3"></div></div>
         </div>
     </main>
 
-    <!-- TAB 6: PLANES & PDF -->
-    <main id="tab-planes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden space-y-6">
+    <!-- ========================================================================= -->
+    <!-- TAB 6: PLANES & PDF                                                       -->
+    <!-- ========================================================================= -->
+    <main id="tab-planes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 hidden space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div class="bg-white rounded-2xl border p-5 flex flex-col justify-between">
                 <div>
                     <h2 class="text-base font-bold text-slate-900 mb-1">Subir PDFs de Planes</h2>
-                    <p class="text-xs text-slate-500 mb-4">Extrae los períodos ordinarios y toma siempre la cuota más alta para informar al cliente.</p>
+                    <p class="text-xs text-slate-500 mb-4">Extrae cuotas, convierte las hojas a JPG y las deja listas para que Sofía 2.7 envíe el explicativo exacto del vehículo.</p>
                     <div class="grid grid-cols-3 gap-2 mb-3">
                         <select id="plan-month-input" class="px-2 py-2 text-xs border rounded-xl bg-white"><option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option><option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option><option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option></select>
                         <input type="number" id="plan-year-input" value="2026" class="px-2 py-2 text-xs border rounded-xl">
                         <select id="plan-modality-input" class="px-2 py-2 text-xs font-bold border rounded-xl bg-white"><option value="Auto">Auto (PDF)</option><option value="70/30">70/30</option><option value="100%">100%</option></select>
                     </div>
-                    <label class="cursor-pointer w-full bg-[#EB0A1E] hover:bg-red-700 text-white px-4 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2">📂 Subir PDFs<input type="file" id="plan-pdf-upload" accept="application/pdf" multiple class="hidden" onchange="handlePlanPdfUpload(event)"></label>
+                    <label class="cursor-pointer w-full bg-[#EB0A1E] hover:bg-[#C80818] text-white px-4 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2">📂 Subir PDFs<input type="file" id="plan-pdf-upload" accept="application/pdf" multiple class="hidden" onchange="handlePlanPdfUpload(event)"></label>
                 </div>
                 <div id="pdf-processing-status" class="hidden mt-3 p-2.5 bg-red-50 rounded-xl text-xs text-[#EB0A1E] text-center">Procesando PDF...</div>
             </div>
             <div class="lg:col-span-2 bg-white rounded-2xl border p-5">
-                <div class="flex justify-between items-center mb-3 pb-2 border-b"><h2 class="text-base font-bold" id="jpg-preview-title">Hojas JPG Guardadas</h2><button id="btn-download-all-jpg" onclick="downloadAllPlanJpgs()" class="hidden bg-zinc-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Descargar Todas</button></div>
+                <div class="flex justify-between items-center mb-3 pb-2 border-b"><h2 class="text-base font-bold" id="jpg-preview-title">Hojas JPG Guardadas</h2><button id="btn-download-all-jpg" onclick="downloadAllPlanJpgs()" class="hidden bg-[#0A0A0C] text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Descargar Todas</button></div>
                 <div id="pdf-jpg-gallery" class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-h-[340px] overflow-y-auto"></div>
             </div>
         </div>
@@ -578,51 +614,52 @@
                 </div>
             </div>
             <div id="vehicle-price-chart-box" class="p-4 rounded-2xl bg-slate-50 border"></div>
-            <div class="overflow-x-auto border rounded-xl"><table class="w-full text-left text-sm"><thead><tr class="bg-slate-50 border-b text-xs uppercase text-slate-500"><th class="p-3">Período</th><th class="p-3">Vehículo</th><th class="p-3">Valor Móvil</th><th class="p-3">Tramos</th><th class="p-3">Cuota Más Alta</th><th class="p-3">Extraord./Integ.</th><th class="p-3">Dif.</th><th class="p-3">Acciones</th></tr></thead><tbody id="plans-history-body" class="divide-y divide-slate-100"></tbody></table></div>
+            <div class="overflow-x-auto border rounded-xl"><table class="w-full text-left text-sm"><thead><tr class="bg-slate-50 border-b text-xs uppercase text-slate-500"><th class="p-3">Período</th><th class="p-3">Vehículo</th><th class="p-3">Valor Unidad</th><th class="p-3">Tramos</th><th class="p-3">Cuota Más Alta</th><th class="p-3">Extraord./Integ.</th><th class="p-3">Dif.</th><th class="p-3">Acciones</th></tr></thead><tbody id="plans-history-body" class="divide-y divide-slate-100"></tbody></table></div>
             <div id="plans-empty-state" class="hidden p-6 text-center text-slate-400 text-xs">Sin PDFs cargados aún.</div>
         </div>
     </main>
 
-    <!-- TAB 7: FINANCIACIONES & BANCOS (TCFA + BNA + PRENDARIOS) -->
-    <main id="tab-financiaciones" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 hidden space-y-6">
-        <div class="bg-gradient-to-r from-zinc-950 via-neutral-900 to-zinc-800 text-white rounded-3xl p-5 sm:p-6 shadow-md border border-zinc-800">
+    <!-- ========================================================================= -->
+    <!-- TAB 7: FINANCIACIONES & BANCOS (TCFA + BNA + PRENDARIOS)                  -->
+    <!-- ========================================================================= -->
+    <main id="tab-financiaciones" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 hidden space-y-6">
+        <div class="bg-gradient-to-r from-[#0A0A0C] via-[#151519] to-zinc-800 text-white rounded-3xl p-5 sm:p-6 shadow-md border border-zinc-800">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div>
                     <span class="px-2.5 py-1 rounded-full bg-[#EB0A1E] text-white text-[10px] font-extrabold uppercase tracking-wider">Uso Interno • Simulador Rápido</span>
                     <h2 class="text-lg sm:text-2xl font-extrabold mt-2">🏦 Financiación Convencional Toyota (TCFA) & Créditos Bancarios</h2>
-                    <p class="text-xs sm:text-sm text-zinc-300 mt-1">Calculá al instante cuánto necesita financiar el cliente descontando su usado (referencia InfoAuto) y su ahorro, y compará la cuota bancaria vs Toyota Plan.</p>
+                    <p class="text-xs sm:text-sm text-zinc-300 mt-1">Calculá al instante cuánto necesita financiar el cliente descontando su usado y su ahorro, y compará la cuota bancaria vs Toyota Plan.</p>
                 </div>
             </div>
         </div>
 
-        <!-- CALCULADORA DE BRECHA A FINANCIAR -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-5">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
                 <div>
                     <h3 class="text-base font-extrabold text-slate-900">🧮 Calculadora de Diferencia a Financiar & Cuota Estimada</h3>
-                    <p class="text-xs text-slate-500">Recordatorio: InfoAuto es el valor máximo vendiendo particular; en concesionario se toma por debajo (lo cotiza el sector de usados).</p>
+                    <p class="text-xs text-slate-500">Simulador rápido para comparar entrega inmediata vs Toyota Plan en cuotas sin interés.</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
                     <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">1. Valor 0 km Referencia ($)</label>
-                    <input type="number" id="fin-calc-0km" value="49621000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-slate-300 rounded-xl bg-white outline-none">
+                    <input type="number" id="fin-calc-0km" value="49621000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-slate-300 rounded-xl bg-white outline-none tabular-nums">
                     <span class="text-[10px] text-slate-400">Ej: Hilux 4x2 DX ~$49.621.000</span>
                 </div>
                 <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
-                    <label class="block text-[11px] font-bold text-amber-900 uppercase mb-1">2. Usado InfoAuto / Toma ($)</label>
-                    <input type="number" id="fin-calc-used" value="18000000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-amber-300 rounded-xl bg-white outline-none">
-                    <span class="text-[10px] text-amber-800">Cargar valor InfoAuto o toma estimada</span>
+                    <label class="block text-[11px] font-bold text-amber-900 uppercase mb-1">2. Usado / Toma Estimada ($)</label>
+                    <input type="number" id="fin-calc-used" value="18000000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-amber-300 rounded-xl bg-white outline-none tabular-nums">
+                    <span class="text-[10px] text-amber-800">Valor estimado de toma del usado</span>
                 </div>
                 <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200">
                     <label class="block text-[11px] font-bold text-emerald-900 uppercase mb-1">3. Ahorro / Entrega Efectivo ($)</label>
-                    <input type="number" id="fin-calc-cash" value="6000000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-emerald-300 rounded-xl bg-white outline-none">
+                    <input type="number" id="fin-calc-cash" value="6000000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-emerald-300 rounded-xl bg-white outline-none tabular-nums">
                     <span class="text-[10px] text-emerald-800">Capital líquido adicional del cliente</span>
                 </div>
-                <div class="p-3 rounded-xl bg-zinc-900 text-white flex flex-col justify-between">
+                <div class="p-3 rounded-xl bg-[#0A0A0C] text-white flex flex-col justify-between">
                     <span class="text-[11px] font-bold text-zinc-400 uppercase">Saldo Real a Financiar</span>
-                    <div id="fin-calc-gap" class="text-xl sm:text-2xl font-extrabold text-[#EB0A1E] my-1">$25.621.000</div>
+                    <div id="fin-calc-gap" class="text-xl sm:text-2xl font-extrabold text-[#EB0A1E] my-1 tabular-nums">$25.621.000</div>
                     <span id="fin-calc-gap-note" class="text-[10px] text-zinc-300">Capital faltante para retiro inmediato</span>
                 </div>
             </div>
@@ -630,10 +667,9 @@
             <div id="fin-calc-results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-2"></div>
         </div>
 
-        <!-- TABLAS DE REFERENCIA OFICIAL TCFA Y BANCOS -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-5 py-3.5 bg-zinc-900 text-white flex items-center justify-between">
+                <div class="px-5 py-3.5 bg-[#0A0A0C] text-white flex items-center justify-between">
                     <h3 class="text-sm font-bold">1. Toyota Compañía Financiera (TCFA)</h3>
                     <span class="px-2 py-0.5 rounded bg-[#EB0A1E] text-[10px] font-bold">OFICIAL</span>
                 </div>
@@ -683,10 +719,40 @@
         </div>
     </main>
 
+    <!-- BARRA DE NAVEGACIÓN INFERIOR MÓVIL (APP SHOWROOM TOYOTA) -->
+    <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg">
+        <div class="grid grid-cols-5 h-16">
+            <button onclick="switchTab('botonera')" id="mob-nav-botonera" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-[#EB0A1E]">
+                <span class="text-base">🏠</span>
+                <span>Panel</span>
+            </button>
+            <button onclick="switchTab('contactos')" id="mob-nav-contactos" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold text-slate-500">
+                <span class="text-base">📋</span>
+                <span>Bases</span>
+            </button>
+            <button onclick="switchTab('clientes')" id="mob-nav-clientes" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold text-slate-500">
+                <span class="text-base">👥</span>
+                <span>Clientes</span>
+            </button>
+            <button onclick="switchTab('planes')" id="mob-nav-planes" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold text-slate-500">
+                <span class="text-base">📄</span>
+                <span>Planes</span>
+            </button>
+            <button onclick="openWaAiAssistantModal()" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-emerald-700">
+                <span class="text-base">🤖</span>
+                <span>Sofi 2.7</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========================================================================= -->
+    <!-- MODALES Y VENTANAS FLOTANTES                                              -->
+    <!-- ========================================================================= -->
+
     <!-- VENTANA CALENDARIO -->
     <div id="agenda-window-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[55] hidden flex items-center justify-center p-2 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden">
-            <div class="px-5 py-3.5 bg-zinc-950 text-white flex justify-between items-center">
+            <div class="px-5 py-3.5 bg-[#0A0A0C] text-white flex justify-between items-center">
                 <h2 class="text-base font-extrabold">📅 Calendario Comercial Ginza Toyota</h2>
                 <div class="flex gap-2">
                     <button onclick="openNewScheduleModal()" class="px-3 py-1.5 rounded-xl bg-[#EB0A1E] text-white text-xs font-bold">+ Nuevo Compromiso</button>
@@ -713,7 +779,7 @@
         </div>
     </div>
 
-    <!-- MODALES VARIOS -->
+    <!-- MODALES OPERATIVOS -->
     <div id="plan-files-modal" class="fixed inset-0 bg-slate-900/60 z-[65] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-5"><div class="flex justify-between items-center border-b pb-3 mb-4"><h3 id="plan-files-modal-title" class="font-bold">Archivos</h3><button onclick="closePlanFilesModal()">✕</button></div><div id="plan-files-modal-actions" class="mb-3"></div><div id="plan-files-modal-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div></div></div>
     <div id="share-jpg-wa-modal" class="fixed inset-0 bg-slate-900/60 z-[70] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-md p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">📲 Compartir JPG</h3><button onclick="closeShareJpgWaModal()">✕</button></div><p id="share-jpg-wa-filename" class="text-xs text-slate-500"></p><input type="text" id="share-jpg-search" oninput="renderShareJpgContactsList()" placeholder="Buscar cliente..." class="w-full px-3 py-2 text-sm border rounded-xl"><div id="share-jpg-contacts-list" class="max-h-40 overflow-y-auto border rounded-xl divide-y"></div></div></div>
     <div id="edit-modal" class="fixed inset-0 bg-slate-900/50 z-[60] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-lg p-5 space-y-3"><div class="flex justify-between items-center border-b pb-2"><h3 class="font-bold">Editar Contacto</h3><button onclick="closeEditModal()">✕</button></div><input type="hidden" id="edit-id"><div class="grid grid-cols-2 gap-3"><input type="text" id="edit-name" placeholder="Nombre" class="px-3 py-2 text-sm border rounded-xl"><input type="text" id="edit-phone" placeholder="Teléfono" class="px-3 py-2 text-sm border rounded-xl"></div><div class="grid grid-cols-2 gap-3"><input type="text" id="edit-reference" placeholder="Referencia" class="px-3 py-2 text-sm border rounded-xl"><select id="edit-model" class="px-3 py-2 text-sm border rounded-xl bg-white"><option value="">Sin modelo</option></select></div><select id="edit-status" class="w-full px-3 py-2 text-sm border rounded-xl bg-white"><option value="Pendiente">Pendiente</option><option value="Llamada Realizada">Llamada Realizada</option><option value="Mensaje Enviado (48h)">Mensaje Enviado (48h)</option><option value="Sin Respuesta 24h">Sin Respuesta 24h</option><option value="Contestó">Contestó</option><option value="Interesado">Interesado</option><option value="Interesado a Futuro">Interesado a Futuro</option><option value="Entrevista">Entrevista</option><option value="Venta">Venta</option><option value="No Compra">No Compra</option></select><div class="grid grid-cols-3 gap-2"><input type="date" id="edit-schedule-date" class="px-2 py-1.5 text-xs border rounded-lg"><input type="time" id="edit-schedule-time" class="px-2 py-1.5 text-xs border rounded-lg"><input type="text" id="edit-schedule-note" placeholder="Nota" class="px-2 py-1.5 text-xs border rounded-lg"></div><textarea id="edit-obs" rows="2" placeholder="Observaciones..." class="w-full px-3 py-2 text-sm border rounded-xl"></textarea><div class="flex justify-end gap-2"><button onclick="closeEditModal()" class="px-4 py-2 text-sm">Cancelar</button><button onclick="saveEdit()" class="px-5 py-2 bg-[#EB0A1E] text-white text-sm font-bold rounded-xl">Guardar</button></div></div></div>
@@ -724,16 +790,16 @@
     <div id="wa-bridge-modal" class="fixed inset-0 bg-slate-900/60 z-[66] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-xl p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">📲 Vinculación MacroDroid</h3><button onclick="closeWaBridgeModal()">✕</button></div><div class="flex gap-2"><input type="text" id="wa-webhook-url" readonly class="flex-1 px-3 py-2 text-xs font-mono bg-slate-100 border rounded-xl"><button onclick="copyWaWebhookUrl()" class="px-3 py-2 bg-[#EB0A1E] text-white rounded-xl text-xs font-bold">Copiar URL</button></div><div id="wa-incoming-logs" class="max-h-36 overflow-y-auto border rounded-xl divide-y text-xs"></div></div></div>
     <div id="sf-sync-modal" class="fixed inset-0 bg-slate-900/60 z-[67] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-xl p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">🔄 Salesforce Sync</h3><button onclick="closeSalesforceSyncModal()">✕</button></div><input type="text" id="sf-inbound-url" readonly class="w-full px-2 py-1.5 text-xs font-mono bg-slate-100 border rounded-lg"><input type="text" id="sf-outbound-url" readonly class="w-full px-2 py-1.5 text-xs font-mono bg-slate-100 border rounded-lg"></div></div>
 
-    <!-- MODAL FICHA INDIVIDUAL DEL CLIENTE + PAUSA / CONTINUIDAD IA -->
+    <!-- MODAL FICHA INDIVIDUAL DEL CLIENTE + RESUMEN EJECUTIVO + PAUSA / CONTINUIDAD IA -->
     <div id="client-profile-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[71] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
-            <div class="px-5 py-4 bg-zinc-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
+            <div class="px-5 py-4 bg-[#0A0A0C] text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
                 <div class="min-w-0">
                     <div class="flex items-center gap-2">
                         <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#EB0A1E] text-white uppercase">Ficha Cliente</span>
                         <h3 id="profile-modal-title" class="text-base sm:text-lg font-extrabold truncate">Cliente</h3>
                     </div>
-                    <p id="profile-modal-subtitle" class="text-xs text-zinc-400 mt-0.5">Gestión individual y control de intervención humana</p>
+                    <p id="profile-modal-subtitle" class="text-xs text-zinc-400 mt-0.5">Gestión individual, resumen Sofía 2.7 y control de intervención humana</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <button id="profile-ai-toggle-btn" onclick="toggleClientAiPauseFromProfile()" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all shadow-sm flex items-center gap-1.5">
@@ -809,7 +875,7 @@
                         <textarea id="profile-obs" rows="3" placeholder="Ej: Tiene un usado 2019, prefiere cuota hasta $550.000..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none resize-none"></textarea>
                     </div>
                     <div class="flex gap-2 pt-1">
-                        <button onclick="saveClientProfileChanges()" class="flex-1 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs font-bold">💾 Guardar Ficha</button>
+                        <button onclick="saveClientProfileChanges()" class="flex-1 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs font-bold">💾 Guardar Ficha</button>
                         <button onclick="openProfileWhatsAppChat()" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">🟢 Abrir WA</button>
                     </div>
                 </div>
@@ -818,7 +884,7 @@
                     <div class="p-3 bg-emerald-50/80 border-b border-emerald-200 space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
                             <span class="text-[11px] font-extrabold text-emerald-950 uppercase">🧠 Resumen Ejecutivo Sofía 2.7</span>
-                            <button onclick="generateClientAiSummary(true)" class="px-2.5 py-0.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[10px] font-bold">✨ Actualizar Resumen</button>
+                            <button id="btn-refresh-ai-summary" onclick="generateClientAiSummary(true)" class="px-2.5 py-0.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[10px] font-bold">✨ Actualizar Resumen</button>
                         </div>
                         <div id="profile-ai-summary-text" class="text-xs text-slate-800 leading-relaxed whitespace-pre-line">Aún sin conversación registrada.</div>
                     </div>
@@ -829,7 +895,7 @@
                     <div id="profile-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[250px]"></div>
                     <div class="p-3 bg-white border-t border-slate-200 flex gap-2">
                         <input type="text" id="profile-manual-note-input" onkeydown="if(event.key==='Enter') logManualAdvisorMessage()" placeholder="Registrar lo que hablaste vos manualmente (para darle contexto a Sofía)..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
-                        <button onclick="logManualAdvisorMessage()" class="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-bold shrink-0">+ Contexto IA</button>
+                        <button onclick="logManualAdvisorMessage()" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] hover:bg-zinc-800 text-white text-xs font-bold shrink-0">+ Contexto IA</button>
                     </div>
                 </div>
             </div>
@@ -839,7 +905,7 @@
     <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA 2.7 • 100% GOOGLE GEMINI) -->
     <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
-            <div class="px-5 py-4 bg-gradient-to-r from-zinc-950 via-neutral-900 to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
+            <div class="px-5 py-4 bg-gradient-to-r from-[#0A0A0C] via-[#151519] to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
                     <div>
@@ -905,7 +971,7 @@
                             <span id="wa-ai-worker-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-200 text-emerald-950">Sin PC encendida</span>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-700 uppercase">URL de tu Worker 24/7 (Opcional — si usás Cloudflare):</label>
+                            <label class="block text-[10px] font-bold text-slate-700 uppercase">URL de tu Worker 24/7 (Cloudflare):</label>
                             <input type="text" id="wa-ai-worker-url" onchange="saveWaAiConfig()" value="https://sofia-ginza.gonzalodichiazza2.workers.dev" placeholder="https://sofia-ginza.tu-usuario.workers.dev" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-emerald-300 rounded-lg outline-none">
                         </div>
                         <label class="flex items-center gap-2 cursor-pointer text-[11px] text-emerald-950">
@@ -914,11 +980,11 @@
                         </label>
                         <div>
                             <label class="block text-[10px] font-bold text-slate-700 uppercase">HTTP POST Entrada (MacroDroid → Nube 24/7):</label>
-                            <div class="flex gap-1"><input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-incoming-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
+                            <div class="flex gap-1"><input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-incoming-url')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-slate-700 uppercase">HTTP GET Última Respuesta (Nube → MacroDroid):</label>
-                            <div class="flex gap-1"><input type="text" id="wa-ai-outgoing-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-outgoing-url')" class="px-2 py-1 bg-zinc-900 text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
+                            <div class="flex gap-1"><input type="text" id="wa-ai-outgoing-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-outgoing-url')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
                         </div>
                     </div>
                 </div>
@@ -963,14 +1029,14 @@
 
                     <div class="p-3 bg-white border-t border-slate-200 flex gap-2">
                         <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Escribe o simula un mensaje del cliente..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
-                        <button id="btn-wa-ai-generate" onclick="runWaAiReply()" class="px-4 py-2 rounded-xl bg-[#EB0A1E] hover:bg-red-700 text-white text-xs font-bold shrink-0">Responder</button>
+                        <button id="btn-wa-ai-generate" onclick="runWaAiReply()" class="px-4 py-2 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs font-bold shrink-0">Responder</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+    <div id="toast-container" class="fixed bottom-20 md:bottom-4 right-4 z-50 flex flex-col gap-2"></div>
 
     <script>
         // ============================================================================
@@ -1026,7 +1092,6 @@
         };
 
         const FIREBASE_DB_URL = CRM_CONFIG.FIREBASE_DB_URL;
-        const TOYOTA_PLAN_CONTRACT_KNOWLEDGE = CRM_CONFIG.CONTRACT_KNOWLEDGE;
         const DEFAULT_MARKET_PLANS = CRM_CONFIG.DEFAULT_MARKET_PLANS;
         const FIXED_INTEREST_MODELS = CRM_CONFIG.FIXED_INTEREST_MODELS;
         const CLIENT_STATUSES = CRM_CONFIG.CLIENT_STATUSES;
@@ -1061,7 +1126,7 @@
             weekly: { llamadas: 100, mensajes: 150, interesados: 25, entrevistas: 10, ventas: 5 },
             monthly: { llamadas: 400, mensajes: 600, interesados: 100, entrevistas: 40, ventas: 20 }
         };
-        let activeTab = 'botonera', activeContactosSubView = 'all', currentClientesStage = 'Todos', currentCrmFolder = 'Todas';
+        let activeTab = 'botonera', activeContactosSubView = 'all', currentClientesStage = 'Todos';
         let latestAiSuggestedWeekly = null;
         let agendaViewYear = new Date().getFullYear(), agendaViewMonth = new Date().getMonth();
         let selectedAgendaDate = new Date().toISOString().split('T')[0];
@@ -1337,19 +1402,6 @@
             if (!silent) showToast(changed ? "Teléfonos formateados a +549" : "Todos los teléfonos ya tienen formato +549");
         };
 
-        function getProvincia(phone) {
-            if (!phone) return "Desconocido";
-            let p = String(phone).replace(/\D/g, '');
-            if (p.startsWith('549')) p = p.substring(3);
-            else if (p.startsWith('54')) p = p.substring(2);
-            if (p.startsWith('0')) p = p.substring(1);
-            if (p.length < 6) return "Desconocido";
-            if (p.startsWith('11')) return "CABA / GBA";
-            const map = { "341": "Rosario", "342": "Santa Fe", "351": "Córdoba", "261": "Mendoza", "221": "La Plata", "223": "Mar del Plata" };
-            const prefix3 = p.substring(0, 3);
-            return map[prefix3] || ("Área " + prefix3);
-        }
-
         function isClientStatus(status) { return CLIENT_STATUSES.includes(status); }
         function getAllListsCombined() {
             return [...crmContacts, ...gestionContacts, ...redesContacts, ...salesforceContacts, ...convencionalContacts, ...canceladosContacts, ...rescindidosContacts];
@@ -1399,10 +1451,11 @@
             showToast("Copiado al portapapeles");
         };
 
-        // --- NAVEGACIÓN DE PESTAÑAS Y VENTANAS ---
+        // --- NAVEGACIÓN DE PESTAÑAS Y BARRA MÓVIL ---
         window.switchTab = function(tabName) {
             activeTab = tabName;
-            ['botonera', 'contactos', 'clientes', 'comparativa', 'objetivos', 'planes', 'financiaciones'].forEach(name => {
+            const allTabs = ['botonera', 'contactos', 'clientes', 'comparativa', 'objetivos', 'planes', 'financiaciones'];
+            allTabs.forEach(name => {
                 const el = document.getElementById(`tab-${name}`);
                 const btn = document.getElementById(`tab-btn-${name}`);
                 if (el) el.classList.add('hidden');
@@ -1410,12 +1463,22 @@
                     ? 'tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5'
                     : 'tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap';
             });
+            ['botonera', 'contactos', 'clientes', 'planes'].forEach(mName => {
+                const mBtn = document.getElementById(`mob-nav-${mName}`);
+                if (mBtn) {
+                    mBtn.className = mName === tabName
+                        ? 'flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-[#EB0A1E]'
+                        : 'flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold text-slate-500';
+                }
+            });
+
             const targetTab = document.getElementById(`tab-${tabName}`);
             const targetBtn = document.getElementById(`tab-btn-${tabName}`);
             if (targetTab) targetTab.classList.remove('hidden');
             if (targetBtn) targetBtn.className = (tabName === 'clientes' || tabName === 'comparativa' || tabName === 'financiaciones')
                 ? 'tab-active pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1.5'
                 : 'tab-active pb-2.5 px-1 transition-colors whitespace-nowrap';
+
             updateDashboard();
             if (tabName === 'botonera') renderBotonera();
             else if (tabName === 'contactos') { updateContactosSubCounts(); renderAllContactSections(); }
@@ -1445,30 +1508,10 @@
             const priv60 = Math.round(factorMillions * 560000);
 
             const cards = [
-                {
-                    title: 'TCFA 18 cuotas Tasa 0%',
-                    sub: gap > 30000000 ? 'Tope $30M (falta efectivo)' : 'Solo capital puro (sin seguro)',
-                    quota: tcfa18,
-                    badge: 'Tasa 0% TNA'
-                },
-                {
-                    title: 'TCFA 36 cuotas Tasa Fija',
-                    sub: 'TNA ~27,9% + seguro y gastos',
-                    quota: tcfa36,
-                    badge: '36 meses'
-                },
-                {
-                    title: 'Banco Nación +Autos (72m)',
-                    sub: 'Tasa General 46% TNA (sin haberes BNA)',
-                    quota: bna72Gen,
-                    badge: '72 meses'
-                },
-                {
-                    title: 'Prendario Banco Privado (60m)',
-                    sub: 'TNA ~58% + seguro obligatorio',
-                    quota: priv60,
-                    badge: '60 meses'
-                }
+                { title: 'TCFA 18 cuotas Tasa 0%', sub: gap > 30000000 ? 'Tope $30M (falta efectivo)' : 'Solo capital puro (sin seguro)', quota: tcfa18, badge: 'Tasa 0% TNA' },
+                { title: 'TCFA 36 cuotas Tasa Fija', sub: 'TNA ~27,9% + seguro y gastos', quota: tcfa36, badge: '36 meses' },
+                { title: 'Banco Nación +Autos (72m)', sub: 'Tasa General 46% TNA (sin haberes BNA)', quota: bna72Gen, badge: '72 meses' },
+                { title: 'Prendario Banco Privado (60m)', sub: 'TNA ~58% + seguro obligatorio', quota: priv60, badge: '60 meses' }
             ];
 
             grid.innerHTML = cards.map(c => `
@@ -1478,7 +1521,7 @@
                             <span class="text-xs font-extrabold text-slate-900">${c.title}</span>
                             <span class="px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 text-[10px] font-bold">${c.badge}</span>
                         </div>
-                        <div class="text-lg font-extrabold text-[#EB0A1E] mt-2">$${c.quota.toLocaleString('es-AR')}<span class="text-xs font-normal text-slate-500">/mes</span></div>
+                        <div class="text-lg font-extrabold text-[#EB0A1E] mt-2 tabular-nums">$${c.quota.toLocaleString('es-AR')}<span class="text-xs font-normal text-slate-500">/mes</span></div>
                     </div>
                     <div class="text-[11px] text-slate-500 mt-1.5">${c.sub}</div>
                 </div>
@@ -1516,7 +1559,7 @@
             renderConvencionalSellers(); renderConvencionalTables(); renderCanceladosTable(); renderRescindidosTable();
         }
         window.updateContactosSubCounts = function() {
-            const countPend = (arr) => arr.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)').length;
+            const countPend = (arr) => arr.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)' && c.status !== 'Sin Respuesta 24h').length;
             const c1 = countPend(crmContacts), c2 = countPend(gestionContacts), c3 = countPend(redesContacts),
                   c4 = countPend(salesforceContacts), c5 = countPend(convencionalContacts),
                   c6 = countPend(canceladosContacts), c7 = countPend(rescindidosContacts);
@@ -1568,18 +1611,19 @@
                 const isCall = kpi.name.toLowerCase().includes('llamada');
                 const card = document.createElement('div');
                 card.className = 'p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between';
-                card.innerHTML = `<div><span class="text-xs font-bold text-slate-500 uppercase">${kpi.name}s Realizadas</span><div class="text-2xl font-extrabold text-slate-900 mt-0.5">${count}</div></div><div class="w-11 h-11 rounded-xl ${isCall ? 'bg-zinc-900 text-white' : 'bg-emerald-600 text-white'} flex items-center justify-center text-lg">${isCall ? '📞' : '💬'}</div>`;
+                card.innerHTML = `<div><span class="text-xs font-bold text-slate-500 uppercase">${kpi.name}s Realizadas</span><div class="font-toyota-display tabular-nums text-2xl font-extrabold text-slate-900 mt-0.5">${count}</div></div><div class="w-11 h-11 rounded-xl ${isCall ? 'bg-[#0A0A0C] text-white' : 'bg-emerald-600 text-white'} flex items-center justify-center text-lg">${isCall ? '📞' : '💬'}</div>`;
                 kpiGrid.appendChild(card);
             });
 
+            const countPend = (arr) => arr.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)' && c.status !== 'Sin Respuesta 24h').length;
             const sources = [
-                { label: '1. No Compra', count: crmContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)').length, bar: 'bg-zinc-800', sub: 'crm' },
-                { label: '2. Gestión Personal', count: gestionContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)').length, bar: 'bg-indigo-600', sub: 'gestion' },
-                { label: '3. Redes Sociales', count: redesContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)').length, bar: 'bg-pink-600', sub: 'redes' },
-                { label: '4. Salesforce Leads', count: salesforceContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)').length, bar: 'bg-sky-600', sub: 'salesforce' },
-                { label: '5. Convencional', count: convencionalContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)').length, bar: 'bg-emerald-600', sub: 'convencional' },
-                { label: '6. Cancelados', count: canceladosContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)').length, bar: 'bg-amber-500', sub: 'cancelados' },
-                { label: '7. Rescindidos', count: rescindidosContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)').length, bar: 'bg-[#EB0A1E]', sub: 'rescindidos' }
+                { label: '1. No Compra', count: countPend(crmContacts), bar: 'bg-zinc-800', sub: 'crm' },
+                { label: '2. Gestión Personal', count: countPend(gestionContacts), bar: 'bg-indigo-600', sub: 'gestion' },
+                { label: '3. Redes Sociales', count: countPend(redesContacts), bar: 'bg-pink-600', sub: 'redes' },
+                { label: '4. Salesforce Leads', count: countPend(salesforceContacts), bar: 'bg-sky-600', sub: 'salesforce' },
+                { label: '5. Convencional', count: countPend(convencionalContacts), bar: 'bg-emerald-600', sub: 'convencional' },
+                { label: '6. Cancelados', count: countPend(canceladosContacts), bar: 'bg-amber-500', sub: 'cancelados' },
+                { label: '7. Rescindidos', count: countPend(rescindidosContacts), bar: 'bg-[#EB0A1E]', sub: 'rescindidos' }
             ];
             const maxCount = Math.max(1, ...sources.map(s => s.count));
             sourceGrid.innerHTML = '';
@@ -1588,7 +1632,7 @@
                 const btn = document.createElement('button');
                 btn.onclick = () => openContactosSection(src.sub);
                 btn.className = 'w-full p-3 rounded-xl bg-slate-50/70 hover:bg-slate-100 border border-slate-200/80 transition-all text-left';
-                btn.innerHTML = `<div class="flex items-center justify-between text-xs font-bold text-slate-800 mb-1.5"><span>${src.label}</span><span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-900">${src.count} pendientes</span></div><div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden"><div class="${src.bar} h-1.5 rounded-full" style="width: ${pct}%"></div></div>`;
+                btn.innerHTML = `<div class="flex items-center justify-between text-xs font-bold text-slate-800 mb-1.5"><span>${src.label}</span><span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-900 tabular-nums">${src.count} pendientes</span></div><div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden"><div class="${src.bar} h-1.5 rounded-full" style="width: ${pct}%"></div></div>`;
                 sourceGrid.appendChild(btn);
             });
 
@@ -1603,7 +1647,7 @@
                 const hotItems = allContacts.filter(c => c.status === 'Entrevista' || c.status === 'Interesado' || c.status === 'Mensaje Enviado (48h)').slice(0, 8);
                 radarList.innerHTML = hotItems.length === 0
                     ? `<div class="p-6 text-center text-slate-400 text-xs border border-dashed border-slate-200 rounded-xl">Aún no hay entrevistas, interesados ni mensajes en seguimiento IA.</div>`
-                    : hotItems.map(c => `<div class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 flex items-center justify-between gap-2"><div class="min-w-0"><div class="text-xs font-bold text-slate-900 truncate">${c.name || 'Sin Nombre'}</div><div class="text-[11px] text-slate-500">${c.phone || ''} ${c.interestModel ? `• ${c.interestModel}` : ''}</div></div><span class="px-2 py-0.5 rounded-full text-[10px] shrink-0 ${getStatusBadgeClass(c.status)}">${c.status}</span></div>`).join('');
+                    : hotItems.map(c => `<div onclick="openClientProfileModal('${c.id}')" class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 cursor-pointer flex items-center justify-between gap-2"><div class="min-w-0"><div class="text-xs font-bold text-slate-900 truncate">${c.name || 'Sin Nombre'}</div><div class="text-[11px] text-slate-500">${c.phone || ''} ${c.interestModel ? `• ${c.interestModel}` : ''}</div></div><span class="px-2 py-0.5 rounded-full text-[10px] shrink-0 ${getStatusBadgeClass(c.status)}">${c.status}</span></div>`).join('');
             }
         };
 
@@ -1633,7 +1677,7 @@
             renderAllTables();
             updateDashboard();
             if (!isClientStatus(c.status)) {
-                showToast(`🤖 Seguimiento Sofía IA programado (24h suave): ${c.name || c.phone}`);
+                showToast(`🤖 Seguimiento Sofía 2.7 programado (24h suave): ${c.name || c.phone}`);
             }
         };
         window.runAutonomousAiFollowUps = async function() {
@@ -1734,7 +1778,7 @@
             const clickHandler = contactId
                 ? `event.preventDefault(); event.stopPropagation(); openWhatsAppSingleTab('${waDigits}', '${contactId}', '${safeChannel}', '${safeName}')`
                 : `event.preventDefault(); event.stopPropagation(); openWhatsAppSingleTab('${waDigits}', null, '${safeChannel}', '${safeName}')`;
-            return `<a href="https://web.whatsapp.com/send?phone=${waDigits}" onclick="${clickHandler}" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-lg transition-colors cursor-pointer">${formatted}</a>`;
+            return `<a href="https://web.whatsapp.com/send?phone=${waDigits}" onclick="${clickHandler}" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-lg transition-colors cursor-pointer tabular-nums">${formatted}</a>`;
         }
 
         window.openWaBridgeModal = function() {
@@ -1874,7 +1918,7 @@
             }
         };
 
-        // --- ALERTAS EN VIVO EN EL CRM (INFOAUTO + ATENCIÓN COMERCIAL + AUDIO) ---
+        // --- ALERTAS EN VIVO EN EL CRM ---
         function detectAndRegisterTradeInAlert(contact, userMessage) {
             if (!contact || !userMessage) return false;
             const norm = String(userMessage).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -1900,7 +1944,6 @@
             }
             localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts.slice(0, 30)));
             renderInfoAutoAlertsBanner();
-            showToast(`🚗 ALERTA INFOAUTO: ${contact.name || 'Cliente'} informó su usado (${userMessage.trim().slice(0, 40)})`);
             return true;
         }
 
@@ -1935,7 +1978,6 @@
             }
             localStorage.setItem('crm_commercial_live_alerts', JSON.stringify(commercialLiveAlerts.slice(0, 30)));
             renderCommercialLiveAlertsBanner();
-            showToast(`🔔 ALERTA CRM: ${contact.name || 'Cliente'} — ${reason}`);
             return true;
         }
 
@@ -1956,7 +1998,6 @@
             });
             localStorage.setItem('crm_audio_live_alerts', JSON.stringify(audioLiveAlerts.slice(0, 30)));
             renderAudioLiveAlertsBanner();
-            showToast(`🎙️ AUDIO RECIBIDO de ${contact.name || 'Cliente'} — Revisá tu WhatsApp`);
             return true;
         }
 
@@ -1967,9 +2008,8 @@
             const pending = audioLiveAlerts.filter(a => !a.resolved);
             if (pending.length === 0) { banner.classList.add('hidden'); return; }
             banner.classList.remove('hidden');
-            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) envió <b>${a.rawLabel}</b> <span class="text-[11px] text-indigo-700">(${a.time})</span></span><button onclick="openWaAiForContact('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-indigo-800 text-white text-[11px] font-bold">💬 Abrir Ficha</button></div>`).join('');
+            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) envió <b>${a.rawLabel}</b> <span class="text-[11px] text-indigo-700">(${a.time})</span></span><button onclick="openClientProfileModal('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-indigo-800 text-white text-[11px] font-bold">👤 Abrir Ficha</button></div>`).join('');
         }
-
         window.dismissAllAudioAlerts = function() {
             audioLiveAlerts.forEach(a => a.resolved = true);
             localStorage.setItem('crm_audio_live_alerts', JSON.stringify(audioLiveAlerts));
@@ -1983,8 +2023,13 @@
             const pending = infoAutoAlerts.filter(a => !a.resolved);
             if (pending.length === 0) { banner.classList.add('hidden'); return; }
             banner.classList.remove('hidden');
-            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) mencionó: <b>"${a.vehicleDesc}"</b> <span class="text-[11px] text-amber-700">(${a.time})</span></span><button onclick="openSendInfoAutoQuote('${a.id}')" class="px-2 py-0.5 rounded-lg bg-amber-900 text-white text-[11px] font-bold">📋 Enviar Cotización InfoAuto</button></div>`).join('');
+            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}) mencionó: <b>"${a.vehicleDesc}"</b> <span class="text-[11px] text-amber-700">(${a.time})</span></span><button onclick="openClientProfileModal('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-amber-900 text-white text-[11px] font-bold">👤 Abrir Ficha</button></div>`).join('');
         }
+        window.dismissAllInfoAutoAlerts = function() {
+            infoAutoAlerts.forEach(a => a.resolved = true);
+            localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts));
+            renderInfoAutoAlertsBanner();
+        };
 
         function renderCommercialLiveAlertsBanner() {
             const banner = document.getElementById('commercial-live-alerts-banner');
@@ -1993,40 +2038,12 @@
             const pending = commercialLiveAlerts.filter(a => !a.resolved);
             if (pending.length === 0) { banner.classList.add('hidden'); return; }
             banner.classList.remove('hidden');
-            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}): <b>${a.reason}</b> — "${a.snippet}" <span class="text-[11px] text-rose-700">(${a.time})</span></span><button onclick="openWaAiForContact('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-[#EB0A1E] text-white text-[11px] font-bold">💬 Ver Chat</button></div>`).join('');
+            listEl.innerHTML = pending.map(a => `<div class="flex flex-wrap items-center gap-2"><span>• <b>${a.clientName}</b> (${a.phone || 'Sin tel'}): <b>${a.reason}</b> — "${a.snippet}" <span class="text-[11px] text-rose-700">(${a.time})</span></span><button onclick="openClientProfileModal('${a.contactId}')" class="px-2 py-0.5 rounded-lg bg-[#EB0A1E] text-white text-[11px] font-bold">👤 Ver Ficha</button></div>`).join('');
         }
-
         window.dismissAllCommercialAlerts = function() {
             commercialLiveAlerts.forEach(a => a.resolved = true);
             localStorage.setItem('crm_commercial_live_alerts', JSON.stringify(commercialLiveAlerts));
             renderCommercialLiveAlertsBanner();
-        };
-
-        window.openSendInfoAutoQuote = function(alertId) {
-            const alertObj = infoAutoAlerts.find(a => a.id === alertId);
-            if (!alertObj) return;
-            alertObj.resolved = true;
-            localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts));
-            renderInfoAutoAlertsBanner();
-
-            openWaAiAssistantModal();
-            const sel = document.getElementById('wa-ai-contact-select');
-            if (sel && alertObj.contactId) { sel.value = alertObj.contactId; onWaAiContactChange(); }
-            const draftBox = document.getElementById('wa-ai-draft-box');
-            const draftText = document.getElementById('wa-ai-draft-text');
-            const sourceTag = document.getElementById('wa-ai-source-tag');
-            if (draftBox && draftText) {
-                draftText.value = `Hola, revisamos en InfoAuto la referencia por tu ${alertObj.vehicleDesc} y el valor estimado de toma ronda los $[COMPLETAR_VALOR]. Si te parece bien, coordinamos una visita en Ginza Toyota para verlo en persona y cerrar los números.`;
-                if (sourceTag) sourceTag.textContent = 'Cotización InfoAuto Lista';
-                draftBox.classList.remove('hidden');
-                draftText.focus();
-            }
-        };
-
-        window.dismissAllInfoAutoAlerts = function() {
-            infoAutoAlerts.forEach(a => a.resolved = true);
-            localStorage.setItem('crm_infoauto_alerts', JSON.stringify(infoAutoAlerts));
-            renderInfoAutoAlertsBanner();
         };
 
         // --- TABLAS Y CRUD ---
@@ -2042,8 +2059,8 @@
             const safeCh = String(channelKey || 'gestion').replace(/'/g, "\\'");
             const isPaused = Boolean(contact.aiPaused);
             return `<div class="flex flex-wrap items-center gap-1">
-                <button onclick="openClientProfileModal('${contact.id}')" class="px-2.5 py-1 ${isPaused ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-slate-900 text-white'} rounded-lg text-xs font-bold">${isPaused ? '⏸️ Ficha (IA Pausada)' : '👤 Ficha'}</button>
-                <button onclick="toggleContactAiPause('${contact.id}')" class="px-2 py-1 ${isPaused ? 'bg-emerald-600 text-white' : 'bg-amber-50 text-amber-800 border border-amber-200'} rounded-lg text-xs font-bold" title="${isPaused ? 'Reactivar Sofía IA' : 'Pausar Sofía IA para intervenir'}">${isPaused ? '▶ Reanudar IA' : '⏸️ Pausar IA'}</button>
+                <button onclick="openClientProfileModal('${contact.id}')" class="px-2.5 py-1 ${isPaused ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-[#0A0A0C] text-white'} rounded-lg text-xs font-bold">${isPaused ? '⏸️ Ficha (IA Pausada)' : '👤 Ficha'}</button>
+                <button onclick="toggleContactAiPause('${contact.id}')" class="px-2 py-1 ${isPaused ? 'bg-emerald-600 text-white' : 'bg-amber-50 text-amber-800 border border-amber-200'} rounded-lg text-xs font-bold">${isPaused ? '▶ Reanudar IA' : '⏸️ Pausar IA'}</button>
                 <button onclick="openWhatsAppSingleTab('${formatPhoneAR(contact.phone).replace(/\D/g, '')}', '${contact.id}', '${safeCh}', '${(contact.name||'').replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-semibold">💬 WA</button>
                 <button onclick="updateStatus('${contact.id}', 'Interesado')" class="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-lg text-xs font-semibold">✓ Interesado</button>
                 <button onclick="deleteContact('${contact.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-xs">🗑️</button>
@@ -2053,7 +2070,13 @@
             const tbody = document.getElementById(tbodyId), emptyEl = document.getElementById(emptyId);
             if (!tbody) return;
             const isCrmNoCompra = channelKey === 'crm';
-            const filtered = list.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)' && !(isCrmNoCompra && c.status === 'Sin Respuesta 24h'));
+            const searchQ = isCrmNoCompra ? String(document.getElementById('search-crm')?.value || '').toLowerCase().trim() : '';
+            const filtered = list.filter(c => {
+                if (isClientStatus(c.status) || c.status === 'Mensaje Enviado (48h)') return false;
+                if (isCrmNoCompra && c.status === 'Sin Respuesta 24h') return false;
+                if (searchQ && !`${c.name || ''} ${c.phone || ''}`.toLowerCase().includes(searchQ)) return false;
+                return true;
+            });
             if (filtered.length === 0) { tbody.innerHTML = ''; emptyEl?.classList.remove('hidden'); }
             else {
                 emptyEl?.classList.add('hidden');
@@ -2061,7 +2084,7 @@
             }
             const box = document.getElementById(waitingBoxId);
             const waiting = list.filter(c => c.status === 'Mensaje Enviado (48h)');
-            if (box) box.innerHTML = waiting.length === 0 ? '' : `<div class="p-3 bg-teal-50/50 border-t border-teal-200 text-xs"><div class="font-bold text-teal-900 mb-1">⏳ En espera (24h/48h) — ${waiting.length}</div>${waiting.map(w => `<div class="flex justify-between items-center bg-white p-2 rounded border mb-1"><span><b>${w.name}</b> (${w.phone}) ${w.aiPaused ? '<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold">⏸️ IA Pausada</span>' : ''}</span><div class="flex gap-1"><button onclick="openClientProfileModal('${w.id}')" class="px-2 py-0.5 bg-zinc-900 text-white rounded font-bold">👤 Ficha</button><button onclick="toggleContactAiPause('${w.id}')" class="px-2 py-0.5 ${w.aiPaused ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-900'} rounded font-bold">${w.aiPaused ? '▶ IA' : '⏸️ IA'}</button></div></div>`).join('')}</div>`;
+            if (box) box.innerHTML = waiting.length === 0 ? '' : `<div class="p-3 bg-teal-50/50 border-t border-teal-200 text-xs"><div class="font-bold text-teal-900 mb-1">⏳ En espera (24h/48h) — ${waiting.length}</div>${waiting.map(w => `<div class="flex justify-between items-center bg-white p-2 rounded border mb-1"><span><b>${w.name}</b> (${w.phone}) ${w.aiPaused ? '<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold">⏸️ IA Pausada</span>' : ''}</span><div class="flex gap-1"><button onclick="openClientProfileModal('${w.id}')" class="px-2 py-0.5 bg-[#0A0A0C] text-white rounded font-bold">👤 Ficha</button><button onclick="toggleContactAiPause('${w.id}')" class="px-2 py-0.5 ${w.aiPaused ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-900'} rounded font-bold">${w.aiPaused ? '▶ IA' : '⏸️ IA'}</button></div></div>`).join('')}</div>`;
             if (isCrmNoCompra) renderNoCompraClassifiedLists();
         }
 
@@ -2079,7 +2102,6 @@
             const detectedModel = detectToyotaModelFromText(userText);
             if (detectedModel) contact.interestModel = detectedModel;
 
-            // 1. Detectar Contactar a Futuro (más adelante, en unos meses, etc.)
             if (/\b(mas adelante|en unos meses|el mes que viene|en marzo|en abril|en mayo|en junio|en julio|en agosto|en septiembre|en octubre|en noviembre|en diciembre|fin de ano|proximo ano|ano que viene|por ahora no|ahora no)\b/.test(norm)) {
                 contact.status = 'Interesado a Futuro';
                 const monthMap = { enero: '01', febrero: '02', marzo: '03', abril: '04', mayo: '05', junio: '06', julio: '07', agosto: '08', septiembre: '09', octubre: '10', noviembre: '11', diciembre: '12' };
@@ -2095,7 +2117,6 @@
                 return;
             }
 
-            // 2. Detectar No Interesados y clasificar motivo real
             const reasonRules = [
                 { reason: 'Ya compró otro vehículo', re: /\b(ya compre|compre otro|ya saque|ya adquiri|compre hace poco|ya tengo auto nuevo)\b/ },
                 { reason: 'Problema con usado / Tasación anterior', re: /\b(tasacion|me lo tomaron bajo|cotizaron bajo|muy abajo el usado)\b/ },
@@ -2120,7 +2141,6 @@
                 return;
             }
 
-            // 3. Detectar Interesados (pregunta cuota, modelo, financiación, entrega)
             if (detectedModel || /\b(cuota|precio|valor|financiacion|interesado|contame|como es|70\/30|100%)\b/.test(norm)) {
                 if (!['Entrevista', 'Venta'].includes(contact.status)) {
                     contact.status = 'Interesado';
@@ -2162,51 +2182,47 @@
                         ${extraBadge}
                     </div>
                     <div class="flex items-center gap-1">
-                        <button onclick="openClientProfileModal('${c.id}')" class="px-2.5 py-1 rounded-lg bg-zinc-900 text-white text-[11px] font-bold">👤 Ficha & Resumen</button>
+                        <button onclick="openClientProfileModal('${c.id}')" class="px-2.5 py-1 rounded-lg bg-[#0A0A0C] text-white text-[11px] font-bold">👤 Ficha & Resumen</button>
                     </div>
                 </div>`;
 
             container.innerHTML = `
                 <div class="text-xs font-extrabold uppercase tracking-wider text-slate-700">📊 Clasificación Automática Sofía 2.7 — Base No Compra</div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <!-- 1. SIN RESPUESTA +24HS -->
                     <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-extrabold text-amber-950">⏳ Sin Respuesta (+24 hs)</span>
-                            <span class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 text-[11px] font-extrabold">${noResp24.length}</span>
+                            <span class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 text-[11px] font-extrabold tabular-nums">${noResp24.length}</span>
                         </div>
                         <div class="space-y-1.5 max-h-48 overflow-y-auto">
                             ${noResp24.length === 0 ? '<div class="text-[11px] text-amber-800/70">Sin contactos vencidos a 24h todavía.</div>' : noResp24.map(c => renderMiniRow(c)).join('')}
                         </div>
                     </div>
 
-                    <!-- 2. INTERESADOS -->
                     <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-extrabold text-emerald-950">🟢 Interesados (Derivados a Clientes)</span>
-                            <span class="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-950 text-[11px] font-extrabold">${interesados.length}</span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-950 text-[11px] font-extrabold tabular-nums">${interesados.length}</span>
                         </div>
                         <div class="space-y-1.5 max-h-48 overflow-y-auto">
                             ${interesados.length === 0 ? '<div class="text-[11px] text-emerald-800/70">Aún sin interesados detectados en esta base.</div>' : interesados.map(c => renderMiniRow(c, `<span class="ml-1 px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">${c.status}</span>`)).join('')}
                         </div>
                     </div>
 
-                    <!-- 3. CONTACTAR A FUTURO -->
                     <div class="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-extrabold text-purple-950">📅 Contactar a Futuro (Fecha acordada con Sofía)</span>
-                            <span class="px-2 py-0.5 rounded-full bg-purple-200 text-purple-950 text-[11px] font-extrabold">${aFuturo.length}</span>
+                            <span class="px-2 py-0.5 rounded-full bg-purple-200 text-purple-950 text-[11px] font-extrabold tabular-nums">${aFuturo.length}</span>
                         </div>
                         <div class="space-y-1.5 max-h-48 overflow-y-auto">
                             ${aFuturo.length === 0 ? '<div class="text-[11px] text-purple-800/70">Sin contactos agendados a futuro aún.</div>' : aFuturo.map(c => renderMiniRow(c, c.scheduleDate ? `<span class="ml-1 px-1.5 py-0.5 rounded bg-purple-100 text-purple-900 text-[10px] font-bold">📅 ${formatDisplayISODate(c.scheduleDate)}</span>` : '')).join('')}
                         </div>
                     </div>
 
-                    <!-- 4. NO INTERESADOS POR MOTIVO -->
                     <div class="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-extrabold text-rose-950">🔴 No Interesados (Clasificados por Motivo)</span>
-                            <span class="px-2 py-0.5 rounded-full bg-rose-200 text-rose-950 text-[11px] font-extrabold">${noInteresados.length}</span>
+                            <span class="px-2 py-0.5 rounded-full bg-rose-200 text-rose-950 text-[11px] font-extrabold tabular-nums">${noInteresados.length}</span>
                         </div>
                         <div class="flex flex-wrap gap-1">
                             ${reasons.map(r => {
@@ -2221,6 +2237,7 @@
                     </div>
                 </div>`;
         }
+
         window.renderCrmTable = () => renderSimpleChannelTable(crmContacts, 'crm-table-body', 'crm-empty-state', 'crm', 'crm-waiting-sublist');
         window.renderGestionTable = () => renderSimpleChannelTable(gestionContacts, 'gestion-table-body', 'gestion-empty-state', 'gestion', 'gestion-waiting-sublist');
         window.renderRedesTable = () => renderSimpleChannelTable(redesContacts, 'redes-table-body', 'redes-empty-state', 'redes', 'redes-waiting-sublist');
@@ -2238,10 +2255,38 @@
         window.addConvencionalContact = () => { const name = document.getElementById('conv-client-name').value.trim(), phone = formatPhoneAR(document.getElementById('conv-client-phone').value.trim()); if (name || phone) { convencionalContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, status: 'Pendiente' }); saveLocalData(); renderAllTables(); updateDashboard(); } };
         window.addCanceladoContact = () => { const name = document.getElementById('cancelados-name').value.trim(), phone = formatPhoneAR(document.getElementById('cancelados-phone').value.trim()); if (name || phone) { canceladosContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, status: 'Pendiente' }); saveLocalData(); renderAllTables(); updateDashboard(); } };
         window.addRescindidoContact = () => { const name = document.getElementById('rescindidos-name').value.trim(), phone = formatPhoneAR(document.getElementById('rescindidos-phone').value.trim()); if (name || phone) { rescindidosContacts.unshift({ id: Date.now().toString(), name: name || 'Sin Nombre', phone, status: 'Pendiente' }); saveLocalData(); renderAllTables(); updateDashboard(); } };
+
         function getAllClientesWithSource() { return getAllListsCombined().filter(c => isClientStatus(c.status)).map(c => ({ ...c, sourceLabel: c.method || 'CRM' })); }
         window.setClientesStageFilter = (s) => { currentClientesStage = s; renderClientesTable(); };
         window.addDirectCliente = () => { const name = document.getElementById('cli-direct-name').value.trim(), phone = formatPhoneAR(document.getElementById('cli-direct-phone').value.trim()); if (name || phone) { gestionContacts.unshift({ id: Date.now().toString(), name: name || 'Cliente', phone, interestModel: document.getElementById('cli-direct-model').value, status: document.getElementById('cli-direct-status').value }); saveLocalData(true); renderAllTables(); updateDashboard(); } };
-        window.renderClientesTable = () => { const tb = document.getElementById('clientes-table-body'); if (!tb) return; const act = getAllClientesWithSource().filter(c => c.status !== 'No Compra'); document.getElementById('cli-count-Todos').textContent = act.length; tb.innerHTML = act.map(c => `<tr><td class="p-3.5 font-bold"><button onclick="openClientProfileModal('${c.id}')" class="text-left hover:text-[#EB0A1E] underline decoration-slate-300">${c.name}</button>${c.aiPaused ? ' <span class="ml-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-extrabold">⏸️ IA Pausada</span>' : ''}<div class="text-[11px] font-normal text-slate-500">${c.phone || ''}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel||'-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><div class="flex flex-wrap gap-1"><button onclick="openClientProfileModal('${c.id}')" class="px-2.5 py-1 bg-zinc-900 text-white rounded-lg text-xs font-bold">👤 Ficha</button><button onclick="toggleContactAiPause('${c.id}')" class="px-2.5 py-1 ${c.aiPaused ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-900 border border-amber-300'} rounded-lg text-xs font-bold">${c.aiPaused ? '▶ Reanudar IA' : '⏸️ Pausar IA'}</button><button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button></div></td></tr>`).join(''); };
+        window.renderClientesTable = () => {
+            const tb = document.getElementById('clientes-table-body');
+            if (!tb) return;
+            const allCli = getAllClientesWithSource();
+            const act = allCli.filter(c => c.status !== 'No Compra');
+            const noComp = allCli.filter(c => c.status === 'No Compra');
+            const q = String(document.getElementById('search-clientes')?.value || '').toLowerCase().trim();
+            const filtered = act.filter(c => {
+                if (currentClientesStage !== 'Todos' && c.status !== currentClientesStage) return false;
+                if (q && !`${c.name || ''} ${c.phone || ''} ${c.interestModel || ''}`.toLowerCase().includes(q)) return false;
+                return true;
+            });
+
+            const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+            setTxt('cli-count-Todos', act.length);
+            setTxt('cli-count-Interesado', act.filter(c => c.status === 'Interesado').length);
+            setTxt('cli-count-Futuro', act.filter(c => c.status === 'Interesado a Futuro').length);
+            setTxt('cli-count-Entrevista', act.filter(c => c.status === 'Entrevista').length);
+            setTxt('cli-count-Venta', act.filter(c => c.status === 'Venta').length);
+            setTxt('cli-count-NoCompra', noComp.length);
+
+            const emptyEl = document.getElementById('clientes-empty-state');
+            if (filtered.length === 0) { tb.innerHTML = ''; emptyEl?.classList.remove('hidden'); }
+            else {
+                emptyEl?.classList.add('hidden');
+                tb.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold"><button onclick="openClientProfileModal('${c.id}')" class="text-left hover:text-[#EB0A1E] underline decoration-slate-300">${c.name}</button>${c.aiPaused ? ' <span class="ml-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-extrabold">⏸️ IA Pausada</span>' : ''}<div class="text-[11px] font-normal text-slate-500 tabular-nums">${c.phone || ''}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel||'-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><div class="flex flex-wrap gap-1"><button onclick="openClientProfileModal('${c.id}')" class="px-2.5 py-1 bg-[#0A0A0C] text-white rounded-lg text-xs font-bold">👤 Ficha</button><button onclick="toggleContactAiPause('${c.id}')" class="px-2.5 py-1 ${c.aiPaused ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-900 border border-amber-300'} rounded-lg text-xs font-bold">${c.aiPaused ? '▶ Reanudar IA' : '⏸️ Pausar IA'}</button><button onclick="openEditModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs">Editar</button></div></td></tr>`).join('');
+            }
+        };
         window.updateStatus = (id, s) => { const f = findContactGlobal(id); if (f) { f.contact.status = s; saveLocalData(true); renderAllTables(); updateDashboard(); } };
         window.closeModelModal = () => document.getElementById('model-modal')?.classList.add('hidden');
         window.confirmInterestModel = () => closeModelModal();
@@ -2284,13 +2329,6 @@
         window.renderAgendaTab = function() {
             const todayIso = getTodayISODate();
             const allSched = getScheduledCommitments();
-            const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-            setTxt('ag-stat-today', allSched.filter(c => c.scheduleDate <= todayIso).length);
-            setTxt('ag-stat-entrevistas', allSched.filter(c => c.status === 'Entrevista').length);
-            setTxt('ag-stat-futuro', allSched.filter(c => c.status === 'Interesado a Futuro').length);
-            const weekLimit = new Date(); weekLimit.setDate(weekLimit.getDate() + 7);
-            const weekIso = weekLimit.toISOString().split('T')[0];
-            setTxt('ag-stat-week', allSched.filter(c => c.scheduleDate >= todayIso && c.scheduleDate <= weekIso).length);
 
             const titleEl = document.getElementById('agenda-month-title');
             if (titleEl) titleEl.textContent = new Date(agendaViewYear, agendaViewMonth, 1).toLocaleDateString('es-AR', { month: 'long', year: 'numeric' });
@@ -2308,7 +2346,7 @@
                     const isSelected = iso === selectedAgendaDate;
                     const isToday = iso === todayIso;
                     html += `<button onclick="selectedAgendaDate='${iso}'; renderAgendaTab();" class="h-14 p-1.5 rounded-xl border text-left flex flex-col justify-between transition-all ${isSelected ? 'border-purple-600 bg-purple-50 ring-2 ring-purple-200' : isToday ? 'border-[#EB0A1E] bg-red-50/40' : 'border-slate-200 bg-white hover:border-slate-400'}">
-                        <span class="text-xs font-extrabold ${isToday ? 'text-[#EB0A1E]' : 'text-slate-800'}">${d}</span>
+                        <span class="text-xs font-extrabold ${isToday ? 'text-[#EB0A1E]' : 'text-slate-800'} tabular-nums">${d}</span>
                         <div class="flex gap-1">${dayItems.slice(0, 3).map(ev => `<span class="w-2 h-2 rounded-full ${ev.status === 'Entrevista' ? 'bg-purple-600' : 'bg-amber-500'}"></span>`).join('')}</div>
                     </button>`;
                 }
@@ -2322,7 +2360,7 @@
                 const dayEvents = allSched.filter(c => c.scheduleDate === selectedAgendaDate);
                 dayList.innerHTML = dayEvents.length === 0
                     ? `<div class="p-4 text-center text-slate-400 text-xs border border-dashed border-slate-200 rounded-xl">Sin compromisos este día.</div>`
-                    : dayEvents.map(c => `<div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2"><div><div class="text-xs font-bold text-slate-900">${c.name}</div><div class="text-[11px] text-slate-500">${c.scheduleTime || ''} hs • ${c.scheduleNote || c.interestModel || ''}</div></div><button onclick="openWaAiForContact('${c.id}')" class="px-2 py-1 rounded-lg bg-emerald-600 text-white text-[10px] font-bold">🤖 WA</button></div>`).join('');
+                    : dayEvents.map(c => `<div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2"><div><div class="text-xs font-bold text-slate-900">${c.name}</div><div class="text-[11px] text-slate-500">${c.scheduleTime || ''} hs • ${c.scheduleNote || c.interestModel || ''}</div></div><button onclick="openClientProfileModal('${c.id}')" class="px-2 py-1 rounded-lg bg-[#0A0A0C] text-white text-[10px] font-bold">👤 Ficha</button></div>`).join('');
             }
 
             const listEl = document.getElementById('agenda-upcoming-list');
@@ -2390,7 +2428,7 @@
             if (countEl) countEl.textContent = `${segPlans.length} planes en segmento ${seg}`;
             const tbody = document.getElementById('comp-segment-table-body');
             if (tbody) {
-                tbody.innerHTML = segPlans.map(p => `<tr class="${p.brand === 'Toyota' ? 'bg-red-50/50 font-semibold' : ''}"><td class="p-3.5">${p.brand}</td><td class="p-3.5">${p.model}</td><td class="p-3.5">${p.modality}</td><td class="p-3.5">$${p.valorMovil.toLocaleString('es-AR')}</td><td class="p-3.5 text-emerald-700 font-bold">$${p.cuotaPura.toLocaleString('es-AR')}</td><td class="p-3.5"><button onclick="selectPlanForComparison('${p.id}', '${p.brand}')" class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-semibold">Comparar</button></td></tr>`).join('');
+                tbody.innerHTML = segPlans.map(p => `<tr class="${p.brand === 'Toyota' ? 'bg-red-50/50 font-semibold' : ''}"><td class="p-3.5">${p.brand}</td><td class="p-3.5">${p.model}</td><td class="p-3.5">${p.modality}</td><td class="p-3.5 tabular-nums">$${p.valorMovil.toLocaleString('es-AR')}</td><td class="p-3.5 text-emerald-700 font-bold tabular-nums">$${p.cuotaPura.toLocaleString('es-AR')}</td><td class="p-3.5"><button onclick="selectPlanForComparison('${p.id}', '${p.brand}')" class="px-2.5 py-1 rounded-lg bg-[#0A0A0C] text-white text-xs font-semibold">Comparar</button></td></tr>`).join('');
             }
         }
         window.selectPlanForComparison = function(id, brand) {
@@ -2406,31 +2444,31 @@
             const diffValor = rv.valorMovil - ty.valorMovil;
             const diffCuota = rv.cuotaPura - ty.cuotaPura;
             container.innerHTML = `
-                <div class="lg:col-span-4 p-4 rounded-2xl bg-zinc-900 text-white border-2 border-[#EB0A1E]">
+                <div class="lg:col-span-4 p-4 rounded-2xl bg-[#0A0A0C] text-white border-2 border-[#EB0A1E]">
                     <span class="px-2 py-0.5 rounded bg-[#EB0A1E] text-[10px] font-bold">TOYOTA ${ty.modality}</span>
                     <h3 class="text-lg font-extrabold mt-2">${ty.model}</h3>
-                    <p class="text-sm mt-2">Valor Móvil: <b>$${ty.valorMovil.toLocaleString('es-AR')}</b></p>
-                    <p class="text-sm mt-1">Cuota Máx. Ref.: <b class="text-emerald-400">$${ty.cuotaPura.toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm mt-2 tabular-nums">Valor de la unidad: <b>$${ty.valorMovil.toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm mt-1 tabular-nums">Cuota Máx. Ref.: <b class="text-emerald-400">$${ty.cuotaPura.toLocaleString('es-AR')}</b></p>
                 </div>
                 <div class="lg:col-span-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">${rv.brand} ${rv.modality}</span>
                     <h3 class="text-lg font-bold text-slate-900 mt-2">${rv.model}</h3>
-                    <p class="text-sm text-slate-700 mt-2">Valor Móvil: <b>$${rv.valorMovil.toLocaleString('es-AR')}</b></p>
-                    <p class="text-sm text-slate-700 mt-1">Cuota Máx. Ref.: <b>$${rv.cuotaPura.toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm text-slate-700 mt-2 tabular-nums">Valor de la unidad: <b>$${rv.valorMovil.toLocaleString('es-AR')}</b></p>
+                    <p class="text-sm text-slate-700 mt-1 tabular-nums">Cuota Máx. Ref.: <b>$${rv.cuotaPura.toLocaleString('es-AR')}</b></p>
                 </div>
                 <div class="lg:col-span-4 p-4 rounded-2xl bg-red-50/70 border border-red-200 flex flex-col justify-between">
                     <div>
                         <span class="text-[11px] font-extrabold uppercase text-[#EB0A1E]">✨ Argumento Comercial Ginza</span>
                         <p class="text-xs text-slate-800 mt-2 leading-relaxed">
                             ${diffValor >= 0
-                                ? `Toyota <b>${ty.model}</b> tiene un valor móvil <b>$${diffValor.toLocaleString('es-AR')} más conveniente</b> y cuota $${Math.abs(diffCuota).toLocaleString('es-AR')} ${diffCuota >= 0 ? 'más baja' : 'competitiva'}, sumado al mayor valor de reventa del mercado.`
+                                ? `Toyota <b>${ty.model}</b> tiene un valor <b>$${diffValor.toLocaleString('es-AR')} más conveniente</b> y cuota $${Math.abs(diffCuota).toLocaleString('es-AR')} ${diffCuota >= 0 ? 'más baja' : 'competitiva'}, sumado al mayor valor de reventa del mercado.`
                                 : `Con una diferencia de capital de $${Math.abs(diffValor).toLocaleString('es-AR')}, el cliente accede a la confiabilidad, garantía oficial de 5 años / 150.000 km y valor de reventa líder de <b>Toyota ${ty.model}</b>.`}
                         </p>
                     </div>
                 </div>`;
         };
 
-        // --- OBJETIVOS (LUN-VIE + COACH IA) ---
+        // --- OBJETIVOS ---
         function getBusinessDaysStats() {
             const now = new Date();
             const year = now.getFullYear(), month = now.getMonth(), todayDate = now.getDate();
@@ -2472,9 +2510,9 @@
             const ratesGrid = document.getElementById('ai-funnel-rates-grid');
             if (ratesGrid) {
                 ratesGrid.innerHTML = `
-                    <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200"><div class="text-[11px] font-bold text-emerald-800 uppercase">Contacto → Interesado</div><div class="text-2xl font-extrabold text-emerald-950 mt-0.5">${rateInt}%</div></div>
-                    <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200"><div class="text-[11px] font-bold text-purple-800 uppercase">Interesado → Entrevista</div><div class="text-2xl font-extrabold text-purple-950 mt-0.5">${rateEnt}%</div></div>
-                    <div class="p-3.5 rounded-xl bg-red-50/70 border border-red-200"><div class="text-[11px] font-bold text-[#EB0A1E] uppercase">Entrevista → Venta</div><div class="text-2xl font-extrabold text-slate-950 mt-0.5">${rateVen}%</div></div>`;
+                    <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200"><div class="text-[11px] font-bold text-emerald-800 uppercase">Contacto → Interesado</div><div class="text-2xl font-extrabold text-emerald-950 mt-0.5 tabular-nums">${rateInt}%</div></div>
+                    <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200"><div class="text-[11px] font-bold text-purple-800 uppercase">Interesado → Entrevista</div><div class="text-2xl font-extrabold text-purple-950 mt-0.5 tabular-nums">${rateEnt}%</div></div>
+                    <div class="p-3.5 rounded-xl bg-red-50/70 border border-red-200"><div class="text-[11px] font-bold text-[#EB0A1E] uppercase">Entrevista → Venta</div><div class="text-2xl font-extrabold text-slate-950 mt-0.5 tabular-nums">${rateVen}%</div></div>`;
             }
             const targetVentasW = Math.max(2, goals.weekly.ventas || 5);
             const sugEntW = Math.ceil(targetVentasW / Math.max(0.25, rateVen / 100));
@@ -2485,7 +2523,7 @@
             if (insightsEl) insightsEl.innerHTML = `<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">🎯 <b>Calibración IA sugerida:</b> ${latestAiSuggestedWeekly.llamadas} llamadas • ${latestAiSuggestedWeekly.mensajes} mensajes → ${latestAiSuggestedWeekly.interesados} interesados → ${latestAiSuggestedWeekly.entrevistas} entrevistas → <b>${latestAiSuggestedWeekly.ventas} ventas</b>.</div>`;
 
             const metricDefs = [
-                { key: 'llamadas', label: 'Llamadas Realizadas', actual: act.llamadas, color: 'bg-zinc-900' },
+                { key: 'llamadas', label: 'Llamadas Realizadas', actual: act.llamadas, color: 'bg-[#0A0A0C]' },
                 { key: 'mensajes', label: 'Mensajes WhatsApp', actual: act.mensajes, color: 'bg-emerald-600' },
                 { key: 'interesados', label: 'Clientes Interesados', actual: act.interesados, color: 'bg-teal-600' },
                 { key: 'entrevistas', label: 'Entrevistas Coordinadas', actual: act.entrevistas, color: 'bg-purple-600' },
@@ -2496,14 +2534,14 @@
                 const target = Math.max(1, Number(goals.weekly[m.key]) || 1);
                 const pct = Math.min(100, Math.round((m.actual / target) * 100));
                 const dailyNeeded = Math.ceil(Math.max(0, target - m.actual) / biz.weekRemaining);
-                return `<div class="p-3.5 rounded-xl bg-slate-50 border space-y-2"><div class="flex justify-between text-xs font-bold"><span>${m.label}</span><input type="number" min="1" value="${target}" onchange="goals.weekly['${m.key}']=Math.max(1, Number(this.value)); goals.monthly['${m.key}']=goals.weekly['${m.key}']*4; renderObjetivos();" class="w-20 px-2 py-0.5 text-right border rounded bg-white"></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="${m.color} h-2 rounded-full" style="width:${pct}%"></div></div><div class="flex justify-between text-[11px]"><span>${m.actual}/${target} (${pct}%)</span><span class="font-bold text-[#EB0A1E]">Ritmo: ${dailyNeeded}/día hábil</span></div></div>`;
+                return `<div class="p-3.5 rounded-xl bg-slate-50 border space-y-2"><div class="flex justify-between text-xs font-bold"><span>${m.label}</span><input type="number" min="1" value="${target}" onchange="goals.weekly['${m.key}']=Math.max(1, Number(this.value)); goals.monthly['${m.key}']=goals.weekly['${m.key}']*4; renderObjetivos();" class="w-20 px-2 py-0.5 text-right border rounded bg-white tabular-nums"></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="${m.color} h-2 rounded-full" style="width:${pct}%"></div></div><div class="flex justify-between text-[11px] tabular-nums"><span>${m.actual}/${target} (${pct}%)</span><span class="font-bold text-[#EB0A1E]">Ritmo: ${dailyNeeded}/día hábil</span></div></div>`;
             }).join('');
             const monthlyBox = document.getElementById('monthly-goals-container');
             if (monthlyBox) monthlyBox.innerHTML = metricDefs.map(m => {
                 const targetM = Math.max(1, Number(goals.monthly[m.key]) || (Number(goals.weekly[m.key]) || 1) * 4);
                 const pctM = Math.min(100, Math.round((m.actual / targetM) * 100));
                 const dailyNeededM = Math.ceil(Math.max(0, targetM - m.actual) / biz.monthRemainingBiz);
-                return `<div class="p-3.5 rounded-xl bg-slate-50 border space-y-2"><div class="flex justify-between text-xs font-bold"><span>${m.label} (Mes)</span><input type="number" min="1" value="${targetM}" onchange="goals.monthly['${m.key}']=Math.max(1, Number(this.value)); renderObjetivos();" class="w-20 px-2 py-0.5 text-right border rounded bg-white"></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="${m.color} h-2 rounded-full" style="width:${pctM}%"></div></div><div class="flex justify-between text-[11px]"><span>${m.actual}/${targetM} (${pctM}%)</span><span class="font-bold">Obj. diario: ${dailyNeededM}/día hábil</span></div></div>`;
+                return `<div class="p-3.5 rounded-xl bg-slate-50 border space-y-2"><div class="flex justify-between text-xs font-bold"><span>${m.label} (Mes)</span><input type="number" min="1" value="${targetM}" onchange="goals.monthly['${m.key}']=Math.max(1, Number(this.value)); renderObjetivos();" class="w-20 px-2 py-0.5 text-right border rounded bg-white tabular-nums"></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="${m.color} h-2 rounded-full" style="width:${pctM}%"></div></div><div class="flex justify-between text-[11px] tabular-nums"><span>${m.actual}/${targetM} (${pctM}%)</span><span class="font-bold">Obj. diario: ${dailyNeededM}/día hábil</span></div></div>`;
             }).join('');
         };
         window.saveGoalsConfig = function() { saveLocalData(true); renderObjetivos(); showToast("🎯 Metas guardadas"); };
@@ -2515,7 +2553,7 @@
             saveLocalData(true); renderObjetivos(); showToast("✨ Metas IA aplicadas");
         };
 
-        // --- PLANES & PDF (INDEXEDDB PERSISTENTE + TRAMOS ORDINARIOS + EVOLUCIÓN) ---
+        // --- PLANES & PDF ---
         const PLAN_IDB_NAME = 'CrmGinzaToyotaPlanesDB', PLAN_IDB_STORE = 'planFiles';
         function openPlansIndexedDB() {
             return new Promise((resolve, reject) => {
@@ -2548,11 +2586,7 @@
                         modality: planRecord.modality || '70/30',
                         period: planRecord.period || '',
                         pageCount: planRecord.jpgPages.length,
-                        pages: planRecord.jpgPages.map(pg => ({
-                            pageNum: pg.pageNum,
-                            fileName: pg.fileName,
-                            dataUrl: pg.dataUrl
-                        })),
+                        pages: planRecord.jpgPages.map(pg => ({ pageNum: pg.pageNum, fileName: pg.fileName, dataUrl: pg.dataUrl })),
                         updatedAt: Date.now()
                     })
                 });
@@ -2631,7 +2665,7 @@
                 } catch (err) {}
             }
             document.getElementById('pdf-processing-status')?.classList.add('hidden');
-            saveLocalData(true); renderPlansHistory(); showToast(`✅ ${files.length} PDF(s) procesado(s) y JPGs publicados para Sofía`);
+            saveLocalData(true); renderPlansHistory(); showToast(`✅ ${files.length} PDF(s) procesado(s) y JPGs publicados para Sofía 2.7`);
         };
         window.renderVehiclePriceEvolutionChart = function() {
             const chartBox = document.getElementById('vehicle-price-chart-box'), modelSel = document.getElementById('plan-chart-model-select');
@@ -2645,7 +2679,7 @@
             const chosen = modelSel.value || models[0];
             const series = plansHistory.filter(p => getPlanKey(p) === chosen).slice().reverse();
             const maxVal = Math.max(1, ...series.map(s => Number(s.price) || 0));
-            chartBox.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-6 gap-3">${series.map(pt => `<div class="p-3 rounded-xl bg-white border"><div class="text-[11px] font-bold text-slate-500">${pt.period}</div><div class="w-full bg-slate-100 rounded h-14 flex items-end p-1 my-1"><div class="w-full bg-[#EB0A1E] rounded" style="height:${Math.max(15, Math.round((Number(pt.price) / maxVal) * 100))}%"></div></div><div class="text-xs font-extrabold">$${Number(pt.price).toLocaleString('es-AR')}</div></div>`).join('')}</div>`;
+            chartBox.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-6 gap-3">${series.map(pt => `<div class="p-3 rounded-xl bg-white border"><div class="text-[11px] font-bold text-slate-500">${pt.period}</div><div class="w-full bg-slate-100 rounded h-14 flex items-end p-1 my-1"><div class="w-full bg-[#EB0A1E] rounded" style="height:${Math.max(15, Math.round((Number(pt.price) / maxVal) * 100))}%"></div></div><div class="text-xs font-extrabold tabular-nums">$${Number(pt.price).toLocaleString('es-AR')}</div></div>`).join('')}</div>`;
         };
         window.renderPlansHistory = function() {
             const tbody = document.getElementById('plans-history-body'), emptyEl = document.getElementById('plans-empty-state');
@@ -2653,7 +2687,7 @@
             if (plansHistory.length === 0) { tbody.innerHTML = ''; emptyEl?.classList.remove('hidden'); }
             else {
                 emptyEl?.classList.add('hidden');
-                tbody.innerHTML = plansHistory.map(p => `<tr><td class="p-3 font-bold text-[#EB0A1E]">${p.period}</td><td class="p-3 font-bold">${p.vehicleName} [${p.modality}]</td><td class="p-3">$${Number(p.vehicleValue || 0).toLocaleString('es-AR')}</td><td class="p-3 text-xs">Cuota Máx. Ordinaria</td><td class="p-3 font-extrabold text-emerald-700">$${Number(p.price || 0).toLocaleString('es-AR')}</td><td class="p-3 text-xs">$${Number(p.extraordinaryQuota || 0).toLocaleString('es-AR')}</td><td class="p-3 text-xs">-</td><td class="p-3"><button onclick="openPlanFilesModal('${p.id}')" class="px-2 py-1 bg-zinc-900 text-white rounded text-xs font-bold">📂 Ver</button> <button onclick="deletePlanRecord('${p.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded text-xs">Eliminar</button></td></tr>`).join('');
+                tbody.innerHTML = plansHistory.map(p => `<tr><td class="p-3 font-bold text-[#EB0A1E]">${p.period}</td><td class="p-3 font-bold">${p.vehicleName} [${p.modality}]</td><td class="p-3 tabular-nums">$${Number(p.vehicleValue || 0).toLocaleString('es-AR')}</td><td class="p-3 text-xs">Cuota Máx. Ordinaria</td><td class="p-3 font-extrabold text-emerald-700 tabular-nums">$${Number(p.price || 0).toLocaleString('es-AR')}</td><td class="p-3 text-xs tabular-nums">$${Number(p.extraordinaryQuota || 0).toLocaleString('es-AR')}</td><td class="p-3 text-xs">-</td><td class="p-3"><button onclick="openPlanFilesModal('${p.id}')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded text-xs font-bold">📂 Ver</button> <button onclick="deletePlanRecord('${p.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded text-xs">Eliminar</button></td></tr>`).join('');
             }
             renderVehiclePriceEvolutionChart();
         };
@@ -2661,26 +2695,9 @@
         window.clearPlansHistory = async () => { for (const p of plansHistory) await deletePlanBlobsFromIndexedDB(p.id); plansHistory = []; currentPlanJpgs = []; saveLocalData(true); renderPlansHistory(); };
         window.openPlanFilesModal = (planId) => { const p = plansHistory.find(x => x.id === planId); if (!p) return; document.getElementById('plan-files-modal-title').textContent = `${p.vehicleName} — ${p.period}`; const grid = document.getElementById('plan-files-modal-grid'); if (grid) { currentPlanJpgs = p.jpgPages || []; grid.innerHTML = currentPlanJpgs.map((pg, idx) => `<div class="border rounded-xl overflow-hidden"><img src="${pg.dataUrl}" class="w-full h-40 object-contain"><div class="p-2 flex justify-between"><button onclick="closePlanFilesModal(); openShareJpgWaModal(${idx});" class="px-2 py-1 bg-emerald-600 text-white rounded text-xs font-bold">📲 WA</button><a href="${pg.dataUrl}" download="${pg.fileName}" class="px-2 py-1 bg-slate-100 rounded text-xs font-bold">⬇️ JPG</a></div></div>`).join(''); } document.getElementById('plan-files-modal')?.classList.remove('hidden'); };
         window.openShareJpgWaModal = (idx) => { pendingShareJpgItem = currentPlanJpgs[idx]; document.getElementById('share-jpg-wa-filename').textContent = pendingShareJpgItem?.fileName || ''; document.getElementById('share-jpg-wa-modal')?.classList.remove('hidden'); };
-        window.openPdfPriceChatbotModal = (planId = '') => { if (planId) pdfChatbotSelectedPlanId = planId; document.getElementById('pdf-price-chatbot-modal')?.classList.remove('hidden'); };
-        let pdfChatbotSelectedPlanId = '';
-        window.sendPdfChatbotCorrection = () => {
-            const rawText = (document.getElementById('pdf-chatbot-input')?.value || '').trim();
-            if (!rawText || plansHistory.length === 0) return;
-            const target = plansHistory.find(p => p.id === pdfChatbotSelectedPlanId) || plansHistory[0];
-            const nums = Array.from(rawText.replace(/\$|\s/g, '').matchAll(/(\d{1,3}(?:\.\d{3})+|\d{5,9})/g)).map(m => Number(m[1].replace(/\./g, '')));
-            const vVal = nums.find(n => n >= 15000000);
-            const qVal = nums.find(n => n >= 50000 && n < 5000000);
-            if (vVal) target.vehicleValue = vVal;
-            if (qVal) target.price = qVal;
-            saveLocalData(true); renderPlansHistory(); renderComparativaSelectors();
-            document.getElementById('pdf-chatbot-input').value = '';
-            closePdfPriceChatbotModal();
-            showToast("✅ Precio PDF corregido");
-        };
         window.closePlanFilesModal = () => document.getElementById('plan-files-modal')?.classList.add('hidden');
         window.closeShareJpgWaModal = () => document.getElementById('share-jpg-wa-modal')?.classList.add('hidden');
         window.renderShareJpgContactsList = () => {};
-        window.closePdfPriceChatbotModal = () => document.getElementById('pdf-price-chatbot-modal')?.classList.add('hidden');
 
         function tryAutoScheduleFromClientMessage(contact, userMessage) {
             if (!contact || waAiConfig.allowAutoSchedule === false) return null;
@@ -2713,11 +2730,8 @@
                     break;
                 }
             }
-            if (!matchedDay && norm.includes('manana') && !periodMatch) {
-                targetDate.setDate(targetDate.getDate() + 1);
-            } else if (!matchedDay && norm.includes('semana que viene')) {
-                targetDate.setDate(targetDate.getDate() + 7);
-            }
+            if (!matchedDay && norm.includes('manana') && !periodMatch) targetDate.setDate(targetDate.getDate() + 1);
+            else if (!matchedDay && norm.includes('semana que viene')) targetDate.setDate(targetDate.getDate() + 7);
 
             const isoDate = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`;
             contact.status = wantsFollowUp && !wantsMeeting ? 'Interesado a Futuro' : 'Entrevista';
@@ -2731,7 +2745,7 @@
         }
 
         // ============================================================================
-        // MÓDULO 4: SOFIA_AI (ÚNICA INSTANCIA • 100% GOOGLE GEMINI • CRITERIO SENIOR)
+        // MÓDULO 4: SOFIA_AI (SOFÍA 2.7 • GOOGLE GEMINI)
         // ============================================================================
         const SOFIA_AI = {
             config: {
@@ -2775,21 +2789,12 @@
                         if (out && out.reply) {
                             await this.queueToMobile(batch.contact, out.reply, combinedMessage);
                         }
-                    } catch (err) {
-                        console.error('Error en Sofía IA:', err);
-                    }
+                    } catch (err) {}
                 }, 3000);
             },
 
-            saveConfig() {
-                localStorage.setItem('crm_wa_ai_config', JSON.stringify(this.config));
-            },
-
-            saveChats() {
-                try {
-                    localStorage.setItem('crm_wa_ai_chats', JSON.stringify(this.chats));
-                } catch (e) {}
-            },
+            saveConfig() { localStorage.setItem('crm_wa_ai_config', JSON.stringify(this.config)); },
+            saveChats() { try { localStorage.setItem('crm_wa_ai_chats', JSON.stringify(this.chats)); } catch (e) {} },
 
             async recordInitialOutreachInHistory(contact, sentText) {
                 if (!contact || !sentText) return;
@@ -2815,15 +2820,8 @@
             },
 
             async resolveModels(apiKey) {
-                if (Array.isArray(this.cachedModels) && this.cachedModels.length > 0) {
-                    return this.cachedModels;
-                }
-                const preferredOrder = [
-                    'gemini-3-flash-preview',
-                    'gemini-2.5-flash',
-                    'gemini-2.5-flash-lite',
-                    'gemini-flash-latest'
-                ];
+                if (Array.isArray(this.cachedModels) && this.cachedModels.length > 0) return this.cachedModels;
+                const preferredOrder = ['gemini-3.1-flash-lite-preview', 'gemini-3-flash-preview', 'gemini-flash-latest'];
                 try {
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
                     if (res.ok) {
@@ -2883,7 +2881,6 @@
                     const officialPricesText = this.buildOfficialPricesText();
                     const systemPrompt = this.getSystemPrompt(officialPricesText, availablePlanJpgs);
 
-                    // Si este navegador no tiene la API Key cargada, heredarla de Firebase para nunca pisarla vacía
                     let effectiveApiKey = String(this.config.geminiApiKey || '').trim();
                     if (!effectiveApiKey) {
                         try {
@@ -2989,9 +2986,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
 
             async generateReply(contact, userMessage) {
                 const apiKey = String(this.config.geminiApiKey || '').trim();
-                if (!apiKey) {
-                    return { reply: '', source: 'Sin API Key Gemini' };
-                }
+                if (!apiKey) return { reply: '', source: 'Sin API Key Gemini' };
 
                 const cid = contact?.id || 'default_client';
                 if (!Array.isArray(this.chats[cid])) this.chats[cid] = [];
@@ -3071,7 +3066,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
                     digits: phoneFormatted.replace(/\D/g, ''),
                     clientMessage: clientMsg,
                     reply: replyText,
-                    source: 'crm_web_sofi26',
+                    source: 'crm_web_sofi27',
                     timestamp: Date.now()
                 };
                 try {
@@ -3136,17 +3131,11 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             modal.classList.remove('hidden');
         };
 
-        window.closeWaAiAssistantModal = function() {
-            document.getElementById('wa-ai-assistant-modal')?.classList.add('hidden');
-        };
-
+        window.closeWaAiAssistantModal = function() { document.getElementById('wa-ai-assistant-modal')?.classList.add('hidden'); };
         window.openWaAiForContact = function(contactId) {
             openWaAiAssistantModal();
             const sel = document.getElementById('wa-ai-contact-select');
-            if (sel && contactId) {
-                sel.value = contactId;
-                onWaAiContactChange();
-            }
+            if (sel && contactId) { sel.value = contactId; onWaAiContactChange(); }
         };
 
         window.saveWaAiConfig = async function() {
@@ -3164,7 +3153,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             SOFIA_AI.saveConfig();
             updateWaAiEngineStatusPill();
             await SOFIA_AI.syncBrainToFirebase();
-            showToast("🤖 Preferencias y Cerebro 24/7 sincronizados");
+            showToast("🤖 Preferencias y Cerebro Sofi 2.7 sincronizados");
         };
 
         function getSelectedWaAiContact() {
@@ -3216,7 +3205,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             const sourceTag = document.getElementById('wa-ai-source-tag');
             if (draftBox && draftText) {
                 draftText.value = greeting;
-                if (sourceTag) sourceTag.textContent = 'Saludo Inicial Sofi 2.6';
+                if (sourceTag) sourceTag.textContent = 'Saludo Inicial Sofi 2.7';
                 draftBox.classList.remove('hidden');
             }
         };
@@ -3247,10 +3236,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             }
         };
 
-        window.copyWaAiDraft = function() {
-            copyInputText('wa-ai-draft-text');
-        };
-
+        window.copyWaAiDraft = function() { copyInputText('wa-ai-draft-text'); };
         window.sendWaAiDraftToWhatsApp = function() {
             const contact = getSelectedWaAiContact();
             const text = String(document.getElementById('wa-ai-draft-text')?.value || '').trim();
@@ -3259,7 +3245,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             window.open(`https://web.whatsapp.com/send?phone=${digits}&text=${encodeURIComponent(text)}`, 'crm_whatsapp_web_singleton');
         };
 
-        // --- FICHA INDIVIDUAL POR CLIENTE + PAUSA / CONTINUIDAD DE SOFÍA IA ---
+        // --- FICHA INDIVIDUAL POR CLIENTE + RESUMEN EJECUTIVO + PAUSA IA ---
         async function syncClientPauseStateToCloud(contact) {
             if (!contact) return;
             const cKey = sanitizeFirebaseKey(contact.id || 'default');
@@ -3337,84 +3323,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             await generateClientAiSummary(false);
         };
 
-        window.generateClientAiSummary = async function(forceRefresh = false) {
-            const id = document.getElementById('profile-contact-id')?.value;
-            const sumBox = document.getElementById('profile-ai-summary-box');
-            const btn = document.getElementById('btn-refresh-ai-summary');
-            const found = findContactGlobal(id);
-            if (!found || !sumBox) return;
-            const c = found.contact;
-            const msgs = (SOFIA_AI.chats[id] || []).filter(m => m && m.text);
-
-            if (msgs.length === 0) {
-                sumBox.textContent = c.aiSummary || 'Sin conversación registrada con Sofía todavía.';
-                return;
-            }
-
-            if (!forceRefresh && c.aiSummary && Number(c.aiSummaryMsgCount || 0) === msgs.length) {
-                sumBox.textContent = c.aiSummary;
-                return;
-            }
-
-            const buildLocalFallbackSummary = () => {
-                const userTexts = msgs.filter(m => m.role === 'user').map(m => m.text).join(' | ');
-                const lastModel = msgs.slice().reverse().find(m => m.role === 'model')?.text || '';
-                const modelTag = c.interestModel || detectToyotaModelFromText(userTexts) || 'Por definir';
-                return `• Vehículo de interés: ${modelTag}\n• Lo que comentó el cliente: "${userTexts.slice(0, 140)}${userTexts.length > 140 ? '...' : ''}"\n• Última respuesta de Sofía: "${lastModel.slice(0, 120)}${lastModel.length > 120 ? '...' : ''}"`;
-            };
-
-            const apiKey = String(SOFIA_AI.config.geminiApiKey || '').trim();
-            if (!apiKey) {
-                const localSum = buildLocalFallbackSummary();
-                c.aiSummary = localSum;
-                c.aiSummaryMsgCount = msgs.length;
-                sumBox.textContent = localSum;
-                saveLocalData(true);
-                return;
-            }
-
-            if (btn) { btn.disabled = true; btn.textContent = '⏳...'; }
-            sumBox.textContent = '✨ Generando resumen de la charla con Sofía...';
-
-            const transcript = msgs.slice(-24).map(m => `${m.role === 'user' ? 'Cliente' : 'Sofía'}: ${m.text}`).join('\n');
-            const prompt = `Resumí en máximo 4 viñetas muy breves y concretas (para que el asesor Gonzalo lo lea en 5 segundos) esta conversación de WhatsApp entre Sofía (Ginza Toyota) y el cliente:\n\n${transcript}\n\nIncluí:\n• Vehículo / modalidad que busca\n• Usado, ahorro o presupuesto de cuota mencionado\n• Estado actual (Interesado, Contactar a futuro + fecha, No interesado + motivo, o en evaluación)\n• Próximo paso sugerido para Gonzalo`;
-
-            try {
-                const models = await SOFIA_AI.resolveModels(apiKey);
-                for (const model of models) {
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ role: 'user', parts: [{ text: prompt }] }],
-                            generationConfig: { temperature: 0.3, maxOutputTokens: 400, thinkingConfig: { thinkingBudget: 0 } }
-                        })
-                    });
-                    if (!res.ok) continue;
-                    const data = await res.json();
-                    const text = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
-                    if (text) {
-                        c.aiSummary = text;
-                        c.aiSummaryMsgCount = msgs.length;
-                        sumBox.textContent = text;
-                        saveLocalData(true);
-                        if (btn) { btn.disabled = false; btn.textContent = '✨ Actualizar'; }
-                        return;
-                    }
-                }
-            } catch (e) {}
-
-            const fallback = buildLocalFallbackSummary();
-            c.aiSummary = fallback;
-            c.aiSummaryMsgCount = msgs.length;
-            sumBox.textContent = fallback;
-            saveLocalData(true);
-            if (btn) { btn.disabled = false; btn.textContent = '✨ Actualizar'; }
-        };
-
-        window.closeClientProfileModal = function() {
-            document.getElementById('client-profile-modal')?.classList.add('hidden');
-        };
+        window.closeClientProfileModal = function() { document.getElementById('client-profile-modal')?.classList.add('hidden'); };
 
         window.toggleClientAiPauseFromProfile = async function() {
             const id = document.getElementById('profile-contact-id')?.value;
@@ -3446,22 +3355,24 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
         window.generateClientAiSummary = async function(forceRefresh = false) {
             const id = document.getElementById('profile-contact-id')?.value;
             const summaryEl = document.getElementById('profile-ai-summary-text');
+            const btn = document.getElementById('btn-refresh-ai-summary');
             if (!id || !summaryEl) return;
             const found = findContactGlobal(id);
             const c = found?.contact;
-            const msgs = SOFIA_AI.chats[id] || [];
+            const msgs = (SOFIA_AI.chats[id] || []).filter(m => m && m.text);
 
             if (msgs.length === 0) {
                 summaryEl.textContent = c?.aiSummary || 'Aún no hay mensajes registrados con Sofía 2.7 para este cliente.';
                 return;
             }
-            if (!forceRefresh && c?.aiSummary && c.aiSummaryMsgCount === msgs.length) {
+            if (!forceRefresh && c?.aiSummary && Number(c.aiSummaryMsgCount || 0) === msgs.length) {
                 summaryEl.textContent = c.aiSummary;
                 return;
             }
 
+            if (btn) { btn.disabled = true; btn.textContent = '⏳...'; }
             summaryEl.textContent = '⏳ Generando resumen ejecutivo de la charla...';
-            const transcript = msgs.slice(-20).map(m => `${m.role === 'user' ? 'Cliente' : 'Sofía'}: ${m.text}`).join('\n');
+            const transcript = msgs.slice(-24).map(m => `${m.role === 'user' ? 'Cliente' : 'Sofía'}: ${m.text}`).join('\n');
             const apiKey = String(SOFIA_AI.config.geminiApiKey || '').trim();
 
             let summaryText = '';
@@ -3500,6 +3411,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
                 saveLocalData(true);
             }
             summaryEl.textContent = summaryText;
+            if (btn) { btn.disabled = false; btn.textContent = '✨ Actualizar Resumen'; }
         };
 
         window.openProfileWhatsAppChat = function() {
@@ -3529,7 +3441,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             }
             box.innerHTML = msgs.map(m => m.role === 'user'
                 ? `<div class="flex justify-start"><div class="max-w-[82%] px-3 py-2 rounded-2xl bg-white border border-slate-200 text-xs text-slate-800 shadow-xs"><div>${m.text}</div><div class="text-[9px] text-slate-400 mt-0.5">Cliente ${m.time ? '• ' + m.time : ''}</div></div></div>`
-                : `<div class="flex justify-end"><div class="max-w-[82%] px-3 py-2 rounded-2xl ${m.manualAdvisor ? 'bg-zinc-900 text-white' : 'bg-emerald-600 text-white'} text-xs shadow-xs"><div>${m.text}</div><div class="text-[9px] opacity-80 text-right mt-0.5">${m.manualAdvisor ? 'Gonzalo (Manual)' : 'Sofía IA'} ${m.time ? '• ' + m.time : ''}</div></div></div>`
+                : `<div class="flex justify-end"><div class="max-w-[82%] px-3 py-2 rounded-2xl ${m.manualAdvisor ? 'bg-[#0A0A0C] text-white' : 'bg-emerald-600 text-white'} text-xs shadow-xs"><div>${m.text}</div><div class="text-[9px] opacity-80 text-right mt-0.5">${m.manualAdvisor ? 'Gonzalo (Manual)' : 'Sofía IA'} ${m.time ? '• ' + m.time : ''}</div></div></div>`
             ).join('');
             box.scrollTop = box.scrollHeight;
         };
@@ -3558,6 +3470,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
                 });
             } catch (e) {}
             await refreshClientProfileChatFromCloud();
+            await generateClientAiSummary(true);
             showToast("✅ Contexto guardado para que Sofía continúe desde acá");
         };
 
@@ -3617,7 +3530,7 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             const container = document.getElementById('toast-container');
             if (!container) return;
             const toast = document.createElement('div');
-            toast.className = 'toast-animate px-4 py-2.5 rounded-xl bg-zinc-900 text-white text-xs font-semibold shadow-lg border border-zinc-700';
+            toast.className = 'toast-animate px-4 py-2.5 rounded-xl bg-[#0A0A0C] text-white text-xs font-semibold shadow-lg border border-zinc-700';
             toast.textContent = msg;
             container.appendChild(toast);
             setTimeout(() => { toast.remove(); }, 3800);
@@ -3630,8 +3543,21 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             renderBotonera();
         }
 
+        // --- AUTO-TESTER INTEGRADO DE INTEGRIDAD UI & LÓGICA ---
+        function runSelfDiagnostics() {
+            const requiredTabs = ['botonera', 'contactos', 'clientes', 'comparativa', 'objetivos', 'planes', 'financiaciones'];
+            const missingTabs = requiredTabs.filter(t => !document.getElementById(`tab-${t}`) || !document.getElementById(`tab-btn-${t}`));
+            const botoneraEl = document.getElementById('tab-botonera');
+            const statTotalEl = document.getElementById('stat-total');
+            const kpisInsideHomeOnly = Boolean(botoneraEl && statTotalEl && botoneraEl.contains(statTotalEl));
+            if (missingTabs.length > 0 || !kpisInsideHomeOnly) {
+                console.error('QA Diagnostic Warning:', { missingTabs, kpisInsideHomeOnly });
+            }
+        }
+
         // --- INICIALIZACIÓN ---
         window.addEventListener('DOMContentLoaded', async () => {
+            runSelfDiagnostics();
             if (typeof pdfjsLib !== 'undefined') {
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
             }
