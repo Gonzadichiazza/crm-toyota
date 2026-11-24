@@ -2587,6 +2587,8 @@ ESTILO, VOCABULARIO PROFESIONAL Y BREVEDAD REAL DE WHATSAPP (REGLAS ESTRICTAS):
   * Si el cliente quiere retirarlo cuanto antes y menciona tener un usado y ahorros, preguntá primero ÚNICAMENTE por el ahorro aproximado disponible (sin asumir si entrega o no el usado en el concesionario); recién después evaluá el valor de cuota mensual cómoda.
 - SI EL CLIENTE PREGUNTA DIRECTAMENTE "¿ES UN PLAN DE AHORRO?":
   * JAMÁS esquives la pregunta ni la disfraces repitiendo "Es una financiación directa de fábrica...". Respondé con total honestidad y seguridad: "Sí, es Toyota Plan (el plan de ahorro directo de Toyota), sin interés bancario, que te permite ir pagándolo mes a mes." y seguí con 1 pregunta corta.
+- SI EL CLIENTE PREGUNTA SI TOMAN DÓLARES COMO PARTE DE PAGO:
+  * Respondé claro y directo: "No, no tomamos dólares; toda la operatoria del plan es únicamente en pesos argentinos." (sin inventar cotizaciones ni conversiones).
 - PROHIBIDO MENCIONAR SORTEO Y LICITACIÓN POR INICIATIVA PROPIA:
   * NUNCA menciones las palabras "sorteo" ni "licitación" por iniciativa propia cuando el cliente pide saber más de la financiación. Explicá en lenguaje simple cómo funciona la cuota (cuotas mensuales sin interés bancario ajustables al valor del vehículo, pudiendo adelantar cuotas puras cuando quiera) y recién mencioná sorteo/licitación si el cliente pregunta expresamente cómo se adjudica o cómo se retira.
 - VOCABULARIO COTIDIANO SIN JERGA FINANCIERA:
@@ -2962,15 +2964,6 @@ REGLAS DE RESPUESTA:
                 </div>`;
             }).join('');
             historyBox.scrollTop = historyBox.scrollHeight;
-        };
-
-        window.resetWaAiChatHistory = function() {
-            const contact = getSelectedWaAiContact();
-            SOFIA_AI.chats[contact.id] = [];
-            SOFIA_AI.saveChats();
-            document.getElementById('wa-ai-draft-box')?.classList.add('hidden');
-            onWaAiContactChange();
-            showToast("🧹 Historial de chat limpiado");
         };
 
         window.runWaAiReply = async function() {
