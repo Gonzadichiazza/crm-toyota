@@ -56,22 +56,15 @@
                         <span id="cloud-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                         <span id="cloud-text">Conectando...</span>
                     </span>
-                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofi 2.6 • Persistencia 24/7">
+                    <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofi 2.7 • Persistencia 24/7">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-                        <span id="nav-wa-ai-label">🤖 Sofi 2.6 ON</span>
-                    </button>
-                    <button onclick="openPdfPriceChatbotModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 transition-colors flex items-center gap-1 shadow-sm shrink-0" title="Corregir precios leídos de los PDFs por chat">
-                        <span>🛠️ Corregir Precio PDF</span>
+                        <span id="nav-wa-ai-label">🤖 Sofi 2.7 ON</span>
                     </button>
                     <button onclick="openAgendaWindow()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600/90 hover:bg-purple-600 text-white border border-purple-400/40 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Abrir Ventana de Calendario e IA">
                         <span>📅 Calendario IA</span>
                         <span id="nav-agenda-badge" class="px-1.5 py-0.2 text-[10px] font-extrabold bg-white text-purple-800 rounded-full">0</span>
                     </button>
-                    <button onclick="openWaBridgeModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors flex items-center gap-1 shrink-0" title="Conectar Celular WhatsApp Auto-Respuesta">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                        <span class="hidden md:inline">Auto-WA Móvil</span>
-                    </button>
-                    <button onclick="openBackupModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-zinc-200 hover:bg-white/20 transition-colors flex items-center gap-1 shrink-0" title="Respaldo y Sala">
+                    <button onclick="openBackupModal()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-zinc-200 hover:bg-white/20 transition-colors flex items-center gap-1 shrink-0" title="Respaldo, Sala y Vinculación Móvil">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
                         <span class="hidden sm:inline">Respaldo</span>
                     </button>
@@ -338,6 +331,7 @@
                 <div class="overflow-x-auto"><table class="w-full text-left border-collapse min-w-[640px]"><thead><tr class="bg-white border-b border-slate-200 text-xs sm:text-sm font-semibold text-slate-600"><th class="p-3.5">Contacto & WhatsApp</th><th class="p-3.5">Origen / Loc.</th><th class="p-3.5">Estado</th><th class="p-3.5">Acciones y Avance</th></tr></thead><tbody id="crm-table-body" class="divide-y divide-slate-100 text-sm"></tbody></table></div>
                 <div id="crm-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay datos pendientes de envío en No Compra.</div>
                 <div id="crm-waiting-sublist"></div>
+                <div id="crm-classification-sublists" class="p-4 bg-slate-50/70 border-t border-slate-200 space-y-4"></div>
                 <div id="crm-nocompra48-sublist"></div>
             </section>
 
@@ -578,7 +572,6 @@
             <div class="flex flex-wrap justify-between items-center gap-2 border-b pb-3">
                 <h3 class="text-base font-extrabold">📊 Evolución Mes a Mes & Cuota Más Alta</h3>
                 <div class="flex gap-2">
-                    <button onclick="openPdfPriceChatbotModal()" class="px-3 py-1.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-300 text-xs font-bold">🛠️ Corregir Precio PDF</button>
                     <select id="plan-chart-model-select" onchange="renderVehiclePriceEvolutionChart()" class="rounded-xl border px-3 py-1.5 text-xs font-bold bg-white"></select>
                     <select id="plan-model-filter" onchange="renderPlansHistory()" class="rounded-xl border px-3 py-1.5 text-xs font-semibold bg-white"><option value="Todos">Todos</option></select>
                     <button onclick="clearPlansHistory()" class="px-3 py-1.5 rounded-xl bg-red-50 text-red-600 text-xs font-bold">Vaciar</button>
@@ -723,12 +716,11 @@
     <!-- MODALES VARIOS -->
     <div id="plan-files-modal" class="fixed inset-0 bg-slate-900/60 z-[65] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-5"><div class="flex justify-between items-center border-b pb-3 mb-4"><h3 id="plan-files-modal-title" class="font-bold">Archivos</h3><button onclick="closePlanFilesModal()">✕</button></div><div id="plan-files-modal-actions" class="mb-3"></div><div id="plan-files-modal-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div></div></div>
     <div id="share-jpg-wa-modal" class="fixed inset-0 bg-slate-900/60 z-[70] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-md p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">📲 Compartir JPG</h3><button onclick="closeShareJpgWaModal()">✕</button></div><p id="share-jpg-wa-filename" class="text-xs text-slate-500"></p><input type="text" id="share-jpg-search" oninput="renderShareJpgContactsList()" placeholder="Buscar cliente..." class="w-full px-3 py-2 text-sm border rounded-xl"><div id="share-jpg-contacts-list" class="max-h-40 overflow-y-auto border rounded-xl divide-y"></div></div></div>
-    <div id="pdf-price-chatbot-modal" class="fixed inset-0 bg-slate-950/75 z-[72] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-xl p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">🛠️ Corregir Precio PDF</h3><button onclick="closePdfPriceChatbotModal()">✕</button></div><div id="pdf-chatbot-quick-pills" class="flex flex-wrap gap-1.5"></div><div id="pdf-chatbot-messages" class="max-h-56 overflow-y-auto space-y-2 p-3 bg-slate-50 rounded-xl border"></div><div class="flex gap-2"><input type="text" id="pdf-chatbot-input" onkeydown="if(event.key==='Enter') sendPdfChatbotCorrection()" placeholder="Ej: Hilux 70/30 cuota 25 a 84 $528.803" class="flex-1 px-3 py-2 text-xs border rounded-xl"><button onclick="sendPdfChatbotCorrection()" class="px-4 py-2 bg-[#EB0A1E] text-white rounded-xl text-xs font-bold">Corregir</button></div></div></div>
-    <div id="edit-modal" class="fixed inset-0 bg-slate-900/50 z-[60] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-lg p-5 space-y-3"><div class="flex justify-between items-center border-b pb-2"><h3 class="font-bold">Editar Contacto</h3><button onclick="closeEditModal()">✕</button></div><input type="hidden" id="edit-id"><div class="grid grid-cols-2 gap-3"><input type="text" id="edit-name" placeholder="Nombre" class="px-3 py-2 text-sm border rounded-xl"><input type="text" id="edit-phone" placeholder="Teléfono" class="px-3 py-2 text-sm border rounded-xl"></div><div class="grid grid-cols-2 gap-3"><input type="text" id="edit-reference" placeholder="Referencia" class="px-3 py-2 text-sm border rounded-xl"><select id="edit-model" class="px-3 py-2 text-sm border rounded-xl bg-white"><option value="">Sin modelo</option></select></div><select id="edit-status" class="w-full px-3 py-2 text-sm border rounded-xl bg-white"><option value="Pendiente">Pendiente</option><option value="Llamada Realizada">Llamada Realizada</option><option value="Mensaje Enviado (48h)">Mensaje Enviado (48h)</option><option value="Contestó">Contestó</option><option value="Interesado">Interesado</option><option value="Interesado a Futuro">Interesado a Futuro</option><option value="Entrevista">Entrevista</option><option value="Venta">Venta</option><option value="No Compra">No Compra</option></select><div class="grid grid-cols-3 gap-2"><input type="date" id="edit-schedule-date" class="px-2 py-1.5 text-xs border rounded-lg"><input type="time" id="edit-schedule-time" class="px-2 py-1.5 text-xs border rounded-lg"><input type="text" id="edit-schedule-note" placeholder="Nota" class="px-2 py-1.5 text-xs border rounded-lg"></div><textarea id="edit-obs" rows="2" placeholder="Observaciones..." class="w-full px-3 py-2 text-sm border rounded-xl"></textarea><div class="flex justify-end gap-2"><button onclick="closeEditModal()" class="px-4 py-2 text-sm">Cancelar</button><button onclick="saveEdit()" class="px-5 py-2 bg-[#EB0A1E] text-white text-sm font-bold rounded-xl">Guardar</button></div></div></div>
+    <div id="edit-modal" class="fixed inset-0 bg-slate-900/50 z-[60] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-lg p-5 space-y-3"><div class="flex justify-between items-center border-b pb-2"><h3 class="font-bold">Editar Contacto</h3><button onclick="closeEditModal()">✕</button></div><input type="hidden" id="edit-id"><div class="grid grid-cols-2 gap-3"><input type="text" id="edit-name" placeholder="Nombre" class="px-3 py-2 text-sm border rounded-xl"><input type="text" id="edit-phone" placeholder="Teléfono" class="px-3 py-2 text-sm border rounded-xl"></div><div class="grid grid-cols-2 gap-3"><input type="text" id="edit-reference" placeholder="Referencia" class="px-3 py-2 text-sm border rounded-xl"><select id="edit-model" class="px-3 py-2 text-sm border rounded-xl bg-white"><option value="">Sin modelo</option></select></div><select id="edit-status" class="w-full px-3 py-2 text-sm border rounded-xl bg-white"><option value="Pendiente">Pendiente</option><option value="Llamada Realizada">Llamada Realizada</option><option value="Mensaje Enviado (48h)">Mensaje Enviado (48h)</option><option value="Sin Respuesta 24h">Sin Respuesta 24h</option><option value="Contestó">Contestó</option><option value="Interesado">Interesado</option><option value="Interesado a Futuro">Interesado a Futuro</option><option value="Entrevista">Entrevista</option><option value="Venta">Venta</option><option value="No Compra">No Compra</option></select><div class="grid grid-cols-3 gap-2"><input type="date" id="edit-schedule-date" class="px-2 py-1.5 text-xs border rounded-lg"><input type="time" id="edit-schedule-time" class="px-2 py-1.5 text-xs border rounded-lg"><input type="text" id="edit-schedule-note" placeholder="Nota" class="px-2 py-1.5 text-xs border rounded-lg"></div><textarea id="edit-obs" rows="2" placeholder="Observaciones..." class="w-full px-3 py-2 text-sm border rounded-xl"></textarea><div class="flex justify-end gap-2"><button onclick="closeEditModal()" class="px-4 py-2 text-sm">Cancelar</button><button onclick="saveEdit()" class="px-5 py-2 bg-[#EB0A1E] text-white text-sm font-bold rounded-xl">Guardar</button></div></div></div>
     <div id="model-modal" class="fixed inset-0 bg-slate-900/50 z-[65] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-md p-5 space-y-3"><h3 class="font-bold">Modelo Toyota de Interés</h3><input type="hidden" id="model-contact-id"><input type="hidden" id="model-contact-status"><select id="input-interest-model" class="w-full px-3 py-2 text-sm border rounded-xl bg-white"></select><div class="flex justify-end gap-2"><button onclick="closeModelModal()" class="px-4 py-2 text-sm">Cancelar</button><button onclick="confirmInterestModel()" class="px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-xl">Confirmar</button></div></div></div>
     <div id="schedule-modal" class="fixed inset-0 bg-slate-900/60 z-[68] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-md p-5 space-y-3"><h3 class="font-bold">📅 Agendar Compromiso</h3><input type="hidden" id="sched-contact-id"><div id="sched-client-picker-box" class="hidden"><select id="sched-client-select" class="w-full px-3 py-2 text-sm border rounded-xl bg-white"></select></div><select id="sched-type-select" class="w-full px-3 py-2 text-sm border rounded-xl bg-white"><option value="Entrevista">Entrevista</option><option value="Interesado a Futuro">Interesado a Futuro</option></select><div class="grid grid-cols-2 gap-2"><input type="date" id="sched-date-input" class="px-3 py-2 text-sm border rounded-xl"><input type="time" id="sched-time-input" value="10:30" class="px-3 py-2 text-sm border rounded-xl"></div><input type="text" id="sched-note-input" placeholder="Ej: Salón Ginza" class="w-full px-3 py-2 text-sm border rounded-xl"><div class="flex justify-end gap-2"><button onclick="closeScheduleModal()" class="px-4 py-2 text-sm">Cancelar</button><button onclick="confirmScheduleCommitment()" class="px-4 py-2 bg-[#EB0A1E] text-white text-sm font-bold rounded-xl">Guardar</button></div></div></div>
     <div id="wa-templates-modal" class="fixed inset-0 bg-slate-900/60 z-[66] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-2xl p-5 space-y-3 max-h-[85vh] overflow-y-auto"><div class="flex justify-between items-center"><h3 class="font-bold">Mensajes Predeterminados</h3><button onclick="closeWaTemplatesModal()">✕</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"><div><label class="font-bold">No Compra</label><textarea id="tpl-input-crm" rows="2" class="w-full p-2 border rounded-xl"></textarea></div><div><label class="font-bold">Gestión</label><textarea id="tpl-input-gestion" rows="2" class="w-full p-2 border rounded-xl"></textarea></div><div><label class="font-bold">Redes</label><textarea id="tpl-input-redes" rows="2" class="w-full p-2 border rounded-xl"></textarea></div><div><label class="font-bold">Salesforce</label><textarea id="tpl-input-salesforce" rows="2" class="w-full p-2 border rounded-xl"></textarea></div><div><label class="font-bold">Convencional</label><textarea id="tpl-input-convencional" rows="2" class="w-full p-2 border rounded-xl"></textarea></div><div><label class="font-bold">Cancelados</label><textarea id="tpl-input-cancelados" rows="2" class="w-full p-2 border rounded-xl"></textarea></div><div><label class="font-bold">Rescindidos</label><textarea id="tpl-input-rescindidos" rows="2" class="w-full p-2 border rounded-xl"></textarea></div><div><label class="font-bold">Clientes</label><textarea id="tpl-input-clientes" rows="2" class="w-full p-2 border rounded-xl"></textarea></div></div><div class="flex justify-end gap-2"><button onclick="closeWaTemplatesModal()" class="px-4 py-2 text-sm">Cancelar</button><button onclick="saveWaTemplates()" class="px-4 py-2 bg-[#EB0A1E] text-white text-sm font-bold rounded-xl">Guardar</button></div></div></div>
-    <div id="backup-modal" class="fixed inset-0 bg-slate-900/50 z-[65] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-md p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">Sala Firebase & Respaldo</h3><button onclick="closeBackupModal()">✕</button></div><div class="flex gap-2"><input type="text" id="sync-room-input" class="flex-1 px-3 py-2 text-sm border rounded-xl"><button onclick="changeSyncRoom()" class="px-3 py-2 bg-[#EB0A1E] text-white rounded-xl text-xs font-bold">Aplicar</button></div><button onclick="exportBackupFile()" class="w-full py-2 bg-slate-100 rounded-xl text-xs font-bold">Descargar Copia JSON</button></div></div>
+    <div id="backup-modal" class="fixed inset-0 bg-slate-900/50 z-[65] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-md p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">Sala Firebase, Respaldo & Móvil</h3><button onclick="closeBackupModal()">✕</button></div><div class="flex gap-2"><input type="text" id="sync-room-input" class="flex-1 px-3 py-2 text-sm border rounded-xl"><button onclick="changeSyncRoom()" class="px-3 py-2 bg-[#EB0A1E] text-white rounded-xl text-xs font-bold">Aplicar</button></div><button onclick="exportBackupFile()" class="w-full py-2 bg-slate-100 rounded-xl text-xs font-bold">Descargar Copia JSON</button><button onclick="closeBackupModal(); openWaBridgeModal();" class="w-full py-2 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold">📲 Vinculación MacroDroid (Auto-WA Móvil)</button></div></div>
     <div id="wa-bridge-modal" class="fixed inset-0 bg-slate-900/60 z-[66] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-xl p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">📲 Vinculación MacroDroid</h3><button onclick="closeWaBridgeModal()">✕</button></div><div class="flex gap-2"><input type="text" id="wa-webhook-url" readonly class="flex-1 px-3 py-2 text-xs font-mono bg-slate-100 border rounded-xl"><button onclick="copyWaWebhookUrl()" class="px-3 py-2 bg-[#EB0A1E] text-white rounded-xl text-xs font-bold">Copiar URL</button></div><div id="wa-incoming-logs" class="max-h-36 overflow-y-auto border rounded-xl divide-y text-xs"></div></div></div>
     <div id="sf-sync-modal" class="fixed inset-0 bg-slate-900/60 z-[67] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-xl p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">🔄 Salesforce Sync</h3><button onclick="closeSalesforceSyncModal()">✕</button></div><input type="text" id="sf-inbound-url" readonly class="w-full px-2 py-1.5 text-xs font-mono bg-slate-100 border rounded-lg"><input type="text" id="sf-outbound-url" readonly class="w-full px-2 py-1.5 text-xs font-mono bg-slate-100 border rounded-lg"></div></div>
 
@@ -778,6 +770,7 @@
                             <select id="profile-status" class="w-full px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none">
                                 <option value="Pendiente">Pendiente</option>
                                 <option value="Mensaje Enviado (48h)">Mensaje Enviado (48h)</option>
+                                <option value="Sin Respuesta 24h">Sin Respuesta 24h</option>
                                 <option value="Contestó">Contestó</option>
                                 <option value="Interesado">Interesado</option>
                                 <option value="Interesado a Futuro">Interesado a Futuro</option>
@@ -798,6 +791,20 @@
                         </div>
                     </div>
                     <div>
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Motivo No Interesado (si aplica)</label>
+                        <select id="profile-no-interest-reason" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-xl bg-white outline-none">
+                            <option value="">Sin motivo / Activo</option>
+                            <option value="Ya compró otro vehículo">Ya compró otro vehículo</option>
+                            <option value="Presupuesto / Cuota elevada">Presupuesto / Cuota elevada</option>
+                            <option value="Problema con usado / Tasación anterior">Problema con usado / Tasación anterior</option>
+                            <option value="No quiere Plan de Ahorro">No quiere Plan de Ahorro</option>
+                            <option value="Situación económica / Frenó búsqueda">Situación económica / Frenó búsqueda</option>
+                            <option value="Averiguaba para un tercero">Averiguaba para un tercero</option>
+                            <option value="Número equivocado">Número equivocado</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Notas / Contexto para Gonzalo & Sofía</label>
                         <textarea id="profile-obs" rows="3" placeholder="Ej: Tiene un usado 2019, prefiere cuota hasta $550.000..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none resize-none"></textarea>
                     </div>
@@ -808,11 +815,18 @@
                 </div>
 
                 <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden min-h-[340px]">
-                    <div class="px-4 py-3 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
+                    <div class="p-3 bg-emerald-50/80 border-b border-emerald-200 space-y-1.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-extrabold text-emerald-950 uppercase">🧠 Resumen Ejecutivo Sofía 2.7</span>
+                            <button onclick="generateClientAiSummary(true)" class="px-2.5 py-0.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[10px] font-bold">✨ Actualizar Resumen</button>
+                        </div>
+                        <div id="profile-ai-summary-text" class="text-xs text-slate-800 leading-relaxed whitespace-pre-line">Aún sin conversación registrada.</div>
+                    </div>
+                    <div class="px-4 py-2.5 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
                         <span class="text-xs font-extrabold text-slate-800">💬 Conversación con el Cliente</span>
                         <button onclick="refreshClientProfileChatFromCloud()" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-[11px] font-bold text-slate-700 hover:bg-slate-50">🔄 Actualizar</button>
                     </div>
-                    <div id="profile-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[300px]"></div>
+                    <div id="profile-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[250px]"></div>
                     <div class="p-3 bg-white border-t border-slate-200 flex gap-2">
                         <input type="text" id="profile-manual-note-input" onkeydown="if(event.key==='Enter') logManualAdvisorMessage()" placeholder="Registrar lo que hablaste vos manualmente (para darle contexto a Sofía)..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
                         <button onclick="logManualAdvisorMessage()" class="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-bold shrink-0">+ Contexto IA</button>
@@ -822,7 +836,7 @@
         </div>
     </div>
 
-    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA • 100% GOOGLE GEMINI) -->
+    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA 2.7 • 100% GOOGLE GEMINI) -->
     <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
             <div class="px-5 py-4 bg-gradient-to-r from-zinc-950 via-neutral-900 to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
@@ -830,9 +844,9 @@
                     <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 2.6 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
+                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 2.7 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">HUMANA • PROFESIONAL</span>
-                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Sofi 2.6 Nube</span>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Sofi 2.7 Nube</span>
                         </div>
                         <p class="text-xs text-zinc-300">Conversación 100% libre impulsada por Google Gemini • Valores y cuotas oficiales desde tu CRM.</p>
                     </div>
@@ -1650,18 +1664,30 @@
             }
         };
         window.checkWhatsApp48hTimeouts = function(manual = false) {
-            const limitMs = 48 * 3600 * 1000, now = Date.now(), todayStr = new Date().toLocaleDateString();
-            let expiredCount = 0;
-            [crmContacts, gestionContacts, redesContacts, salesforceContacts, convencionalContacts, canceladosContacts, rescindidosContacts].forEach(list => {
+            const limit24hMs = 24 * 3600 * 1000, limit48hMs = 48 * 3600 * 1000, now = Date.now(), todayStr = new Date().toLocaleDateString();
+            let moved24h = 0, expired48h = 0;
+            crmContacts.forEach(c => {
+                if (c.status === 'Mensaje Enviado (48h)' && c.waSentAt && (now - Number(c.waSentAt) >= limit24hMs)) {
+                    c.status = 'Sin Respuesta 24h';
+                    c.noResponse24hAt = now;
+                    moved24h++;
+                }
+            });
+            [gestionContacts, redesContacts, salesforceContacts, convencionalContacts, canceladosContacts, rescindidosContacts].forEach(list => {
                 list.forEach(c => {
-                    if (c.status === 'Mensaje Enviado (48h)' && c.waSentAt && (now - Number(c.waSentAt) >= limitMs)) {
-                        c.status = 'No Compra'; c.method = 'Mensaje'; c.noCompraDate = todayStr; delete c.waSentAt;
-                        expiredCount++;
+                    if (c.status === 'Mensaje Enviado (48h)' && c.waSentAt && (now - Number(c.waSentAt) >= limit48hMs)) {
+                        c.status = 'No Compra'; c.method = 'Mensaje'; c.noCompraDate = todayStr; c.noInterestReason = c.noInterestReason || 'Sin respuesta (48h)'; delete c.waSentAt;
+                        expired48h++;
                     }
                 });
             });
-            if (expiredCount > 0) { saveLocalData(true); renderAllTables(); updateDashboard(); showToast(`⏱️ ${expiredCount} contacto(s) pasaron a "No Compra" (${todayStr})`); }
-            else if (manual) showToast("Verificación 48h completada: sin mensajes vencidos.");
+            if (moved24h > 0 || expired48h > 0) {
+                saveLocalData(true); renderAllTables(); updateDashboard();
+                if (moved24h > 0) showToast(`⏳ ${moved24h} contacto(s) de No Compra pasaron a "Sin Respuesta 24h"`);
+                if (expired48h > 0) showToast(`⏱️ ${expired48h} contacto(s) pasaron a "No Compra" (${todayStr})`);
+            } else if (manual) {
+                showToast("Verificación 24h/48h completada: sin pendientes vencidos.");
+            }
             updateWaBannerSummary();
         };
         function formatWhatsAppMessageForChannel(channelKey, contactName) {
@@ -1826,11 +1852,12 @@
                     const result = processIncomingWhatsAppMessage(sender, text);
                     waIncomingLogs.unshift({
                         sender: sender || 'Desconocido',
-                        actionLabel: result ? `Atendido Sofi 2.6 (${result.contact.name})` : 'Ignorado (No está en CRM / Chat Personal)',
+                        actionLabel: result ? `Atendido Sofi 2.7 (${result.contact.name})` : 'Ignorado (No está en CRM / Chat Personal)',
                         time: new Date().toLocaleTimeString()
                     });
                     if (result) {
                         anyUpdated = true;
+                        classifyNoCompraConversationState(result.contact, text);
                         if (result.contact.aiPaused) {
                             waIncomingLogs[0].actionLabel = `⏸️ Pausada para ${result.contact.name} (Intervención manual)`;
                         } else if (waAiConfig.autoReplyMobile && text && !waAiConfig.cloudWorkerPrimary) {
@@ -2025,7 +2052,8 @@
         function renderSimpleChannelTable(list, tbodyId, emptyId, channelKey, waitingBoxId = '') {
             const tbody = document.getElementById(tbodyId), emptyEl = document.getElementById(emptyId);
             if (!tbody) return;
-            const filtered = list.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            const isCrmNoCompra = channelKey === 'crm';
+            const filtered = list.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)' && !(isCrmNoCompra && c.status === 'Sin Respuesta 24h'));
             if (filtered.length === 0) { tbody.innerHTML = ''; emptyEl?.classList.remove('hidden'); }
             else {
                 emptyEl?.classList.add('hidden');
@@ -2033,7 +2061,165 @@
             }
             const box = document.getElementById(waitingBoxId);
             const waiting = list.filter(c => c.status === 'Mensaje Enviado (48h)');
-            if (box) box.innerHTML = waiting.length === 0 ? '' : `<div class="p-3 bg-teal-50/50 border-t border-teal-200 text-xs"><div class="font-bold text-teal-900 mb-1">⏳ En espera (48h) — ${waiting.length}</div>${waiting.map(w => `<div class="flex justify-between items-center bg-white p-2 rounded border mb-1"><span><b>${w.name}</b> (${w.phone}) ${w.aiPaused ? '<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold">⏸️ IA Pausada</span>' : ''}</span><div class="flex gap-1"><button onclick="openClientProfileModal('${w.id}')" class="px-2 py-0.5 bg-zinc-900 text-white rounded font-bold">👤 Ficha</button><button onclick="toggleContactAiPause('${w.id}')" class="px-2 py-0.5 ${w.aiPaused ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-900'} rounded font-bold">${w.aiPaused ? '▶ IA' : '⏸️ IA'}</button></div></div>`).join('')}</div>`;
+            if (box) box.innerHTML = waiting.length === 0 ? '' : `<div class="p-3 bg-teal-50/50 border-t border-teal-200 text-xs"><div class="font-bold text-teal-900 mb-1">⏳ En espera (24h/48h) — ${waiting.length}</div>${waiting.map(w => `<div class="flex justify-between items-center bg-white p-2 rounded border mb-1"><span><b>${w.name}</b> (${w.phone}) ${w.aiPaused ? '<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold">⏸️ IA Pausada</span>' : ''}</span><div class="flex gap-1"><button onclick="openClientProfileModal('${w.id}')" class="px-2 py-0.5 bg-zinc-900 text-white rounded font-bold">👤 Ficha</button><button onclick="toggleContactAiPause('${w.id}')" class="px-2 py-0.5 ${w.aiPaused ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-900'} rounded font-bold">${w.aiPaused ? '▶ IA' : '⏸️ IA'}</button></div></div>`).join('')}</div>`;
+            if (isCrmNoCompra) renderNoCompraClassifiedLists();
+        }
+
+        let currentNoInterestReasonFilter = 'Todos';
+        window.setNoInterestReasonFilter = function(reason) {
+            currentNoInterestReasonFilter = reason;
+            renderNoCompraClassifiedLists();
+        };
+
+        function classifyNoCompraConversationState(contact, userText = '') {
+            if (!contact) return;
+            const norm = String(userText || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+            if (!norm) return;
+
+            const detectedModel = detectToyotaModelFromText(userText);
+            if (detectedModel) contact.interestModel = detectedModel;
+
+            // 1. Detectar Contactar a Futuro (más adelante, en unos meses, etc.)
+            if (/\b(mas adelante|en unos meses|el mes que viene|en marzo|en abril|en mayo|en junio|en julio|en agosto|en septiembre|en octubre|en noviembre|en diciembre|fin de ano|proximo ano|ano que viene|por ahora no|ahora no)\b/.test(norm)) {
+                contact.status = 'Interesado a Futuro';
+                const monthMap = { enero: '01', febrero: '02', marzo: '03', abril: '04', mayo: '05', junio: '06', julio: '07', agosto: '08', septiembre: '09', octubre: '10', noviembre: '11', diciembre: '12' };
+                for (const [mName, mNum] of Object.entries(monthMap)) {
+                    if (norm.includes(mName)) {
+                        const now = new Date();
+                        const yr = Number(mNum) <= (now.getMonth() + 1) ? now.getFullYear() + 1 : now.getFullYear();
+                        contact.scheduleDate = `${yr}-${mNum}-10`;
+                        contact.scheduleTime = '10:30';
+                        contact.scheduleNote = `Recontacto acordado con Sofía (${mName})`;
+                    }
+                }
+                return;
+            }
+
+            // 2. Detectar No Interesados y clasificar motivo real
+            const reasonRules = [
+                { reason: 'Ya compró otro vehículo', re: /\b(ya compre|compre otro|ya saque|ya adquiri|compre hace poco|ya tengo auto nuevo)\b/ },
+                { reason: 'Problema con usado / Tasación anterior', re: /\b(tasacion|me lo tomaron bajo|cotizaron bajo|muy abajo el usado)\b/ },
+                { reason: 'No quiere Plan de Ahorro', re: /\b(no quiero plan|nada con planes|no me interesan los planes|solo contado|entrega inmediata)\b/ },
+                { reason: 'Presupuesto / Cuota elevada', re: /\b(muy caro|no llego|se me va|cuota alta|no puedo pagar|fuera de presupuesto)\b/ },
+                { reason: 'Situación económica / Frenó búsqueda', re: /\b(frene la busqueda|esta dificil|situacion economica|sin trabajo|no estoy buscando)\b/ },
+                { reason: 'Averiguaba para un tercero', re: /\b(era para mi hijo|para mi hija|para un amigo|para un familiar|para mi viejo|para mi empresa)\b/ },
+                { reason: 'Número equivocado', re: /\b(numero equivocado|no soy|te equivocaste)\b/ }
+            ];
+            for (const r of reasonRules) {
+                if (r.re.test(norm)) {
+                    contact.status = 'No Compra';
+                    contact.noInterestReason = r.reason;
+                    contact.noCompraDate = new Date().toLocaleDateString('es-AR');
+                    return;
+                }
+            }
+            if (/^(no|no gracias|no me interesa|por ahora no gracias)[!.,\s]*$/.test(norm)) {
+                contact.status = 'No Compra';
+                contact.noInterestReason = contact.noInterestReason || 'Otros';
+                contact.noCompraDate = new Date().toLocaleDateString('es-AR');
+                return;
+            }
+
+            // 3. Detectar Interesados (pregunta cuota, modelo, financiación, entrega)
+            if (detectedModel || /\b(cuota|precio|valor|financiacion|interesado|contame|como es|70\/30|100%)\b/.test(norm)) {
+                if (!['Entrevista', 'Venta'].includes(contact.status)) {
+                    contact.status = 'Interesado';
+                }
+            }
+        }
+
+        function renderNoCompraClassifiedLists() {
+            const container = document.getElementById('crm-classification-sublists');
+            if (!container) return;
+
+            const noResp24 = crmContacts.filter(c => c.status === 'Sin Respuesta 24h');
+            const interesados = crmContacts.filter(c => ['Interesado', 'Entrevista', 'Venta'].includes(c.status));
+            const aFuturo = crmContacts.filter(c => c.status === 'Interesado a Futuro');
+            const noInteresados = crmContacts.filter(c => c.status === 'No Compra');
+
+            const reasons = [
+                'Todos',
+                'Ya compró otro vehículo',
+                'Presupuesto / Cuota elevada',
+                'Problema con usado / Tasación anterior',
+                'No quiere Plan de Ahorro',
+                'Situación económica / Frenó búsqueda',
+                'Averiguaba para un tercero',
+                'Número equivocado',
+                'Otros'
+            ];
+
+            const filteredNoInt = currentNoInterestReasonFilter === 'Todos'
+                ? noInteresados
+                : noInteresados.filter(c => (c.noInterestReason || 'Otros') === currentNoInterestReasonFilter);
+
+            const renderMiniRow = (c, extraBadge = '') => `
+                <div class="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-xl border border-slate-200 text-xs">
+                    <div class="min-w-0">
+                        <button onclick="openClientProfileModal('${c.id}')" class="font-bold text-slate-900 hover:text-[#EB0A1E] underline decoration-slate-300">${c.name || 'Sin Nombre'}</button>
+                        <span class="text-slate-500 ml-1.5">${c.phone || ''}</span>
+                        ${c.interestModel ? `<span class="ml-1.5 px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold text-[10px]">${c.interestModel}</span>` : ''}
+                        ${extraBadge}
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="openClientProfileModal('${c.id}')" class="px-2.5 py-1 rounded-lg bg-zinc-900 text-white text-[11px] font-bold">👤 Ficha & Resumen</button>
+                    </div>
+                </div>`;
+
+            container.innerHTML = `
+                <div class="text-xs font-extrabold uppercase tracking-wider text-slate-700">📊 Clasificación Automática Sofía 2.7 — Base No Compra</div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <!-- 1. SIN RESPUESTA +24HS -->
+                    <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-amber-950">⏳ Sin Respuesta (+24 hs)</span>
+                            <span class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 text-[11px] font-extrabold">${noResp24.length}</span>
+                        </div>
+                        <div class="space-y-1.5 max-h-48 overflow-y-auto">
+                            ${noResp24.length === 0 ? '<div class="text-[11px] text-amber-800/70">Sin contactos vencidos a 24h todavía.</div>' : noResp24.map(c => renderMiniRow(c)).join('')}
+                        </div>
+                    </div>
+
+                    <!-- 2. INTERESADOS -->
+                    <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-emerald-950">🟢 Interesados (Derivados a Clientes)</span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-950 text-[11px] font-extrabold">${interesados.length}</span>
+                        </div>
+                        <div class="space-y-1.5 max-h-48 overflow-y-auto">
+                            ${interesados.length === 0 ? '<div class="text-[11px] text-emerald-800/70">Aún sin interesados detectados en esta base.</div>' : interesados.map(c => renderMiniRow(c, `<span class="ml-1 px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">${c.status}</span>`)).join('')}
+                        </div>
+                    </div>
+
+                    <!-- 3. CONTACTAR A FUTURO -->
+                    <div class="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-purple-950">📅 Contactar a Futuro (Fecha acordada con Sofía)</span>
+                            <span class="px-2 py-0.5 rounded-full bg-purple-200 text-purple-950 text-[11px] font-extrabold">${aFuturo.length}</span>
+                        </div>
+                        <div class="space-y-1.5 max-h-48 overflow-y-auto">
+                            ${aFuturo.length === 0 ? '<div class="text-[11px] text-purple-800/70">Sin contactos agendados a futuro aún.</div>' : aFuturo.map(c => renderMiniRow(c, c.scheduleDate ? `<span class="ml-1 px-1.5 py-0.5 rounded bg-purple-100 text-purple-900 text-[10px] font-bold">📅 ${formatDisplayISODate(c.scheduleDate)}</span>` : '')).join('')}
+                        </div>
+                    </div>
+
+                    <!-- 4. NO INTERESADOS POR MOTIVO -->
+                    <div class="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-rose-950">🔴 No Interesados (Clasificados por Motivo)</span>
+                            <span class="px-2 py-0.5 rounded-full bg-rose-200 text-rose-950 text-[11px] font-extrabold">${noInteresados.length}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1">
+                            ${reasons.map(r => {
+                                const cnt = r === 'Todos' ? noInteresados.length : noInteresados.filter(x => (x.noInterestReason || 'Otros') === r).length;
+                                const active = currentNoInterestReasonFilter === r;
+                                return `<button onclick="setNoInterestReasonFilter('${r}')" class="px-2 py-0.5 rounded-lg text-[10px] font-bold transition-colors ${active ? 'bg-rose-700 text-white' : 'bg-white text-rose-900 border border-rose-200 hover:bg-rose-100'}">${r} (${cnt})</button>`;
+                            }).join('')}
+                        </div>
+                        <div class="space-y-1.5 max-h-48 overflow-y-auto">
+                            ${filteredNoInt.length === 0 ? '<div class="text-[11px] text-rose-800/70">Sin contactos en esta categoría.</div>' : filteredNoInt.map(c => renderMiniRow(c, `<span class="ml-1 px-1.5 py-0.5 rounded bg-rose-100 text-rose-900 text-[10px] font-bold">${c.noInterestReason || 'Otros'}</span>`)).join('')}
+                        </div>
+                    </div>
+                </div>`;
         }
         window.renderCrmTable = () => renderSimpleChannelTable(crmContacts, 'crm-table-body', 'crm-empty-state', 'crm', 'crm-waiting-sublist');
         window.renderGestionTable = () => renderSimpleChannelTable(gestionContacts, 'gestion-table-body', 'gestion-empty-state', 'gestion', 'gestion-waiting-sublist');
@@ -2734,8 +2920,8 @@
                     const badge = document.getElementById('wa-ai-cloud-brain-badge');
                     if (badge) {
                         badge.textContent = this.config.sandboxEnabled
-                            ? `🧪 Sofi 2.6 Sandbox (${this.config.sandboxPhone || 'Hans / Prueba CRM'})`
-                            : `☁️ Sofi 2.6 24/7 (${authorizedContacts.length} contactos • ${availablePlanJpgs.length} JPGs)`;
+                            ? `🧪 Sofi 2.7 Sandbox (${this.config.sandboxPhone || 'Hans / Prueba CRM'})`
+                            : `☁️ Sofi 2.7 24/7 (${authorizedContacts.length} contactos • ${availablePlanJpgs.length} JPGs)`;
                     }
                 } catch (e) {}
             },
@@ -2748,13 +2934,16 @@
                         const key = `${p.vehicleName || p.planName} (${p.modality || '70/30'})`;
                         if (seen.has(key)) continue;
                         seen.add(key);
-                        lines.push(`- ${key} [${p.period}]: Valor Móvil $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Cuota Máx. Referencia: $${Number(p.price || 0).toLocaleString('es-AR')}`);
+                        const extra30 = p.modality !== '100%' && Number(p.extraordinaryQuota || p.value30) > 0
+                            ? ` | Integración mínima 30% de la unidad: ($${Number(p.extraordinaryQuota || p.value30).toLocaleString('es-AR')})`
+                            : '';
+                        lines.push(`- ${key} [${p.period}]: Valor de la unidad $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Cuota Máx. Referencia: $${Number(p.price || 0).toLocaleString('es-AR')}${extra30}`);
                     }
                 }
                 const existingUpper = lines.join('\n').toUpperCase();
                 for (const def of marketPlansCatalog.filter(m => m.brand === 'Toyota')) {
                     if (!existingUpper.includes(def.model.toUpperCase())) {
-                        lines.push(`- ${def.model} (${def.modality}): Valor Móvil $${Number(def.valorMovil).toLocaleString('es-AR')} | Cuota Máx. Referencia: $${Number(def.cuotaPura).toLocaleString('es-AR')}`);
+                        lines.push(`- ${def.model} (${def.modality}): Valor de la unidad $${Number(def.valorMovil).toLocaleString('es-AR')} | Cuota Máx. Referencia: $${Number(def.cuotaPura).toLocaleString('es-AR')}`);
                     }
                 }
                 return `LISTA OFICIAL DE VALORES Y CUOTAS TOYOTA PLAN (GINZA TOYOTA):\n${lines.join('\n')}`;
@@ -2766,41 +2955,32 @@
                 const jpgCatalogLines = Array.isArray(availablePlanJpgs) && availablePlanJpgs.length > 0
                     ? availablePlanJpgs.map(j => `- Modelo exacto: "${j.vehicleName}" (${j.modality} - ${j.period}) → URL JPG: ${j.jpgUrlPage1}`).join('\n')
                     : '(Aún no hay hojas JPG subidas en Planes & PDF)';
-                return `Sos ${advisor}, asistente comercial senior de Gonzalo Dichiazza en ${branch} (concesionario oficial Toyota en Rosario), chateando por WhatsApp como una persona real, breve, cálida y 100% profesional.
+                return `Sos ${advisor}, asistente comercial senior de Gonzalo Dichiazza en ${branch} (concesionario oficial Toyota en Rosario), chateando por WhatsApp como una persona real, breve, cálida y 100% profesional (versión Sofi 2.7).
 
 REGLAS DE ORO DE CONVERSACIÓN (CUMPLIMIENTO ESTRICTO):
 0. SALUDO INICIAL PURO ("Hola", "Buenas", "Hola cómo estás" sin mencionar ningún auto ni consulta): Respondé únicamente saludando según la hora de Argentina ("Hola, buen día" / "Hola, buenas tardes" / "Hola, buenas noches"), presentándote como ${advisor}, asistente de Gonzalo Dichiazza en ${branch}, y cerrando EXCLUSIVAMENTE con "¿En qué te puedo ayudar?". PROHIBIDO preguntar "¿En qué modelo estás interesado?" o mencionar vehículos cuando el cliente solo saludó.
 1. Mensajes cortos y naturales de WhatsApp (1 a 3 renglones máximo), sin sonar a robot ni poner comillas alrededor del texto.
 2. Postura profesional y respetuosa: evitá expresiones informales como "te calza", "de una", "es un caño" o repetir muletillas como "Siendo sincero", "Excelente opción" o "Perfecto, ideal entonces".
-3. UNA ÚNICA PREGUNTA POR TURNO Y SIN "O": Hacé solo 1 pregunta inteligente y directa por mensaje, nunca dando dos opciones separadas por "o" (por ejemplo, en lugar de "¿Para ciudad o para ruta?", preguntá "¿Buscás el vehículo principalmente para uso en ciudad?").
-4. EXPLICACIÓN INICIAL LIMPIA: No asumas que el cliente tiene un auto usado para entregar ni prometas "retiro rápido" o "mientras tanto". Explicá de forma simple y clara.
-5. HONESTIDAD Y PRECISIÓN CONTRACTUAL SOBRE PLAN DE AHORRO Y RETIRO ANTICIPADO:
-   - NUNCA digas "ir pagándolo mes a mes o retirarlo antes" (el vehículo siempre se paga mes a mes en cuotas sin interés bancario).
-   - El retiro anticipado en Toyota Plan está habilitado recién **a partir de la cuota número 2** (nunca en la cuota 1).
-   - Si el cliente pregunta "¿Es un plan de ahorro?", respondé directo y claro: "Sí, es Toyota Plan (el plan de ahorro directo de Toyota), sin interés bancario: pagás el vehículo en cuotas mensuales en pesos y, a partir de la cuota número 2, podés programar el retiro anticipado cuando lo necesites."
-   - Si el cliente pregunta cómo funciona el retiro anticipado, explicá: "A partir de la cuota número 2 podés programar el retiro anticipado integrando capital o tu usado, o bien continuar pagando tu cuota mensual tranquilo hasta decidir cuándo retirar."
-6. MANEJO ESTRICTO DE CONTACTO FRÍO DE BASE DE DATOS ("NO COMPRA"):
-   - Si dice que ya compró otro vehículo: felicitalo, agradecé el aviso y cerrá cordial sin insistir ("Qué buena noticia, felicitaciones por la compra. Gracias por avisarme y quedo a disposición en Ginza Toyota para lo que necesites más adelante. ¡Que lo disfrutes!").
-   - Si dice que averiguaba para un tercero (hijo, familiar, empresa): preguntá simple y directo "¿Sabés si siguen buscando?".
-   - Si viene molesto porque en su momento le cotizaron bajo su auto usado: NUNCA menciones que se toma "por debajo de InfoAuto", NUNCA le pidas volver a cotizar su usado ahora, y NUNCA nombres la palabra "plan" ni "este sistema" de entrada. Primero quitá la presión de entregar el auto y preguntá qué Toyota estaba evaluando ("Te entiendo perfectamente, por eso hoy no hace falta que entregues ni malvendas tu auto. Contame, ¿qué vehículo de Toyota estabas evaluando?"). Recién cuando responda el modelo, proponé la idea de ir avanzando con una cuota mensual accesible mientras sigue usando su vehículo para venderlo por su cuenta al valor real de mercado (sin nombrar "plan" salvo que el cliente lo pregunte).
-7. HONESTIDAD TOTAL SOBRE DÓLARES: Si el cliente pregunta si toman dólares como parte de pago, respondé claro y directo: "No, no tomamos dólares; toda la operatoria del plan es únicamente en pesos argentinos."
-8. PROHIBIDO HABLAR DE SORTEO Y LICITACIÓN POR INICIATIVA PROPIA: Jamás menciones las palabras "sorteo" ni "licitación" salvo que el cliente pregunte expresamente cómo se adjudica el vehículo.
-9. CALIFICACIÓN ANTES DE DERIVAR O PEDIR VISITA: Conocé primero el uso, si tiene vehículo usado (sin tasarlo), su ahorro disponible y qué cuota mensual le queda cómoda. Si su cuota cómoda está cerca pero un poco por debajo de la cuota oficial, consultá si puede estirarse a ese valor antes de derivar.
-10. NO APURAR LA VISITA PRESENCIAL: Preguntá primero si prefiere seguir revisando los números por acá o coordinar una entrevista con Gonzalo. Recién si confirma que quiere reunirse, pedí nombre y apellido (si no lo tenemos). Si dice que todavía no quiere ir al concesionario, acompañalo por WhatsApp sin insistir.
-11. COMPARACIÓN INTELIGENTE CON OTRAS MARCAS: Si el cliente nombra un modelo de la competencia (ej. Territory, Amarok, Ranger, Cronos, 208), NUNCA respondas frío "no trabajamos otras marcas"; comparalo de forma positiva con su equivalente Toyota (Territory → Corolla Cross, Ranger/Amarok → Hilux, Cronos/208 → Yaris/Corolla) resaltando valor de reventa, confiabilidad y garantía oficial Toyota, y hacé 1 pregunta sobre qué atributo valora más.
-12. CIERRE CORDIAL ANTE UN "NO": Si el cliente responde seco "No" cuando le ofrecés más información, no vuelvas a repreguntar; despedite amablemente en 1 renglón dejando la puerta abierta.
-13. ENVÍO EXACTO DE EXPLICATIVOS JPG DE PLANES (REGLA ANTI-CRUCE DE MODELO):
-   - Podés compartir el explicativo en imagen JPG del plan ÚNICAMENTE cuando el cliente pida ver el folleto/explicativo/detalle de cuotas de un modelo Toyota específico y ese modelo exista con coincidencia EXACTA en la lista de hojas JPG disponibles abajo.
-   - PROHIBICIÓN ABSOLUTA DE MEZCLAR MODELOS:
-     * Si el cliente habla de **Corolla** (sedán), NUNCA le pases el explicativo de **Corolla Cross** ni de **Hilux**.
-     * Si habla de **Corolla Cross**, NUNCA le pases el de **Corolla** sedán.
-     * Si habla de **Yaris**, NUNCA le pases el de **Yaris Cross**.
-     * Si habla de **Hilux**, NUNCA le pases el de otro vehículo.
-   - Si existe la hoja JPG exacta para el modelo que pidió el cliente, incluí el link exacto de su URL JPG en tu respuesta (sin paréntesis alrededor del link) junto con una breve explicación y 1 pregunta.
-   - Si el cliente pide el explicativo de un modelo Toyota cuya hoja JPG todavía NO está cargada en la lista de abajo, jamás mandes el JPG de otro modelo: informale por texto la cuota oficial de ese modelo y preguntale si ese valor se ajusta a su presupuesto mensual.
-   Hojas JPG disponibles hoy:
+3. UNA ÚNICA PREGUNTA POR TURNO Y SIN "O": Hacé solo 1 pregunta inteligente y directa por mensaje, nunca dando dos opciones separadas por "o".
+4. MODALIDAD 70/30 vs PLAN 100% (REGLAS CONTRACTUALES ESTRICTAS):
+   - En la modalidad 70/30, al momento de retirar la unidad se necesita integrar **como mínimo el 30% de la unidad** (NO digas "del valor móvil", decí "de la unidad"). Cuando tengas el dato exacto extraído del PDF, poné entre paréntesis **únicamente el valor numérico** sin texto extra dentro del paréntesis, por ejemplo: "como mínimo el 30% de la unidad ($14.886.300)". Si no hay PDF cargado para ese modelo, decí solo "como mínimo el 30% de la unidad" sin calcular ni inventar el importe.
+   - Si el cliente dice que **no tiene capital inicial para entregar ni un vehículo usado**: explicale que la modalidad 70/30 no le convendría porque al retirar pide integrar como mínimo el 30% de la unidad, y recomendale el **Plan 100%**, aclarando que puede arrancar sin capital ni usado pagando cuotas mensuales en pesos sin interés bancario y que **a medida que va pagando cada vez necesita menos integración mínima** para programar el retiro.
+   - El retiro anticipado está habilitado recién **a partir de la cuota número 2** (nunca en la cuota 1). NUNCA digas "ir pagándolo mes a mes o retirarlo antes".
+5. MANEJO ESTRICTO DE CONTACTO FRÍO DE BASE DE DATOS ("NO COMPRA"):
+   - Si dice que ya compró otro vehículo: felicitalo, agradecé el aviso y cerrá cordial sin insistir.
+   - Si dice que averiguaba para un tercero: preguntá simple y directo "¿Sabés si siguen buscando?".
+   - Si pide volver a hablar más adelante / en unos meses: preguntale cuándo prefiere que lo volvamos a contactar ("Entiendo perfectamente. ¿Para qué mes o fecha aproximada te gustaría que te vuelva a escribir sin compromiso?").
+   - Si viene molesto porque en su momento le cotizaron bajo su auto usado: NUNCA menciones "InfoAuto", NUNCA le pidas volver a cotizar su usado ahora, y NUNCA nombres "plan" ni "este sistema" de entrada. Quitá la presión de entregar el auto y preguntá qué vehículo de Toyota estaba evaluando ("Te entiendo perfectamente, por eso hoy no hace falta que entregues ni malvendas tu auto. Contame, ¿qué vehículo de Toyota estabas evaluando?"). Recién cuando responda el modelo, proponé avanzar con una cuota mensual accesible mientras sigue usando su auto para venderlo por su cuenta al valor real de mercado (sin nombrar "plan" salvo que lo pregunte).
+6. HONESTIDAD TOTAL SOBRE DÓLARES: Si pregunta si toman dólares, respondé: "No, no tomamos dólares; toda la operatoria del plan es únicamente en pesos argentinos."
+7. PROHIBIDO HABLAR DE SORTEO Y LICITACIÓN POR INICIATIVA PROPIA: Jamás menciones las palabras "sorteo" ni "licitación" salvo que el cliente pregunte expresamente cómo se adjudica el vehículo.
+8. CALIFICACIÓN ANTES DE INVITAR AL CONCESIONARIO: En Hilux preguntá primero tracción (ej. 4x2) y uso; en todos los modelos conocé primero versión, uso, presupuesto mensual y si tiene usado o ahorro antes de preguntar si prefiere seguir por acá o coordinar una entrevista con Gonzalo.
+9. COMPARACIÓN INTELIGENTE CON OTRAS MARCAS: Si nombra un modelo de la competencia (ej. Territory, Amarok, Ranger, Cronos, 208), comparalo positivamente con su equivalente Toyota (Territory → Corolla Cross, Ranger/Amarok → Hilux, Cronos/208 → Yaris/Corolla) resaltando valor de reventa, confiabilidad y garantía oficial Toyota, y hacé 1 pregunta sobre qué atributo valora más.
+10. CIERRE CORDIAL ANTE UN "NO": Si responde seco "No", despedite amablemente en 1 renglón sin volver a repreguntar.
+11. ENVÍO EXACTO DE EXPLICATIVOS JPG DE PLANES (REGLA ANTI-CRUCE DE MODELO):
+   - Compartí la URL JPG únicamente si el cliente pide el explicativo/detalle/folleto y coincide EXACTAMENTE con el modelo que busca (Corolla ≠ Corolla Cross, Yaris ≠ Yaris Cross, Corolla ≠ Hilux).
+   - Hojas JPG disponibles hoy:
 ${jpgCatalogLines}
-14. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
+12. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
 ${officialPricesText}
 
 FINANCIACIÓN CONVENCIONAL Y BANCARIA DE REFERENCIA:
@@ -3148,10 +3328,88 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             document.getElementById('profile-status').value = c.status || 'Pendiente';
             document.getElementById('profile-schedule-date').value = c.scheduleDate || '';
             document.getElementById('profile-schedule-time').value = c.scheduleTime || '';
+            const reasonSel = document.getElementById('profile-no-interest-reason');
+            if (reasonSel) reasonSel.value = c.noInterestReason || '';
             document.getElementById('profile-obs').value = c.observations || '';
             updateClientProfileAiUi(c);
             document.getElementById('client-profile-modal')?.classList.remove('hidden');
             await refreshClientProfileChatFromCloud();
+            await generateClientAiSummary(false);
+        };
+
+        window.generateClientAiSummary = async function(forceRefresh = false) {
+            const id = document.getElementById('profile-contact-id')?.value;
+            const sumBox = document.getElementById('profile-ai-summary-box');
+            const btn = document.getElementById('btn-refresh-ai-summary');
+            const found = findContactGlobal(id);
+            if (!found || !sumBox) return;
+            const c = found.contact;
+            const msgs = (SOFIA_AI.chats[id] || []).filter(m => m && m.text);
+
+            if (msgs.length === 0) {
+                sumBox.textContent = c.aiSummary || 'Sin conversación registrada con Sofía todavía.';
+                return;
+            }
+
+            if (!forceRefresh && c.aiSummary && Number(c.aiSummaryMsgCount || 0) === msgs.length) {
+                sumBox.textContent = c.aiSummary;
+                return;
+            }
+
+            const buildLocalFallbackSummary = () => {
+                const userTexts = msgs.filter(m => m.role === 'user').map(m => m.text).join(' | ');
+                const lastModel = msgs.slice().reverse().find(m => m.role === 'model')?.text || '';
+                const modelTag = c.interestModel || detectToyotaModelFromText(userTexts) || 'Por definir';
+                return `• Vehículo de interés: ${modelTag}\n• Lo que comentó el cliente: "${userTexts.slice(0, 140)}${userTexts.length > 140 ? '...' : ''}"\n• Última respuesta de Sofía: "${lastModel.slice(0, 120)}${lastModel.length > 120 ? '...' : ''}"`;
+            };
+
+            const apiKey = String(SOFIA_AI.config.geminiApiKey || '').trim();
+            if (!apiKey) {
+                const localSum = buildLocalFallbackSummary();
+                c.aiSummary = localSum;
+                c.aiSummaryMsgCount = msgs.length;
+                sumBox.textContent = localSum;
+                saveLocalData(true);
+                return;
+            }
+
+            if (btn) { btn.disabled = true; btn.textContent = '⏳...'; }
+            sumBox.textContent = '✨ Generando resumen de la charla con Sofía...';
+
+            const transcript = msgs.slice(-24).map(m => `${m.role === 'user' ? 'Cliente' : 'Sofía'}: ${m.text}`).join('\n');
+            const prompt = `Resumí en máximo 4 viñetas muy breves y concretas (para que el asesor Gonzalo lo lea en 5 segundos) esta conversación de WhatsApp entre Sofía (Ginza Toyota) y el cliente:\n\n${transcript}\n\nIncluí:\n• Vehículo / modalidad que busca\n• Usado, ahorro o presupuesto de cuota mencionado\n• Estado actual (Interesado, Contactar a futuro + fecha, No interesado + motivo, o en evaluación)\n• Próximo paso sugerido para Gonzalo`;
+
+            try {
+                const models = await SOFIA_AI.resolveModels(apiKey);
+                for (const model of models) {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                            generationConfig: { temperature: 0.3, maxOutputTokens: 400, thinkingConfig: { thinkingBudget: 0 } }
+                        })
+                    });
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    const text = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+                    if (text) {
+                        c.aiSummary = text;
+                        c.aiSummaryMsgCount = msgs.length;
+                        sumBox.textContent = text;
+                        saveLocalData(true);
+                        if (btn) { btn.disabled = false; btn.textContent = '✨ Actualizar'; }
+                        return;
+                    }
+                }
+            } catch (e) {}
+
+            const fallback = buildLocalFallbackSummary();
+            c.aiSummary = fallback;
+            c.aiSummaryMsgCount = msgs.length;
+            sumBox.textContent = fallback;
+            saveLocalData(true);
+            if (btn) { btn.disabled = false; btn.textContent = '✨ Actualizar'; }
         };
 
         window.closeClientProfileModal = function() {
@@ -3174,6 +3432,8 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             c.status = document.getElementById('profile-status').value;
             c.scheduleDate = document.getElementById('profile-schedule-date').value;
             c.scheduleTime = document.getElementById('profile-schedule-time').value;
+            const reasonSel = document.getElementById('profile-no-interest-reason');
+            if (reasonSel) c.noInterestReason = reasonSel.value;
             c.observations = document.getElementById('profile-obs').value.trim();
             document.getElementById('profile-modal-title').textContent = c.name;
             saveLocalData(true);
@@ -3181,6 +3441,65 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             updateDashboard();
             await SOFIA_AI.syncBrainToFirebase();
             showToast(`💾 Ficha actualizada para ${c.name}`);
+        };
+
+        window.generateClientAiSummary = async function(forceRefresh = false) {
+            const id = document.getElementById('profile-contact-id')?.value;
+            const summaryEl = document.getElementById('profile-ai-summary-text');
+            if (!id || !summaryEl) return;
+            const found = findContactGlobal(id);
+            const c = found?.contact;
+            const msgs = SOFIA_AI.chats[id] || [];
+
+            if (msgs.length === 0) {
+                summaryEl.textContent = c?.aiSummary || 'Aún no hay mensajes registrados con Sofía 2.7 para este cliente.';
+                return;
+            }
+            if (!forceRefresh && c?.aiSummary && c.aiSummaryMsgCount === msgs.length) {
+                summaryEl.textContent = c.aiSummary;
+                return;
+            }
+
+            summaryEl.textContent = '⏳ Generando resumen ejecutivo de la charla...';
+            const transcript = msgs.slice(-20).map(m => `${m.role === 'user' ? 'Cliente' : 'Sofía'}: ${m.text}`).join('\n');
+            const apiKey = String(SOFIA_AI.config.geminiApiKey || '').trim();
+
+            let summaryText = '';
+            if (apiKey) {
+                try {
+                    const models = await SOFIA_AI.resolveModels(apiKey);
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(models[0])}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{
+                                role: 'user',
+                                parts: [{
+                                    text: `Resumí en máximo 4 viñetas breves (sin markdown complejo) esta conversación comercial de Toyota Plan para que el vendedor Gonzalo la lea en 5 segundos:\n- Vehículo y modalidad buscada\n- Situación financiera (usado, ahorro o cuota cómoda)\n- Estado/motivo y próximo paso\n\nConversación:\n${transcript}`
+                                }]
+                            }],
+                            generationConfig: { temperature: 0.3, maxOutputTokens: 250, thinkingConfig: { thinkingBudget: 0 } }
+                        })
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        summaryText = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+                    }
+                } catch (e) {}
+            }
+
+            if (!summaryText) {
+                const userTexts = msgs.filter(m => m.role === 'user').map(m => m.text).join(' | ');
+                const modelDetected = c?.interestModel || detectToyotaModelFromText(userTexts) || 'A definir';
+                summaryText = `• Vehículo: ${modelDetected}\n• Estado actual: ${c?.status || 'En seguimiento'}${c?.noInterestReason ? ` (${c.noInterestReason})` : ''}\n• Últimos dichos del cliente: "${userTexts.slice(-140)}"`;
+            }
+
+            if (c) {
+                c.aiSummary = summaryText;
+                c.aiSummaryMsgCount = msgs.length;
+                saveLocalData(true);
+            }
+            summaryEl.textContent = summaryText;
         };
 
         window.openProfileWhatsAppChat = function() {
