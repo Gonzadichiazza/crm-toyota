@@ -2523,6 +2523,20 @@
                     const officialPricesText = this.buildOfficialPricesText();
                     const systemPrompt = this.getSystemPrompt(officialPricesText);
 
+                    // Si este navegador no tiene la API Key cargada, heredarla de Firebase para nunca pisarla vacía
+                    let effectiveApiKey = String(this.config.geminiApiKey || '').trim();
+                    if (!effectiveApiKey) {
+                        try {
+                            const prevRes = await fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`);
+                            const prevBrain = await prevRes.json();
+                            if (prevBrain && prevBrain.geminiApiKey) {
+                                effectiveApiKey = String(prevBrain.geminiApiKey).trim();
+                                this.config.geminiApiKey = effectiveApiKey;
+                                this.saveConfig();
+                            }
+                        } catch (e) {}
+                    }
+
                     await fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
@@ -2530,12 +2544,12 @@
                             updatedAt: Date.now(),
                             room: syncRoom,
                             active: Boolean(this.config.autoReplyMobile),
-                            cloudWorkerPrimary: Boolean(this.config.cloudWorkerPrimary),
+                            cloudWorkerPrimary: true,
                             sandboxEnabled: Boolean(this.config.sandboxEnabled),
                             sandboxPhone: formatPhoneAR(this.config.sandboxPhone || ''),
                             advisorName: this.config.advisorName || 'Sofía',
                             branchName: this.config.branchName || 'Ginza Toyota',
-                            geminiApiKey: this.config.geminiApiKey || '',
+                            geminiApiKey: effectiveApiKey,
                             systemPrompt,
                             officialPricesText,
                             authorizedContacts,
@@ -2552,224 +2566,133 @@
             },
 
             buildOfficialPricesText() {
-                const toyotaPlans = marketPlansCatalog
-                    .filter(p => p.brand === 'Toyota')
-                    .map(p => `- ${p.model} (${p.modality}): Valor móvil $${Number(p.valorMovil).toLocaleString('es-AR')} | Cuota máxima ordinaria ref. $${Number(p.cuotaPura).toLocaleString('es-AR')}`);
-
-                const pdfPlans = plansHistory.slice(0, 15).map(p =>
-                    `- PDF ${p.vehicleName || p.planName} [${p.modality || '70/30'}] (${p.period}): Valor vehículo $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Cuota máxima ordinaria ref. $${Number(p.price || 0).toLocaleString('es-AR')}`
-                );
-
-                return [...pdfPlans, ...toyotaPlans].join('\n');
+                const lines = [];
+                if (plansHistory.length > 0) {
+                    const seen = new Set();
+                    for (const p of plansHistory) {
+                        const key = `${p.vehicleName || p.planName}_${p.modality || '70/30'}`;
+                        if (seen.has(key)) continue;
+                        seen.add(key);
+                        lines.push(`- ${p.vehicleName || p.planName} (${p.modality || '70/30'}): Valor Móvil $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Cuota Máxima Ref. $${Number(p.price || 0).toLocaleString('es-AR')}`);
+                    }
+                }
+                if (lines.length === 0) {
+                    marketPlansCatalog.filter(p => p.brand === 'Toyota').forEach(p => {
+                        lines.push(`- ${p.model} (${p.modality}): Valor Móvil $${Number(p.valorMovil || 0).toLocaleString('es-AR')} | Cuota Máxima Ref. $${Number(p.cuotaPura || 0).toLocaleString('es-AR')}`);
+                    });
+                }
+                return lines.join('\n');
             },
 
             getSystemPrompt(officialPricesText) {
                 const advisor = this.config.advisorName || 'Sofía';
                 const branch = this.config.branchName || 'Ginza Toyota';
-                return `Sos ${advisor}, asistente de Gonzalo Dichiazza en ${branch} (concesionario oficial Toyota en Rosario, Argentina), chateando por WhatsApp como una persona real, breve y profesional.
-Todas estas reglas aplican por igual a TODA la línea de modelos Toyota (Yaris, Yaris Cross, Corolla, Corolla Cross, Hilux y Hiace).
+                return `Sos ${advisor}, asistente comercial senior de Gonzalo Dichiazza en ${branch} (concesionario oficial Toyota en Rosario), chateando por WhatsApp como una persona real, breve, cálida y 100% profesional.
 
-ESTILO, VOCABULARIO PROFESIONAL Y BREVEDAD REAL DE WHATSAPP (REGLAS ESTRICTAS):
-- MENSAJES CORTOS Y HUMANOS (MENOS ES MÁS): No suenes a IA ni escribas introducciones largas ni párrafos de relleno. Respondé en 1 a 3 renglones claros y naturales.
-- POSTURA PROFESIONAL EN EL VOCABULARIO: Mantené siempre un trato cercano pero impecablemente profesional. Prohibido usar expresiones demasiado informales o callejeras como "te calza", "es un caño", "de una" o "copado"; usá expresiones profesionales como "se adapta mejor a lo que buscás", "te conviene" o "encaja con lo que necesitás".
-- PROHIBIDO REPETIR MULETILLAS O FRASES: Jamás repitas conectores como "Siendo sincero..." ni frases gastadas como "adelantar el retiro" a lo largo de la charla. Variá siempre tu expresión con naturalidad.
-- REGLA DE PREGUNTA ÚNICA, INTELIGENTE Y SIN "O" (CRÍTICA):
-  * Hacé UNA ÚNICA pregunta inteligente y directa por mensaje. Jamás hagas dos preguntas juntas en el mismo mensaje.
-  * Prohibido darle el "o" al cliente en la pregunta (prohibido "¿Es para uso familiar o viajás solo?", "¿Buscás el Yaris para ciudad o para ruta?", "¿Pensás comprarlo de contado o financiar una parte?", "¿Contás con algún ahorro o sería solo con el auto?"). Hacé la pregunta limpia de una sola vía sin "o" (ej. "¿Buscás el Yaris principalmente para moverte en ciudad?", "¿Pensás financiar una parte en cuotas?", "¿Contás con algún ahorro disponible?").
-- EN EL PRIMER SALUDO ("Hola", "Buenas", "Buen día" sin consulta puntual): Saludá con naturalidad, presentate como ${advisor} (asistente de Gonzalo Dichiazza en ${branch}) y preguntá en qué lo podés ayudar. NUNCA pidas nombre y apellido en el primer saludo; pedilo únicamente cuando el cliente confirme que quiere coordinar una visita presencial con Gonzalo.
-- PROHIBIDO VOLVER A SALUDAR O PRESENTARTE EN MENSAJES SIGUIENTES: Si ya hay mensajes previos tuyos, nunca vuelvas a decir "Hola" ni "Soy ${advisor}".
-- CERO ELOGIOS AUTOMÁTICOS NI ENCASILLAR MODELOS:
-  * Prohibido arrancar con "Muy buena elección", "Excelente opción", "Perfecto, ideal entonces..." o "Qué lindo auto".
-  * No encasilles los modelos en categorías rígidas ("el Yaris es para ciudad, el Corolla para familia"). Ayudalo a elegir según lo que vaya contando con preguntas inteligentes.
-- PROHIBIDO HACER JUICIOS DE VALOR O PROMETER "RETIRARLO RÁPIDO" ANTES DE CONOCER NÚMEROS:
-  * Cuando el cliente mencione un auto usado o "un poco de ahorro" sin haber dicho montos todavía, JAMÁS digas "ya tenés una buena base para avanzar rápido" ni prometas "retirarlo rápido". Primero preguntá con cuánto ahorro aproximado cuenta sin calificar ni prometer nada. Una vez conocidos los números, usá expresiones prudentes como "tenés muy buenos elementos para analizar distintas opciones".
-- NO MEZCLAR CAPITAL INICIAL CON CUOTA MENSUAL:
-  * Si el cliente quiere retirarlo cuanto antes y menciona tener un usado y ahorros, preguntá primero ÚNICAMENTE por el ahorro aproximado disponible (sin asumir si entrega o no el usado en el concesionario); recién después evaluá el valor de cuota mensual cómoda.
-- SI EL CLIENTE PREGUNTA DIRECTAMENTE "¿ES UN PLAN DE AHORRO?":
-  * JAMÁS esquives la pregunta ni la disfraces repitiendo "Es una financiación directa de fábrica...". Respondé con total honestidad y seguridad: "Sí, es Toyota Plan (el plan de ahorro directo de Toyota), sin interés bancario, que te permite ir pagándolo mes a mes." y seguí con 1 pregunta corta.
-- SI EL CLIENTE PREGUNTA SI TOMAN DÓLARES COMO PARTE DE PAGO:
-  * Respondé claro y directo: "No, no tomamos dólares; toda la operatoria del plan es únicamente en pesos argentinos." (sin inventar cotizaciones ni conversiones).
-- PROHIBIDO MENCIONAR SORTEO Y LICITACIÓN POR INICIATIVA PROPIA:
-  * NUNCA menciones las palabras "sorteo" ni "licitación" por iniciativa propia cuando el cliente pide saber más de la financiación. Explicá en lenguaje simple cómo funciona la cuota (cuotas mensuales sin interés bancario ajustables al valor del vehículo, pudiendo adelantar cuotas puras cuando quiera) y recién mencioná sorteo/licitación si el cliente pregunta expresamente cómo se adjudica o cómo se retira.
-- VOCABULARIO COTIDIANO SIN JERGA FINANCIERA:
-  * Prohibido usar palabras técnicas como "descapitalizarse", "estructura", "oferta de capital", "adjudicar", "ratio" o "competir".
-  * NUNCA nombres "Toyota Plan" ni "plan de ahorro" antes de tiempo (salvo que el cliente te lo pregunte directo, como en "¿Es un plan de ahorro?"), ni menciones por iniciativa propia sorteo/licitación, demoras, plazo de 84/120 cuotas, gastos administrativos o seguro de vida salvo que el cliente pregunte expresamente.
-- Yaris: Viene ÚNICAMENTE en carrocería Hatchback 5 puertas y ÚNICAMENTE con caja Automática CVT.
-- Yaris Cross: SUV compacto, 100% Automático CVT (nafta o híbrido).
-- Corolla: Único Sedán 4 puertas de la gama, 100% Automático CVT (nafta 2.0 o híbrido 1.8).
-- Corolla Cross: SUV mediano, 100% Automático CVT (nafta 2.0 o híbrido 1.8).
-- Hilux: Pick-up (opción manual 6MT o automática 6AT, 4x2 o 4x4, cabina simple o doble).
-- Hiace: Utilitario Furgón/Commuter/Wagon, 100% Automático.
+REGLAS DE ORO DE CONVERSACIÓN (CUMPLIMIENTO ESTRICTO):
+1. Mensajes cortos y naturales de WhatsApp (1 a 3 renglones máximo), sin sonar a robot ni poner comillas alrededor del texto.
+2. Postura profesional y respetuosa: evitá expresiones informales como "te calza", "de una", "es un caño" o repetir muletillas como "Siendo sincero", "Excelente opción" o "Perfecto, ideal entonces".
+3. UNA ÚNICA PREGUNTA POR TURNO Y SIN "O": Hacé solo 1 pregunta inteligente y directa por mensaje, nunca dando dos opciones separadas por "o" (por ejemplo, en lugar de "¿Para ciudad o para ruta?", preguntá "¿Buscás el vehículo principalmente para uso en ciudad?").
+4. EXPLICACIÓN INICIAL LIMPIA: No asumas que el cliente tiene un auto usado para entregar ni prometas "retiro rápido" o "mientras tanto". Explicá de forma simple y clara.
+5. HONESTIDAD TOTAL SOBRE PLAN DE AHORRO: Si el cliente pregunta "¿Es un plan de ahorro?", respondé directo y sin esquivar: "Sí, es Toyota Plan (el plan de ahorro directo de Toyota), sin interés bancario, que te permite ir pagándolo mes a mes o retirarlo antes."
+6. HONESTIDAD TOTAL SOBRE DÓLARES: Si el cliente pregunta si toman dólares como parte de pago, respondé claro y directo: "No, no tomamos dólares; toda la operatoria del plan es únicamente en pesos argentinos."
+7. PROHIBIDO HABLAR DE SORTEO Y LICITACIÓN POR INICIATIVA PROPIA: Jamás menciones las palabras "sorteo" ni "licitación" salvo que el cliente pregunte expresamente cómo se adjudica el vehículo.
+8. CALIFICACIÓN ANTES DE DERIVAR O PEDIR VISITA: Conocé primero el uso, si tiene vehículo usado (sin tasarlo; aclarando si pregunta que en concesionario se toma por debajo de InfoAuto porque lo cotiza el sector de usados), su ahorro disponible y qué cuota mensual le queda cómoda. Si su cuota cómoda está cerca pero un poco por debajo de la cuota oficial, consultá si puede estirarse a ese valor antes de derivar.
+9. NO APURAR LA VISITA PRESENCIAL: Preguntá primero si prefiere seguir revisando los números por acá o coordinar una entrevista con Gonzalo. Recién si confirma que quiere reunirse, pedí nombre y apellido (si no lo tenemos). Si dice que todavía no quiere ir al concesionario, acompañalo por WhatsApp sin insistir.
+10. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
 
-FLUJO CONSULTIVO PASO A PASO, PERFILES Y CIERRE ACTIVO:
-1. EXPLICACIÓN INICIAL ANTE CONSULTA ABIERTA DE PLANES ("no tengo claro cómo funciona ni qué me conviene"):
-   - Explicalo súper simple sin asumir que tiene usado ni mencionar "usado", "ahorro" ni "mientras tanto..." en ese primer mensaje:
-   - "Es una financiación directa de fábrica para llegar a un Toyota 0 km pagándolo en cuotas mensuales sin interés bancario, y tenés la posibilidad de retirar el vehículo desde los primeros meses o bien ir pagándolo tranquilo mes a mes."
-   - Cerrá preguntando qué modelo le llamó la atención.
-2. INDAGACIÓN DE PERFIL SOCIOECONÓMICO Y FAMILIAR SIN INTERROGAR:
-   - Si no tiene un modelo definido, ayudalo a elegir haciendo de a una pregunta inteligente y sin "o" (ej. "¿Es para uso familiar?", luego "¿Qué auto tenés actualmente?") para interpretar tanto el espacio que necesita como su capacidad de pago real sin interrogarlo.
-3. CLIENTE SIN APURO / AUTO IMPECABLE:
-   - Si está cómodo con su auto actual y no tiene urgencia, mostrale que esta financiación directa tiene todo el sentido cuando uno no tiene apuro porque permite ir avanzando mes a mes hacia el próximo 0 km mientras sigue disfrutando el suyo, sin poner toda la diferencia junta de golpe. Cerrá con una pregunta limpia sin salida negativa: "Viéndolo de esa manera, ¿te parece una alternativa que valdría la pena considerar?".
-4. INTENTAR ESTIRAMIENTO DE CUOTA ANTES DE DERIVAR A VENTA CONVENCIONAL:
-   - Si el presupuesto mensual que menciona el cliente está cerca de la cuota de referencia del modelo (ej. $300.000 vs $387.000), NO lo derives todavía a convencional. Informá el valor de referencia y preguntá con naturalidad y sin "o" si podría estirarse un poco más de ese monto para llegar a esa cuota.
-   - Si responde "No me interesa el plan", indagá con 1 pregunta corta si es porque necesita entrega inmediata sí o sí o por desconocimiento antes de derivar.
-5. TRANSPARENCIA EN RETIRO (SI PREGUNTA CUÁNDO LO RETIRA):
-   - Nunca digas "lo retirás cuando vos decidas". Explicá de forma simple que todos los meses hay dos vías: por sorteo (pagando solo la cuota) o por licitación ofreciendo un capital (ahorros o un usado), donde gana la oferta más alta del grupo en ese mes (y si no gana, no desembolsa nada y vuelve a participar al mes siguiente).
-6. NO APURARSE A LA ENTREVISTA PRESENCIAL Y UBICACIONES EXACTAS DE GINZA TOYOTA:
-   - No apures al cliente a ir al concesionario ni pidas nombre y apellido antes de saber si quiere reunirse. Primero preguntá si prefiere que sigan viéndolo por este medio o coordinar una charla con Gonzalo; recién cuando confirme que quiere reunirse en persona, pedile nombre y apellido y día/horario. Si dice que todavía no quiere ir al concesionario, acompañalo con naturalidad por WhatsApp sin insistir.
-   - Cuando pregunte dónde queda Ginza Toyota o al coordinar visita presencial, nombrá SIEMPRE primero la casa central en **Bv. Avellaneda entre Cerrito e Ituzaingó** con su link de Google Maps (https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario), y mencioná como segunda ubicación **Av. Carballo 632** (sin escribir paréntesis como "(Rosario)" ni "(Puerto Norte)").
-   - Cuando el cliente use el vehículo para trabajar o tenga poco tiempo, ofrecé acercarse 15 minutos a **Bv. Avellaneda entre Cerrito e Ituzaingó** con Gonzalo Dichiazza o coordinar para que Gonzalo se acerque donde le quede cómodo.
-   - Si el cliente posterga ("en la semana te escribo y vemos"), despedite con cordialidad y sin presión dejando la puerta abierta.
+VALORES Y CUOTAS OFICIALES VIGENTES (USO EXCLUSIVO COMO REFERENCIA):
+${officialPricesText}
 
-VALORES Y CUOTAS OFICIALES DESDE LA APP (USAR ÚNICAMENTE ESTOS DATOS CUANDO CONSULTEN PRECIOS O CUOTAS):
-${officialPricesText || 'Consultar valores vigentes en el concesionario.'}
-
-REGLAS DE RESPUESTA:
-- Respondé únicamente con el texto del mensaje de WhatsApp listo para enviar al cliente (sin comillas alrededor del mensaje, sin aclaraciones ni encabezados).
-- Mantené mensajes breves, claros y fáciles de leer en celular (1 a 3 renglones por párrafo).`;
+FINANCIACIÓN CONVENCIONAL Y BANCARIA DE REFERENCIA:
+${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             },
 
             async generateReply(contact, userMessage) {
-                if (!contact || !userMessage) return null;
-                const cid = contact.id || 'default_client';
-                const nowTime = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+                const apiKey = String(this.config.geminiApiKey || '').trim();
+                if (!apiKey) {
+                    return { reply: '', source: 'Sin API Key Gemini' };
+                }
 
-                detectAndRegisterAudioAlert(contact, userMessage);
-                detectAndRegisterTradeInAlert(contact, userMessage);
-                triggerCommercialAttentionAlert(contact, userMessage);
-                const schedInfo = tryAutoScheduleFromClientMessage(contact, userMessage);
+                const cid = contact?.id || 'default_client';
+                if (!Array.isArray(this.chats[cid])) this.chats[cid] = [];
 
                 const detectedModel = detectToyotaModelFromText(userMessage);
-                if (detectedModel && !contact.interestModel) {
+                if (detectedModel && contact && !contact.interestModel) {
                     contact.interestModel = detectedModel;
                     saveLocalData(true);
                 }
 
-                // Capturar automáticamente nombre y apellido si el cliente se presenta durante la charla
-                const nameMatch = String(userMessage || '').match(/(?:soy|me llamo|mi nombre es)\s+([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,2})/i);
-                if (nameMatch && nameMatch[1]) {
-                    const extractedName = nameMatch[1].trim().replace(/\b\w/g, l => l.toUpperCase());
-                    const currentName = String(contact.name || '').toLowerCase().trim();
-                    if (!currentName || ['sin nombre', 'lead salesforce', 'prueba crm', 'lead sf'].includes(currentName)) {
-                        contact.name = extractedName;
-                        saveLocalData(true);
-                        renderAllTables();
-                    }
+                detectAndRegisterTradeInAlert(contact, userMessage);
+                triggerCommercialAttentionAlert(contact, userMessage);
+                detectAndRegisterAudioAlert(contact, userMessage);
+                const autoSched = tryAutoScheduleFromClientMessage(contact, userMessage);
+
+                this.chats[cid].push({
+                    role: 'user',
+                    text: String(userMessage || '').trim(),
+                    ts: Date.now(),
+                    time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+                });
+
+                let systemPrompt = this.getSystemPrompt(this.buildOfficialPricesText());
+                if (contact?.name && !['sin nombre', 'lead salesforce', 'hans', 'prueba crm'].includes(contact.name.toLowerCase().trim())) {
+                    systemPrompt += `\n\nCONTEXTO DEL CLIENTE: Nombre ${contact.name}${contact.interestModel ? `, modelo de interés: ${contact.interestModel}` : ''}.`;
+                }
+                if (autoSched) {
+                    systemPrompt += `\n\nNOTA DE AGENDA: Ya quedó agendado (${autoSched.type}) para el ${autoSched.date} a las ${autoSched.time} hs. Confirmale brevemente el día y horario.`;
                 }
 
-                if (!Array.isArray(this.chats[cid])) this.chats[cid] = [];
-                this.chats[cid].push({ role: 'user', text: userMessage, time: nowTime });
-                this.saveChats();
-
-                const apiKey = String(this.config.geminiApiKey || '').trim();
-                if (!apiKey) {
-                    return {
-                        reply: '',
-                        modelUsed: 'Sin API Key',
-                        error: 'Configurá tu API Key de Google AI Studio en el panel de Sofi 2.5 para generar respuestas.'
-                    };
-                }
-
-                const officialPricesText = this.buildOfficialPricesText();
-                let systemInstructionText = this.getSystemPrompt(officialPricesText);
-                const isFirstGreetingOnly = this.chats[cid].length === 1 && /^(hola|buenas|buen dia|buenos dias|buenas tardes|buenas noches|que tal|como andas)[!.,\s]*$/i.test(
-                    String(userMessage || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
-                );
-
-                if (isFirstGreetingOnly) {
-                    systemInstructionText += `\n\nINSTRUCCIÓN DE PRIMER CONTACTO: El cliente acaba de enviar únicamente un saludo inicial ("${userMessage}"). Saludalo con calidez, presentate como ${this.config.advisorName || 'Sofía'}, asistente de Gonzalo Dichiazza en ${this.config.branchName || 'Ginza Toyota'}, y preguntale en qué lo podés ayudar hoy. NO menciones ningún modelo de vehículo todavía.`;
-                } else if (contact.name && !['sin nombre', 'lead salesforce', 'hans', 'prueba crm'].includes(contact.name.toLowerCase().trim())) {
-                    systemInstructionText += `\n\nCONTEXTO DEL CONTACTO ACTUAL:\n- Nombre agendado en CRM: ${contact.name}\n- Modelo registrado: ${contact.interestModel || 'Aún no definido'}\n- Estado actual: ${contact.status || 'Pendiente'}`;
-                }
-                if (schedInfo) {
-                    systemInstructionText += `\n- NOTA DE SISTEMA: Ya se agendó automáticamente en el calendario del CRM una entrevista para el ${schedInfo.date} a las ${schedInfo.time} hs. Confirmale brevemente ese día y horario con calidez.`;
-                }
-
-                const contents = this.chats[cid].slice(-14).map(msg => ({
-                    role: msg.role === 'model' ? 'model' : 'user',
-                    parts: [{ text: msg.text }]
+                const contents = this.chats[cid].slice(-24).map(m => ({
+                    role: m.role === 'model' ? 'model' : 'user',
+                    parts: [{ text: m.text }]
                 }));
 
-                const modelsToTry = await this.resolveModels(apiKey);
-                let lastError = 'No se pudo conectar con Google Gemini';
-
-                for (const modelName of modelsToTry) {
+                const models = await this.resolveModels(apiKey);
+                for (const model of models) {
                     try {
-                        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-                        const res = await fetch(endpoint, {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                systemInstruction: { parts: [{ text: systemInstructionText }] },
+                                systemInstruction: { parts: [{ text: systemPrompt }] },
                                 contents,
-                                generationConfig: {
-                                    temperature: 0.65,
-                                    maxOutputTokens: 1500,
-                                    thinkingConfig: { thinkingBudget: 0 }
-                                }
+                                generationConfig: { temperature: 0.65, maxOutputTokens: 1200, thinkingConfig: { thinkingBudget: 0 } }
                             })
                         });
-                        if (!res.ok) {
-                            const errBody = await res.json().catch(() => ({}));
-                            lastError = errBody?.error?.message || `HTTP ${res.status} (${modelName})`;
-                            continue;
-                        }
+                        if (!res.ok) continue;
                         const data = await res.json();
-                        const candidate = data?.candidates?.[0];
-                        const replyText = (candidate?.content?.parts || [])
-                            .map(p => p.text || '')
-                            .join('')
-                            .replace(/^[\s"'«“]+|[\s"'»”]+$/g, '')
-                            .trim();
-
-                        if (replyText) {
+                        const rawText = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+                        const cleanReply = rawText.replace(/^[\s"'«“]+|[\s"'»”]+$/g, '').trim();
+                        if (cleanReply) {
                             this.chats[cid].push({
                                 role: 'model',
-                                text: replyText,
-                                model: modelName,
+                                text: cleanReply,
+                                ts: Date.now(),
                                 time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
                             });
                             this.saveChats();
-                            this.updateEngineStatusBadge('ok', `Gemini activo (${modelName})`);
-                            return { reply: replyText, modelUsed: modelName, error: '' };
+                            return { reply: cleanReply, source: `Gemini (${model})` };
                         }
-                    } catch (err) {
-                        lastError = err.message || 'Error de red con Gemini';
-                    }
+                    } catch (e) {}
                 }
-
-                this.updateEngineStatusBadge('err', lastError);
-                return { reply: '', modelUsed: 'Error Gemini', error: lastError };
-            },
-
-            updateEngineStatusBadge(state, label) {
-                const pill = document.getElementById('wa-ai-engine-pill');
-                if (!pill) return;
-                pill.textContent = label || '';
-                pill.className = state === 'ok'
-                    ? 'px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-900 border border-emerald-300'
-                    : 'px-2 py-1 rounded-lg text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300';
+                return { reply: '', source: 'Error de conexión Gemini' };
             },
 
             async queueToMobile(contact, replyText, clientMsg = '') {
-                if (!contact || !replyText) return;
+                const phoneFormatted = formatPhoneAR(contact?.phone || '');
                 const payload = {
                     id: `${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-                    contactId: contact.id || 'default_client',
-                    name: contact.name || 'Cliente',
-                    phone: contact.phone || '',
-                    digits: String(contact.phone || '').replace(/\D/g, ''),
+                    contactId: contact?.id || 'default',
+                    name: contact?.name || 'Cliente',
+                    phone: phoneFormatted,
+                    digits: phoneFormatted.replace(/\D/g, ''),
                     clientMessage: clientMsg,
                     reply: replyText,
-                    source: 'crm_browser_sofia',
+                    source: 'crm_web_sofi26',
                     timestamp: Date.now()
                 };
                 try {
-                    await fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/queue.json`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
                     await fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
@@ -2780,142 +2703,55 @@ REGLAS DE RESPUESTA:
         };
 
         const waAiConfig = SOFIA_AI.config;
-        const waAiChats = SOFIA_AI.chats;
-        function saveWaAiChats() { SOFIA_AI.saveChats(); }
-        async function queueAutoReplyToMobile(contact, replyText, clientMsg = '') {
-            return SOFIA_AI.queueToMobile(contact, replyText, clientMsg);
-        }
+        const queueAutoReplyToMobile = (contact, replyText, clientMsg = '') => SOFIA_AI.queueToMobile(contact, replyText, clientMsg);
 
-        window.saveWaAiConfig = function() {
-            const autoEl = document.getElementById('wa-ai-auto-reply');
-            const fuEl = document.getElementById('wa-ai-auto-followup');
-            const schedEl = document.getElementById('wa-ai-allow-schedule');
-            const compEl = document.getElementById('wa-ai-allow-compare');
-            const advEl = document.getElementById('wa-ai-advisor-name');
-            const brEl = document.getElementById('wa-ai-branch');
-            const keyEl = document.getElementById('wa-ai-gemini-key');
-            const workerEl = document.getElementById('wa-ai-worker-url');
-            const workerPrimaryEl = document.getElementById('wa-ai-cloud-worker-primary');
-            const sbEl = document.getElementById('wa-ai-sandbox-enabled');
-            const sbPhoneEl = document.getElementById('wa-ai-sandbox-phone');
-
-            if (autoEl) waAiConfig.autoReplyMobile = autoEl.checked;
-            if (fuEl) waAiConfig.autoFollowUp24h = fuEl.checked;
-            if (schedEl) waAiConfig.allowAutoSchedule = schedEl.checked;
-            if (compEl) waAiConfig.allowCompetitorCompare = compEl.checked;
-            if (advEl) waAiConfig.advisorName = advEl.value.trim() || 'Sofía';
-            if (brEl) waAiConfig.branchName = brEl.value.trim() || 'Ginza Toyota';
-            if (keyEl) waAiConfig.geminiApiKey = keyEl.value.trim();
-            if (workerEl) waAiConfig.workerUrl = workerEl.value.trim().replace(/\/+$/, '');
-            if (workerPrimaryEl) waAiConfig.cloudWorkerPrimary = workerPrimaryEl.checked;
-            if (sbEl) waAiConfig.sandboxEnabled = sbEl.checked;
-            if (sbPhoneEl) waAiConfig.sandboxPhone = sbPhoneEl.value.trim();
-
-            SOFIA_AI.cachedModels = null;
-            SOFIA_AI.saveConfig();
-            SOFIA_AI.syncBrainToFirebase();
-            updateWaAiNavBadge();
-            updateWaAiWorkerUrlsDisplay();
-            showToast("🤖 Preferencias y Cerebro 24/7 sincronizados");
-        };
-
-        window.resetWaAiChatHistory = async function() {
-            const contact = getSelectedWaAiContact();
-            SOFIA_AI.chats[contact.id] = [];
-            SOFIA_AI.saveChats();
-
-            // Limpiar también el modelo residual en contactos de prueba (Hans / Sandbox)
-            getAllListsCombined().forEach(c => {
-                const n = String(c.name || '').toLowerCase().trim();
-                if (c.id === contact.id || n === 'hans' || n === 'prueba crm') {
-                    c.interestModel = '';
-                }
-            });
-            saveLocalData(true);
-
-            // Borrar historial persistente en Firebase (/ai_chats) para arrancar 100% de cero
-            try {
-                await fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(contact.id)}.json`, { method: 'DELETE' });
-                await fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest.json`, { method: 'DELETE' });
-            } catch (e) {}
-
-            document.getElementById('wa-ai-draft-box')?.classList.add('hidden');
-            onWaAiContactChange();
-            showToast("🧹 Historial local y en la nube limpiado de cero");
-        };
-
-        function updateWaAiWorkerUrlsDisplay() {
-            const rawWorker = String(waAiConfig.workerUrl || '').trim().replace(/\/+$/, '');
-            const inEl = document.getElementById('wa-ai-incoming-url');
-            const outEl = document.getElementById('wa-ai-outgoing-url');
-            if (inEl) {
-                inEl.value = rawWorker
-                    ? `${rawWorker}/incoming?room=${encodeURIComponent(syncRoom)}`
-                    : `${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`;
-            }
-            if (outEl) {
-                outEl.value = `${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest.json`;
-            }
-        }
-
-        function updateWaAiNavBadge() {
-            const btn = document.getElementById('nav-wa-ai-btn');
-            const dot = document.getElementById('nav-wa-ai-dot');
-            const lbl = document.getElementById('nav-wa-ai-label');
-            if (!btn || !lbl) return;
-            if (waAiConfig.autoReplyMobile) {
-                btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0';
-                if (dot) dot.className = 'w-2 h-2 rounded-full bg-white animate-ping';
-                lbl.textContent = waAiConfig.cloudWorkerPrimary ? '☁️ Sofi 2.6 24/7' : '🤖 Sofi 2.6 ON';
+        // --- INTERFAZ MODAL DE SOFÍA IA ---
+        function updateWaAiEngineStatusPill() {
+            const pill = document.getElementById('wa-ai-engine-pill');
+            if (!pill) return;
+            const hasKey = Boolean(String(SOFIA_AI.config.geminiApiKey || '').trim());
+            if (hasKey) {
+                pill.className = 'px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-900 border border-emerald-300';
+                pill.textContent = '✅ Gemini Activo';
             } else {
-                btn.className = 'px-2.5 py-1.5 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-zinc-300 border border-white/15 transition-colors flex items-center gap-1.5 shrink-0';
-                if (dot) dot.className = 'w-2 h-2 rounded-full bg-zinc-400';
-                lbl.textContent = '🤖 Sofi 2.6 PAUSA';
+                pill.className = 'px-2 py-1 rounded-lg text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300';
+                pill.textContent = '⚠️ Falta API Key';
             }
         }
 
         window.openWaAiAssistantModal = function() {
-            const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
-            const setChk = (id, v) => { const el = document.getElementById(id); if (el) el.checked = Boolean(v); };
-
-            setChk('wa-ai-auto-reply', waAiConfig.autoReplyMobile);
-            setChk('wa-ai-auto-followup', waAiConfig.autoFollowUp24h);
-            setChk('wa-ai-allow-schedule', waAiConfig.allowAutoSchedule);
-            setChk('wa-ai-allow-compare', waAiConfig.allowCompetitorCompare);
-            setVal('wa-ai-advisor-name', waAiConfig.advisorName || 'Sofía');
-            setVal('wa-ai-branch', waAiConfig.branchName || 'Ginza Toyota');
-            setVal('wa-ai-gemini-key', waAiConfig.geminiApiKey || '');
-            setVal('wa-ai-worker-url', waAiConfig.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev');
-            setChk('wa-ai-cloud-worker-primary', waAiConfig.cloudWorkerPrimary);
-            setChk('wa-ai-sandbox-enabled', waAiConfig.sandboxEnabled);
-            setVal('wa-ai-sandbox-phone', waAiConfig.sandboxPhone || '');
-
-            updateWaAiWorkerUrlsDisplay();
+            const modal = document.getElementById('wa-ai-assistant-modal');
+            if (!modal) return;
+            document.getElementById('wa-ai-auto-reply').checked = Boolean(SOFIA_AI.config.autoReplyMobile);
+            document.getElementById('wa-ai-gemini-key').value = SOFIA_AI.config.geminiApiKey || '';
+            document.getElementById('wa-ai-advisor-name').value = SOFIA_AI.config.advisorName || 'Sofía';
+            document.getElementById('wa-ai-branch').value = SOFIA_AI.config.branchName || 'Ginza Toyota';
+            document.getElementById('wa-ai-auto-followup').checked = SOFIA_AI.config.autoFollowUp24h !== false;
+            document.getElementById('wa-ai-allow-schedule').checked = SOFIA_AI.config.allowAutoSchedule !== false;
+            document.getElementById('wa-ai-allow-compare').checked = SOFIA_AI.config.allowCompetitorCompare !== false;
+            document.getElementById('wa-ai-worker-url').value = SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev';
+            document.getElementById('wa-ai-cloud-worker-primary').checked = Boolean(SOFIA_AI.config.cloudWorkerPrimary);
+            document.getElementById('wa-ai-sandbox-enabled').checked = Boolean(SOFIA_AI.config.sandboxEnabled);
+            document.getElementById('wa-ai-sandbox-phone').value = SOFIA_AI.config.sandboxPhone || '';
+            document.getElementById('wa-ai-incoming-url').value = `${(SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '')}/incoming?room=${encodeURIComponent(syncRoom)}&format=text`;
+            document.getElementById('wa-ai-outgoing-url').value = `${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest/reply.json`;
 
             const kbBox = document.getElementById('wa-ai-kb-summary');
             if (kbBox) {
-                const toyotaCount = marketPlansCatalog.filter(p => p.brand === 'Toyota').length;
-                kbBox.innerHTML = `
-                    <div class="flex justify-between"><span>• PDFs Oficiales cargados:</span><b>${plansHistory.length}</b></div>
-                    <div class="flex justify-between"><span>• Modelos Toyota vigentes:</span><b>${toyotaCount}</b></div>
-                    <div class="flex justify-between"><span>• Contactos en base CRM:</span><b>${getAllListsCombined().length}</b></div>`;
-            }
-
-            if (waAiConfig.geminiApiKey) {
-                SOFIA_AI.updateEngineStatusBadge('ok', 'API Key lista');
-            } else {
-                SOFIA_AI.updateEngineStatusBadge('err', 'Falta API Key Gemini');
+                kbBox.innerHTML = `<div class="p-2 rounded-lg bg-slate-50 border border-slate-200 text-[11px]">📋 <b>${plansHistory.length || 9}</b> listas oficiales cargadas • Memoria persistente activa.</div>`;
             }
 
             const sel = document.getElementById('wa-ai-contact-select');
             if (sel) {
+                const prev = sel.value;
                 const all = getAllListsCombined();
-                const sandboxOpt = `<option value="sandbox_test_user">🧪 Prueba CRM / Hans (${waAiConfig.sandboxPhone || 'Sandbox'})</option>`;
-                sel.innerHTML = sandboxOpt + all.map(c => `<option value="${c.id}">${c.name || 'Sin Nombre'} (${c.phone || 'Sin tel'}) — ${c.status}</option>`).join('');
+                sel.innerHTML = `<option value="sandbox_test_user">🧪 Simulador Prueba CRM (Hans)</option>` +
+                    all.map(c => `<option value="${c.id}">${c.name || 'Sin Nombre'} (${c.phone || 'Sin tel'})</option>`).join('');
+                if (prev) sel.value = prev;
             }
-
+            updateWaAiEngineStatusPill();
             onWaAiContactChange();
-            document.getElementById('wa-ai-assistant-modal')?.classList.remove('hidden');
+            modal.classList.remove('hidden');
         };
 
         window.closeWaAiAssistantModal = function() {
@@ -2931,72 +2767,89 @@ REGLAS DE RESPUESTA:
             }
         };
 
+        window.saveWaAiConfig = async function() {
+            SOFIA_AI.config.autoReplyMobile = Boolean(document.getElementById('wa-ai-auto-reply')?.checked);
+            SOFIA_AI.config.geminiApiKey = String(document.getElementById('wa-ai-gemini-key')?.value || '').trim();
+            SOFIA_AI.config.advisorName = String(document.getElementById('wa-ai-advisor-name')?.value || 'Sofía').trim();
+            SOFIA_AI.config.branchName = String(document.getElementById('wa-ai-branch')?.value || 'Ginza Toyota').trim();
+            SOFIA_AI.config.autoFollowUp24h = Boolean(document.getElementById('wa-ai-auto-followup')?.checked);
+            SOFIA_AI.config.allowAutoSchedule = Boolean(document.getElementById('wa-ai-allow-schedule')?.checked);
+            SOFIA_AI.config.allowCompetitorCompare = Boolean(document.getElementById('wa-ai-allow-compare')?.checked);
+            SOFIA_AI.config.workerUrl = String(document.getElementById('wa-ai-worker-url')?.value || '').trim();
+            SOFIA_AI.config.cloudWorkerPrimary = Boolean(document.getElementById('wa-ai-cloud-worker-primary')?.checked);
+            SOFIA_AI.config.sandboxEnabled = Boolean(document.getElementById('wa-ai-sandbox-enabled')?.checked);
+            SOFIA_AI.config.sandboxPhone = String(document.getElementById('wa-ai-sandbox-phone')?.value || '').trim();
+            SOFIA_AI.saveConfig();
+            updateWaAiEngineStatusPill();
+            await SOFIA_AI.syncBrainToFirebase();
+            showToast("🤖 Preferencias y Cerebro 24/7 sincronizados");
+        };
+
         function getSelectedWaAiContact() {
-            const cid = document.getElementById('wa-ai-contact-select')?.value || 'sandbox_test_user';
-            if (cid === 'sandbox_test_user') {
-                return {
-                    id: 'sandbox_test_user',
-                    name: 'Hans',
-                    phone: formatPhoneAR(waAiConfig.sandboxPhone || '+5493415069213'),
-                    status: 'Contestó'
-                };
+            const id = document.getElementById('wa-ai-contact-select')?.value || 'sandbox_test_user';
+            if (id === 'sandbox_test_user') {
+                return { id: 'sandbox_test_user', name: 'Hans', phone: formatPhoneAR(SOFIA_AI.config.sandboxPhone || ''), status: 'Contestó' };
             }
-            const found = findContactGlobal(cid);
-            return found ? found.contact : { id: cid, name: 'Cliente', phone: '' };
+            const found = findContactGlobal(id);
+            return found ? found.contact : { id, name: 'Cliente', phone: '' };
         }
 
         window.onWaAiContactChange = function() {
             const contact = getSelectedWaAiContact();
-            const historyBox = document.getElementById('wa-ai-chat-history');
-            if (!historyBox) return;
+            const box = document.getElementById('wa-ai-chat-history');
+            if (!box) return;
             const msgs = SOFIA_AI.chats[contact.id] || [];
             if (msgs.length === 0) {
-                historyBox.innerHTML = `<div class="text-center text-xs text-slate-400 py-8">Sin mensajes en este chat todavía. Escribí abajo para probar a Sofía.</div>`;
+                box.innerHTML = `<div class="text-center text-xs text-slate-500 py-8">Sin mensajes aún con <b>${contact.name}</b>. Escribí abajo para simular o probar.</div>`;
                 return;
             }
-            historyBox.innerHTML = msgs.map(m => {
-                const isBot = m.role === 'model';
-                return `<div class="flex ${isBot ? 'justify-start' : 'justify-end'}">
-                    <div class="max-w-[82%] px-3.5 py-2 rounded-2xl text-xs shadow-xs ${isBot ? 'bg-white text-slate-800 border border-slate-200 rounded-tl-sm' : 'bg-[#d9fdd3] text-slate-900 rounded-tr-sm'}">
-                        <div class="whitespace-pre-line leading-relaxed">${m.text}</div>
-                        <div class="text-[10px] text-slate-400 text-right mt-1">${m.time || ''}</div>
-                    </div>
-                </div>`;
-            }).join('');
-            historyBox.scrollTop = historyBox.scrollHeight;
+            box.innerHTML = msgs.map(m => m.role === 'user'
+                ? `<div class="flex justify-start"><div class="max-w-[80%] px-3 py-2 rounded-2xl bg-white border border-slate-200 text-xs text-slate-800 shadow-xs"><div>${m.text}</div><div class="text-[9px] text-slate-400 mt-0.5">${m.time || ''}</div></div></div>`
+                : `<div class="flex justify-end"><div class="max-w-[80%] px-3 py-2 rounded-2xl bg-emerald-600 text-white text-xs shadow-xs"><div>${m.text}</div><div class="text-[9px] text-emerald-100 text-right mt-0.5">${m.time || ''}</div></div></div>`
+            ).join('');
+            box.scrollTop = box.scrollHeight;
+        };
+
+        window.resetWaAiChatHistory = async function() {
+            const contact = getSelectedWaAiContact();
+            delete SOFIA_AI.chats[contact.id];
+            SOFIA_AI.saveChats();
+            onWaAiContactChange();
+            document.getElementById('wa-ai-draft-box')?.classList.add('hidden');
+            try {
+                await Promise.all([
+                    fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(contact.id)}.json`, { method: 'DELETE' }),
+                    fetch(`${FIREBASE_DB_URL}/wa_buffer/${encodeURIComponent(syncRoom)}/${encodeURIComponent(contact.id)}.json`, { method: 'DELETE' }),
+                    fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest.json`, { method: 'DELETE' })
+                ]);
+            } catch (e) {}
+            showToast(`🧹 Historial limpio en local y nube para ${contact.name}`);
+        };
+
+        window.generateInitialOutreachWithAi = async function() {
+            const contact = getSelectedWaAiContact();
+            const greeting = formatWhatsAppMessageForChannel('gestion', contact.name);
+            const draftBox = document.getElementById('wa-ai-draft-box');
+            const draftText = document.getElementById('wa-ai-draft-text');
+            const sourceTag = document.getElementById('wa-ai-source-tag');
+            if (draftBox && draftText) {
+                draftText.value = greeting;
+                if (sourceTag) sourceTag.textContent = 'Saludo Inicial Sofi 2.6';
+                draftBox.classList.remove('hidden');
+            }
         };
 
         window.runWaAiReply = async function() {
             const input = document.getElementById('wa-ai-client-msg-input');
             const btn = document.getElementById('btn-wa-ai-generate');
-            const text = (input?.value || '').trim();
-            if (!text) return;
-
-            const contact = getSelectedWaAiContact();
+            const msg = String(input?.value || '').trim();
+            if (!msg) return;
             input.value = '';
             if (btn) { btn.disabled = true; btn.textContent = 'Pensando...'; }
-
-            const out = await SOFIA_AI.generateReply(contact, text);
-            if (btn) { btn.disabled = false; btn.textContent = 'Responder'; }
-
-            onWaAiContactChange();
-            if (out && out.reply) {
-                const draftBox = document.getElementById('wa-ai-draft-box');
-                const draftText = document.getElementById('wa-ai-draft-text');
-                const sourceTag = document.getElementById('wa-ai-source-tag');
-                if (draftBox && draftText) {
-                    draftText.value = out.reply;
-                    if (sourceTag) sourceTag.textContent = out.modelUsed || 'Gemini';
-                    draftBox.classList.remove('hidden');
-                }
-            } else if (out && out.error) {
-                showToast(`⚠️ ${out.error}`);
-            }
-        };
-
-        window.generateInitialOutreachWithAi = async function() {
             const contact = getSelectedWaAiContact();
-            const out = await SOFIA_AI.generateReply(contact, 'Hola');
+            onWaAiContactChange();
+            const out = await SOFIA_AI.generateReply(contact, msg);
+            if (btn) { btn.disabled = false; btn.textContent = 'Responder'; }
             onWaAiContactChange();
             if (out && out.reply) {
                 const draftBox = document.getElementById('wa-ai-draft-box');
@@ -3004,9 +2857,11 @@ REGLAS DE RESPUESTA:
                 const sourceTag = document.getElementById('wa-ai-source-tag');
                 if (draftBox && draftText) {
                     draftText.value = out.reply;
-                    if (sourceTag) sourceTag.textContent = out.modelUsed || 'Gemini';
+                    if (sourceTag) sourceTag.textContent = out.source || 'Gemini';
                     draftBox.classList.remove('hidden');
                 }
+            } else {
+                showToast("⚠️ Verificá que tu API Key de Gemini esté cargada arriba");
             }
         };
 
@@ -3016,14 +2871,13 @@ REGLAS DE RESPUESTA:
 
         window.sendWaAiDraftToWhatsApp = function() {
             const contact = getSelectedWaAiContact();
-            const msg = (document.getElementById('wa-ai-draft-text')?.value || '').trim();
+            const text = String(document.getElementById('wa-ai-draft-text')?.value || '').trim();
             const digits = formatPhoneAR(contact.phone || '').replace(/\D/g, '');
-            if (!digits || !msg) return;
-            const url = `https://web.whatsapp.com/send?phone=${digits}&text=${encodeURIComponent(msg)}`;
-            window.open(url, 'crm_whatsapp_web_singleton');
+            if (!digits || !text) { showToast("Falta teléfono o mensaje"); return; }
+            window.open(`https://web.whatsapp.com/send?phone=${digits}&text=${encodeURIComponent(text)}`, 'crm_whatsapp_web_singleton');
         };
 
-        // --- RESPALDO, SALA FIREBASE Y UTILIDADES ---
+        // --- RESPALDO Y SALA FIREBASE ---
         window.openBackupModal = function() {
             const inp = document.getElementById('sync-room-input');
             if (inp) inp.value = syncRoom;
@@ -3031,7 +2885,7 @@ REGLAS DE RESPUESTA:
         };
         window.closeBackupModal = function() { document.getElementById('backup-modal')?.classList.add('hidden'); };
         window.changeSyncRoom = function() {
-            const val = (document.getElementById('sync-room-input')?.value || '').trim();
+            const val = String(document.getElementById('sync-room-input')?.value || '').trim();
             if (!val) return;
             syncRoom = val;
             localStorage.setItem('crm_sync_room', syncRoom);
@@ -3040,30 +2894,30 @@ REGLAS DE RESPUESTA:
             startFirebaseLiveListener();
             startWaIncomingLiveListener();
             startSfIncomingLiveListener();
-            showToast(`☁️ Sala cambiada a: ${syncRoom}`);
+            showToast(`Sala cambiada a: ${syncRoom}`);
         };
         window.exportBackupFile = function() {
             const blob = new Blob([JSON.stringify(buildSyncPayload(Date.now()), null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `Backup_CrmGinzaToyota_${getTodayISODate()}.json`;
+            a.download = `backup_crm_ginza_${getTodayISODate()}.json`;
             a.click();
         };
         window.exportSectionCSV = function(section) {
             const map = { crm: crmContacts, gestion: gestionContacts, redes: redesContacts, salesforce: salesforceContacts };
-            const rows = map[section] || [];
-            const csv = ['Nombre,Telefono,Estado,Modelo', ...rows.map(r => `"${r.name || ''}","${r.phone || ''}","${r.status || ''}","${r.interestModel || ''}"`)].join('\n');
+            const rows = [['Nombre', 'Telefono', 'Estado'], ...(map[section] || []).map(c => [c.name || '', c.phone || '', c.status || ''])];
+            const blob = new Blob([rows.map(r => r.join(',')).join('\n')], { type: 'text/csv;charset=utf-8;' });
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-            a.download = `Ginza_${section}_${getTodayISODate()}.csv`;
+            a.href = URL.createObjectURL(blob);
+            a.download = `ginza_${section}_${getTodayISODate()}.csv`;
             a.click();
         };
         window.exportClientesCSV = function() {
-            const rows = getAllClientesWithSource();
-            const csv = ['Nombre,Telefono,Canal,Modelo,Etapa', ...rows.map(r => `"${r.name || ''}","${r.phone || ''}","${r.sourceLabel || ''}","${r.interestModel || ''}","${r.status || ''}"`)].join('\n');
+            const rows = [['Nombre', 'Telefono', 'Modelo', 'Etapa'], ...getAllClientesWithSource().map(c => [c.name || '', c.phone || '', c.interestModel || '', c.status || ''])];
+            const blob = new Blob([rows.map(r => r.join(',')).join('\n')], { type: 'text/csv;charset=utf-8;' });
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-            a.download = `Cartera_Clientes_Ginza_${getTodayISODate()}.csv`;
+            a.href = URL.createObjectURL(blob);
+            a.download = `clientes_ginza_${getTodayISODate()}.csv`;
             a.click();
         };
         window.requestDeleteAll = function() {
@@ -3074,65 +2928,46 @@ REGLAS DE RESPUESTA:
             showToast("Base No Compra vaciada");
         };
 
+        // --- TOAST & RENDER GLOBAL ---
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = 'toast-animate px-4 py-2.5 rounded-xl bg-zinc-900 text-white text-xs font-semibold shadow-lg border border-zinc-700';
+            toast.textContent = msg;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 3800);
+        }
+
         function renderAllTables() {
             updateContactosSubCounts();
             renderAllContactSections();
             renderClientesTable();
+            renderBotonera();
         }
 
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            if (!container) return;
-            const toast = document.createElement('div');
-            toast.className = 'toast-animate bg-zinc-900 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-xl border border-zinc-700 max-w-sm';
-            toast.textContent = message;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
-
-        // ============================================================================
-        // INICIALIZACIÓN GLOBAL DEL CRM GINZA TOYOTA
-        // ============================================================================
+        // --- INICIALIZACIÓN ---
         window.addEventListener('DOMContentLoaded', async () => {
             if (typeof pdfjsLib !== 'undefined') {
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
             }
-
+            document.getElementById('csv-upload')?.addEventListener('change', handleCsvUpload);
             loadLocalData();
             mergeDefaultMarketPlans();
             syncModelDropdowns();
             await restoreSavedPlanBlobsFromIndexedDB();
-
-            const csvInput = document.getElementById('csv-upload');
-            if (csvInput) csvInput.addEventListener('change', handleCsvUpload);
-
-            updateWaAiNavBadge();
-            updateWaAiWorkerUrlsDisplay();
+            renderAllTables();
+            updateDashboard();
             renderInfoAutoAlertsBanner();
             renderCommercialLiveAlertsBanner();
             renderAudioLiveAlertsBanner();
-
-            renderAllTables();
-            updateDashboard();
-            renderBotonera();
-            recalcFinancingSimulator();
-
             await pullFromFirebase(true);
+            await SOFIA_AI.syncBrainToFirebase();
             startFirebaseLiveListener();
             startWaIncomingLiveListener();
             startSfIncomingLiveListener();
-            SOFIA_AI.syncBrainToFirebase();
-
             setInterval(() => {
-                pollIncomingWhatsAppEvents();
                 checkWhatsApp48hTimeouts(false);
-            }, 15000);
-
-            setInterval(() => {
                 runAutonomousAiFollowUps();
             }, 60000);
         });
