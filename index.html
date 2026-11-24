@@ -121,7 +121,9 @@
                     <span>⚖️ Comparativa de Planes</span>
                 </button>
                 <button id="tab-btn-objetivos" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('objetivos')">Objetivos</button>
-                <button id="tab-btn-planes" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap" onclick="switchTab('planes')">Planes & PDF</button>
+                <button id="tab-btn-planes" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1" onclick="switchTab('planes')">
+                    <span>🚗 Vehículos</span>
+                </button>
                 <button id="tab-btn-financiaciones" class="tab-inactive pb-2.5 px-1 transition-colors whitespace-nowrap flex items-center gap-1" onclick="switchTab('financiaciones')">
                     <span>🏦 Financiaciones & Bancos</span>
                 </button>
@@ -169,6 +171,7 @@
     <!-- TAB 1: PANEL PRINCIPAL EJECUTIVO GINZA TOYOTA (INCLUYE KPIS EXCLUSIVOS)   -->
     <!-- ========================================================================= -->
     <main id="tab-botonera" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-5">
+        <!-- 4 TARJETAS KPI EXCLUSIVAS DEL PANEL PRINCIPAL -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <button onclick="filterByStatus('Todos')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm hover:border-slate-900 hover:shadow transition-all text-left group relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-1 h-full bg-[#0A0A0C]"></div>
@@ -211,6 +214,7 @@
             </button>
         </div>
 
+        <!-- BARRA DE SEGUIMIENTO AUTÓNOMO SOFÍA 2.7 -->
         <div id="wa-tracker-banner" class="bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -218,13 +222,14 @@
                 <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h (08:00–21:00h; Redes/IG 24/7).</span>
             </div>
             <div class="flex items-center gap-1.5 flex-wrap">
-                <button onclick="openMassCampaignModal()" class="px-2.5 py-1 rounded-lg bg-amber-500 text-zinc-950 hover:bg-amber-600 font-bold transition-colors">📢 Campaña Masiva Anti-Ban</button>
                 <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">🤖 Piloto Sofi 2.7</button>
+                <button onclick="openMassCampaignModal()" class="px-2.5 py-1 rounded-lg bg-amber-500 text-zinc-950 hover:bg-amber-600 font-bold transition-colors">📢 Masivos Anti-Ban</button>
                 <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">🟢 Pestaña WA Web</button>
                 <button onclick="checkWhatsApp48hTimeouts(true)" class="px-2.5 py-1 rounded-lg bg-red-50 text-[#EB0A1E] hover:bg-red-100 border border-red-200 font-semibold transition-colors">Verificar 24h/48h</button>
             </div>
         </div>
 
+        <!-- BANNER SHOWROOM TOYOTA -->
         <div class="bg-gradient-to-br from-[#0A0A0C] via-[#151519] to-[#222229] rounded-3xl p-5 sm:p-7 text-white shadow-lg relative overflow-hidden border border-zinc-800">
             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                 <div class="max-w-2xl">
@@ -240,7 +245,7 @@
                     </p>
                     <div class="flex flex-wrap gap-2.5 mt-4">
                         <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs sm:text-sm font-bold shadow-md transition-all">📋 Ir a Prospección (7 Canales)</button>
-                        <button onclick="openMassCampaignModal()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs sm:text-sm font-bold shadow-md transition-all">📢 Envío Masivo Seguro (Sofía IA)</button>
+                        <button onclick="openMassCampaignModal()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-zinc-950 text-xs sm:text-sm font-extrabold shadow-md transition-all">📢 Envío Masivo IA</button>
                         <button onclick="openAgendaWindow()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all">📅 Ventana Calendario (<span id="hero-agenda-count" class="tabular-nums">0</span>)</button>
                         <button onclick="switchTab('comparativa')" class="px-4 py-2.5 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-xs sm:text-sm font-bold shadow-md transition-all">⚖️ Comparar Planes</button>
                     </div>
@@ -313,11 +318,16 @@
                     <h2 class="text-base sm:text-lg font-bold text-slate-900">Base de Datos de Prospección (7 Canales)</h2>
                     <p class="text-xs text-slate-500">Al enviar un mensaje pasa a <b>espera</b>. Sofía 2.7 clasifica automáticamente <b>No Compra</b> en Sin Respuesta (+24h), Interesados, Contactar a Futuro y No Interesados por motivo.</p>
                 </div>
-                <button onclick="switchTab('clientes')" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-red-50 text-[#EB0A1E] border border-red-200 hover:bg-red-100 transition-colors self-start sm:self-auto">
-                    <span>Ver derivados en Clientes:</span>
-                    <span id="contactos-moved-count" class="px-2 py-0.5 rounded-full bg-[#EB0A1E] text-white font-bold tabular-nums">0</span>
-                    <span>→</span>
-                </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="openMassCampaignModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-extrabold bg-amber-500 text-zinc-950 hover:bg-amber-600 transition-colors">
+                        <span>📢 Envío Masivo IA</span>
+                    </button>
+                    <button onclick="switchTab('clientes')" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-red-50 text-[#EB0A1E] border border-red-200 hover:bg-red-100 transition-colors self-start sm:self-auto">
+                        <span>Ver derivados en Clientes:</span>
+                        <span id="contactos-moved-count" class="px-2 py-0.5 rounded-full bg-[#EB0A1E] text-white font-bold tabular-nums">0</span>
+                        <span>→</span>
+                    </button>
+                </div>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
                 <button onclick="setContactosSubView('all')" id="subnav-all" class="p-2.5 rounded-xl border-2 border-[#EB0A1E] bg-red-50 text-left transition-all"><div class="text-[10px] font-bold text-[#EB0A1E] uppercase">Todos</div><div class="text-base font-bold text-slate-900 mt-0.5 tabular-nums" id="subcount-all">0</div></button>
@@ -332,12 +342,12 @@
         </div>
 
         <div class="space-y-8">
-            <!-- SECCIÓN 1: NO COMPRA -->
+            <!-- SECCIÓN 1: NO COMPRA (SCROLL INTERNO LIMITADO A 10 FILAS VISIBLES) -->
             <section id="section-block-crm" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="px-4 sm:px-6 py-4 bg-[#0A0A0C] text-white flex flex-wrap items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5"><span class="w-2.5 h-2.5 rounded-full bg-[#EB0A1E]"></span><h3 class="text-sm sm:text-base font-bold">1. Base de Datos — No Compra</h3></div>
                     <div class="flex items-center gap-2">
-                        <button onclick="openMassCampaignModal('crm')" class="bg-amber-500 hover:bg-amber-400 text-zinc-950 px-2.5 py-1 rounded-lg text-xs font-extrabold transition-colors">📢 Masivo Seguro</button>
+                        <button onclick="openMassCampaignModal('crm')" class="bg-amber-500 hover:bg-amber-600 text-zinc-950 px-2.5 py-1 rounded-lg text-xs font-extrabold transition-colors">📢 Masivo IA</button>
                         <button onclick="openWaTemplatesModal('crm')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-colors">💬 Mensaje WA</button>
                     </div>
                 </div>
@@ -350,7 +360,7 @@
                         <button onclick="requestDeleteAll()" class="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl font-medium text-xs sm:text-sm">Vaciar</button>
                     </div>
                 </div>
-                <div class="overflow-x-auto overflow-y-auto max-h-[540px] border-b border-slate-200"><table class="w-full text-left border-collapse min-w-[640px]"><thead class="sticky top-0 z-10 shadow-xs"><tr class="bg-white border-b border-slate-200 text-xs sm:text-sm font-semibold text-slate-600"><th class="p-3.5">Contacto & WhatsApp</th><th class="p-3.5">Origen / Loc.</th><th class="p-3.5">Estado</th><th class="p-3.5">Acciones y Avance</th></tr></thead><tbody id="crm-table-body" class="divide-y divide-slate-100 text-sm"></tbody></table></div>
+                <div class="overflow-x-auto max-h-[540px] overflow-y-auto"><table class="w-full text-left border-collapse min-w-[640px]"><thead class="sticky top-0 z-10"><tr class="bg-white border-b border-slate-200 text-xs sm:text-sm font-semibold text-slate-600 shadow-2xs"><th class="p-3.5">Contacto & WhatsApp</th><th class="p-3.5">Origen / Loc.</th><th class="p-3.5">Estado</th><th class="p-3.5">Acciones y Avance</th></tr></thead><tbody id="crm-table-body" class="divide-y divide-slate-100 text-sm"></tbody></table></div>
                 <div id="crm-empty-state" class="hidden p-8 text-center text-slate-500 text-sm">No hay datos pendientes de envío en No Compra.</div>
                 <div id="crm-waiting-sublist"></div>
                 <div id="crm-classification-sublists" class="p-4 bg-slate-50/70 border-t border-slate-200 space-y-4"></div>
@@ -569,14 +579,108 @@
     </main>
 
     <!-- ========================================================================= -->
-    <!-- TAB 6: PLANES & PDF                                                       -->
+    <!-- TAB 6: VEHÍCULOS (VERSIONES, FOTOS, FICHA TÉCNICA, PLANES & PDF)          -->
     <!-- ========================================================================= -->
     <main id="tab-planes" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 hidden space-y-6">
+        <!-- CABECERA & SELECTOR DE MODELOS TOYOTA -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                <div>
+                    <h2 class="text-base sm:text-xl font-extrabold text-slate-900">🚗 Catálogo Oficial de Vehículos — Versiones, Fotos, Ficha Técnica & Planes</h2>
+                    <p class="text-xs text-slate-500">Seleccioná un modelo para ver sus versiones, valores, planes disponibles (70/30 y 100%), galería de fotos por versión y ficha técnica sincronizada con Sofía 2.7.</p>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-red-50 text-[#EB0A1E] text-xs font-extrabold border border-red-200 self-start sm:self-center">Sincronizado con Sofía IA</span>
+            </div>
+            <div id="veh-model-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5"></div>
+        </div>
+
+        <!-- FICHA DETALLADA DEL VEHÍCULO SELECCIONADO -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <!-- COLUMNA IZQUIERDA: VERSIONES & VALORES + PLANES DEL MODELO -->
+            <div class="lg:col-span-6 space-y-5">
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3.5">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                        <div>
+                            <h3 id="veh-selected-title" class="text-base font-extrabold text-slate-900">Yaris — Versiones y Valores</h3>
+                            <p class="text-xs text-slate-500">Precios oficiales vigentes por versión (editable)</p>
+                        </div>
+                        <button onclick="addVehicleVersionPrompt()" class="px-3 py-1.5 rounded-xl bg-[#0A0A0C] hover:bg-zinc-800 text-white text-xs font-bold">+ Versión</button>
+                    </div>
+                    <div id="veh-versions-list" class="space-y-2"></div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                        <div>
+                            <h3 id="veh-model-plans-title" class="text-base font-extrabold text-slate-900">Planes Disponibles (70/30 y 100%)</h3>
+                            <p class="text-xs text-slate-500">Cuotas por tramos, cuota pura e integración mínima de este modelo</p>
+                        </div>
+                    </div>
+                    <div id="veh-model-plans-list" class="space-y-2.5"></div>
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: FOTOS POR VERSIÓN + FICHA TÉCNICA + ANALIZADOR IA -->
+            <div class="lg:col-span-6 space-y-5">
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3.5">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                        <div>
+                            <h3 class="text-base font-extrabold text-slate-900">📸 Galería de Fotos por Versión</h3>
+                            <p class="text-xs text-slate-500">Cargá fotos separadas por versión (ej. XS, XLS+, S) para mostrar o enviar por WA</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <select id="veh-photo-version-select" onchange="renderSelectedVehicleHub()" class="px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
+                            <label class="cursor-pointer px-3 py-1.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs font-bold">
+                                + Subir Fotos
+                                <input type="file" accept="image/*" multiple class="hidden" onchange="handleVehicleVersionPhotosUpload(event)">
+                            </label>
+                        </div>
+                    </div>
+                    <div id="veh-photos-gallery" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-[260px] overflow-y-auto"></div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                        <div>
+                            <h3 id="veh-tech-title" class="text-base font-extrabold text-slate-900">📋 Ficha Técnica & Diferencias por Versión</h3>
+                            <p class="text-xs text-slate-500">Sofía 2.7 lee esta ficha para responder consultas técnicas de equipamiento, motor y seguridad</p>
+                        </div>
+                        <button onclick="saveVehicleTechSpec()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">💾 Guardar Ficha</button>
+                    </div>
+                    <textarea id="veh-tech-textarea" rows="5" class="w-full p-3 text-xs border border-slate-300 rounded-xl outline-none leading-relaxed" placeholder="Motorización, transmisión, seguridad (Toyota Safety Sense, airbags), pantallas, llantas y diferencias entre versiones..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALIZADOR IA DE DIFERENCIAS ENTRE VERSIONES Y MODELOS -->
+        <div class="bg-gradient-to-br from-[#0A0A0C] via-[#151519] to-zinc-900 text-white rounded-3xl p-5 sm:p-6 shadow-md border border-zinc-800 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <span class="px-2.5 py-0.5 rounded-full bg-[#EB0A1E] text-white text-[10px] font-extrabold uppercase">Inteligencia Comercial Ginza</span>
+                    <h3 class="text-base sm:text-lg font-extrabold mt-1">🧠 Comparador IA de Versiones y Modelos Toyota</h3>
+                    <p class="text-xs text-zinc-300">Elegí dos vehículos o versiones (ej. Yaris XS vs Yaris S, o Yaris Cross vs Corolla Cross) y Sofía te arma las diferencias clave para el cliente.</p>
+                </div>
+                <button id="btn-veh-ai-compare" onclick="analyzeVehicleDifferencesWithAi()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold shadow">✨ Analizar Diferencias con IA</button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1">Vehículo / Versión A</label>
+                    <select id="veh-ai-comp-a" class="w-full px-3 py-2 text-xs font-bold bg-zinc-900 border border-zinc-700 text-white rounded-xl outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1">Vehículo / Versión B</label>
+                    <select id="veh-ai-comp-b" class="w-full px-3 py-2 text-xs font-bold bg-zinc-900 border border-zinc-700 text-white rounded-xl outline-none"></select>
+                </div>
+            </div>
+            <div id="veh-ai-compare-result" class="hidden p-4 rounded-2xl bg-white/10 border border-white/15 text-xs sm:text-sm text-zinc-100 leading-relaxed whitespace-pre-line"></div>
+        </div>
+
+        <!-- CARGA DE PDFs OFICIALES DE PLANES & HOJAS JPG -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div class="bg-white rounded-2xl border p-5 flex flex-col justify-between">
                 <div>
-                    <h2 class="text-base font-bold text-slate-900 mb-1">Subir PDFs de Planes</h2>
-                    <p class="text-xs text-slate-500 mb-4">Extrae cuotas, convierte las hojas a JPG y deja actualizados los valores oficiales para Sofía 2.7.</p>
+                    <h2 class="text-base font-bold text-slate-900 mb-1">Subir PDFs de Planes Toyota</h2>
+                    <p class="text-xs text-slate-500 mb-4">Extrae los 3 tramos diferenciados, cuota pura, integración mínima y convierte las hojas a JPG.</p>
                     <div class="grid grid-cols-3 gap-2 mb-3">
                         <select id="plan-month-input" class="px-2 py-2 text-xs border rounded-xl bg-white"><option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option><option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option><option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option></select>
                         <input type="number" id="plan-year-input" value="2026" class="px-2 py-2 text-xs border rounded-xl">
@@ -587,7 +691,7 @@
                 <div id="pdf-processing-status" class="hidden mt-3 p-2.5 bg-red-50 rounded-xl text-xs text-[#EB0A1E] text-center">Procesando PDF...</div>
             </div>
             <div class="lg:col-span-2 bg-white rounded-2xl border p-5">
-                <div class="flex justify-between items-center mb-3 pb-2 border-b"><h2 class="text-base font-bold" id="jpg-preview-title">Hojas JPG Guardadas</h2><button id="btn-download-all-jpg" onclick="downloadAllPlanJpgs()" class="hidden bg-[#0A0A0C] text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Descargar Todas</button></div>
+                <div class="flex justify-between items-center mb-3 pb-2 border-b"><h2 class="text-base font-bold" id="jpg-preview-title">Hojas JPG de Planes Guardadas</h2><button id="btn-download-all-jpg" onclick="downloadAllPlanJpgs()" class="hidden bg-[#0A0A0C] text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Descargar Todas</button></div>
                 <div id="pdf-jpg-gallery" class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-h-[340px] overflow-y-auto"></div>
             </div>
         </div>
@@ -792,8 +896,8 @@
                 <span>Clientes</span>
             </button>
             <button onclick="switchTab('planes')" id="mob-nav-planes" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold text-slate-500">
-                <span class="text-base">📄</span>
-                <span>Planes</span>
+                <span class="text-base">🚗</span>
+                <span>Vehículos</span>
             </button>
             <button onclick="openWaAiAssistantModal()" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-emerald-700">
                 <span class="text-base">🤖</span>
@@ -1787,16 +1891,386 @@
             else if (tabName === 'clientes') renderClientesTable();
             else if (tabName === 'comparativa') renderComparativaSelectors();
             else if (tabName === 'objetivos') renderObjetivos();
-            else if (tabName === 'planes') renderPlansHistory();
+            else if (tabName === 'planes') { renderVehiclesCatalogSection(); renderPlansHistory(); }
             else if (tabName === 'financiaciones') initTcfaSimulator();
         };
-
-        // --- COTIZADOR TCFA NOVIEMBRE 2026 ---
-        let tcfaState = {
-            modelId: 'hilux-4x2-dx-mt',
-            category: 'promo',
-            selectedPlanKey: 'cupo_0_18'
+        // --- CATÁLOGO DE VEHÍCULOS (VERSIONES, FOTOS POR VERSIÓN, FICHA TÉCNICA & IA) ---
+        const DEFAULT_VEHICLES_CATALOG = {
+            'Yaris': {
+                versions: [
+                    { id: 'y-xs', name: 'XS 1.5 CVT 5P', price: 36315000, notes: 'Motor 1.5 Dual VVT-i 107 CV, caja CVT 7 marchas, 7 airbags, control de estabilidad (VSC), pantalla táctil 7" con Apple CarPlay y Android Auto.' },
+                    { id: 'y-xls', name: 'XLS+ 1.5 CVT 5P', price: 40340000, notes: 'Suma llantas de aleación 15", faros delanteros LED, climatizador automático digital, cámara de retroceso, sensores de estacionamiento y espejos rebatibles.' },
+                    { id: 'y-s', name: 'S 1.5 CVT 5P', price: 43255000, notes: 'Tope de gama deportivo: llantas de aleación 16", techo solar eléctrico, tapizado de cuero ecológico con costuras rojas, botón de encendido (Smart Entry) y Toyota Safety Sense (pre-colisión y alerta de cambio de carril).' }
+                ],
+                techSpec: 'Motor 1.5L 16v Dual VVT-i (107 CV / 140 Nm) • Transmisión automática CVT de 7 velocidades • 7 Airbags de serie en todas las versiones • Control de estabilidad (VSC) y tracción (TRC) • Asistente de arranque en pendiente (HAC) • Diferencias clave: XS es la entrada de gama súper equipada en seguridad; XLS+ agrega climatizador, LED y cámara; S suma techo solar, cuero, llave presencial y paquete Toyota Safety Sense.'
+            },
+            'Yaris Cross': {
+                versions: [
+                    { id: 'yc-xli', name: 'XLI 1.5 CVT (Naftera)', price: 41464000, notes: 'SUV compacto naftero 1.5L 106 CV CVT, Toyota Safety Sense, 6 airbags, pantalla multimedia 10" inalámbrica, freno de mano eléctrico.' },
+                    { id: 'yc-xei', name: 'XEI 1.5 CVT (Naftera)', price: 45260000, notes: 'Suma llantas de aleación 17", climatizador automático, acceso sin llave y encendido por botón, faros Bi-LED.' },
+                    { id: 'yc-xei-hev', name: 'XEI HEV 1.5 eCVT (Híbrida)', price: 48457000, notes: 'Motorización Híbrida autorrecargable 1.5L + motor eléctrico (111 CV combinados), consumo urbano ultra bajo (~4 L/100 km), caja eCVT.' },
+                    { id: 'yc-seg', name: 'SEG 1.5 CVT (Naftera)', price: 50224000, notes: 'Tapizado de cuero, portón trasero eléctrico con sensor manos libres, cámara 360°, cargador inalámbrico.' },
+                    { id: 'yc-seg-hev', name: 'SEG HEV 1.5 eCVT (Híbrida)', price: 54020000, notes: 'Máximo equipamiento híbrido: techo panorámico, cuero, cámara 360°, portón eléctrico y paquete completo Toyota Safety Sense.' }
+                ],
+                techSpec: 'SUV B-Segmento con versiones Nafteras (1.5L 106 CV CVT) e Híbridas autorrecargables (1.5L eCVT, sin enchufe) • Ambos planes disponibles en Toyota Plan son modalidad 70/30 (XLI Naftera y XEI Híbrida) • Toyota Safety Sense de serie (frenado autónomo, control crucero adaptativo) • Pantalla 10" con CarPlay/Android Auto inalámbrico • Baúl de 471 litros.'
+            },
+            'Corolla': {
+                versions: [
+                    { id: 'cor-xli', name: '2.0 XLI CVT', price: 44082000, notes: 'Motor 2.0 Dynamic Force 171 CV, caja Direct Shift CVT 10 marchas, Toyota Safety Sense, 7 airbags, pantalla 9".' },
+                    { id: 'cor-xei', name: '2.0 XEI CVT', price: 48410000, notes: 'Suma llantas 17", climatizador bi-zona, faros Bi-LED, levas al volante y cargador inalámbrico.' },
+                    { id: 'cor-hev-xei', name: 'HEV 1.8 XEI eCVT (Híbrido)', price: 50764000, notes: 'Sistema híbrido autorrecargable 1.8L (122 CV combinados), bajo consumo urbano y exención de patente en varias jurisdicciones.' },
+                    { id: 'cor-seg', name: '2.0 SEG CVT', price: 54392000, notes: 'Tapizado de cuero, tablero digital 12.3", alerta de punto ciego (BSM) y tráfico cruzado trasero.' },
+                    { id: 'cor-gr', name: 'GR-SPORT 2.0 CVT', price: 55439000, notes: 'Suspensión deportiva Gazoo Racing, estética exterior GR, interior en cuero y Ultrasuede con detalles rojos.' },
+                    { id: 'cor-hev-seg', name: 'HEV 1.8 SEG eCVT (Híbrido)', price: 56180000, notes: 'Tope de gama híbrido con cuero, tablero digital 12.3" y máximo confort.' }
+                ],
+                techSpec: 'Sedán mediano líder • Motor 2.0L Dynamic Force 171 CV con caja Direct Shift CVT de 10 velocidades o versión Híbrida 1.8L eCVT (122 CV) • Suspensión trasera independiente Multi-Link • 7 Airbags + Toyota Safety Sense en toda la gama • Garantía oficial Toyota.'
+            },
+            'Corolla Cross': {
+                versions: [
+                    { id: 'cc-xli', name: 'XLI 2.0 CVT', price: 51918000, notes: 'Motor 2.0 171 CV CVT 10 velocidades, Toyota Safety Sense, 7 airbags, pantalla 10" inalámbrica, cámara de retroceso.' },
+                    { id: 'cc-xei', name: 'XEI 2.0 CVT', price: 56263000, notes: 'Llantas 18", faros Bi-LED, tablero digital, acceso sin llave y climatizador bi-zona.' },
+                    { id: 'cc-xei-hev', name: 'XEI HEV 1.8 eCVT (Híbrido)', price: 57682000, notes: 'SUV híbrido autorrecargable 1.8L eCVT, máxima eficiencia de combustible en ciudad y ruta.' },
+                    { id: 'cc-seg', name: 'SEG 2.0 CVT', price: 61732000, notes: 'Tapizado de cuero, butaca eléctrica, portón trasero eléctrico con apertura por sensor de pie, alerta punto ciego.' },
+                    { id: 'cc-seg-hev', name: 'SEG HEV 1.8 eCVT (Híbrido)', price: 63684000, notes: 'Tope de gama híbrido con cuero, portón manos libres y asistencias completas.' },
+                    { id: 'cc-gr', name: 'GR-SPORT 2.0 CVT', price: 64083000, notes: 'Puesta a punto deportiva Gazoo Racing, techo bitono negro, llantas 18" exclusivas.' }
+                ],
+                techSpec: 'SUV mediano • Motor 2.0L Dynamic Force 171 CV Direct Shift CVT o Híbrido 1.8L eCVT • 7 Airbags + Toyota Safety Sense de serie • Pantalla táctil 10" inalámbrica, freno de estacionamiento electrónico con Auto-Hold • Plan disponible en modalidad 70/30 sobre versión XLI 2.0 CVT (con posibilidad de cambio de versión al adjudicar).'
+            },
+            'Hilux': {
+                versions: [
+                    { id: 'hx-4x2-dx', name: '4x2 DC DX 2.4 TDI 6MT', price: 49621000, notes: 'Motor 2.4 Turbo Diésel 150 CV / 400 Nm, caja manual 6 marchas, 7 airbags, control de estabilidad y balanceo de tráiler, pantalla 9" inalámbrica.' },
+                    { id: 'hx-4x2-sr', name: '4x2 DC SR 2.4 TDI 6AT', price: 59480000, notes: 'Suma caja automática de 6 marchas, llantas de aleación 17", cámara de retroceso y modos ECO/POWER.' },
+                    { id: 'hx-4x4-dx', name: '4x4 DC DX 2.4 TDI 6AT', price: 59739000, notes: 'Tracción 4x4 con alta y baja, bloqueo de diferencial trasero, 7 airbags y caja automática 6 marchas.' },
+                    { id: 'hx-4x4-srv', name: '4x4 DC SRV 2.8 TDI 6AT', price: 76381000, notes: 'Motor 2.8 Turbo Diésel 204 CV / 500 Nm, climatizador bi-zona, faros Bi-LED, estribos y barra.' },
+                    { id: 'hx-4x4-srx', name: '4x4 DC SRX 2.8 TDI 6AT', price: 84855000, notes: 'Trocha ancha, tapizado de cuero ventilado, audio JBL, cámara 360° y paquete Toyota Safety Sense.' }
+                ],
+                techSpec: 'Pick-up líder del mercado argentino • Versiones 2.4 TDI (150 CV / 400 Nm) y 2.8 TDI (204 CV / 500 Nm) • Tracción 4x2 o 4x4 con reductora y bloqueo de diferencial • 7 Airbags de serie, control de tracción activo (A-TRC) y control de balanceo de tráiler • Capacidad de carga hasta 1 tonelada • Planes disponibles en 70/30 (4x2 DX) y 100% (4x4 DX).'
+            },
+            'Hiace': {
+                versions: [
+                    { id: 'hc-l2h2', name: 'Furgón L2H2 2.8 6AT 3A', price: 72798000, notes: 'Motor 2.8 Turbo Diésel 177 CV (mismo conjunto mecánico de Hilux), caja automática 6 marchas, volumen de carga 9,3 m³, doble portón lateral.' },
+                    { id: 'hc-commuter', name: 'Commuter 2.8 6AT 14A', price: 87882000, notes: 'Transporte de pasajeros 13+1 asientos, salidas de aire individuales en techo, control de estabilidad y arranque en pendiente.' }
+                ],
+                techSpec: 'Utilitario / Transporte • Motor 2.8L Turbo Diésel 177 CV con cadena de distribución y caja automática de 6 velocidades • Tracción trasera con diferencial autoblocante • Furgón L2H2 con 9,3 m³ de capacidad de carga (Largo interno 3,56 m / Alto interno 1,65 m) • Plan 100% disponible en Toyota Plan.'
+            }
         };
+
+        let vehiclesCatalogState = JSON.parse(localStorage.getItem('crm_vehicles_catalog_v1') || 'null') || JSON.parse(JSON.stringify(DEFAULT_VEHICLES_CATALOG));
+        let selectedVehicleModelTab = 'Yaris';
+        let vehicleVersionPhotosCache = {}; // { 'Yaris::y-xs': [ { id, fileName, dataUrl } ] }
+        const VEH_PHOTOS_IDB_STORE = 'vehiclePhotos';
+
+        function saveVehiclesCatalogState() {
+            try { localStorage.setItem('crm_vehicles_catalog_v1', JSON.stringify(vehiclesCatalogState)); } catch (e) {}
+            SOFIA_AI.syncBrainToFirebase();
+        }
+
+        async function openVehiclePhotosDB() {
+            return new Promise((resolve, reject) => {
+                if (!window.indexedDB) { reject('No IndexedDB'); return; }
+                const req = indexedDB.open('CrmGinzaVehiclesPhotosDB', 1);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(VEH_PHOTOS_IDB_STORE)) {
+                        db.createObjectStore(VEH_PHOTOS_IDB_STORE, { keyPath: 'key' });
+                    }
+                };
+                req.onsuccess = (e) => resolve(e.target.result);
+                req.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        async function restoreVehiclePhotosFromIDB() {
+            try {
+                const db = await openVehiclePhotosDB();
+                const tx = db.transaction(VEH_PHOTOS_IDB_STORE, 'readonly');
+                const all = await new Promise((resolve) => {
+                    const r = tx.objectStore(VEH_PHOTOS_IDB_STORE).getAll();
+                    r.onsuccess = () => resolve(r.result || []);
+                    r.onerror = () => resolve([]);
+                });
+                all.forEach(item => { if (item && item.key) vehicleVersionPhotosCache[item.key] = item.photos || []; });
+            } catch (e) {}
+        }
+
+        async function saveVehiclePhotosToIDB(photoKey, photosArr) {
+            vehicleVersionPhotosCache[photoKey] = photosArr;
+            try {
+                const db = await openVehiclePhotosDB();
+                const tx = db.transaction(VEH_PHOTOS_IDB_STORE, 'readwrite');
+                tx.objectStore(VEH_PHOTOS_IDB_STORE).put({ key: photoKey, photos: photosArr });
+            } catch (e) {}
+        }
+
+        window.selectVehicleCatalogModel = function(modelName) {
+            selectedVehicleModelTab = modelName;
+            renderVehiclesCatalogSection();
+        };
+
+        window.renderVehiclesCatalogSection = function() {
+            const tabsBox = document.getElementById('veh-model-tabs');
+            if (!tabsBox) return;
+
+            tabsBox.innerHTML = FIXED_INTEREST_MODELS.map(m => {
+                const entry = vehiclesCatalogState[m] || { versions: [], techSpec: '' };
+                const modelPlans = plansHistory.filter(p => (p.vehicleName || '').toLowerCase().includes(m.toLowerCase()) && (m !== 'Yaris' || !(p.vehicleName || '').toLowerCase().includes('cross')) && (m !== 'Corolla' || !(p.vehicleName || '').toLowerCase().includes('cross')));
+                const photoCount = Object.entries(vehicleVersionPhotosCache)
+                    .filter(([k]) => k.startsWith(`${m}::`))
+                    .reduce((acc, [, arr]) => acc + (arr?.length || 0), 0);
+                const isSel = selectedVehicleModelTab === m;
+                return `<button onclick="selectVehicleCatalogModel('${m}')" class="p-3 rounded-2xl border-2 text-left transition-all ${isSel ? 'border-[#EB0A1E] bg-red-50/70 shadow-xs' : 'border-slate-200 bg-slate-50/60 hover:border-slate-400'}">
+                    <div class="text-xs font-extrabold ${isSel ? 'text-[#EB0A1E]' : 'text-slate-900'}">${m}</div>
+                    <div class="text-[10px] text-slate-500 mt-1 tabular-nums">${entry.versions.length} vers. • ${modelPlans.length} plan(es) • ${photoCount} fotos</div>
+                </button>`;
+            }).join('');
+
+            populateVehicleAiCompareSelects();
+            renderSelectedVehicleHub();
+        };
+
+        function populateVehicleAiCompareSelects() {
+            const selA = document.getElementById('veh-ai-comp-a');
+            const selB = document.getElementById('veh-ai-comp-b');
+            if (!selA || !selB) return;
+            const prevA = selA.value, prevB = selB.value;
+            const opts = [];
+            FIXED_INTEREST_MODELS.forEach(m => {
+                const versions = vehiclesCatalogState[m]?.versions || [];
+                versions.forEach(v => {
+                    opts.push(`<option value="${m}::${v.id}">${m} — ${v.name} ($${Number(v.price || 0).toLocaleString('es-AR')})</option>`);
+                });
+            });
+            selA.innerHTML = opts.join('');
+            selB.innerHTML = opts.join('');
+            if (prevA) selA.value = prevA;
+            if (prevB) selB.value = prevB;
+            else if (selB.options.length > 2) selB.selectedIndex = 2;
+        }
+
+        window.renderSelectedVehicleHub = function() {
+            const modelName = selectedVehicleModelTab || 'Yaris';
+            const entry = vehiclesCatalogState[modelName] || { versions: [], techSpec: '' };
+
+            const titleEl = document.getElementById('veh-selected-title');
+            if (titleEl) titleEl.textContent = `${modelName} — Versiones y Valores Oficiales`;
+
+            const verList = document.getElementById('veh-versions-list');
+            if (verList) {
+                verList.innerHTML = entry.versions.length === 0
+                    ? `<div class="p-4 text-center text-xs text-slate-400 border border-dashed rounded-xl">Sin versiones cargadas para ${modelName}.</div>`
+                    : entry.versions.map((v, idx) => `<div class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="text-xs font-extrabold text-slate-900">${v.name}</div>
+                            <div class="text-[11px] text-slate-600 mt-0.5">${v.notes || ''}</div>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <input type="number" value="${Number(v.price || 0)}" onchange="updateVehicleVersionPrice('${modelName}', ${idx}, this.value)" class="w-28 px-2 py-1 text-xs font-extrabold text-right border border-slate-300 rounded-lg bg-white tabular-nums">
+                            <button onclick="deleteVehicleVersion('${modelName}', ${idx})" class="px-2 py-1 rounded-lg bg-red-50 text-red-600 text-xs">🗑️</button>
+                        </div>
+                    </div>`).join('');
+            }
+
+            // Planes disponibles del modelo seleccionado
+            const plansTitle = document.getElementById('veh-model-plans-title');
+            if (plansTitle) plansTitle.textContent = `Planes Toyota Plan Disponibles — ${modelName}`;
+            const plansBox = document.getElementById('veh-model-plans-list');
+            if (plansBox) {
+                const matchingPdfs = plansHistory.filter(p => {
+                    const vn = (p.vehicleName || '').toLowerCase();
+                    const mn = modelName.toLowerCase();
+                    if (mn === 'yaris') return vn.includes('yaris') && !vn.includes('cross');
+                    if (mn === 'corolla') return vn.includes('corolla') && !vn.includes('cross');
+                    return vn.includes(mn);
+                });
+                const matchingRefs = marketPlansCatalog.filter(p => {
+                    if (p.brand !== 'Toyota') return false;
+                    const pm = p.model.toLowerCase();
+                    const mn = modelName.toLowerCase();
+                    if (mn === 'yaris') return pm.includes('yaris') && !pm.includes('cross');
+                    if (mn === 'corolla') return pm.includes('corolla') && !pm.includes('cross');
+                    return pm.includes(mn);
+                });
+
+                if (matchingPdfs.length > 0) {
+                    plansBox.innerHTML = matchingPdfs.map(p => {
+                        const tr = p.tranches || {};
+                        const is100 = p.modality === '100%';
+                        return `<div class="p-3.5 rounded-xl border-2 border-red-200 bg-red-50/40 space-y-1.5 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-slate-900">${p.vehicleName} — Modalidad ${p.modality}</span>
+                                <span class="px-2 py-0.5 rounded bg-[#EB0A1E] text-white text-[10px] font-bold">${p.period}</span>
+                            </div>
+                            <div class="text-slate-700 tabular-nums">Unidad: <b>$${Number(p.vehicleValue || 0).toLocaleString('es-AR')}</b> • Financia (${is100 ? '100%' : '70%'}): <b class="text-emerald-700">$${Number(p.financedAmount || p.value70 || 0).toLocaleString('es-AR')}</b></div>
+                            <div class="grid grid-cols-3 gap-1.5 pt-1 text-[11px] tabular-nums">
+                                <div class="p-1.5 rounded bg-white border">T1 (${tr.t1Label || '2 a 18'}): <b>$${Number(tr.c1_18 || p.price).toLocaleString('es-AR')}</b></div>
+                                <div class="p-1.5 rounded bg-white border">T2 (${tr.t2Label || '19 a 24'}): <b>$${Number(tr.c19_24 || p.price).toLocaleString('es-AR')}</b></div>
+                                <div class="p-1.5 rounded bg-white border">T3 (${tr.t3Label || '25 a 84'}): <b>$${Number(tr.c25_84 || p.price).toLocaleString('es-AR')}</b></div>
+                            </div>
+                            <div class="flex items-center justify-between pt-1 text-[11px] tabular-nums">
+                                <span>Cuota Pura: <b>$${Number(p.pureQuota || 0).toLocaleString('es-AR')}</b> • ${is100 ? `Integ. Mín. (${p.minIntegrationMonths || 24}m)` : 'Extraord. 30%'}: <b>$${Number(p.extraordinaryQuota || 0).toLocaleString('es-AR')}</b></span>
+                                <button onclick="openEditPlanModal('${p.id}')" class="px-2 py-0.5 rounded bg-amber-100 text-amber-950 font-bold">✏️ Editar</button>
+                            </div>
+                        </div>`;
+                    }).join('');
+                } else {
+                    plansBox.innerHTML = matchingRefs.map(r => `<div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
+                        <div><b>${r.model}</b> <span class="px-1.5 py-0.5 rounded bg-zinc-900 text-white text-[10px] font-bold ml-1">${r.modality}</span></div>
+                        <div class="tabular-nums">Ref. Cuota: <b class="text-[#EB0A1E]">$${Number(r.cuotaPura).toLocaleString('es-AR')}</b></div>
+                    </div>`).join('');
+                }
+            }
+
+            // Galería de fotos por versión
+            const photoVerSel = document.getElementById('veh-photo-version-select');
+            if (photoVerSel) {
+                const prevVer = photoVerSel.value;
+                photoVerSel.innerHTML = entry.versions.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
+                if (prevVer && entry.versions.some(v => v.id === prevVer)) photoVerSel.value = prevVer;
+            }
+            const activeVerId = photoVerSel?.value || entry.versions[0]?.id || 'default';
+            const photoKey = `${modelName}::${activeVerId}`;
+            const photos = vehicleVersionPhotosCache[photoKey] || [];
+            const gallery = document.getElementById('veh-photos-gallery');
+            if (gallery) {
+                gallery.innerHTML = photos.length === 0
+                    ? `<div class="col-span-full p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">Sin fotos cargadas para esta versión. Tocá <b>"+ Subir Fotos"</b> arriba para agregar imágenes reales.</div>`
+                    : photos.map((ph, idx) => `<div class="rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
+                        <img src="${ph.dataUrl}" class="w-full h-28 object-cover border-b">
+                        <div class="p-1.5 flex items-center justify-between gap-1">
+                            <a href="${ph.dataUrl}" download="${ph.fileName}" class="px-2 py-0.5 rounded bg-white border text-[10px] font-bold">⬇️</a>
+                            <button onclick="deleteVehicleVersionPhoto('${photoKey}', ${idx})" class="px-2 py-0.5 rounded bg-red-50 text-red-600 text-[10px] font-bold">🗑️</button>
+                        </div>
+                    </div>`).join('');
+            }
+
+            // Ficha técnica
+            const techTitle = document.getElementById('veh-tech-title');
+            if (techTitle) techTitle.textContent = `📋 Ficha Técnica & Diferencias — ${modelName}`;
+            const techArea = document.getElementById('veh-tech-textarea');
+            if (techArea) techArea.value = entry.techSpec || '';
+        };
+
+        window.updateVehicleVersionPrice = function(modelName, idx, newPrice) {
+            if (!vehiclesCatalogState[modelName]?.versions?.[idx]) return;
+            vehiclesCatalogState[modelName].versions[idx].price = Math.max(0, Number(newPrice) || 0);
+            saveVehiclesCatalogState();
+            renderVehiclesCatalogSection();
+            showToast(`💰 Precio actualizado en ${modelName}`);
+        };
+
+        window.deleteVehicleVersion = function(modelName, idx) {
+            if (!vehiclesCatalogState[modelName]?.versions) return;
+            vehiclesCatalogState[modelName].versions.splice(idx, 1);
+            saveVehiclesCatalogState();
+            renderVehiclesCatalogSection();
+        };
+
+        window.addVehicleVersionPrompt = function() {
+            const modelName = selectedVehicleModelTab || 'Yaris';
+            const verName = document.getElementById('veh-tech-textarea') ? `${modelName} Nueva Versión` : '';
+            const priceInput = 45000000;
+            if (!vehiclesCatalogState[modelName]) vehiclesCatalogState[modelName] = { versions: [], techSpec: '' };
+            vehiclesCatalogState[modelName].versions.push({
+                id: `v_${Date.now()}`,
+                name: verName,
+                price: priceInput,
+                notes: 'Equipamiento de serie + asistencias Toyota'
+            });
+            saveVehiclesCatalogState();
+            renderVehiclesCatalogSection();
+            showToast(`✅ Versión agregada a ${modelName} (editá su precio al lado)`);
+        };
+
+        window.handleVehicleVersionPhotosUpload = async function(event) {
+            const files = Array.from(event.target.files || []);
+            if (files.length === 0) return;
+            const modelName = selectedVehicleModelTab || 'Yaris';
+            const verId = document.getElementById('veh-photo-version-select')?.value || 'default';
+            const photoKey = `${modelName}::${verId}`;
+            const currentList = [...(vehicleVersionPhotosCache[photoKey] || [])];
+
+            for (const f of files) {
+                const dataUrl = await new Promise((resolve) => {
+                    const r = new FileReader();
+                    r.onload = () => resolve(r.result);
+                    r.readAsDataURL(f);
+                });
+                currentList.push({ id: `${Date.now()}_${Math.random().toString(36).slice(2, 5)}`, fileName: f.name, dataUrl });
+            }
+            await saveVehiclePhotosToIDB(photoKey, currentList);
+            renderVehiclesCatalogSection();
+            showToast(`📸 ${files.length} foto(s) guardada(s) en ${modelName}`);
+        };
+
+        window.deleteVehicleVersionPhoto = async function(photoKey, idx) {
+            const currentList = [...(vehicleVersionPhotosCache[photoKey] || [])];
+            currentList.splice(idx, 1);
+            await saveVehiclePhotosToIDB(photoKey, currentList);
+            renderVehiclesCatalogSection();
+        };
+
+        window.saveVehicleTechSpec = function() {
+            const modelName = selectedVehicleModelTab || 'Yaris';
+            if (!vehiclesCatalogState[modelName]) vehiclesCatalogState[modelName] = { versions: [], techSpec: '' };
+            vehiclesCatalogState[modelName].techSpec = document.getElementById('veh-tech-textarea')?.value.trim() || '';
+            saveVehiclesCatalogState();
+            showToast(`📋 Ficha técnica de ${modelName} guardada y sincronizada con Sofía 2.7`);
+        };
+
+        window.analyzeVehicleDifferencesWithAi = async function() {
+            const valA = document.getElementById('veh-ai-comp-a')?.value || '';
+            const valB = document.getElementById('veh-ai-comp-b')?.value || '';
+            const resBox = document.getElementById('veh-ai-compare-result');
+            const btn = document.getElementById('btn-veh-ai-compare');
+            if (!valA || !valB || !resBox) return;
+
+            const [modA, idA] = valA.split('::');
+            const [modB, idB] = valB.split('::');
+            const verA = (vehiclesCatalogState[modA]?.versions || []).find(v => v.id === idA);
+            const verB = (vehiclesCatalogState[modB]?.versions || []).find(v => v.id === idB);
+            const techA = vehiclesCatalogState[modA]?.techSpec || '';
+            const techB = vehiclesCatalogState[modB]?.techSpec || '';
+
+            resBox.classList.remove('hidden');
+            const fallbackSummary = `Comparativa ${modA} (${verA?.name || ''}) vs ${modB} (${verB?.name || ''}):\n• Precio de lista: $${Number(verA?.price || 0).toLocaleString('es-AR')} vs $${Number(verB?.price || 0).toLocaleString('es-AR')} (diferencia de $${Math.abs(Number(verA?.price || 0) - Number(verB?.price || 0)).toLocaleString('es-AR')}).\n• ${verA?.name}: ${verA?.notes || techA}\n• ${verB?.name}: ${verB?.notes || techB}`;
+
+            const apiKey = String(SOFIA_AI.config.geminiApiKey || '').trim();
+            if (!apiKey) {
+                resBox.textContent = fallbackSummary;
+                return;
+            }
+
+            if (btn) { btn.disabled = true; btn.textContent = '⏳ Analizando...'; }
+            resBox.textContent = '⏳ Sofía está comparando equipamiento, motorización y relación precio/producto...';
+            try {
+                const models = await SOFIA_AI.resolveModels(apiKey);
+                const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(models[0])}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            role: 'user',
+                            parts: [{
+                                text: `Sos Sofía, asesora senior de Ginza Toyota. Compará de forma clara, comercial y breve (4 a 6 renglones, listo para explicarle a un cliente por WhatsApp) estas dos opciones:\n\nOPCIÓN A: ${modA} ${verA?.name || ''} ($${Number(verA?.price || 0).toLocaleString('es-AR')}) - ${verA?.notes || ''}\nFicha ${modA}: ${techA}\n\nOPCIÓN B: ${modB} ${verB?.name || ''} ($${Number(verB?.price || 0).toLocaleString('es-AR')}) - ${verB?.notes || ''}\nFicha ${modB}: ${techB}\n\nDestacá diferencias reales de equipamiento/motor/uso y qué perfil de cliente conviene cada una.`
+                            }]
+                        }],
+                        generationConfig: { temperature: 0.5, maxOutputTokens: 420, thinkingConfig: { thinkingBudget: 0 } }
+                    })
+                });
+                if (gRes.ok) {
+                    const gData = await gRes.json();
+                    const txt = (gData?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+                    resBox.textContent = txt || fallbackSummary;
+                } else {
+                    resBox.textContent = fallbackSummary;
+                }
+            } catch (e) {
+                resBox.textContent = fallbackSummary;
+            }
+            if (btn) { btn.disabled = false; btn.textContent = '✨ Analizar Diferencias con IA'; }
+        };
+
+        let tcfaState = { modelId: 'hilux-4x2-dx-mt', category: 'promo', selectedPlanKey: 'cupo_0_18' };
 
         function calcTcfaQuotaWithIva(capital, tna, meses, mode = 'frances') {
             if (!capital || capital <= 0 || !meses) return 0;
@@ -3704,7 +4178,13 @@
                         lines.push(`- ${def.model} (${def.modality}): Valor de la unidad $${Number(def.valorMovil).toLocaleString('es-AR')} | Cuota Final Referencia: $${Number(def.cuotaPura).toLocaleString('es-AR')}`);
                     }
                 }
-                return `LISTA OFICIAL DE VALORES Y CUOTAS TOYOTA PLAN (GINZA TOYOTA):\n${lines.join('\n')}`;
+                const techLines = FIXED_INTEREST_MODELS.map(m => {
+                    const entry = vehiclesCatalogState[m];
+                    if (!entry) return '';
+                    const verStr = (entry.versions || []).map(v => `${v.name} ($${Number(v.price || 0).toLocaleString('es-AR')}: ${v.notes || ''})`).join(' | ');
+                    return `• ${m}: ${verStr}\n  Ficha: ${entry.techSpec || ''}`;
+                }).filter(Boolean).join('\n');
+                return `LISTA OFICIAL DE VALORES Y CUOTAS TOYOTA PLAN (GINZA TOYOTA):\n${lines.join('\n')}\n\nCATÁLOGO DE VERSIONES Y FICHAS TÉCNICAS TOYOTA (GINZA TOYOTA):\n${techLines}`;
             },
 
             getSystemPrompt(officialPricesText, availablePlanJpgs = []) {
@@ -4785,6 +5265,8 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             mergeDefaultMarketPlans();
             syncModelDropdowns();
             await restoreSavedPlanBlobsFromIndexedDB();
+            await restoreVehiclePhotosFromIDB();
+            renderVehiclesCatalogSection();
             renderAllTables();
             updateDashboard();
             renderInfoAutoAlertsBanner();
