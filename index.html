@@ -55,6 +55,7 @@
                     <span id="cloud-status" class="px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5 shrink-0">
                         <span id="cloud-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                         <span id="cloud-text">Conectando...</span>
+                    </span>
                     <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0" title="Asistente IA Sofi 2.6 • Persistencia 24/7">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
                         <span id="nav-wa-ai-label">🤖 Sofi 2.6 ON</span>
@@ -435,7 +436,7 @@
 
             <!-- SECCIÓN 6: CANCELADOS -->
             <section id="section-block-cancelados" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-4 sm:px-6 py-4 bg-amber-950 text-white flex items-center justify-between"><h3 class="text-sm sm:text-base font-bold">6. Base de Datos — Cancelados</h3></div>
+                <div class="px-4 sm:px-6 py-4 bg-amber-950 text-white flex items-center justify-between"><h3 class="text-sm sm:text-base font-bold">6. Base de Datos — Cancelados</h3><button onclick="openWaTemplatesModal('cancelados')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium">💬 Mensaje WA</button></div>
                 <div class="p-4 bg-slate-50/70 grid grid-cols-1 sm:grid-cols-4 gap-3">
                     <input type="text" id="cancelados-name" placeholder="Nombre" class="px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
                     <input type="text" id="cancelados-phone" placeholder="Teléfono" class="px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
@@ -450,7 +451,7 @@
 
             <!-- SECCIÓN 7: RESCINDIDOS -->
             <section id="section-block-rescindidos" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-4 sm:px-6 py-4 bg-rose-950 text-white flex items-center justify-between"><h3 class="text-sm sm:text-base font-bold">7. Base de Datos — Rescindidos</h3></div>
+                <div class="px-4 sm:px-6 py-4 bg-rose-950 text-white flex items-center justify-between"><h3 class="text-sm sm:text-base font-bold">7. Base de Datos — Rescindidos</h3><button onclick="openWaTemplatesModal('rescindidos')" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-medium">💬 Mensaje WA</button></div>
                 <div class="p-4 bg-slate-50/70 grid grid-cols-1 sm:grid-cols-4 gap-3">
                     <input type="text" id="rescindidos-name" placeholder="Nombre" class="px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
                     <input type="text" id="rescindidos-phone" placeholder="Teléfono" class="px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
@@ -1509,14 +1510,25 @@
             const waitingCount = getAllListsCombined().filter(c => c.status === 'Mensaje Enviado (48h)').length;
             summaryEl.innerHTML = `<b>${waitingCount}</b> mensaje(s) en espera • 1 único toque cordial IA a las 24h sin insistir.`;
         }
-        window.trackWhatsAppMessageSent = function(id) {
+        window.trackWhatsAppMessageSent = function(id, sentText = '', channelKey = 'gestion') {
             const found = findContactGlobal(id);
             if (!found) return;
             const c = found.contact;
             if (!isClientStatus(c.status) && c.status !== 'Contestó') {
-                c.status = 'Mensaje Enviado (48h)'; c.method = 'Mensaje'; c.waSentAt = Date.now();
+                c.status = 'Mensaje Enviado (48h)';
+                c.method = 'Mensaje';
+                c.waSentAt = Date.now();
                 c.aiFollowUpCount = c.aiFollowUpCount || 0;
-                saveLocalData(true); renderAllTables(); updateDashboard();
+            }
+            if (sentText) {
+                c.lastOutreachMsg = sentText;
+                c.lastOutreachChannel = channelKey;
+                SOFIA_AI.recordInitialOutreachInHistory(c, sentText);
+            }
+            saveLocalData(true);
+            renderAllTables();
+            updateDashboard();
+            if (!isClientStatus(c.status)) {
                 showToast(`🤖 Seguimiento Sofía IA programado (24h suave): ${c.name || c.phone}`);
             }
         };
@@ -1591,8 +1603,8 @@
             waTabRef = window.open('https://web.whatsapp.com', 'crm_whatsapp_web_singleton');
         };
         window.openWhatsAppSingleTab = function(waDigits, contactId = null, channelKey = 'gestion', contactName = '') {
-            if (contactId) trackWhatsAppMessageSent(contactId);
             const customMsg = formatWhatsAppMessageForChannel(channelKey, contactName);
+            if (contactId) trackWhatsAppMessageSent(contactId, customMsg, channelKey);
             const targetUrl = customMsg ? `https://web.whatsapp.com/send?phone=${waDigits}&text=${encodeURIComponent(customMsg)}` : `https://web.whatsapp.com/send?phone=${waDigits}`;
             if (waTabRef && !waTabRef.closed) { try { waTabRef.location.href = targetUrl; waTabRef.focus(); return; } catch (err) {} }
             waTabRef = window.open(targetUrl, 'crm_whatsapp_web_singleton');
@@ -1708,13 +1720,11 @@
                     const sender = typeof ev === 'string' ? ev : (ev.sender || ev.not_title || ev.title || '');
                     const text = typeof ev === 'object' ? (ev.text || ev.notification || '') : '';
 
-                    // Ignorar signos sueltos ("?", "!", ".") enviados como segundo mensaje rápido para no pisar la respuesta real
                     if (/^[?!.,…\s]+$/.test(text.trim())) {
                         fetch(`${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}/${encodeURIComponent(evId)}.json`, { method: 'DELETE' }).catch(() => {});
                         continue;
                     }
 
-                    // Evitar procesar notificaciones duplicadas idénticas en menos de 8 segundos
                     const fp = `${sender.trim().toLowerCase()}|${text.trim().toLowerCase()}`;
                     const lastSeen = recentWaMessageFingerprints.get(fp) || 0;
                     if (Date.now() - lastSeen < 8000) {
@@ -1726,7 +1736,7 @@
                     const result = processIncomingWhatsAppMessage(sender, text);
                     waIncomingLogs.unshift({
                         sender: sender || 'Desconocido',
-                        actionLabel: result ? `Atendido Sofía IA 2.3 (${result.contact.name})` : 'Ignorado (No está en CRM / Chat Personal)',
+                        actionLabel: result ? `Atendido Sofi 2.6 (${result.contact.name})` : 'Ignorado (No está en CRM / Chat Personal)',
                         time: new Date().toLocaleTimeString()
                     });
                     if (result) {
@@ -2362,9 +2372,6 @@
         window.closeShareJpgWaModal = () => document.getElementById('share-jpg-wa-modal')?.classList.add('hidden');
         window.renderShareJpgContactsList = () => {};
         window.closePdfPriceChatbotModal = () => document.getElementById('pdf-price-chatbot-modal')?.classList.add('hidden');
-        window.syncPlaneroDeLeyLive = () => renderComparativaSelectors();
-        window.onCompSegmentChange = () => renderComparativaSelectors();
-        window.renderComparativaResult = () => {};
 
         function tryAutoScheduleFromClientMessage(contact, userMessage) {
             if (!contact || waAiConfig.allowAutoSchedule === false) return null;
@@ -2475,6 +2482,29 @@
                 } catch (e) {}
             },
 
+            async recordInitialOutreachInHistory(contact, sentText) {
+                if (!contact || !sentText) return;
+                const cid = contact.id || 'default_client';
+                if (!Array.isArray(this.chats[cid])) this.chats[cid] = [];
+                const last = this.chats[cid][this.chats[cid].length - 1];
+                if (!last || last.text !== sentText) {
+                    this.chats[cid].push({
+                        role: 'model',
+                        text: sentText,
+                        ts: Date.now(),
+                        time: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+                    });
+                    this.saveChats();
+                }
+                try {
+                    await fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(cid)}.json`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.chats[cid].slice(-40))
+                    });
+                } catch (e) {}
+            },
+
             async resolveModels(apiKey) {
                 if (Array.isArray(this.cachedModels) && this.cachedModels.length > 0) {
                     return this.cachedModels;
@@ -2516,8 +2546,9 @@
                             phone: formatPhoneAR(c.phone || ''),
                             digitsTail: String(c.phone || '').replace(/\D/g, '').slice(-7),
                             status: c.status || 'Pendiente',
-                            channel: c.method || 'CRM',
-                            interestModel: c.interestModel || ''
+                            channel: c.lastOutreachChannel || c.method || 'CRM',
+                            interestModel: c.interestModel || '',
+                            lastOutreachMsg: c.lastOutreachMsg || ''
                         }));
 
                     const officialPricesText = this.buildOfficialPricesText();
@@ -2637,6 +2668,9 @@ ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
                 });
 
                 let systemPrompt = this.getSystemPrompt(this.buildOfficialPricesText());
+                if (contact?.lastOutreachMsg && this.chats[cid].length <= 2) {
+                    systemPrompt += `\n\nCONTEXTO DE MENSAJE PREVIO ENVIADO AL CLIENTE:\n"${contact.lastOutreachMsg}"\nRespondé en base a ese mensaje sin volver a saludar ni presentarte.`;
+                }
                 if (contact?.name && !['sin nombre', 'lead salesforce', 'hans', 'prueba crm'].includes(contact.name.toLowerCase().trim())) {
                     systemPrompt += `\n\nCONTEXTO DEL CLIENTE: Nombre ${contact.name}${contact.interestModel ? `, modelo de interés: ${contact.interestModel}` : ''}.`;
                 }
