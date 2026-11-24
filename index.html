@@ -2321,7 +2321,16 @@
         function renderSimpleChannelTable(list, tbodyId, emptyId, channelKey, waitingBoxId = '') {
             const tbody = document.getElementById(tbodyId), emptyEl = document.getElementById(emptyId);
             if (!tbody) return;
-            const filtered = list.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            const searchQuery = channelKey === 'crm'
+                ? String(document.getElementById('search-crm')?.value || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
+                : '';
+            const filtered = list.filter(c => {
+                if (isClientStatus(c.status) || c.status === 'Mensaje Enviado (48h)') return false;
+                if (!searchQuery) return true;
+                const haystack = `${c.name || ''} ${c.phone || ''} ${formatPhoneAR(c.phone || '')} ${c.method || ''} ${c.reference || ''} ${c.status || ''}`
+                    .toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                return haystack.includes(searchQuery);
+            });
             if (filtered.length === 0) { tbody.innerHTML = ''; emptyEl?.classList.remove('hidden'); }
             else {
                 emptyEl?.classList.add('hidden');
@@ -2351,16 +2360,99 @@
         window.addDirectCliente = () => { const name = document.getElementById('cli-direct-name').value.trim(), phone = formatPhoneAR(document.getElementById('cli-direct-phone').value.trim()); if (name || phone) { gestionContacts.unshift({ id: Date.now().toString(), name: name || 'Cliente', phone, interestModel: document.getElementById('cli-direct-model').value, status: document.getElementById('cli-direct-status').value }); saveLocalData(true); renderAllTables(); updateDashboard(); } };
         window.renderClientesTable = () => {
             const tb = document.getElementById('clientes-table-body');
+            const emptyEl = document.getElementById('clientes-empty-state');
+            const noCompraTb = document.getElementById('clientes-nocompra-body');
+            const noCompraEmpty = document.getElementById('clientes-nocompra-empty');
             if (!tb) return;
+
+            const searchQ = String(document.getElementById('search-clientes')?.value || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+            const matchesSearch = (c) => {
+                if (!searchQ) return true;
+                const hay = `${c.name || ''} ${c.phone || ''} ${formatPhoneAR(c.phone || '')} ${c.sourceLabel || ''} ${c.interestModel || ''} ${c.status || ''} ${c.observations || ''}`
+                    .toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                return hay.includes(searchQ);
+            };
+
             const allCli = getAllClientesWithSource();
-            const act = allCli.filter(c => c.status !== 'No Compra');
-            tb.innerHTML = act.map(c => `<tr><td class="p-3.5 font-bold">${c.name}<div class="text-[11px] font-normal text-slate-500">${c.phone || ''}</div></td><td class="p-3.5 text-xs">${c.sourceLabel}</td><td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel||'-'}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5"><button onclick="openClientProfileModal('${c.id}')" class="px-2.5 py-1 bg-[#0A0A0C] text-white rounded-lg text-xs font-bold">👤 Ficha</button></td></tr>`).join('');
+            const activeAll = allCli.filter(c => c.status !== 'No Compra');
+            const noCompraAll = allCli.filter(c => c.status === 'No Compra');
+
+            const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+            setTxt('cli-count-Todos', activeAll.length);
+            setTxt('cli-count-Interesado', activeAll.filter(c => c.status === 'Interesado').length);
+            setTxt('cli-count-Futuro', activeAll.filter(c => c.status === 'Interesado a Futuro').length);
+            setTxt('cli-count-Entrevista', activeAll.filter(c => c.status === 'Entrevista').length);
+            setTxt('cli-count-Venta', activeAll.filter(c => c.status === 'Venta').length);
+            setTxt('cli-count-NoCompra', noCompraAll.length);
+
+            const filteredAct = activeAll.filter(c => {
+                const stageOk = currentClientesStage === 'Todos' || c.status === currentClientesStage;
+                return stageOk && matchesSearch(c);
+            });
+
+            if (filteredAct.length === 0) {
+                tb.innerHTML = '';
+                emptyEl?.classList.remove('hidden');
+            } else {
+                emptyEl?.classList.add('hidden');
+                tb.innerHTML = filteredAct.map(c => `<tr>
+                    <td class="p-3.5 font-bold"><button onclick="openClientProfileModal('${c.id}')" class="text-left hover:text-[#EB0A1E] underline decoration-slate-300">${c.name || 'Sin Nombre'}</button><div class="text-[11px] font-normal text-emerald-700">${formatPhoneAR(c.phone) || c.phone || ''}</div></td>
+                    <td class="p-3.5 text-xs">${c.sourceLabel}</td>
+                    <td class="p-3.5 text-xs font-bold text-emerald-700">${c.interestModel || '-'}</td>
+                    <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td>
+                    <td class="p-3.5"><div class="flex flex-wrap items-center gap-1.5">
+                        <button onclick="openClientProfileModal('${c.id}')" class="px-2.5 py-1 bg-[#0A0A0C] text-white rounded-lg text-xs font-bold">👤 Ficha</button>
+                        <button onclick="openWhatsAppSingleTab('${formatPhoneAR(c.phone).replace(/\D/g, '')}', '${c.id}', 'clientes', '${(c.name || '').replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-semibold">💬 WA</button>
+                        <button onclick="deleteContact('${c.id}')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-lg text-xs font-bold" title="Eliminar cliente">🗑️ Eliminar</button>
+                    </div></td>
+                </tr>`).join('');
+            }
+
+            if (noCompraTb) {
+                const filteredNc = noCompraAll.filter(matchesSearch);
+                if (filteredNc.length === 0) {
+                    noCompraTb.innerHTML = '';
+                    noCompraEmpty?.classList.remove('hidden');
+                } else {
+                    noCompraEmpty?.classList.add('hidden');
+                    noCompraTb.innerHTML = filteredNc.map(c => `<tr>
+                        <td class="p-3 font-bold text-xs">${c.name || 'Sin Nombre'} <span class="font-normal text-slate-500">(${formatPhoneAR(c.phone) || c.phone || ''})</span></td>
+                        <td class="p-3 text-xs text-rose-700">${c.noInterestReason || c.observations || 'Sin motivo registrado'}</td>
+                        <td class="p-3 text-right"><div class="inline-flex items-center gap-1.5">
+                            <button onclick="openClientProfileModal('${c.id}')" class="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-lg text-xs font-bold">👤 Ficha</button>
+                            <button onclick="deleteContact('${c.id}')" class="px-2.5 py-1 bg-red-50 text-red-600 border border-red-200 rounded-lg text-xs font-bold">🗑️ Eliminar</button>
+                        </div></td>
+                    </tr>`).join('');
+                }
+            }
         };
         window.updateStatus = (id, s) => { const f = findContactGlobal(id); if (f) { f.contact.status = s; saveLocalData(true); renderAllTables(); updateDashboard(); } };
         window.openEditModal = (id) => { syncModelDropdowns(); const f = findContactGlobal(id); if (!f) return; document.getElementById('edit-id').value = f.contact.id; document.getElementById('edit-name').value = f.contact.name || ''; document.getElementById('edit-phone').value = f.contact.phone || ''; document.getElementById('edit-model').value = f.contact.interestModel || ''; document.getElementById('edit-status').value = f.contact.status; document.getElementById('edit-obs').value = f.contact.observations || ''; document.getElementById('edit-modal').classList.remove('hidden'); };
         window.closeEditModal = () => document.getElementById('edit-modal')?.classList.add('hidden');
         window.saveEdit = () => { const f = findContactGlobal(document.getElementById('edit-id').value); if (f) { f.contact.name = document.getElementById('edit-name').value; f.contact.phone = formatPhoneAR(document.getElementById('edit-phone').value); f.contact.interestModel = document.getElementById('edit-model').value; f.contact.status = document.getElementById('edit-status').value; f.contact.observations = document.getElementById('edit-obs').value; saveLocalData(true); renderAllTables(); updateDashboard(); } closeEditModal(); };
-        window.deleteContact = (id) => { crmContacts = crmContacts.filter(x => x.id !== id); gestionContacts = gestionContacts.filter(x => x.id !== id); redesContacts = redesContacts.filter(x => x.id !== id); salesforceContacts = salesforceContacts.filter(x => x.id !== id); convencionalContacts = convencionalContacts.filter(x => x.id !== id); canceladosContacts = canceladosContacts.filter(x => x.id !== id); rescindidosContacts = rescindidosContacts.filter(x => x.id !== id); saveLocalData(true); renderAllTables(); updateDashboard(); };
+        window.deleteContact = async (id) => {
+            crmContacts = crmContacts.filter(x => x.id !== id);
+            gestionContacts = gestionContacts.filter(x => x.id !== id);
+            redesContacts = redesContacts.filter(x => x.id !== id);
+            salesforceContacts = salesforceContacts.filter(x => x.id !== id);
+            convencionalContacts = convencionalContacts.filter(x => x.id !== id);
+            canceladosContacts = canceladosContacts.filter(x => x.id !== id);
+            rescindidosContacts = rescindidosContacts.filter(x => x.id !== id);
+            delete SOFIA_AI.chats[id];
+            SOFIA_AI.saveChats();
+            saveLocalData(true);
+            renderAllTables();
+            updateDashboard();
+            try {
+                const safeKey = String(id || '').replace(/[.#$\[\]\/]/g, '_');
+                await Promise.all([
+                    fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(safeKey)}.json`, { method: 'DELETE' }),
+                    fetch(`${FIREBASE_DB_URL}/wa_buffer/${encodeURIComponent(syncRoom)}/${encodeURIComponent(safeKey)}.json`, { method: 'DELETE' }),
+                    fetch(`${FIREBASE_DB_URL}/ai_scheduled/${encodeURIComponent(syncRoom)}/${encodeURIComponent(safeKey)}.json`, { method: 'DELETE' })
+                ]);
+            } catch (e) {}
+            showToast("🗑️ Registro eliminado por completo");
+        };
 
         // --- CALENDARIO ---
         window.openScheduleModal = function(id, defaultType = 'Entrevista', prefillDate = null) { document.getElementById('sched-contact-id').value = id || ''; document.getElementById('sched-type-select').value = defaultType; document.getElementById('sched-date-input').value = prefillDate || getTodayISODate(); document.getElementById('schedule-modal').classList.remove('hidden'); };
@@ -3126,14 +3218,16 @@ ${officialPricesText}`;
             delete SOFIA_AI.chats[contact.id];
             SOFIA_AI.saveChats();
             onWaAiContactChange();
+            const safeKey = String(contact.id || 'default').replace(/[.#$\[\]\/]/g, '_').replace(/\s+/g, '_');
+            const keysToClear = Array.from(new Set([contact.id, safeKey, 'sandbox_test_user', 'sandbox_tester_hans']));
             try {
                 await Promise.all([
-                    fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(contact.id)}.json`, { method: 'DELETE' }),
-                    fetch(`${FIREBASE_DB_URL}/wa_buffer/${encodeURIComponent(syncRoom)}/${encodeURIComponent(contact.id)}.json`, { method: 'DELETE' }),
+                    ...keysToClear.map(k => fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(k)}.json`, { method: 'DELETE' })),
+                    ...keysToClear.map(k => fetch(`${FIREBASE_DB_URL}/wa_buffer/${encodeURIComponent(syncRoom)}/${encodeURIComponent(k)}.json`, { method: 'DELETE' })),
                     fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest.json`, { method: 'DELETE' })
                 ]);
             } catch (e) {}
-            showToast(`🧹 Chat limpio para ${contact.name}`);
+            showToast(`🧹 Historial y buffer borrados para ${contact.name}`);
         };
         window.runWaAiReply = async function() {
             const input = document.getElementById('wa-ai-client-msg-input');
@@ -3144,11 +3238,22 @@ ${officialPricesText}`;
             onWaAiContactChange();
             const out = await SOFIA_AI.generateReply(contact, msg);
             onWaAiContactChange();
-            if (out && out.reply) {
-                const draftBox = document.getElementById('wa-ai-draft-box');
-                const draftText = document.getElementById('wa-ai-draft-text');
-                if (draftBox && draftText) { draftText.value = out.reply; draftBox.classList.remove('hidden'); }
+            const draftBox = document.getElementById('wa-ai-draft-box');
+            const draftText = document.getElementById('wa-ai-draft-text');
+            const sourceTag = document.getElementById('wa-ai-source-tag');
+            if (draftBox && draftText && out.reply) {
+                draftBox.classList.remove('hidden');
+                draftText.value = out.reply;
+                if (sourceTag) sourceTag.textContent = out.source || 'Gemini';
             }
+        };
+
+        window.requestDeleteAll = async () => {
+            crmContacts = [];
+            saveLocalData(true);
+            renderAllTables();
+            updateDashboard();
+            showToast("🗑️ Base No Compra vaciada");
         };
 
         // --- STUBS SEGUROS PARA CONTROLES SECUNDARIOS ---
@@ -3190,7 +3295,6 @@ ${officialPricesText}`;
         window.dismissAllAudioAlerts = () => {};
         window.exportSectionCSV = () => {};
         window.exportClientesCSV = () => {};
-        window.requestDeleteAll = () => { crmContacts = []; saveLocalData(true); renderAllTables(); };
 
         function showToast(msg) {
             const container = document.getElementById('toast-container');
