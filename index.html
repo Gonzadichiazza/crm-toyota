@@ -220,7 +220,7 @@
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span class="font-bold text-slate-900">Seguimiento Autónomo Sofi 2.7 (Google Gemini):</span>
-                <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h sin insistir.</span>
+                <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h (08:00–21:00h; Redes/IG 24/7).</span>
             </div>
             <div class="flex items-center gap-1.5 flex-wrap">
                 <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">
@@ -589,7 +589,7 @@
             <div class="bg-white rounded-2xl border p-5 flex flex-col justify-between">
                 <div>
                     <h2 class="text-base font-bold text-slate-900 mb-1">Subir PDFs de Planes</h2>
-                    <p class="text-xs text-slate-500 mb-4">Extrae cuotas, convierte las hojas a JPG y las deja listas para que Sofía 2.7 envíe el explicativo exacto del vehículo.</p>
+                    <p class="text-xs text-slate-500 mb-4">Extrae cuotas, convierte las hojas a JPG y actualiza los valores oficiales de Toyota Plan.</p>
                     <div class="grid grid-cols-3 gap-2 mb-3">
                         <select id="plan-month-input" class="px-2 py-2 text-xs border rounded-xl bg-white"><option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option><option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option><option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option></select>
                         <input type="number" id="plan-year-input" value="2026" class="px-2 py-2 text-xs border rounded-xl">
@@ -711,7 +711,7 @@
                         <div class="font-extrabold text-slate-900">Bancos Privados (Galicia, BBVA, Santander — Prendarios)</div>
                         <ul class="mt-1.5 space-y-1 list-disc list-inside">
                             <li><b>Tasa Fija (TNA 53% – 63% / CFTEA 86% – 114%):</b> entre <b>$515.000 y $608.000</b> cada $10M a 60 meses + seguro automotor obligatorio.</li>
-                            <li><b>Tasa UVA (TNA ~25% + UVA):</b> cuota inicial ~$335.000 cada $10M a 60 meses, ajustable todos los meses por inflación.</li>
+                            <li><b>Tasa UVA bancarios:</b> TNA ~25% + UVA: cuota inicial ~$335.000 cada $10M a 60 meses, ajustable todos los meses por inflación.</li>
                         </ul>
                     </div>
                 </div>
@@ -952,7 +952,7 @@
                         <div class="space-y-1.5 text-xs text-slate-700">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="wa-ai-auto-followup" checked class="accent-[#EB0A1E]">
-                                <span><b>Seguimiento IA suave a las 24h</b> (máx. 1 toque, 9:30–19:30h)</span>
+                                <span><b>Seguimiento IA suave a las 24h</b> (máx. 1 toque, 08:00–21:00h)</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="wa-ai-allow-schedule" checked class="accent-[#EB0A1E]">
@@ -1057,27 +1057,27 @@
             },
             CONVENTIONAL_FINANCING_KNOWLEDGE: `FINANCIACIÓN CONVENCIONAL Y BANCARIA VERIFICADA (ARGENTINA - DATOS OFICIALES VIGENTES - USO EXCLUSIVO COMO REFERENCIA ESTIMADA Y ORIENTATIVA, NUNCA COMO OFERTA CERRADA):
 1. Toyota Compañía Financiera Argentina (TCFA - Venta Convencional):
-   - Líneas promocionales Tasa 0% TNA:
-     * Hasta 18 meses Tasa 0% TNA: tope de $25.000.000 a $30.000.000 según versión de Hilux (solo capital puro: $1.388.889/mes por $25M o $1.666.667/mes por $30M, más gastos de otorgamiento, seguro automotor y patente).
-     * Hasta 24 meses Tasa 0% TNA: tope de $18.500.000 (~$770.833/mes solo capital puro, sin gastos ni seguro).
-   - Líneas tradicionales Tasa Fija en pesos (TCFA):
-     * 18 meses (TNA 9,9%): tope $19.000.000.
-     * 24 meses (TNA 19%): tope $24.000.000.
-     * 36 meses (TNA 26,9% a 27,9%): tope $30.000.000 (cuota referencial ~$1.220.000 a $1.320.000/mes por $30M, más seguro y gastos).
-     * 48 meses (TNA 27,9%): tope $27.000.000 (cuota referencial ~$940.000 a $1.050.000/mes por $27M, más seguro y gastos).
-     * También existe línea UVA a 18/24 meses Tasa 0% + UVA (tope $30M, cuota ajustable por inflación UVA).
+  - Líneas promocionales Tasa 0% TNA:
+    - Hasta 18 meses Tasa 0% TNA: tope de $25.000.000 a $30.000.000 según versión de Hilux (solo capital puro: $1.388.889/mes por $25M o $1.666.667/mes por $30M, más gastos de otorgamiento, seguro automotor y patente).
+    - Hasta 24 meses Tasa 0% TNA: tope de $18.500.000 (~$770.833/mes solo capital puro, sin gastos ni seguro).
+  - Líneas tradicionales Tasa Fija en pesos (TCFA):
+    - 18 meses (TNA 9,9%): tope $19.000.000.
+    - 24 meses (TNA 19%): tope $24.000.000.
+    - 36 meses (TNA 26,9% a 27,9%): tope $30.000.000 (cuota referencial ~$1.220.000 a $1.320.000/mes por $30M, más seguro y gastos).
+    - 48 meses (TNA 27,9%): tope $27.000.000 (cuota referencial ~$940.000 a $1.050.000/mes por $27M, más seguro y gastos).
+    - También existe línea UVA a 18/24 meses Tasa 0% + UVA (tope $30M, cuota ajustable por inflación UVA).
 2. Bancos Públicos y Privados (Créditos Personales sin prenda / Prendarios bancarios):
-   - Banco Nación ("+Autos con BNA" - préstamo personal hasta $50.000.000, hasta 72 meses tasa fija o 60 meses UVA):
-     * Tasa Preferencial (25% TNA fija, CFT TNA 44,90% — solo si cobra sueldo/jubilación en BNA, tiene tarjeta de crédito BNA y contrata seguro vía BNA): cada $10.000.000 financiados da una cuota inicial de $313.122 (a 72 meses) o $441.348 (a 36 meses).
-     * Tasa General (46% TNA fija, CFT TNA 55,66% — para público general sin haberes en BNA): cada $10.000.000 financiados da una cuota inicial de $491.203 (a 72 meses) o $597.227 (a 36 meses). Ejemplo: financiar $25.000.000 con tasa general BNA da ~$1.228.000/mes a 72 meses o ~$1.493.000/mes a 36 meses (más seguro automotor y patente).
-   - Bancos Privados (Galicia, BBVA, Santander - Préstamos Prendarios):
-     * Tasa Fija en pesos: TNA entre 53% y 63% (CFTEA con IVA entre 86% y 114%), plazos de 12 a 60 meses. Por cada $10.000.000 a 60 meses la cuota supera los $515.000–$608.000/mes (es decir, $20M-$25M financiados superan los $1.100.000 a $1.500.000/mes más seguro obligatorio).
-     * Tasa UVA bancarios: TNA ~24,9%–25% + ajuste mensual por índice UVA (cuota inicial ~$335.000 cada $10M a 60 meses, pero el capital y la cuota suben todos los meses con la inflación).`,
+  - Banco Nación ("+Autos con BNA" - préstamo personal hasta $50.000.000, hasta 72 meses tasa fija o 60 meses UVA):
+    - Tasa Preferencial (25% TNA fija, CFT TNA 44,90% — solo si cobra sueldo/jubilación en BNA, tiene tarjeta de crédito BNA y contrata seguro vía BNA): cada $10.000.000 financiados da una cuota inicial de $313.122 (a 72 meses) o $441.348 (a 36 meses).
+    - Tasa General (46% TNA fija, CFT TNA 55,66% — para público general sin haberes en BNA): cada $10.000.000 financiados da una cuota inicial de $491.203 (a 72 meses) o $597.227 (a 36 meses). Ejemplo: financiar $25.000.000 con tasa general BNA da ~$1.228.000/mes a 72 meses o ~$1.493.000/mes a 36 meses (más seguro automotor y patente).
+  - Bancos Privados (Galicia, BBVA, Santander - Préstamos Prendarios):
+    - Tasa Fija en pesos: TNA entre 53% y 63% (CFTEA con IVA entre 86% y 114%), plazos de 12 a 60 meses. Por cada $10.000.000 a 60 meses la cuota supera los $515.000–$608.000/mes (es decir, $20M-$25M financiados superan los $1.100.000 a $1.500.000/mes más seguro obligatorio).
+    - Tasa UVA bancarios: TNA ~24,9%–25% + ajuste mensual por índice UVA (cuota inicial ~$335.000 cada $10M a 60 meses, pero el capital y la cuota suben todos los meses con la inflación).`,
             DEFAULT_MARKET_PLANS: [
                 { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 528803 },
                 { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 891366 },
-                { id: 'ty-yariscross-xli', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XLI CVT', modality: '70/30', valorMovil: 41464000, cuotaPura: 441862 },
-                { id: 'ty-yariscross-hv', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XEI Híbrido', modality: '70/30', valorMovil: 48457000, cuotaPura: 516395 },
+                { id: 'ty-yariscross-xli', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XLI CVT (Naftera)', modality: '70/30', valorMovil: 41464000, cuotaPura: 441862 },
+                { id: 'ty-yariscross-hv', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XEI Híbrido (HEV)', modality: '100%', valorMovil: 48457000, cuotaPura: 516395 },
                 { id: 'ty-corollacross', brand: 'Toyota', segment: 'SUV', model: 'Corolla Cross XLI CVT', modality: '70/30', valorMovil: 51918000, cuotaPura: 582729 },
                 { id: 'ty-yaris-70', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '70/30', valorMovil: 36315000, cuotaPura: 386998 },
                 { id: 'ty-yaris-100', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '100%', valorMovil: 36315000, cuotaPura: 541856 },
@@ -1656,7 +1656,7 @@
             const summaryEl = document.getElementById('wa-tracker-summary');
             if (!summaryEl) return;
             const waitingCount = getAllListsCombined().filter(c => c.status === 'Mensaje Enviado (48h)').length;
-            summaryEl.innerHTML = `<b>${waitingCount}</b> mensaje(s) en espera • 1 único toque cordial IA a las 24h sin insistir.`;
+            summaryEl.innerHTML = `<b>${waitingCount}</b> mensaje(s) en espera • 1 único toque cordial IA a las 24h (08:00–21:00h; Redes/IG 24/7).`;
         }
         window.trackWhatsAppMessageSent = function(id, sentText = '', channelKey = 'gestion') {
             const found = findContactGlobal(id);
@@ -1799,8 +1799,8 @@
         function isSystemOrSummaryNotification(sender, text) {
             const combined = `${sender || ''} ${text || ''}`.toLowerCase();
             const systemPatterns = [
-                'mensajes nuevos', 'mensajes de', 'buscando mensajes', 'realizando copia',
-                'enviando', 'llamando', 'whatsapp web', 'illegalstateexception', 'scheme == null', 'undefined'
+                'buscando mensajes', 'realizando copia',
+                'whatsapp web', 'illegalstateexception', 'scheme == null', 'undefined'
             ];
             return systemPatterns.some(pattern => combined.includes(pattern));
         }
@@ -2665,7 +2665,7 @@
                 } catch (err) {}
             }
             document.getElementById('pdf-processing-status')?.classList.add('hidden');
-            saveLocalData(true); renderPlansHistory(); showToast(`✅ ${files.length} PDF(s) procesado(s) y JPGs publicados para Sofía 2.7`);
+            saveLocalData(true); renderPlansHistory(); showToast(`✅ ${files.length} PDF(s) procesado(s) y valores actualizados para Sofía 2.7`);
         };
         window.renderVehiclePriceEvolutionChart = function() {
             const chartBox = document.getElementById('vehicle-price-chart-box'), modelSel = document.getElementById('plan-chart-model-select');
@@ -2861,23 +2861,6 @@
                         }));
 
                     const availablePlanJpgs = [];
-                    const seenJpgSlugs = new Set();
-                    const workerBase = String(this.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '');
-                    for (const p of plansHistory) {
-                        if (!Array.isArray(p.jpgPages) || p.jpgPages.length === 0) continue;
-                        const slug = buildPlanJpgSlug(p.vehicleName || p.planName, p.modality || '70/30');
-                        if (seenJpgSlugs.has(slug)) continue;
-                        seenJpgSlugs.add(slug);
-                        availablePlanJpgs.push({
-                            slug,
-                            vehicleName: p.vehicleName || p.planName,
-                            modality: p.modality || '70/30',
-                            period: p.period || '',
-                            pageCount: p.jpgPages.length,
-                            jpgUrlPage1: `${workerBase}/plan-jpg?room=${encodeURIComponent(syncRoom)}&slug=${encodeURIComponent(slug)}&page=1`
-                        });
-                    }
-
                     const officialPricesText = this.buildOfficialPricesText();
                     const systemPrompt = this.getSystemPrompt(officialPricesText, availablePlanJpgs);
 
@@ -2918,7 +2901,7 @@
                     if (badge) {
                         badge.textContent = this.config.sandboxEnabled
                             ? `🧪 Sofi 2.7 Sandbox (${this.config.sandboxPhone || 'Hans / Prueba CRM'})`
-                            : `☁️ Sofi 2.7 24/7 (${authorizedContacts.length} contactos • ${availablePlanJpgs.length} JPGs)`;
+                            : `☁️ Sofi 2.7 24/7 (${authorizedContacts.length} contactos)`;
                     }
                 } catch (e) {}
             },
@@ -2956,32 +2939,37 @@ REGLAS DE ORO DE CONVERSACIÓN (CUMPLIMIENTO ESTRICTO):
 0. SALUDO INICIAL PURO ("Hola", "Buenas", "Hola cómo estás" sin mencionar ningún auto ni consulta): Respondé únicamente saludando según la hora de Argentina ("Hola, buen día" / "Hola, buenas tardes" / "Hola, buenas noches"), presentándote como ${advisor}, asistente de Gonzalo Dichiazza en ${branch}, y cerrando EXCLUSIVAMENTE con "¿En qué te puedo ayudar?". PROHIBIDO preguntar "¿En qué modelo estás interesado?" o mencionar vehículos cuando el cliente solo saludó.
 1. Mensajes cortos y naturales de WhatsApp (1 a 3 renglones máximo), sin sonar a robot ni poner comillas alrededor del texto.
 2. Postura profesional y respetuosa: evitá expresiones informales como "te calza", "de una", "es un caño" o repetir muletillas como "Siendo sincero", "Excelente opción" o "Perfecto, ideal entonces".
-3. UNA ÚNICA PREGUNTA POR TURNO: Hacé solo 1 pregunta inteligente y directa por mensaje. Podés usar "o" de forma natural cuando aclara una elección puntual (ej: "¿La buscás 4x2 o 4x4?").
-4. MODALIDAD 70/30 vs PLAN 100% Y CAMBIO DE MODELO (REGLAS CONTRACTUALES ESTRICTAS):
-   - En la modalidad 70/30, al momento de retirar la unidad se necesita integrar **como mínimo el 30% de la unidad** (NO digas "del valor móvil", decí "de la unidad"). Cuando tengas el dato exacto extraído del PDF, poné entre paréntesis **únicamente el valor numérico** sin texto extra dentro del paréntesis, por ejemplo: "como mínimo el 30% de la unidad ($14.886.300)". Si no hay PDF cargado para ese modelo, decí solo "como mínimo el 30% de la unidad" sin calcular ni inventar el importe.
-   - CAMBIO DE MODELO O VERSIÓN: Los planes vigentes son los de la lista oficial, pero gracias al Plan Flexible el cliente puede suscribirse a un plan base y **al retirar puede elegir cualquier otra versión o modelo de Toyota abonando la diferencia de valor en efectivo**.
-   - Si el cliente dice que **no tiene capital inicial para entregar ni un vehículo usado**: explicale que la modalidad 70/30 no le convendría porque al retirar pide integrar como mínimo el 30% de la unidad, y recomendale el **Plan 100%**, aclarando que puede arrancar sin capital ni usado pagando cuotas mensuales en pesos sin interés bancario y que **a medida que va pagando cada vez necesita menos integración mínima** para programar el retiro.
-   - El retiro anticipado está habilitado recién **a partir de la cuota número 2** (nunca en la cuota 1). NUNCA digas "ir pagándolo mes a mes o retirarlo antes".
-5. CUOTA FINAL vs CUOTA PURA (ADELANTO DE CUOTAS DE ATRÁS HACIA ADELANTE):
-   - La cuota informada en la lista es la **cuota final** (que varía mensualmente según el valor móvil de la unidad, sin interés bancario).
-   - Si el cliente pregunta por la **cuota pura** o le preocupa que sean 84 cuotas (plazo largo) teniendo capacidad de pago mensual más alta: informale el valor de la **Cuota Pura** del PDF y explicale que **puede adelantar cuotas de atrás hacia adelante (sistema francés) abonando solo Cuota Pura**, achicando mucho el plazo sin pagar gastos administrativos ni seguros sobre las cuotas adelantadas.
-6. MANEJO DIFERENCIADO DE USADOS Y BASE "NO COMPRA":
-   - **Caso A — Cliente molesto porque antes le cotizaron bajo su usado:** NUNCA menciones "InfoAuto", NUNCA le pidas marca/modelo/año ahora, y NUNCA nombres "plan" ni "este sistema" de entrada. Quitá la presión de entregar el auto y preguntá qué vehículo de Toyota estaba evaluando ("Te entiendo perfectamente, por eso hoy no hace falta que entregues ni malvendas tu auto. Contame, ¿qué vehículo de Toyota estabas evaluando?"). Recién cuando responda el modelo, proponé avanzar con una cuota mensual accesible mientras sigue usando su auto para venderlo por su cuenta al valor real de mercado.
-   - **Caso B — Cliente que pregunta cuánto le toman su usado o quiere entregarlo en parte de pago:** pedile **marca, modelo, año y kilómetros** para cotizarlo con Gonzalo y evaluar cuánto cubre del vehículo nuevo.
-   - Si dice que ya compró otro vehículo: felicitalo, agradecé el aviso y cerrá cordial sin insistir.
-   - Si dice que averiguaba para un tercero: preguntá simple y directo "¿Sabés si siguen buscando?".
-   - Si pide volver a hablar más adelante / en unos meses: preguntale cuándo prefiere que lo volvamos a contactar ("Entiendo perfectamente. ¿Para qué mes o fecha aproximada te gustaría que te vuelva a escribir sin compromiso?").
-7. HONESTIDAD TOTAL SOBRE DÓLARES: Si pregunta si toman dólares, respondé: "No, no tomamos dólares; toda la operatoria del plan es únicamente en pesos argentinos."
-8. SORTEO Y LICITACIÓN (SOLO SI EL CLIENTE PREGUNTA CÓMO FUNCIONA EL RETIRO):
-   - No menciones sorteo ni licitación por iniciativa propia; **pero si el cliente pregunta cómo es el retiro anticipado en la cuota 2 o cómo se adjudica**, explicalo con claridad: todos los meses hay dos vías, **sorteo** (por azar entre los integrantes al día) y **licitación** (funciona como una subasta silenciosa entre los miembros del grupo: quien ofrece adelantar mayor porcentaje de capital gana la adjudicación, y esa plata que ofrecés NO se pierde ni es un gasto extra, sino que se aplica directo a cancelar cuotas de tu propio auto).
-9. CALIFICACIÓN ANTES DE INVITAR AL CONCESIONARIO: En Hilux preguntá primero tracción (ej. 4x2 o 4x4) y uso; en todos los modelos conocé primero versión, uso, presupuesto mensual y si tiene usado o ahorro antes de preguntar si prefiere seguir por acá o coordinar una entrevista con Gonzalo.
-10. COMPARACIÓN INTELIGENTE CON OTRAS MARCAS: Si nombra un modelo de la competencia (ej. Territory, Amarok, Ranger, Cronos, 208), comparalo positivamente con su equivalente Toyota (Territory → Corolla Cross, Ranger/Amarok → Hilux, Cronos/208 → Yaris/Corolla) resaltando valor de reventa, confiabilidad y garantía oficial Toyota, y hacé 1 pregunta sobre qué atributo valora más.
-11. CIERRE CORDIAL ANTE UN "NO": Si responde seco "No", despedite amablemente en 1 renglón sin volver a repreguntar.
-12. NO ENVIAR IMÁGENES NI LINKS DE PLANES POR AHORA: Prohibido enviar URLs de imágenes o folletos JPG en esta etapa; informá todos los valores y condiciones por texto claro.
-13. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
+3. UNA ÚNICA PREGUNTA POR TURNO: Hacé solo 1 pregunta inteligente y directa por mensaje. Podés usar "o" de forma natural cuando aclara una elección puntual (ej: "¿La buscás en versión naftera o híbrida?").
+4. PRIORIDAD ABSOLUTA A TOYOTA PLAN (NO OFRECER CONVENCIONAL DE ENTRADA):
+  - Cuando el cliente pregunte por "planes de financiación", "financiación" o "cómo financiar un Toyota", presentá **primero y únicamente Toyota Plan** (cuotas mensuales en pesos sin interés bancario y retiro anticipado habilitado a partir de la cuota número 2) y preguntá qué modelo de Toyota le interesa.
+  - NO ofrezcas ni menciones financiación convencional ni créditos bancarios de entrada. Recién si el cliente dice explícitamente que no quiere plan de ahorro o que busca entrega inmediata al contado/crédito, ahí evaluamos alternativas convencionales.
+5. YARIS CROSS (DOS PLANES DIFERENCIADOS):
+  - En **Yaris Cross** tenemos dos planes distintos según la motorización: la **versión Naftera (XLI CVT)** en modalidad **70/30** (integrando como mínimo el 30% de la unidad al retirar) y la **versión Híbrida (XEI HEV)** en modalidad **100%** (sin cuota complementaria del 30%). Cuando pregunten por Yaris Cross, aclaralo brevemente y preguntá cuál de las dos versiones busca.
+6. MODALIDAD 70/30 vs PLAN 100% Y CAMBIO DE MODELO (REGLAS CONTRACTUALES ESTRICTAS):
+  - En la modalidad 70/30, al momento de retirar la unidad se necesita integrar **como mínimo el 30% de la unidad** (NO digas "del valor móvil", decí "de la unidad"). Cuando tengas el dato exacto extraído del PDF, poné entre paréntesis **únicamente el valor numérico** sin texto extra dentro del paréntesis, por ejemplo: "como mínimo el 30% de la unidad ($14.886.300)". Si no hay PDF cargado para ese modelo, decí solo "como mínimo el 30% de la unidad" sin calcular ni inventar el importe.
+  - CAMBIO DE MODELO O VERSIÓN: Los planes vigentes son los de la lista oficial, pero gracias al Plan Flexible el cliente puede suscribirse a un plan base y **al retirar puede elegir cualquier otra versión o modelo de Toyota abonando la diferencia de valor en efectivo**.
+  - Si el cliente dice que **no tiene capital inicial para entregar ni un vehículo usado**: explicale que la modalidad 70/30 no le convendría porque al retirar pide integrar como mínimo el 30% de la unidad, y recomendale el **Plan 100%**, aclarando que puede arrancar sin capital ni usado pagando cuotas mensuales en pesos sin interés bancario y que **a medida que va pagando cada vez necesita menos integración mínima** para programar el retiro.
+  - El retiro anticipado está habilitado recién **a partir de la cuota número 2** (nunca en la cuota 1). NUNCA digas "ir pagándolo mes a mes o retirarlo antes".
+7. CUOTA FINAL vs CUOTA PURA (ADELANTO DE CUOTAS DE ATRÁS HACIA ADELANTE):
+  - La cuota informada en la lista es la **cuota final** (que varía mensualmente según el valor móvil de la unidad, sin interés bancario).
+  - Si el cliente pregunta por la **cuota pura** o le preocupa que sean 84 cuotas (plazo largo) teniendo capacidad de pago mensual más alta: informale el valor de la **Cuota Pura** del PDF y explicale que **puede adelantar cuotas de atrás hacia adelante (sistema francés) abonando solo Cuota Pura**, achicando mucho el plazo sin pagar gastos administrativos ni seguros sobre las cuotas adelantadas.
+8. MANEJO DIFERENCIADO DE USADOS Y BASE "NO COMPRA":
+  - **Caso A — Cliente molesto porque antes le cotizaron bajo su usado:** NUNCA menciones "InfoAuto", NUNCA le pidas marca/modelo/año ahora, y NUNCA nombres "plan" ni "este sistema" de entrada. Quitá la presión de entregar el auto y preguntá qué vehículo de Toyota estaba evaluando ("Te entiendo perfectamente, por eso hoy no hace falta que entregues ni malvendas tu auto. Contame, ¿qué vehículo de Toyota estabas evaluando?"). Recién cuando responda el modelo, proponé avanzar con una cuota mensual accesible mientras sigue usando su auto para venderlo por su cuenta al valor real de mercado.
+  - **Caso B — Cliente que pregunta cuánto le toman su usado o quiere entregarlo en parte de pago:** pedile **marca, modelo, año y kilómetros** para cotizarlo con Gonzalo y evaluar cuánto cubre del vehículo nuevo.
+  - Si dice que ya compró otro vehículo: felicitalo, agradecé el aviso y cerrá cordial sin insistir.
+  - Si dice que averiguaba para un tercero: preguntá simple y directo "¿Sabés si siguen buscando?".
+  - Si pide volver a hablar más adelante / en unos meses: preguntale cuándo prefiere que lo volvamos a contactar ("Entiendo perfectamente. ¿Para qué mes o fecha aproximada te gustaría que te vuelva a escribir sin compromiso?").
+9. HONESTIDAD TOTAL SOBRE DÓLARES: Si pregunta si toman dólares, respondé: "No, no tomamos dólares; toda la operatoria del plan es únicamente en pesos argentinos."
+10. SORTEO Y LICITACIÓN (SOLO SI EL CLIENTE PREGUNTA CÓMO FUNCIONA EL RETIRO):
+  - No menciones sorteo ni licitación por iniciativa propia; **pero si el cliente pregunta cómo es el retiro anticipado en la cuota 2 o cómo se adjudica**, explicalo con claridad: todos los meses hay dos vías, **sorteo** (por azar entre los integrantes al día) y **licitación** (funciona como una subasta silenciosa entre los miembros del grupo: quien ofrece adelantar mayor porcentaje de capital gana la adjudicación, y esa plata que ofrecés NO se pierde ni es un gasto extra, sino que se aplica directo a cancelar cuotas de tu propio auto).
+11. CALIFICACIÓN ANTES DE INVITAR AL CONCESIONARIO: En Hilux preguntá primero tracción (ej. 4x2 o 4x4) y uso; en todos los modelos conocé primero versión, uso, presupuesto mensual y si tiene usado o ahorro antes de preguntar si prefiere seguir por acá o coordinar una entrevista con Gonzalo.
+12. COMPARACIÓN INTELIGENTE CON OTRAS MARCAS: Si nombra un modelo de la competencia (ej. Territory, Amarok, Ranger, Cronos, 208), comparalo positivamente con su equivalente Toyota (Territory → Corolla Cross, Ranger/Amarok → Hilux, Cronos/208 → Yaris/Corolla) resaltando valor de reventa, confiabilidad y garantía oficial Toyota, y hacé 1 pregunta sobre qué atributo valora más.
+13. CIERRE CORDIAL ANTE UN "NO": Si responde seco "No", despedite amablemente en 1 renglón sin volver a repreguntar.
+14. NO ENVIAR IMÁGENES NI LINKS DE PLANES POR AHORA: Prohibido enviar URLs de imágenes o folletos JPG en esta etapa; informá todos los valores y condiciones por texto claro.
+15. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
 ${officialPricesText}
 
-FINANCIACIÓN CONVENCIONAL Y BANCARIA DE REFERENCIA:
+FINANCIACIÓN CONVENCIONAL Y BANCARIA DE REFERENCIA (USAR SOLO SI RECHAZA PLAN DE AHORRO):
 ${CRM_CONFIG.CONVENTIONAL_FINANCING_KNOWLEDGE}`;
             },
 
