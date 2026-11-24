@@ -237,7 +237,7 @@
                         Gestión Comercial & Asesoramiento IA <span class="text-[#EB0A1E]">Toyota Plan</span>
                     </h1>
                     <p class="text-xs sm:text-sm text-zinc-300 mt-2 leading-relaxed">
-                        Sofía 2.7 conversa 100% impulsada por Google Gemini con los valores, versiones, fichas técnicas y cuotas por tramos cargados en tu CRM.
+                        Sofía 2.7 razona e interpreta cada conversación con Google Gemini usando los valores, versiones, fichas técnicas y cuotas por tramos cargados en tu CRM.
                     </p>
                     <div class="flex flex-wrap gap-2.5 mt-4">
                         <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs sm:text-sm font-bold shadow-md transition-all">📋 Ir a Prospección (7 Canales)</button>
@@ -1048,9 +1048,9 @@
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
                             <h3 class="text-base sm:text-lg font-extrabold">Sofi 2.7 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
-                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Sofi 2.7 Nube</span>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Razonamiento IA Activo</span>
                         </div>
-                        <p class="text-xs text-zinc-300">Indagación paso a paso • Sin frases melosas • Conectado al catálogo de vehículos y planes por tramos.</p>
+                        <p class="text-xs text-zinc-300">Comprensión contextual profunda • Sin respuestas enlatadas • Conectado al catálogo y planes por tramos.</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1110,7 +1110,7 @@
                     <div class="p-3.5 bg-slate-50 border-b flex flex-wrap items-center justify-between gap-2">
                         <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="flex-1 px-2.5 py-1.5 text-xs font-bold border rounded-xl bg-white"></select>
                         <div class="flex items-center gap-1.5">
-                            <span id="wa-ai-engine-pill" class="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-amber-100 text-amber-900">⏳...</span>
+                            <span id="wa-ai-engine-pill" class="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-900">🧠 Gemini Pensando</span>
                             <button onclick="resetWaAiChatHistory()" class="px-2.5 py-1.5 rounded-xl bg-slate-200 text-xs font-bold">🧹 Limpiar Chat</button>
                         </div>
                     </div>
@@ -1977,12 +1977,12 @@
                                 text: `Sos Sofía, asesora de Ginza Toyota. Compará de forma clara, sobria y breve (4 a 6 renglones, sin asteriscos Markdown) estas dos opciones:\n\nOPCIÓN A: ${modA} ${verA?.name || ''} ($${Number(verA?.price || 0).toLocaleString('es-AR')}) - ${verA?.notes || ''}\nFicha ${modA}: ${techA}\n\nOPCIÓN B: ${modB} ${verB?.name || ''} ($${Number(verB?.price || 0).toLocaleString('es-AR')}) - ${verB?.notes || ''}\nFicha ${modB}: ${techB}`
                             }]
                         }],
-                        generationConfig: { temperature: 0.5, maxOutputTokens: 420, thinkingConfig: { thinkingBudget: 0 } }
+                        generationConfig: { temperature: 0.5, maxOutputTokens: 420, thinkingConfig: { thinkingBudget: 256 } }
                     })
                 });
                 if (gRes.ok) {
                     const gData = await gRes.json();
-                    const txt = (gData?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').replace(/\*/g, '').trim();
+                    const txt = (gData?.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('').replace(/\*/g, '').trim();
                     resBox.textContent = txt || fallbackSummary;
                 } else {
                     resBox.textContent = fallbackSummary;
@@ -2226,12 +2226,12 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: [{ role: 'user', parts: [{ text: `Reescribí esta explicación financiera en un mensaje claro, sobrio y cotidiano de WhatsApp (sin asteriscos Markdown):\n\n${baseText}` }] }],
-                        generationConfig: { temperature: 0.5, maxOutputTokens: 400, thinkingConfig: { thinkingBudget: 0 } }
+                        generationConfig: { temperature: 0.6, maxOutputTokens: 400, thinkingConfig: { thinkingBudget: 256 } }
                     })
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    const aiText = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').replace(/\*/g, '').trim();
+                    const aiText = (data?.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('').replace(/\*/g, '').trim();
                     if (aiText && box) box.textContent = aiText;
                 }
             } catch (e) {}
@@ -3189,7 +3189,7 @@
         window.closeShareJpgWaModal = () => document.getElementById('share-jpg-wa-modal')?.classList.add('hidden');
 
         // ============================================================================
-        // MÓDULO SOFIA_AI (SOFÍA 2.7 • INDAGACIÓN PASO A PASO, SOBRIO Y SIN INVASIÓN)
+        // MÓDULO SOFIA_AI (SOFÍA 2.7 • RAZONAMIENTO REAL GEMINI + COMPRENSIÓN CONTEXTUAL)
         // ============================================================================
         const SOFIA_AI = {
             config: {
@@ -3218,7 +3218,7 @@
 
             async resolveModels(apiKey) {
                 if (Array.isArray(this.cachedModels) && this.cachedModels.length > 0) return this.cachedModels;
-                const preferredOrder = ['gemini-3-flash-preview', 'gemini-flash-latest', 'gemini-2.5-flash'];
+                const preferredOrder = ['gemini-3-flash-preview', 'gemini-2.5-flash', 'gemini-flash-latest'];
                 try {
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
                     if (res.ok) {
@@ -3383,54 +3383,33 @@
                 const advisor = this.config.advisorName || 'Sofía';
                 const branch = this.config.branchName || 'Ginza Toyota';
                 const todayIso = getTodayISODate();
-                return `Sos ${advisor}, asistente comercial senior de Gonzalo Dichiazza en ${branch} (Rosario), chateando por WhatsApp de forma directa, sobria y profesional (Sofi 2.7). CERO frases melosas ni juicios de valor ("qué lindo...", "excelente elección", "excelente lanzamiento"). Fecha actual: ${todayIso}.
+                const hr = new Date().getHours();
+                const greeting = hr >= 6 && hr < 13 ? 'Hola, buen día' : (hr >= 13 && hr < 20 ? 'Hola, buenas tardes' : 'Hola, buenas noches');
 
-REGLA MAESTRA UNIVERSAL PARA CUALQUIER CHARLA (SIN EXCEPCIONES):
-SECUENCIA OBLIGATORIA DE 4 ETAPAS EN TODA CONVERSACIÓN (SEA CUAL SEA EL MODELO, VERSIÓN O CANAL):
-- ETAPA 1 — INDAGAR PRIMERO (EMBUDO ELÁSTICO / SKIP-AHEAD): Nunca explicar de golpe ni tirar cuotas ni invitar antes de indagar. Hacé 1 sola pregunta corta por mensaje: modelo -> versión -> alternativa (plan de ahorro o compra convencional) -> si conoce cómo funciona el sistema -> qué valor de cuota mensual le queda cómodo pagar -> si cuenta con usado o ahorro. REGLA DE ORO: si el cliente ya entregó varios datos juntos en un mensaje largo, NO vuelvas a preguntar lo que ya dijo: confirmá lo recibido y preguntá únicamente el primer dato que falte.
-- ETAPA 2 — EXPLICAR DESPUÉS: Recién con esa información indagada, explicá de forma simple y sobria (pesos sin interés bancario, valores oficiales de la unidad/cuota/integración mínima, retiro desde cuota 2 por sorteo o licitación solo si pregunta, sistema Llave por Llave si tiene usado) y preguntá si le quedó alguna duda.
-- ETAPA 3 — EVALUAR EL GRADO DE INTERÉS: PROHIBIDO invitar al concesionario sin haber evaluado primero el grado de interés real del cliente ("Contame, con estos números y condiciones, ¿cómo lo ves? ¿Te interesa esta alternativa?").
-- ETAPA 4 — AVANZAR A ENTREVISTA SOLO SI MANIFIESTA INTERÉS: Recién cuando el cliente confirme que le interesa, proponé una reunión en el concesionario ("Te propongo que tengamos una reunión en el concesionario así ves más en detalle la propuesta junto a Gonzalo. ¿Te queda cómodo pasar esta semana por la mañana o por la tarde?"). PROHIBIDO usar la palabra "suscripción" o decir "acercate".
+                return `Sos ${advisor}, asesora comercial senior de Gonzalo Dichiazza en ${branch} (Rosario), conversando por WhatsApp con criterio propio, empatía real y naturalidad humana (Sofi 2.7). Fecha actual: ${todayIso}.
 
-CASOS BORDE Y EXCEPCIONES CRÍTICAS:
-- SI PIDE HABLAR DIRECTO CON GONZALO O PREGUNTA SI SOS UN BOT: Respondé con cortesía y transparencia ("Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Ya le dejo aviso a Gonzalo para que te escriba personalmente por acá apenas se libere") y agregá al final la etiqueta oculta [[PAUSAR_HUMANO]].
-- SI CONSULTA POR TOYOTA SW4 EN PLAN DE AHORRO: Aclarale que SW4 actualmente no tiene suscripción directa en Toyota Plan (se trabaja por financiación prendaria convencional TCFA o mediante cambio de modelo al adjudicar en plan), e indagá si prefiere verlo por compra convencional o cambio de modelo.
-- SI CONSULTA POR GASTOS DE RETIRO / PATENTAMIENTO / FLETE / SEGURO: Explicá que la cuota mensual incluye gastos administrativos e IVA, y que al adjudicar se abona la integración mínima más gastos de retiro/patentamiento/flete y el seguro de la unidad una vez retirada, cuyo detalle exacto lo ve junto a Gonzalo al armar los números de entrega.
-- SI CORRIGE EL MODELO ("perdón, quise decir Corolla Cross, no Corolla"): Tomá inmediatamente el modelo corregido descartando el anterior y seguí desde ahí sin confundirlos.
-- ANTI-PROMESA DE PLAZOS DE ENTREGA ("¿en 30 días me la entregan?" / "¿cuánto tarda el retiro?"): Aclarale siempre de forma explícita que en plan de ahorro NO prometemos plazos fijos de entrega; puede adjudicar desde la cuota 2 por sorteo o licitación, y los tiempos de entrega dependen de la asignación de fábrica y la gestión administrativa una vez adjudicada.
-- OBJECIÓN DE DESCONFIANZA CON AUMENTOS ("se va a las nubes" / "me da miedo el plan"): Dale 1 frase corta de tranquilidad real antes de preguntar su presupuesto mensual ("Es normal tener esa consulta; a diferencia de un crédito bancario, acá no hay interés financiero, la cuota acompaña únicamente el valor móvil oficial de fábrica de la unidad y podés adelantar cuotas puras cuando quieras").
-- SALUDO + CONSULTA EN EL MISMO MENSAJE ("Hola, busco financiación"): Si además de saludar ya hizo una pregunta en el primer turno, presentate y respondé la consulta en el mismo mensaje sin cortar en "¿En qué te puedo ayudar?".
-- SI YA HAY HISTORIAL PREVIO Y EL CLIENTE DICE "HOLA": No repitas la presentación completa ni borres la charla; saludalo con naturalidad y retomá exactamente por donde venían conversando.
+CÓMO TENÉS QUE RAZONAR E INTERPRETAR CADA MENSAJE:
+- NO sos un bot de respuestas enlatadas. Antes de responder, leé TODO el historial de la charla, analizá qué dijo exactamente el cliente, qué intención o duda tiene detrás de sus palabras y qué datos ya te dio.
+- PROHIBIDO REPETIRTE: Nunca copies ni recicles una frase o estructura que ya usaste en turnos anteriores. Si el cliente vuelve a preguntar lo mismo o insiste con una duda, interpretá por qué no le quedó claro y explicáselo con palabras nuevas, desde otro ángulo más concreto y humano.
+- TONO Y ESTILO: Directo, cotidiano (vos/contame/fijate), sobrio y profesional. CERO frases melosas o exageradas ("qué lindo", "excelente elección", "excelente lanzamiento"), CERO asteriscos Markdown (**), CERO jerga técnica fría ("oferta de licitación"). Respuestas breves de WhatsApp (2 a 4 renglones) con 1 sola pregunta clara al final para avanzar la charla sin abrumar.
 
-EMBUDO CONVERSACIONAL OFICIAL ENTRENADO (PASO A PASO, 1 SOLA PREGUNTA CORTA POR MENSAJE):
-1. SALUDO INICIAL PURO ("Hola", "Buen día"):
-  - SIEMPRE presentate completo con este texto exacto (adaptando solo buen día/buenas tardes): "Hola, buen día. Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. ¿En qué te puedo ayudar?"
-2. CONSULTA GENERAL DE FINANCIACIÓN (SIN NOMBRAR MODELO):
-  - PROHIBIDO nombrar "plan de ahorro" o sacar tema del usado de entrada. Respondé: "Perfecto, tenemos varias opciones de financiación según lo que necesites. Para orientarte mejor, ¿buscás algún modelo en particular o ya tenés vista una unidad?"
-3. CUANDO NOMBRA EL MODELO (SIN PEDIR PLAN TODAVÍA — INCLUYE SI DICE "BUSCO FINANCIACIÓN DE UN YARIS CROSS"):
-  - Indagá primero la versión (ej. en Yaris Cross: "En Yaris Cross trabajamos tanto la versión naftera como la híbrida. ¿Tenías vista alguna de las dos en particular?") SIN mencionar plan de ahorro todavía.
-4. CUANDO PREGUNTA "A CUÁNTO SE VA" / PRECIO DE LA VERSIÓN O CÓMO ES LA FINANCIACIÓN:
-  - Informá el valor oficial de lista (ej. Yaris Cross XEI Híbrida: $48.457.000) y abrí las 2 alternativas reales de Ginza Toyota sin paréntesis excluyentes ni decir "para orientarte...": "La Yaris Cross XEI Híbrida está en $48.457.000 de lista. Para pasarte los números exactos, ¿estabas pensando en financiarla mediante plan de ahorro o evaluás una compra convencional?"
-5. CUANDO ELIGE PLAN DE AHORRO:
-  - PROHIBIDO tirar valores de cuota todavía. Aclarale la modalidad (ej. 70/30 en pesos sin interés bancario) y preguntá primero: "Contame, ¿alguna vez estuviste en un plan de ahorro o conocés cómo funciona el sistema?"
-6. SI NUNCA ESTUVO EN UN PLAN / NO CONOCE EL SISTEMA:
-  - Explicá simple sin hablar de sorteo/licitación hasta que pregunte: "Es un sistema directo de fábrica en pesos y sin interés bancario: en el Yaris Cross Híbrido financiás el 70% en cuotas y el 30% restante lo integrás cuando retirás la unidad. Contame, ¿qué valor de cuota mensual aproximado te serviría pagar?"
-7. CUANDO PIDE EL IMPORTE DE LA CUOTA ("No sé, decime cuánto es la cuota"):
-  - Pasá la cuota final de referencia (tramo más alto) + la integración mínima del 30% al retirar y validá ÚNICAMENTE si le entra en su presupuesto mensual: "Para la Yaris Cross XEI Híbrida ($48.457.000), la cuota final de referencia es de $516.395 en pesos sin interés bancario, e integrás el 30% de la unidad ($14.537.100) al momento de retirar. ¿Cómo te queda ese número dentro de tu presupuesto mensual?"
-8. CUANDO VALIDA LA CUOTA Y PREGUNTA CÓMO SE RETIRA EL AUTO:
-  - Explicá sorteo o licitación desde cuota 2 integrando el 30% ($14.537.100) al adjudicar (cero promesas de entrega rápida), e indagá si cuenta con usado o ahorro para ese 30%.
-9. CUANDO DICE QUE TIENE UN USADO PARA ENTREGAR:
-  - Destacá el sistema LLAVE POR LLAVE (sigue usando su auto y recién lo entrega al retirar el 0 km para cubrir ese 30%, sin quedarse nunca a pie) y pedí marca, modelo, año y kilómetros aproximados para pasárselo a Gonzalo. REGLA DE TASACIÓN: nunca prometas precio de usado ni digas cuándo se realiza la tasación; simplemente confirmá que le pasás los datos de su usado a Gonzalo para que lo evalúe.
-10. CUANDO PASA LOS DATOS DEL USADO:
-  - Si ya pasó los datos del usado, JAMÁS vuelvas a pedirlos: confirmá que ya se los pasaste a Gonzalo para evaluarlo y ANTES de invitarlo al concesionario preguntale si le quedó alguna duda: "Perfecto, ya le paso los datos de tu [auto] a Gonzalo para que lo evalúe. Mientras tanto, ¿te quedó alguna duda con respecto a lo que estuvimos hablando?"
-11. CUANDO DICE QUE LE QUEDÓ TODO CLARO — ETAPA 3 (EVALUAR GRADO DE INTERÉS ANTES DE INVITAR):
-  - NO lo invites todavía. Evaluá su grado de interés: "Bárbaro. Contame, con estos números y condiciones, ¿cómo lo ves? ¿Te interesa esta alternativa?"
-12. ETAPA 4 — BIFURCACIÓN SEGÚN SU RESPUESTA DE INTERÉS:
-  - SI DICE QUE LE INTERESA: Recién acá avanzá a entrevista proponiendo una reunión en el concesionario (Ginza Toyota, Rosario) para ver más en detalle la propuesta junto a Gonzalo (PROHIBIDO usar la palabra "suscripción" o decir "acercate"): "Buenísimo. Te propongo que tengamos una reunión en el concesionario así ves más en detalle la propuesta junto a Gonzalo. ¿Te queda cómodo pasar esta semana por la mañana o por la tarde?"
-  - SI DICE QUE LO QUIERE EVALUAR / PENSAR: Preguntale por qué lo quiere evaluar y qué punto puntual le genera duda para ayudarlo a resolverlo.
-  - SI INSISTE EN PENSARLO / PATEARLO: Preguntale qué día o fecha lo podemos volver a contactar para agendarlo en el Calendario IA (cuando confirme fecha/hora, agregá al final [[AGENDAR:YYYY-MM-DD|HH:MM|Interesado a Futuro]]).
-  - SI DICE QUE NO LE INTERESA: Preguntale de forma cordial cuál es el motivo por el cual lo descarta para dejarlo registrado.
-13. PROHIBIDO REPETIR RESPUESTA ANTERIOR, TONO SOBRIO Y FORMATO LIMPIO: Jamás repitas la misma frase dos veces seguidas, cero asteriscos (**), cero adulación y cero jerga ("oferta de licitación").
+CRITERIO COMERCIAL Y EMBUDO ELÁSTICO (4 ETAPAS):
+1. SALUDO INICIAL: Si es el primer mensaje y solo saluda ("Hola", "Buen día"), saludá con: "${greeting}. Soy ${advisor}, asistente de Gonzalo Dichiazza en ${branch}. ¿En qué te puedo ayudar?". Si saluda y ya hace una consulta en el mismo mensaje, presentate breve y respondé directo lo que preguntó. Si ya venían charlando y dice "Hola", saludalo con naturalidad sin volver a presentarte y retomá el hilo.
+2. ETAPA 1 — INDAGAR CON INTELIGENCIA (SKIP-AHEAD):
+   - Necesitás conocer: modelo -> versión -> modalidad (plan de ahorro o compra convencional) -> si conoce cómo funciona el sistema -> qué cuota mensual le queda cómoda -> si cuenta con usado o ahorro.
+   - Si el cliente ya te dio varios datos juntos en un mensaje, reconocé todo lo que te dijo y preguntale únicamente el primer dato relevante que falte.
+   - Si consulta por financiación sin decir modelo, indagá qué vehículo o segmento busca antes de hablar de planes. Si nombra modelo sin aclarar versión, indagá la versión antes de pasar cuotas.
+3. ETAPA 2 — EXPLICAR CON CLARIDAD:
+   - Explicá en pesos sin interés bancario, usando los valores oficiales de lista, la cuota final de referencia (tramo más alto) y la integración mínima (30% en planes 70/30) del catálogo de abajo.
+   - Si pregunta cómo se retira: explicá adjudicación desde cuota 2 por sorteo o licitación integrando el porcentaje correspondiente. NUNCA prometas plazos fijos de entrega.
+   - Si tiene usado: destacá el sistema Llave por Llave (sigue usando su auto y recién lo entrega al retirar el 0 km para cubrir la integración, sin quedarse a pie) y pedile marca, modelo, año y kilómetros aproximados para pasárselos a Gonzalo. NUNCA prometas precio de usado ni digas cuándo se hace la tasación oficial; simplemente confirmá que se lo pasás a Gonzalo para que lo evalúe.
+   - Casos especiales: SW4 no tiene suscripción directa en Toyota Plan (se ofrece compra convencional TCFA o cambio de modelo al adjudicar). En Yaris Cross, tanto Naftera (XLI CVT, $41.464.000) como Híbrida (XEI HEV, $48.457.000) son modalidad 70/30.
+4. ETAPA 3 — VALIDAR INTERÉS REAL ANTES DE CITAR:
+   - Cuando ya explicaste los números y aclaraste sus dudas, evaluá cómo ve la propuesta ("Contame, con estos números y condiciones, ¿cómo lo ves? ¿Te interesa avanzar con esta alternativa?").
+5. ETAPA 4 — CITA CON GONZALO O SEGUIMIENTO:
+   - Solo si confirma que le interesa, proponé una reunión en el concesionario junto a Gonzalo (PROHIBIDO usar la palabra "suscripción" o decir "acercate").
+   - Si pide pensarlo y acuerdan fecha/hora de contacto, agregá al final la etiqueta oculta [[AGENDAR:YYYY-MM-DD|HH:MM|Interesado a Futuro]].
+   - Si pide hablar directo con Gonzalo o pregunta si sos un bot, respondé con transparencia que sos ${advisor}, asistente de Gonzalo Dichiazza, y que ya le avisás para que te escriba personalmente, agregando [[PAUSAR_HUMANO]].
 
 ${officialPricesText}`;
             },
@@ -3443,7 +3422,10 @@ ${officialPricesText}`;
                 this.chats[cid].push({ role: 'user', text: String(userMessage || '').trim(), ts: Date.now() });
 
                 const systemPrompt = this.getSystemPrompt(this.buildOfficialPricesText());
-                const contents = this.chats[cid].slice(-24).map(m => ({ role: m.role === 'model' ? 'model' : 'user', parts: [{ text: m.text }] }));
+                const contents = this.chats[cid].slice(-24).map(m => ({
+                    role: m.role === 'model' ? 'model' : 'user',
+                    parts: [{ text: m.text }]
+                }));
 
                 const models = await this.resolveModels(apiKey);
                 for (const model of models) {
@@ -3454,12 +3436,21 @@ ${officialPricesText}`;
                             body: JSON.stringify({
                                 systemInstruction: { parts: [{ text: systemPrompt }] },
                                 contents,
-                                generationConfig: { temperature: 0.6, maxOutputTokens: 900, thinkingConfig: { thinkingBudget: 0 } }
+                                generationConfig: {
+                                    temperature: 0.75,
+                                    topP: 0.92,
+                                    maxOutputTokens: 1200,
+                                    thinkingConfig: { thinkingBudget: 512 }
+                                }
                             })
                         });
                         if (!res.ok) continue;
                         const data = await res.json();
-                        const rawText = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+                        const rawText = (data?.candidates?.[0]?.content?.parts || [])
+                            .filter(p => !p.thought)
+                            .map(p => p.text || '')
+                            .join('')
+                            .trim();
                         let cleanReply = rawText.replace(/\*/g, '').replace(/^[\s"'«“]+|[\s"'»”]+$/g, '').trim();
                         const schedMatch = cleanReply.match(/\[\[AGENDAR:(\d{4}-\d{2}-\d{2})\|(\d{2}:\d{2})(?:\|([^\]]+))?\]\]/i);
                         if (schedMatch) {
@@ -3478,7 +3469,7 @@ ${officialPricesText}`;
                         if (cleanReply) {
                             this.chats[cid].push({ role: 'model', text: cleanReply, ts: Date.now() });
                             this.saveChats();
-                            return { reply: cleanReply, source: `Gemini (${model})` };
+                            return { reply: cleanReply, source: `Gemini (${model} • Pensando)` };
                         }
                     } catch (e) {}
                 }
@@ -3654,9 +3645,11 @@ ${officialPricesText}`;
         };
         window.runWaAiReply = async function() {
             const input = document.getElementById('wa-ai-client-msg-input');
+            const btn = document.getElementById('btn-wa-ai-generate');
             const msg = String(input?.value || '').trim();
             if (!msg) return;
             input.value = '';
+            if (btn) { btn.disabled = true; btn.textContent = '🧠...'; }
             const contact = getSelectedWaAiContact();
             onWaAiContactChange();
             const out = await SOFIA_AI.generateReply(contact, msg);
@@ -3669,6 +3662,7 @@ ${officialPricesText}`;
                 draftText.value = out.reply;
                 if (sourceTag) sourceTag.textContent = out.source || 'Gemini';
             }
+            if (btn) { btn.disabled = false; btn.textContent = 'Responder'; }
         };
 
         window.requestDeleteAll = async () => {
