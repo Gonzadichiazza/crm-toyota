@@ -2922,14 +2922,25 @@
                     let effectiveApiKey = String(this.config.geminiApiKey || '').trim();
                     if (!effectiveApiKey) {
                         try {
-                            const prevRes = await fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`);
-                            const prevBrain = await prevRes.json();
-                            if (prevBrain && prevBrain.geminiApiKey) {
-                                effectiveApiKey = String(prevBrain.geminiApiKey).trim();
+                            const [prevRes, keyRes] = await Promise.all([
+                                fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`),
+                                fetch(`${FIREBASE_DB_URL}/ai_keys/${encodeURIComponent(syncRoom)}.json`)
+                            ]);
+                            const prevBrain = await prevRes.json().catch(() => null);
+                            const keyBackup = await keyRes.json().catch(() => null);
+                            const recoveredKey = String(prevBrain?.geminiApiKey || keyBackup?.geminiApiKey || '').trim();
+                            if (recoveredKey) {
+                                effectiveApiKey = recoveredKey;
                                 this.config.geminiApiKey = effectiveApiKey;
                                 this.saveConfig();
                             }
                         } catch (e) {}
+                    } else {
+                        fetch(`${FIREBASE_DB_URL}/ai_keys/${encodeURIComponent(syncRoom)}.json`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ geminiApiKey: effectiveApiKey, updatedAt: Date.now() })
+                        }).catch(() => {});
                     }
 
                     await fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`, {
