@@ -601,7 +601,7 @@
                 </div>
             </div>
             <div id="vehicle-price-chart-box" class="p-4 rounded-2xl bg-slate-50 border"></div>
-            <div class="overflow-x-auto border rounded-xl"><table class="w-full text-left text-sm"><thead><tr class="bg-slate-50 border-b text-xs uppercase text-slate-500"><th class="p-3">Período</th><th class="p-3">Vehículo</th><th class="p-3">Valor Unidad</th><th class="p-3">Tramos</th><th class="p-3">Cuota Más Alta</th><th class="p-3">Extraord./Integ.</th><th class="p-3">Dif.</th><th class="p-3">Acciones</th></tr></thead><tbody id="plans-history-body" class="divide-y divide-slate-100"></tbody></table></div>
+            <div class="overflow-x-auto border rounded-xl"><table class="w-full text-left text-sm"><thead><tr class="bg-slate-50 border-b text-xs uppercase text-slate-500"><th class="p-3">Período</th><th class="p-3">Vehículo</th><th class="p-3">Valor Unidad / Financia</th><th class="p-3">Tramos Diferenciados</th><th class="p-3">Cuota Más Alta (Sofía)</th><th class="p-3">Cuota Pura</th><th class="p-3">Extraord. / Integ. Mín.</th><th class="p-3">Acciones</th></tr></thead><tbody id="plans-history-body" class="divide-y divide-slate-100"></tbody></table></div>
             <div id="plans-empty-state" class="hidden p-6 text-center text-slate-400 text-xs">Sin PDFs cargados aún.</div>
         </div>
     </main>
@@ -838,6 +838,84 @@
 
     <!-- MODALES OPERATIVOS -->
     <div id="plan-files-modal" class="fixed inset-0 bg-slate-900/60 z-[65] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-5"><div class="flex justify-between items-center border-b pb-3 mb-4"><h3 id="plan-files-modal-title" class="font-bold">Archivos</h3><button onclick="closePlanFilesModal()">✕</button></div><div id="plan-files-modal-actions" class="mb-3"></div><div id="plan-files-modal-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div></div></div>
+    <div id="edit-plan-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[72] hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[92vh] overflow-y-auto p-5 space-y-4 border border-slate-200">
+            <div class="flex items-center justify-between border-b pb-3">
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900">✏️ Editar Valores Oficiales del Plan (Sincroniza con Sofía 2.7)</h3>
+                    <p class="text-xs text-slate-500">Corregí cualquier tramo, cuota pura o integración mínima y se actualiza directo en el cerebro de Sofía.</p>
+                </div>
+                <button onclick="closeEditPlanModal()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-xs font-bold">✕</button>
+            </div>
+            <input type="hidden" id="ep-id">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Vehículo</label>
+                    <input type="text" id="ep-vehicle" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Modalidad</label>
+                    <select id="ep-modality" onchange="recalcEditPlanDerived()" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl bg-white">
+                        <option value="70/30">70/30</option>
+                        <option value="100%">100%</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Período</label>
+                    <input type="text" id="ep-period" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Valor de la Unidad ($)</label>
+                    <input type="number" id="ep-vehicle-val" oninput="recalcEditPlanDerived()" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Monto que Financia ($)</label>
+                    <input type="number" id="ep-financed-val" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                </div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                <div class="text-[11px] font-extrabold uppercase text-slate-700">Cuotas Diferenciadas por Tramos (La más alta la informa Sofía)</div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 mb-1">Cuota 1 (opc.)</label>
+                        <input type="number" id="ep-c1" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-lg bg-white tabular-nums">
+                    </div>
+                    <div>
+                        <label id="ep-t1-lbl" class="block text-[10px] font-bold text-slate-500 mb-1">Tramo 1 (2 a 18)</label>
+                        <input type="number" id="ep-t1" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-lg bg-white tabular-nums">
+                    </div>
+                    <div>
+                        <label id="ep-t2-lbl" class="block text-[10px] font-bold text-slate-500 mb-1">Tramo 2 (19 a 24)</label>
+                        <input type="number" id="ep-t2" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-lg bg-white tabular-nums">
+                    </div>
+                    <div>
+                        <label id="ep-t3-lbl" class="block text-[10px] font-bold text-slate-500 mb-1">Tramo 3 (25 a 84)</label>
+                        <input type="number" id="ep-t3" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-lg bg-white tabular-nums">
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Cuota Pura ($)</label>
+                    <input type="number" id="ep-pure" oninput="recalcEditPlanDerived()" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Cuotas Integ. Mín. (100%)</label>
+                    <input type="number" id="ep-integ-months" value="24" min="1" max="84" oninput="recalcEditPlanDerived()" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Extraord. / Integ. Mín. ($)</label>
+                    <input type="number" id="ep-extra" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 pt-2 border-t">
+                <button onclick="closeEditPlanModal()" class="px-4 py-2 text-xs font-bold text-slate-600">Cancelar</button>
+                <button onclick="saveEditedPlanRecord()" class="px-5 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs font-extrabold">💾 Guardar y Sincronizar Sofía</button>
+            </div>
+        </div>
+    </div>
     <div id="share-jpg-wa-modal" class="fixed inset-0 bg-slate-900/60 z-[70] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-md p-5 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold">📲 Compartir JPG</h3><button onclick="closeShareJpgWaModal()">✕</button></div><p id="share-jpg-wa-filename" class="text-xs text-slate-500"></p><input type="text" id="share-jpg-search" oninput="renderShareJpgContactsList()" placeholder="Buscar cliente..." class="w-full px-3 py-2 text-sm border rounded-xl"><div id="share-jpg-contacts-list" class="max-h-40 overflow-y-auto border rounded-xl divide-y"></div></div></div>
     <div id="edit-modal" class="fixed inset-0 bg-slate-900/50 z-[60] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-lg p-5 space-y-3"><div class="flex justify-between items-center border-b pb-2"><h3 class="font-bold">Editar Contacto</h3><button onclick="closeEditModal()">✕</button></div><input type="hidden" id="edit-id"><div class="grid grid-cols-2 gap-3"><input type="text" id="edit-name" placeholder="Nombre" class="px-3 py-2 text-sm border rounded-xl"><input type="text" id="edit-phone" placeholder="Teléfono" class="px-3 py-2 text-sm border rounded-xl"></div><div class="grid grid-cols-2 gap-3"><input type="text" id="edit-reference" placeholder="Referencia" class="px-3 py-2 text-sm border rounded-xl"><select id="edit-model" class="px-3 py-2 text-sm border rounded-xl bg-white"><option value="">Sin modelo</option></select></div><select id="edit-status" class="w-full px-3 py-2 text-sm border rounded-xl bg-white"><option value="Pendiente">Pendiente</option><option value="Llamada Realizada">Llamada Realizada</option><option value="Mensaje Enviado (48h)">Mensaje Enviado (48h)</option><option value="Sin Respuesta 24h">Sin Respuesta 24h</option><option value="Contestó">Contestó</option><option value="Interesado">Interesado</option><option value="Interesado a Futuro">Interesado a Futuro</option><option value="Entrevista">Entrevista</option><option value="Venta">Venta</option><option value="No Compra">No Compra</option></select><div class="grid grid-cols-3 gap-2"><input type="date" id="edit-schedule-date" class="px-2 py-1.5 text-xs border rounded-lg"><input type="time" id="edit-schedule-time" class="px-2 py-1.5 text-xs border rounded-lg"><input type="text" id="edit-schedule-note" placeholder="Nota" class="px-2 py-1.5 text-xs border rounded-lg"></div><textarea id="edit-obs" rows="2" placeholder="Observaciones..." class="w-full px-3 py-2 text-sm border rounded-xl"></textarea><div class="flex justify-end gap-2"><button onclick="closeEditModal()" class="px-4 py-2 text-sm">Cancelar</button><button onclick="saveEdit()" class="px-5 py-2 bg-[#EB0A1E] text-white text-sm font-bold rounded-xl">Guardar</button></div></div></div>
     <div id="model-modal" class="fixed inset-0 bg-slate-900/50 z-[65] hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl w-full max-w-md p-5 space-y-3"><h3 class="font-bold">Modelo Toyota de Interés</h3><input type="hidden" id="model-contact-id"><input type="hidden" id="model-contact-status"><select id="input-interest-model" class="w-full px-3 py-2 text-sm border rounded-xl bg-white"></select><div class="flex justify-end gap-2"><button onclick="closeModelModal()" class="px-4 py-2 text-sm">Cancelar</button><button onclick="confirmInterestModel()" class="px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-xl">Confirmar</button></div></div></div>
@@ -3064,31 +3142,144 @@
             try {
                 const db = await openPlansIndexedDB();
                 const tx = db.transaction(PLAN_IDB_STORE, 'readonly');
-                const allRecords = await new Promise((resolve) => { const r = tx.objectStore(PLAN_IDB_STORE).getAll(); r.onsuccess = () => resolve(r.result || []); r.onerror = () => resolve([]); });
+                const allRecords = await new Promise((resolve) => {
+                    const r = tx.objectStore(PLAN_IDB_STORE).getAll();
+                    r.onsuccess = () => resolve(r.result || []);
+                    r.onerror = () => resolve([]);
+                });
                 const map = new Map(allRecords.map(r => [r.id, r]));
-                plansHistory.forEach(p => { const b = map.get(p.id); if (b) { p.pdfDataUrl = b.pdfDataUrl || ''; p.jpgPages = b.jpgPages || []; } });
+                plansHistory.forEach(p => {
+                    const b = map.get(p.id);
+                    if (b) { p.pdfDataUrl = b.pdfDataUrl || ''; p.jpgPages = b.jpgPages || []; }
+                });
                 const latestWithJpg = plansHistory.find(p => Array.isArray(p.jpgPages) && p.jpgPages.length > 0);
-                if (latestWithJpg) { currentPlanJpgs = latestWithJpg.jpgPages; renderCurrentJpgGallery(`${latestWithJpg.vehicleName || latestWithJpg.planName} (${latestWithJpg.modality || '70/30'})`, latestWithJpg.period); }
+                if (latestWithJpg) {
+                    currentPlanJpgs = latestWithJpg.jpgPages;
+                    renderCurrentJpgGallery(`${latestWithJpg.vehicleName || latestWithJpg.planName} (${latestWithJpg.modality || '70/30'})`, latestWithJpg.period);
+                }
             } catch (e) {}
         }
         function parseNumbersFromPlanPdfText(fullText, fileName, forcedModality = 'Auto') {
-            const rawStr = String(fullText || ''), combinedLabel = `${fileName} ${rawStr}`;
+            const rawStr = String(fullText || '');
+            const combinedLabel = `${fileName} ${rawStr}`;
             const detectedModel = detectToyotaModelFromText(combinedLabel) || fileName.replace(/\.pdf$/i, '');
-            let modality = forcedModality && forcedModality !== 'Auto' ? forcedModality : (/70\s*\/\s*30/.test(combinedLabel) ? '70/30' : (/100\s*%/.test(combinedLabel) ? '100%' : '70/30'));
-            const parseMoneyList = (txt) => Array.from(String(txt || '').matchAll(/\$?\s*([\d]{1,3}(?:\.[\d]{3})+)(?:,\d{2})?/g)).map(m => Number(m[1].replace(/\./g, ''))).filter(n => !isNaN(n) && n >= 50000);
-            const allBigAmounts = parseMoneyList(rawStr).filter(n => n >= 4000000 && n <= 250000000);
-            let vehicleValue = allBigAmounts.length > 0 ? Math.max(...allBigAmounts) : 0;
-            let value70 = modality !== '100%' && vehicleValue > 0 ? Math.round(vehicleValue * 0.70) : vehicleValue;
-            let value30 = modality !== '100%' && vehicleValue > 0 ? Math.round(vehicleValue * 0.30) : 0;
-            const maxCap = vehicleValue > 0 ? Math.round(vehicleValue * 0.045) : 3500000;
-            const quotas = parseMoneyList(rawStr).filter(n => n >= 80000 && n <= maxCap);
-            let highestPeriodQuota = quotas.length > 0 ? Math.max(...quotas) : 0;
-            let pureQuota = quotas.length > 0 ? quotas[quotas.length - 1] : 0;
-            if (!vehicleValue || !highestPeriodQuota) {
-                const refPlan = marketPlansCatalog.find(p => p.brand === 'Toyota' && p.model.toLowerCase().includes(detectedModel.toLowerCase()));
-                if (refPlan) { if (!vehicleValue) vehicleValue = refPlan.valorMovil; if (!highestPeriodQuota) highestPeriodQuota = refPlan.cuotaPura; if (!pureQuota) pureQuota = refPlan.cuotaPura; }
+            const modality = forcedModality && forcedModality !== 'Auto'
+                ? forcedModality
+                : (/70\s*\/\s*30|7030/.test(combinedLabel) ? '70/30' : (/100\s*%|\b100\b/.test(combinedLabel) ? '100%' : '70/30'));
+
+            const parseMoneyList = (txt) => Array.from(String(txt || '').matchAll(/\$\s*([\d]{1,3}(?:\.[\d]{3})+)(?:,\d{2})?/g))
+            // Lectura robusta de los 4 importes de la tabla RANGO / VALOR (funciona aunque la columna RANGO y VALOR tengan distinto tamaño de fuente)
+            const lines = rawStr.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+            let c1 = 0;
+            const rangeItems = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const nextLine = lines[i + 1] || '';
+                const lineAmounts = parseMoneyList(line).filter(n => n >= 80000 && n <= 4000000);
+                const nextAmounts = parseMoneyList(nextLine).filter(n => n >= 80000 && n <= 4000000);
+                const amt = lineAmounts[0] || nextAmounts[0] || 0;
+                if (!amt) continue;
+
+                const rangeMatch = line.match(/\b(\d{1,2})\s*(?:a|al|-)\s*(\d{1,3})\b/i);
+                if (rangeMatch) {
+                    const fromC = parseInt(rangeMatch[1], 10);
+                    const toC = parseInt(rangeMatch[2], 10);
+                    if (fromC >= 1 && toC > fromC && toC <= 120) {
+                        const label = `${fromC} a ${toC}`;
+                        if (!rangeItems.some(r => r.label === label)) {
+                            rangeItems.push({ from: fromC, to: toC, label, amount: amt });
+                        }
+                    }
+                    continue;
+                }
+
+                if (!/desde\s*cuota|cuotas?|pura|integraci|70%|30%/i.test(line) && /(?:^|\s|\|)1(?:\s|\||$)/.test(line)) {
+                    c1 = amt;
+                }
             }
-            return { vehicleName: detectedModel, modality, pureQuota, vehicleValue, value70, value30, allPeriods: [], tranches: { c1: 0, c1_18: 0, c19_24: 0, c25_84: highestPeriodQuota }, extraordinaryQuota: value30 || Math.round(24 * pureQuota), extraordinaryLabel: modality !== '100%' ? 'Cuota Extraordinaria (30%)' : 'Integ. Mín. (24 cuotas)', price: highestPeriodQuota };
+
+            rangeItems.sort((a, b) => a.from - b.from);
+
+            // Respaldo posicional: si los rangos y los valores quedaron en bloques separados del PDF, tomar las 4 cuotas de la tabla en orden vertical
+            if (rangeItems.length < 3) {
+                const pureIdx = rawStr.search(/cuota\s*pura/i);
+                const tableZone = pureIdx > 0 ? rawStr.slice(0, pureIdx) : rawStr;
+                const tableQuotas = parseMoneyList(tableZone).filter(n => n >= 80000 && n <= 4000000);
+                if (tableQuotas.length >= 4) {
+                    c1 = tableQuotas[0];
+                    rangeItems.length = 0;
+                    rangeItems.push(
+                        { from: 2, to: 18, label: '2 a 18', amount: tableQuotas[1] },
+                        { from: 19, to: 24, label: '19 a 24', amount: tableQuotas[2] },
+                        { from: 25, to: 84, label: '25 a 84', amount: tableQuotas[3] }
+                    );
+                } else if (tableQuotas.length === 3) {
+                    rangeItems.length = 0;
+                    rangeItems.push(
+                        { from: 2, to: 18, label: '2 a 18', amount: tableQuotas[0] },
+                        { from: 19, to: 24, label: '19 a 24', amount: tableQuotas[1] },
+                        { from: 25, to: 84, label: '25 a 84', amount: tableQuotas[2] }
+                    );
+                }
+            }
+
+            const t1Obj = rangeItems[0] || { label: '2 a 18', amount: 0 };
+            const t2Obj = rangeItems[1] || { label: '19 a 24', amount: 0 };
+            const t3Obj = rangeItems[2] || { label: '25 a 84', amount: 0 };
+
+            const tramo1 = t1Obj.amount;
+            const tramo2 = t2Obj.amount;
+            const tramo3 = t3Obj.amount;
+
+            const highestPeriodQuota = Math.max(c1, tramo1, tramo2, tramo3) || (refPlan ? refPlan.cuotaPura : 0);
+            if (!pureQuota) pureQuota = refPlan ? refPlan.cuotaPura : Math.round(financedAmount / 84);
+
+            // Detección dinámica de Integración Mínima en el PDF (ej: "Integración Mínima de 24 cuotas")
+            let minIntegrationMonths = 24;
+            const integMonthsMatch = rawStr.match(/integraci[oó]n\s*m[ií]nima[\s\S]{0,45}?(\d{1,2})\s*cuotas?/i)
+                || rawStr.match(/(\d{1,2})\s*cuotas?\s*(?:puras?\s*)?(?:de\s*)?integraci[oó]n\s*m[ií]nima/i);
+            if (integMonthsMatch) {
+                const parsedMonths = parseInt(integMonthsMatch[1], 10);
+                if (parsedMonths >= 1 && parsedMonths <= 84) minIntegrationMonths = parsedMonths;
+            }
+
+            let explicitIntegAmount = 0;
+            const integAmountMatch = rawStr.match(/integraci[oó]n\s*m[ií]nima[\s\S]{0,65}?\$\s*([\d]{1,3}(?:\.[\d]{3})+)/i);
+            if (integAmountMatch) {
+                const parsedAmt = Number(integAmountMatch[1].replace(/\./g, ''));
+                if (parsedAmt >= 1000000 && parsedAmt <= vehicleValue) explicitIntegAmount = parsedAmt;
+            }
+
+            const extraordinaryQuota = modality !== '100%'
+                ? value30
+                : (explicitIntegAmount > 0 ? explicitIntegAmount : Math.round(pureQuota * minIntegrationMonths));
+            const extraordinaryLabel = modality !== '100%'
+                ? 'Cuota Extraord. (30% unidad)'
+                : `Integ. Mín. (${minIntegrationMonths} × Cuota Pura)`;
+
+            return {
+                vehicleName: detectedModel,
+                modality,
+                pureQuota,
+                vehicleValue,
+                financedAmount,
+                value70: financedAmount,
+                value30,
+                tranches: {
+                    c1,
+                    c1_18: tramo1,
+                    c19_24: tramo2,
+                    c25_84: tramo3,
+                    t1Label: t1Obj.label,
+                    t2Label: t2Obj.label,
+                    t3Label: t3Obj.label
+                },
+                minIntegrationMonths,
+                extraordinaryQuota,
+                extraordinaryLabel,
+                price: highestPeriodQuota
+            };
         }
         function renderCurrentJpgGallery(planTitle = '', periodLabel = '') {
             const gallery = document.getElementById('pdf-jpg-gallery'), titleEl = document.getElementById('jpg-preview-title'), dlAllBtn = document.getElementById('btn-download-all-jpg');
@@ -3099,6 +3290,19 @@
             gallery.innerHTML = currentPlanJpgs.map((pg, idx) => `<div class="rounded-xl border bg-white overflow-hidden"><img src="${pg.dataUrl}" class="w-full h-36 object-contain border-b"><div class="p-2 flex justify-between gap-1"><button onclick="openShareJpgWaModal(${idx})" class="flex-1 py-1 bg-emerald-600 text-white rounded text-[11px] font-bold">📲 WA</button><a href="${pg.dataUrl}" download="${pg.fileName}" class="py-1 px-2 bg-slate-100 rounded text-[11px] font-bold">⬇️ JPG</a></div></div>`).join('');
         }
         window.downloadAllPlanJpgs = () => { currentPlanJpgs.forEach((pg, i) => setTimeout(() => { const a = document.createElement('a'); a.href = pg.dataUrl; a.download = pg.fileName; a.click(); }, i * 180)); };
+        function extractStructuredRowsFromPdfContent(txtContent) {
+            const items = (txtContent?.items || []).filter(it => it && String(it.str || '').trim());
+            const rows = [];
+            for (const it of items) {
+                const y = Math.round((it.transform?.[5] || 0) / 4) * 4;
+                const x = it.transform?.[4] || 0;
+                let row = rows.find(r => Math.abs(r.y - y) <= 5);
+                if (!row) { row = { y, cells: [] }; rows.push(row); }
+                row.cells.push({ x, str: String(it.str).trim() });
+            }
+            rows.sort((a, b) => b.y - a.y);
+            return rows.map(r => r.cells.sort((a, b) => a.x - b.x).map(c => c.str).join(' ')).join('\n');
+        }
         window.handlePlanPdfUpload = async function(event) {
             const files = Array.from(event.target.files || []);
             if (files.length === 0 || typeof pdfjsLib === 'undefined') return;
@@ -3114,7 +3318,7 @@
                     for (let p = 1; p <= pdf.numPages; p++) {
                         const page = await pdf.getPage(p);
                         const txtContent = await page.getTextContent();
-                        fullText += ' ' + txtContent.items.map(it => it.str).join(' ');
+                        fullText += '\n' + extractStructuredRowsFromPdfContent(txtContent);
                         const viewport = page.getViewport({ scale: 1.5 });
                         const canvas = document.createElement('canvas'); canvas.width = viewport.width; canvas.height = viewport.height;
                         await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
@@ -3152,9 +3356,112 @@
             if (plansHistory.length === 0) { tbody.innerHTML = ''; emptyEl?.classList.remove('hidden'); }
             else {
                 emptyEl?.classList.add('hidden');
-                tbody.innerHTML = plansHistory.map(p => `<tr><td class="p-3 font-bold text-[#EB0A1E]">${p.period}</td><td class="p-3 font-bold">${p.vehicleName} [${p.modality}]</td><td class="p-3 tabular-nums">$${Number(p.vehicleValue || 0).toLocaleString('es-AR')}</td><td class="p-3 text-xs">Cuota Máx. Ordinaria</td><td class="p-3 font-extrabold text-emerald-700 tabular-nums">$${Number(p.price || 0).toLocaleString('es-AR')}</td><td class="p-3 text-xs tabular-nums">$${Number(p.extraordinaryQuota || 0).toLocaleString('es-AR')}</td><td class="p-3 text-xs">-</td><td class="p-3"><button onclick="openPlanFilesModal('${p.id}')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded text-xs font-bold">📂 Ver</button> <button onclick="deletePlanRecord('${p.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded text-xs">Eliminar</button></td></tr>`).join('');
+                tbody.innerHTML = plansHistory.map(p => {
+                    const tr = p.tranches || {};
+                    const financed = Number(p.financedAmount || p.value70 || p.vehicleValue || 0);
+                    const pureQ = Number(p.pureQuota || 0);
+                    const extraQ = Number(p.extraordinaryQuota || 0);
+                    const is100 = (p.modality || '') === '100%';
+                    const tramosHtml = `
+                        <div class="text-[11px] space-y-0.5 tabular-nums">
+                            ${tr.c1 ? `<div><span class="text-slate-400">Cuota 1:</span> <b>$${Number(tr.c1).toLocaleString('es-AR')}</b></div>` : ''}
+                            <div><span class="text-slate-500">Tramo 1 (${tr.t1Label || '2 a 18'}):</span> <b>$${Number(tr.c1_18 || p.price || 0).toLocaleString('es-AR')}</b></div>
+                            <div><span class="text-slate-500">Tramo 2 (${tr.t2Label || '19 a 24'}):</span> <b>$${Number(tr.c19_24 || p.price || 0).toLocaleString('es-AR')}</b></div>
+                            <div><span class="text-slate-500">Tramo 3 (${tr.t3Label || '25 a 84'}):</span> <b>$${Number(tr.c25_84 || p.price || 0).toLocaleString('es-AR')}</b></div>
+                        </div>`;
+                    return `<tr>
+                        <td class="p-3 font-bold text-[#EB0A1E]">${p.period}</td>
+                        <td class="p-3 font-bold">${p.vehicleName}<div class="text-[10px] font-extrabold uppercase text-slate-500">Modalidad ${p.modality || '70/30'}</div></td>
+                        <td class="p-3 tabular-nums text-xs">
+                            <div>Unidad: <b>$${Number(p.vehicleValue || 0).toLocaleString('es-AR')}</b></div>
+                            <div class="text-emerald-700 font-bold">Financia (${is100 ? '100%' : '70%'}): $${financed.toLocaleString('es-AR')}</div>
+                        </td>
+                        <td class="p-3">${tramosHtml}</td>
+                        <td class="p-3 font-extrabold text-[#EB0A1E] tabular-nums">$${Number(p.price || 0).toLocaleString('es-AR')}<div class="text-[10px] font-normal text-slate-500">Cuota informada por Sofía</div></td>
+                        <td class="p-3 font-bold text-slate-800 tabular-nums">$${pureQ.toLocaleString('es-AR')}<div class="text-[10px] font-normal text-slate-500">Adelanto de cuotas</div></td>
+                        <td class="p-3 text-xs tabular-nums">
+                            <div class="font-bold text-slate-900">$${extraQ.toLocaleString('es-AR')}</div>
+                            <div class="text-[10px] text-slate-500">${is100 ? `Cuota Pura × ${p.minIntegrationMonths || 24}m` : '30% de la unidad'}</div>
+                        </td>
+                        <td class="p-3"><div class="flex flex-wrap gap-1"><button onclick="openEditPlanModal('${p.id}')" class="px-2 py-1 bg-amber-100 text-amber-950 border border-amber-300 rounded text-xs font-bold">✏️ Editar</button><button onclick="openPlanFilesModal('${p.id}')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded text-xs font-bold">📂 Ver</button><button onclick="deletePlanRecord('${p.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded text-xs">🗑️</button></div></td>
+                    </tr>`;
+                }).join('');
             }
             renderVehiclePriceEvolutionChart();
+        };
+        window.openEditPlanModal = function(planId) {
+            const p = plansHistory.find(x => x.id === planId);
+            if (!p) return;
+            const tr = p.tranches || {};
+            document.getElementById('ep-id').value = p.id;
+            document.getElementById('ep-vehicle').value = p.vehicleName || p.planName || '';
+            document.getElementById('ep-modality').value = p.modality || '70/30';
+            document.getElementById('ep-period').value = p.period || '';
+            document.getElementById('ep-vehicle-val').value = Number(p.vehicleValue || 0);
+            document.getElementById('ep-financed-val').value = Number(p.financedAmount || p.value70 || p.vehicleValue || 0);
+            document.getElementById('ep-c1').value = Number(tr.c1 || 0);
+            document.getElementById('ep-t1').value = Number(tr.c1_18 || p.price || 0);
+            document.getElementById('ep-t2').value = Number(tr.c19_24 || p.price || 0);
+            document.getElementById('ep-t3').value = Number(tr.c25_84 || p.price || 0);
+            document.getElementById('ep-t1-lbl').textContent = `Tramo 1 (${tr.t1Label || '2 a 18'})`;
+            document.getElementById('ep-t2-lbl').textContent = `Tramo 2 (${tr.t2Label || '19 a 24'})`;
+            document.getElementById('ep-t3-lbl').textContent = `Tramo 3 (${tr.t3Label || '25 a 84'})`;
+            document.getElementById('ep-pure').value = Number(p.pureQuota || 0);
+            document.getElementById('ep-integ-months').value = Number(p.minIntegrationMonths || 24);
+            document.getElementById('ep-extra').value = Number(p.extraordinaryQuota || 0);
+            document.getElementById('edit-plan-modal')?.classList.remove('hidden');
+        };
+        window.closeEditPlanModal = function() {
+            document.getElementById('edit-plan-modal')?.classList.add('hidden');
+        };
+        window.recalcEditPlanDerived = function() {
+            const mod = document.getElementById('ep-modality')?.value || '70/30';
+            const vehVal = Number(document.getElementById('ep-vehicle-val')?.value || 0);
+            const pureVal = Number(document.getElementById('ep-pure')?.value || 0);
+            const months = Math.max(1, Number(document.getElementById('ep-integ-months')?.value || 24));
+            if (mod === '100%') {
+                document.getElementById('ep-financed-val').value = vehVal;
+                document.getElementById('ep-extra').value = Math.round(pureVal * months);
+            } else {
+                document.getElementById('ep-financed-val').value = Math.round(vehVal * 0.70);
+                document.getElementById('ep-extra').value = Math.round(vehVal * 0.30);
+            }
+        };
+        window.saveEditedPlanRecord = async function() {
+            const id = document.getElementById('ep-id')?.value;
+            const p = plansHistory.find(x => x.id === id);
+            if (!p) return;
+            const mod = document.getElementById('ep-modality').value;
+            const c1 = Number(document.getElementById('ep-c1').value || 0);
+            const t1 = Number(document.getElementById('ep-t1').value || 0);
+            const t2 = Number(document.getElementById('ep-t2').value || 0);
+            const t3 = Number(document.getElementById('ep-t3').value || 0);
+            const highest = Math.max(c1, t1, t2, t3);
+
+            p.vehicleName = document.getElementById('ep-vehicle').value.trim() || p.vehicleName;
+            p.modality = mod;
+            p.period = document.getElementById('ep-period').value.trim() || p.period;
+            p.vehicleValue = Number(document.getElementById('ep-vehicle-val').value || 0);
+            p.financedAmount = Number(document.getElementById('ep-financed-val').value || 0);
+            p.value70 = p.financedAmount;
+            p.value30 = mod !== '100%' ? Math.round(p.vehicleValue * 0.30) : 0;
+            p.tranches = {
+                ...(p.tranches || {}),
+                c1,
+                c1_18: t1,
+                c19_24: t2,
+                c25_84: t3
+            };
+            p.pureQuota = Number(document.getElementById('ep-pure').value || 0);
+            p.minIntegrationMonths = Math.max(1, Number(document.getElementById('ep-integ-months').value || 24));
+            p.extraordinaryQuota = Number(document.getElementById('ep-extra').value || 0);
+            p.price = highest;
+
+            closeEditPlanModal();
+            saveLocalData(true);
+            renderPlansHistory();
+            await SOFIA_AI.syncBrainToFirebase();
+            showToast(`✅ Plan "${p.vehicleName}" actualizado y sincronizado con Sofía 2.7`);
         };
         window.deletePlanRecord = async (id) => { plansHistory = plansHistory.filter(p => p.id !== id); await deletePlanBlobsFromIndexedDB(id); saveLocalData(true); renderPlansHistory(); };
         window.clearPlansHistory = async () => { for (const p of plansHistory) await deletePlanBlobsFromIndexedDB(p.id); plansHistory = []; currentPlanJpgs = []; saveLocalData(true); renderPlansHistory(); };
@@ -3379,11 +3686,16 @@
                         const key = `${p.vehicleName || p.planName} (${p.modality || '70/30'})`;
                         if (seen.has(key)) continue;
                         seen.add(key);
-                        const extra30 = p.modality !== '100%' && Number(p.extraordinaryQuota || p.value30) > 0
-                            ? ` | Integración mínima 30% de la unidad: ($${Number(p.extraordinaryQuota || p.value30).toLocaleString('es-AR')})`
-                            : '';
-                        const pureStr = Number(p.pureQuota) > 0 ? ` | Cuota Pura: $${Number(p.pureQuota).toLocaleString('es-AR')}` : '';
-                        lines.push(`- ${key} [${p.period}]: Valor de la unidad $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Cuota Final Referencia: $${Number(p.price || 0).toLocaleString('es-AR')}${pureStr}${extra30}`);
+                        const is100 = (p.modality || '') === '100%';
+                        const financed = Number(p.financedAmount || p.value70 || p.vehicleValue || 0);
+                        const pureQ = Number(p.pureQuota || 0);
+                        const minMonths = Number(p.minIntegrationMonths || 24);
+                        const extraQ = Number(p.extraordinaryQuota || (is100 ? pureQ * minMonths : p.value30) || 0);
+                        const extraStr = !is100 && extraQ > 0
+                            ? ` | Integración mínima 30% de la unidad: ($${extraQ.toLocaleString('es-AR')})`
+                            : (is100 && extraQ > 0 ? ` | Integración mínima (${minMonths} cuotas puras): ($${extraQ.toLocaleString('es-AR')})` : '');
+                        const pureStr = pureQ > 0 ? ` | Cuota Pura: $${pureQ.toLocaleString('es-AR')}` : '';
+                        lines.push(`- ${key} [${p.period}]: Valor de la unidad $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Monto que financia: $${financed.toLocaleString('es-AR')} | Cuota Final Referencia (tramo más alto): $${Number(p.price || 0).toLocaleString('es-AR')}${pureStr}${extraStr}`);
                     }
                 }
                 const existingUpper = lines.join('\n').toUpperCase();
