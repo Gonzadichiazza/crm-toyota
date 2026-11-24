@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, ainitial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1064,12 +1064,12 @@
 
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50/70">
                 <div class="lg:col-span-5 space-y-4">
-                    <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3">
-                        <div class="text-xs font-extrabold uppercase text-slate-800">🔑 Motor Real Google Gemini (Principal + Respaldos)</div>
-                        <input type="password" id="wa-ai-gemini-key" onchange="saveWaAiConfig()" placeholder="API Key Principal (AIzaSy...)" class="w-full px-2.5 py-1.5 text-xs font-mono border border-sky-300 rounded-lg bg-white outline-none">
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-2.5">
+                        <div class="text-xs font-extrabold uppercase text-slate-800">🔑 Pool de API Keys Google Gemini (Redundancia)</div>
+                        <input type="password" id="wa-ai-gemini-key" onchange="saveWaAiConfig()" placeholder="Key Principal (AIzaSy...)" class="w-full px-2.5 py-1.5 text-xs font-mono border border-sky-300 rounded-lg bg-white outline-none">
                         <div class="grid grid-cols-2 gap-1.5">
-                            <input type="password" id="wa-ai-gemini-key-b1" onchange="saveWaAiConfig()" placeholder="Key Respaldo 1 (opc.)" class="px-2 py-1.5 text-[11px] font-mono border border-slate-200 rounded-lg bg-slate-50 outline-none">
-                            <input type="password" id="wa-ai-gemini-key-b2" onchange="saveWaAiConfig()" placeholder="Key Respaldo 2 (opc.)" class="px-2 py-1.5 text-[11px] font-mono border border-slate-200 rounded-lg bg-slate-50 outline-none">
+                            <input type="password" id="wa-ai-gemini-key-b1" onchange="saveWaAiConfig()" placeholder="Key Respaldo 1 (opc.)" class="w-full px-2 py-1 text-[11px] font-mono border border-slate-300 rounded-lg bg-slate-50 outline-none">
+                            <input type="password" id="wa-ai-gemini-key-b2" onchange="saveWaAiConfig()" placeholder="Key Respaldo 2 (opc.)" class="w-full px-2 py-1 text-[11px] font-mono border border-slate-300 rounded-lg bg-slate-50 outline-none">
                         </div>
                         <div id="wa-ai-kb-summary" class="space-y-1.5 text-xs text-slate-700"></div>
                         <div class="grid grid-cols-2 gap-2">
@@ -1081,7 +1081,10 @@
                     </div>
 
                     <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-2.5">
-                        <span class="text-xs font-extrabold uppercase text-emerald-950">☁️ Persistencia 24/7 (Cloudflare Worker)</span>
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-extrabold uppercase text-emerald-950">☁️ Persistencia 24/7 (Cloudflare Worker)</span>
+                            <span id="wa-ai-mobile-health-badge" class="px-2 py-0.5 rounded bg-white border border-emerald-300 text-[10px] font-bold text-emerald-900">📱 Verificando puente...</span>
+                        </div>
                         <input type="text" id="wa-ai-worker-url" onchange="saveWaAiConfig()" value="https://sofia-ginza.gonzalodichiazza2.workers.dev" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-emerald-300 rounded-lg">
                         <label class="flex items-center gap-2 text-[11px] text-emerald-950"><input type="checkbox" id="wa-ai-cloud-worker-primary" onchange="saveWaAiConfig()"><span>Delegar respuestas 24/7 al Worker</span></label>
                         <div class="flex gap-1"><input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-incoming-url')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
@@ -1428,38 +1431,6 @@
                 };
                 firebaseStream.addEventListener('put', handleEvent);
                 firebaseStream.addEventListener('patch', handleEvent);
-            } catch (e) {}
-        }
-
-        function startWaIncomingLiveListener() {
-            if (waIncomingStream) { try { waIncomingStream.close(); } catch (e) {} }
-            try {
-                waIncomingStream = new EventSource(`${FIREBASE_DB_URL}/wa_incoming/${encodeURIComponent(syncRoom)}.json`);
-                const onWa = (e) => {
-                    try {
-                        const parsed = JSON.parse(e.data);
-                        if (!parsed || parsed.data === null) return;
-                        pollIncomingWhatsAppEvents();
-                    } catch (err) {}
-                };
-                waIncomingStream.addEventListener('put', onWa);
-                waIncomingStream.addEventListener('patch', onWa);
-            } catch (e) {}
-        }
-
-        function startSfIncomingLiveListener() {
-            if (sfIncomingStream) { try { sfIncomingStream.close(); } catch (e) {} }
-            try {
-                sfIncomingStream = new EventSource(`${FIREBASE_DB_URL}/sf_incoming/${encodeURIComponent(syncRoom)}.json`);
-                const onSf = (e) => {
-                    try {
-                        const parsed = JSON.parse(e.data);
-                        if (!parsed || parsed.data === null) return;
-                        pollIncomingSalesforceEvents(false);
-                    } catch (err) {}
-                };
-                sfIncomingStream.addEventListener('put', onSf);
-                sfIncomingStream.addEventListener('patch', onSf);
             } catch (e) {}
         }
 
@@ -2301,6 +2272,27 @@
                 const pct = Math.round((src.count / maxCount) * 100);
                 return `<button onclick="openContactosSection('${src.sub}')" class="w-full p-3 rounded-xl bg-slate-50/70 hover:bg-slate-100 border border-slate-200/80 transition-all text-left"><div class="flex items-center justify-between text-xs font-bold text-slate-800 mb-1.5"><span>${src.label}</span><span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-900 tabular-nums">${src.count} pendientes</span></div><div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden"><div class="${src.bar} h-1.5 rounded-full" style="width: ${pct}%"></div></div></button>`;
             }).join('');
+
+            const homeAgenda = document.getElementById('home-agenda-list');
+            if (homeAgenda) {
+                const upcoming = getScheduledCommitments().filter(c => c.scheduleDate >= getTodayISODate()).slice(0, 6);
+                homeAgenda.innerHTML = upcoming.length === 0
+                    ? `<div class="text-xs text-slate-400 text-center py-4">Sin compromisos agendados para hoy.</div>`
+                    : upcoming.map(c => `<div class="p-2.5 rounded-xl bg-purple-50/60 border border-purple-200 flex items-center justify-between text-xs">
+                        <div><b>${formatDisplayISODate(c.scheduleDate)} ${c.scheduleTime || ''}</b> · ${c.name}</div>
+                        <span class="px-2 py-0.5 rounded bg-purple-600 text-white text-[10px] font-bold">${c.status}</span>
+                    </div>`).join('');
+            }
+            const homeRadar = document.getElementById('home-radar-list');
+            if (homeRadar) {
+                const hot = getAllListsCombined().filter(c => ['Interesado', 'Entrevista', 'Contestó'].includes(c.status)).slice(0, 6);
+                homeRadar.innerHTML = hot.length === 0
+                    ? `<div class="text-xs text-slate-400 text-center py-4">Sin leads calientes en seguimiento aún.</div>`
+                    : hot.map(c => `<div class="p-2.5 rounded-xl bg-slate-50 border flex items-center justify-between text-xs">
+                        <div><b>${c.name || 'Cliente'}</b> <span class="text-slate-500">${c.interestModel ? '• ' + c.interestModel : ''}</span></div>
+                        <button onclick="openClientProfileModal('${c.id}')" class="px-2 py-0.5 rounded bg-[#0A0A0C] text-white text-[10px] font-bold">Ver Ficha</button>
+                    </div>`).join('');
+            }
         };
 
         function getStatusBadgeClass(status) {
@@ -2459,37 +2451,320 @@
         };
 
         // --- CALENDARIO ---
-        window.openScheduleModal = function(id, defaultType = 'Entrevista', prefillDate = null) { document.getElementById('sched-contact-id').value = id || ''; document.getElementById('sched-type-select').value = defaultType; document.getElementById('sched-date-input').value = prefillDate || getTodayISODate(); document.getElementById('schedule-modal').classList.remove('hidden'); };
+        window.openScheduleModal = function(id, defaultType = 'Entrevista', prefillDate = null) {
+            document.getElementById('sched-contact-id').value = id || '';
+            const pickerBox = document.getElementById('sched-client-picker-box');
+            const pickerSel = document.getElementById('sched-client-select');
+            if (!id && pickerBox && pickerSel) {
+                pickerBox.classList.remove('hidden');
+                pickerSel.innerHTML = getAllListsCombined().map(c => `<option value="${c.id}">${c.name || 'Sin Nombre'} (${c.phone || ''})</option>`).join('');
+            } else if (pickerBox) {
+                pickerBox.classList.add('hidden');
+            }
+            document.getElementById('sched-type-select').value = defaultType;
+            document.getElementById('sched-date-input').value = prefillDate || getTodayISODate();
+            document.getElementById('schedule-modal').classList.remove('hidden');
+        };
         window.openNewScheduleModal = function(prefillDate = null) { openScheduleModal('', 'Entrevista', prefillDate); };
         window.closeScheduleModal = function() { document.getElementById('schedule-modal').classList.add('hidden'); };
-        window.confirmScheduleCommitment = function() { closeScheduleModal(); };
-        window.renderAgendaTab = function() {};
-        window.changeAgendaMonth = function(delta) { agendaViewMonth += delta; renderAgendaTab(); };
+        window.confirmScheduleCommitment = function() {
+            const directId = document.getElementById('sched-contact-id')?.value;
+            const pickedId = document.getElementById('sched-client-select')?.value;
+            const targetId = directId || pickedId;
+            const f = findContactGlobal(targetId);
+            if (f) {
+                f.contact.status = document.getElementById('sched-type-select')?.value || 'Entrevista';
+                f.contact.scheduleDate = document.getElementById('sched-date-input')?.value || getTodayISODate();
+                f.contact.scheduleTime = document.getElementById('sched-time-input')?.value || '10:30';
+                const note = document.getElementById('sched-note-input')?.value.trim();
+                if (note) f.contact.observations = `${f.contact.observations ? f.contact.observations + ' | ' : ''}${note}`;
+                saveLocalData(true);
+                renderAllTables();
+                updateDashboard();
+                renderAgendaTab();
+                showToast(`📅 Compromiso agendado para ${f.contact.name}`);
+            }
+            closeScheduleModal();
+        };
+        window.deleteScheduledEvent = function(id) {
+            const f = findContactGlobal(id);
+            if (f) {
+                f.contact.scheduleDate = '';
+                f.contact.scheduleTime = '';
+                saveLocalData(true);
+                renderAllTables();
+                updateDashboard();
+                renderAgendaTab();
+                showToast("🗑️ Compromiso quitado del calendario");
+            }
+        };
+        window.renderAgendaTab = function() {
+            const grid = document.getElementById('agenda-calendar-grid');
+            const titleEl = document.getElementById('agenda-month-title');
+            const dayTitle = document.getElementById('agenda-selected-day-title');
+            const dayList = document.getElementById('agenda-day-events-list');
+            const upList = document.getElementById('agenda-upcoming-list');
+            if (!grid) return;
 
-        // --- COMPARATIVA ---
-        window.syncPlaneroDeLeyLive = async function(manual = false) { mergeDefaultMarketPlans(); renderComparativaSelectors(); if (manual) showToast("Lista actualizada"); };
+            const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+            if (titleEl) titleEl.textContent = `${monthNames[agendaViewMonth]} ${agendaViewYear}`;
+
+            const events = getScheduledCommitments();
+            const firstDay = new Date(agendaViewYear, agendaViewMonth, 1).getDay();
+            const daysInMonth = new Date(agendaViewYear, agendaViewMonth + 1, 0).getDate();
+            const offset = firstDay === 0 ? 6 : firstDay - 1;
+
+            const headers = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => `<div class="text-center text-[10px] font-bold text-slate-400 uppercase py-1">${d}</div>`).join('');
+            let cells = Array(offset).fill('<div></div>').join('');
+            for (let d = 1; d <= daysInMonth; d++) {
+                const iso = `${agendaViewYear}-${String(agendaViewMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const dayEvents = events.filter(e => e.scheduleDate === iso);
+                const isSel = iso === selectedAgendaDate;
+                cells += `<button onclick="selectedAgendaDate='${iso}'; renderAgendaTab();" class="p-2 rounded-xl border text-center transition-all ${isSel ? 'border-[#EB0A1E] bg-red-50 font-extrabold text-[#EB0A1E]' : 'border-slate-200 hover:border-slate-400'}">
+                    <div class="text-xs tabular-nums">${d}</div>
+                    ${dayEvents.length > 0 ? `<div class="mt-0.5 text-[9px] font-bold px-1 rounded bg-purple-600 text-white tabular-nums">${dayEvents.length}</div>` : '<div class="h-3.5"></div>'}
+                </button>`;
+            }
+            grid.innerHTML = headers + cells;
+
+            if (dayTitle) dayTitle.textContent = `Compromisos del ${formatDisplayISODate(selectedAgendaDate)}`;
+            const selEvents = events.filter(e => e.scheduleDate === selectedAgendaDate);
+            if (dayList) {
+                dayList.innerHTML = selEvents.length === 0
+                    ? `<div class="p-3 text-center text-xs text-slate-400 border border-dashed rounded-xl">Sin compromisos este día.</div>`
+                    : selEvents.map(e => `<div class="p-2.5 rounded-xl bg-slate-50 border flex items-center justify-between text-xs">
+                        <div><b>${e.scheduleTime || '10:00'} hs — ${e.name}</b><div class="text-[11px] text-slate-500">${e.status} ${e.interestModel ? '• ' + e.interestModel : ''}</div></div>
+                        <button onclick="deleteScheduledEvent('${e.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded-lg font-bold">✕</button>
+                    </div>`).join('');
+            }
+            if (upList) {
+                const upcoming = events.filter(e => e.scheduleDate >= getTodayISODate()).slice(0, 8);
+                upList.innerHTML = upcoming.length === 0
+                    ? `<div class="text-xs text-slate-400">Sin próximos compromisos agendados.</div>`
+                    : upcoming.map(e => `<div class="p-2 rounded-xl bg-purple-50/60 border border-purple-200 flex items-center justify-between text-xs">
+                        <span><b>${formatDisplayISODate(e.scheduleDate)} ${e.scheduleTime || ''}</b> · ${e.name}</span>
+                        <span class="px-2 py-0.5 rounded bg-purple-600 text-white text-[10px] font-bold">${e.status}</span>
+                    </div>`).join('');
+            }
+        };
+        window.changeAgendaMonth = function(delta) {
+            agendaViewMonth += delta;
+            if (agendaViewMonth < 0) { agendaViewMonth = 11; agendaViewYear--; }
+            if (agendaViewMonth > 11) { agendaViewMonth = 0; agendaViewYear++; }
+            renderAgendaTab();
+        };
+
+        // --- COMPARATIVA DE PLANES (COMPLETA) ---
+        window.syncPlaneroDeLeyLive = async function(manual = false) { mergeDefaultMarketPlans(); renderComparativaSelectors(); if (manual) showToast("Lista de planes actualizada"); };
         window.onCompSegmentChange = function() { renderComparativaSelectors(); };
+        window.selectCompetitorPlanFromTable = function(rivalId) {
+            const rvEl = document.getElementById('comp-rival-select');
+            if (rvEl) { rvEl.value = rivalId; renderComparativaResult(); }
+        };
         function renderComparativaSelectors() {
             const segEl = document.getElementById('comp-segment-select'), tyEl = document.getElementById('comp-toyota-select'), rvEl = document.getElementById('comp-rival-select');
             if (!segEl || !tyEl || !rvEl) return;
             const seg = segEl.value || 'Pick Up';
             const segPlans = marketPlansCatalog.filter(p => p.segment === seg);
+            const prevTy = tyEl.value, prevRv = rvEl.value;
             tyEl.innerHTML = segPlans.filter(p => p.brand === 'Toyota').map(p => `<option value="${p.id}">${p.model} (${p.modality}) — $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
             rvEl.innerHTML = segPlans.filter(p => p.brand !== 'Toyota').map(p => `<option value="${p.id}">${p.brand} ${p.model} (${p.modality}) — $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
+            if (prevTy && segPlans.some(p => p.id === prevTy)) tyEl.value = prevTy;
+            if (prevRv && segPlans.some(p => p.id === prevRv)) rvEl.value = prevRv;
             renderComparativaResult();
         }
         window.renderComparativaResult = function() {
             const container = document.getElementById('comp-head-to-head');
-            const ty = marketPlansCatalog.find(p => p.id === document.getElementById('comp-toyota-select')?.value);
-            const rv = marketPlansCatalog.find(p => p.id === document.getElementById('comp-rival-select')?.value);
-            if (!container || !ty || !rv) return;
-            container.innerHTML = `<div class="lg:col-span-6 p-4 rounded-2xl bg-[#0A0A0C] text-white border-2 border-[#EB0A1E]"><h3 class="text-lg font-extrabold">${ty.model} (${ty.modality})</h3><p class="text-sm mt-2">Valor unidad: <b>$${ty.valorMovil.toLocaleString('es-AR')}</b> • Cuota Ref.: <b class="text-emerald-400">$${ty.cuotaPura.toLocaleString('es-AR')}</b></p></div><div class="lg:col-span-6 p-4 rounded-2xl bg-slate-50 border"><h3 class="text-lg font-bold">${rv.brand} ${rv.model}</h3><p class="text-sm mt-2">Valor unidad: <b>$${rv.valorMovil.toLocaleString('es-AR')}</b> • Cuota Ref.: <b>$${rv.cuotaPura.toLocaleString('es-AR')}</b></p></div>`;
+            const tbody = document.getElementById('comp-segment-table-body');
+            const countBadge = document.getElementById('comp-table-count');
+            const seg = document.getElementById('comp-segment-select')?.value || 'Pick Up';
+            const segPlans = marketPlansCatalog.filter(p => p.segment === seg);
+            const ty = marketPlansCatalog.find(p => p.id === document.getElementById('comp-toyota-select')?.value) || segPlans.find(p => p.brand === 'Toyota');
+            const rv = marketPlansCatalog.find(p => p.id === document.getElementById('comp-rival-select')?.value) || segPlans.find(p => p.brand !== 'Toyota');
+
+            if (countBadge) countBadge.textContent = `${segPlans.length} planes en ${seg}`;
+            if (tbody) {
+                tbody.innerHTML = segPlans.map(p => {
+                    const isTy = p.brand === 'Toyota';
+                    return `<tr class="${isTy ? 'bg-red-50/40 font-semibold' : ''}">
+                        <td class="p-3.5"><span class="px-2 py-0.5 rounded text-xs font-extrabold ${isTy ? 'bg-[#EB0A1E] text-white' : 'bg-slate-200 text-slate-800'}">${p.brand}</span></td>
+                        <td class="p-3.5 font-bold">${p.model}</td>
+                        <td class="p-3.5 text-xs">${p.modality}</td>
+                        <td class="p-3.5 tabular-nums">$${Number(p.valorMovil).toLocaleString('es-AR')}</td>
+                        <td class="p-3.5 font-extrabold tabular-nums ${isTy ? 'text-[#EB0A1E]' : 'text-slate-900'}">$${Number(p.cuotaPura).toLocaleString('es-AR')}</td>
+                        <td class="p-3.5">${isTy ? '<span class="text-xs font-bold text-emerald-700">Referencia Toyota</span>' : `<button onclick="selectCompetitorPlanFromTable('${p.id}')" class="px-2.5 py-1 rounded-lg bg-[#0A0A0C] text-white text-xs font-bold">Comparar</button>`}</td>
+                    </tr>`;
+                }).join('');
+            }
+
+            if (!container || !ty) return;
+            if (!rv) {
+                container.innerHTML = `<div class="lg:col-span-12 p-5 rounded-2xl bg-[#0A0A0C] text-white border-2 border-[#EB0A1E]"><h3 class="text-lg font-extrabold">${ty.model} (${ty.modality})</h3><p class="text-sm mt-2">Valor unidad: <b>$${ty.valorMovil.toLocaleString('es-AR')}</b> • Cuota Ref.: <b class="text-emerald-400">$${ty.cuotaPura.toLocaleString('es-AR')}</b> (Líder exclusivo de segmento sin rival directo en plan).</p></div>`;
+                return;
+            }
+            const diffQuota = rv.cuotaPura - ty.cuotaPura;
+            const diffText = diffQuota > 0
+                ? `Ahorro mensual con Toyota: $${diffQuota.toLocaleString('es-AR')}/mes ($${(diffQuota * 84).toLocaleString('es-AR')} en 84 cuotas)`
+                : `Diferencia mensual de $${Math.abs(diffQuota).toLocaleString('es-AR')}/mes con mayor valor de reventa Toyota y sistema Llave por Llave`;
+
+            container.innerHTML = `
+                <div class="lg:col-span-6 p-5 rounded-2xl bg-[#0A0A0C] text-white border-2 border-[#EB0A1E] space-y-2">
+                    <div class="flex items-center justify-between"><span class="px-2.5 py-0.5 rounded bg-[#EB0A1E] text-white text-[10px] font-extrabold uppercase">Toyota Oficial</span><span class="text-xs text-zinc-400">Modalidad ${ty.modality}</span></div>
+                    <h3 class="text-lg font-extrabold">${ty.model}</h3>
+                    <div class="grid grid-cols-2 gap-2 pt-1 tabular-nums">
+                        <div class="p-2.5 rounded-xl bg-white/10"><div class="text-[10px] text-zinc-400 uppercase">Valor Unidad</div><div class="text-sm font-extrabold">$${ty.valorMovil.toLocaleString('es-AR')}</div></div>
+                        <div class="p-2.5 rounded-xl bg-emerald-600/20 border border-emerald-500/40"><div class="text-[10px] text-emerald-300 uppercase">Cuota Ref.</div><div class="text-sm font-extrabold text-emerald-400">$${ty.cuotaPura.toLocaleString('es-AR')}</div></div>
+                    </div>
+                    <p class="text-xs text-zinc-300 pt-1">✓ Retiro desde cuota 2 • Llave por Llave • Mayor valor de reventa del mercado.</p>
+                </div>
+                <div class="lg:col-span-6 p-5 rounded-2xl bg-slate-50 border border-slate-300 space-y-2">
+                    <div class="flex items-center justify-between"><span class="px-2.5 py-0.5 rounded bg-slate-800 text-white text-[10px] font-extrabold uppercase">${rv.brand}</span><span class="text-xs text-slate-500">Modalidad ${rv.modality}</span></div>
+                    <h3 class="text-lg font-bold text-slate-900">${rv.model}</h3>
+                    <div class="grid grid-cols-2 gap-2 pt-1 tabular-nums">
+                        <div class="p-2.5 rounded-xl bg-white border"><div class="text-[10px] text-slate-500 uppercase">Valor Unidad</div><div class="text-sm font-extrabold">$${rv.valorMovil.toLocaleString('es-AR')}</div></div>
+                        <div class="p-2.5 rounded-xl bg-white border"><div class="text-[10px] text-slate-500 uppercase">Cuota Ref.</div><div class="text-sm font-extrabold text-slate-900">$${rv.cuotaPura.toLocaleString('es-AR')}</div></div>
+                    </div>
+                    <p class="text-xs font-bold text-[#EB0A1E] pt-1">⚖️ ${diffText}</p>
+                </div>`;
         };
 
-        // --- OBJETIVOS ---
-        window.renderObjetivos = function() {};
-        window.saveGoalsConfig = function() { saveLocalData(true); showToast("🎯 Metas guardadas"); };
-        window.applyAiSuggestedGoals = function() { showToast("✨ Metas IA aplicadas"); };
+        // --- OBJETIVOS (COMPLETO CON PROYECCIÓN DÍAS HÁBILES Y COACH IA) ---
+        function countRemainingWeekdaysInMonth() {
+            const now = new Date();
+            const year = now.getFullYear(), month = now.getMonth(), today = now.getDate();
+            const lastDay = new Date(year, month + 1, 0).getDate();
+            let remaining = 0, totalMonth = 0;
+            for (let d = 1; d <= lastDay; d++) {
+                const dow = new Date(year, month, d).getDay();
+                if (dow >= 1 && dow <= 5) {
+                    totalMonth++;
+                    if (d >= today) remaining++;
+                }
+            }
+            return { remaining: Math.max(1, remaining), totalMonth: Math.max(1, totalMonth) };
+        }
+        window.renderObjetivos = function() {
+            const wContainer = document.getElementById('weekly-goals-container');
+            const mContainer = document.getElementById('monthly-goals-container');
+            const ratesGrid = document.getElementById('ai-funnel-rates-grid');
+            const insightsList = document.getElementById('ai-coach-insights-list');
+            const paceSummary = document.getElementById('objetivos-pace-summary');
+            const remBadge = document.getElementById('objetivos-dias-restantes-badge');
+            const habBadge = document.getElementById('objetivos-dias-habiles-badge');
+            if (!wContainer || !mContainer) return;
+
+            const all = getAllListsCombined();
+            const actuals = {
+                llamadas: all.filter(c => (c.method || '').toLowerCase().includes('llamada')).length,
+                mensajes: all.filter(c => (c.method || '').toLowerCase().includes('mensaje') || c.status === 'Mensaje Enviado (48h)' || isClientStatus(c.status)).length,
+                interesados: all.filter(c => c.status === 'Interesado' || c.status === 'Interesado a Futuro').length,
+                entrevistas: all.filter(c => c.status === 'Entrevista').length,
+                ventas: all.filter(c => c.status === 'Venta').length
+            };
+
+            const { remaining, totalMonth } = countRemainingWeekdaysInMonth();
+            if (remBadge) remBadge.textContent = `${remaining} días hábiles restantes`;
+            if (habBadge) habBadge.textContent = `${totalMonth} días hábiles en el mes`;
+
+            const missingSales = Math.max(0, (goals.monthly?.ventas || 20) - actuals.ventas);
+            const dailySalesNeeded = (missingSales / remaining).toFixed(2);
+            const dailyInteresNeeded = Math.ceil(Math.max(0, (goals.monthly?.interesados || 100) - actuals.interesados) / remaining);
+            if (paceSummary) {
+                paceSummary.textContent = `Para cumplir la meta mensual te faltan ${missingSales} ventas (${dailySalesNeeded}/día hábil) y generar ~${dailyInteresNeeded} interesados nuevos por día.`;
+            }
+
+            const metricsMeta = [
+                { key: 'llamadas', label: 'Llamadas Realizadas' },
+                { key: 'mensajes', label: 'Mensajes WhatsApp Enviados' },
+                { key: 'interesados', label: 'Interesados Generados' },
+                { key: 'entrevistas', label: 'Entrevistas Agendadas' },
+                { key: 'ventas', label: 'Ventas / Suscripciones' }
+            ];
+
+            wContainer.innerHTML = metricsMeta.map(m => {
+                const target = Number(goals.weekly?.[m.key] || 10);
+                const cur = actuals[m.key] || 0;
+                const pct = Math.min(100, Math.round((cur / Math.max(1, target)) * 100));
+                return `<div class="p-3 rounded-xl bg-slate-50 border space-y-1.5">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-bold text-slate-800">${m.label}</span>
+                        <div class="flex items-center gap-1.5 tabular-nums">
+                            <span class="font-extrabold text-slate-900">${cur} /</span>
+                            <input type="number" id="goal-w-${m.key}" value="${target}" min="1" class="w-16 px-2 py-0.5 text-xs font-bold border rounded-lg bg-white text-right">
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden"><div class="bg-[#EB0A1E] h-2 rounded-full" style="width:${pct}%"></div></div>
+                </div>`;
+            }).join('');
+
+            mContainer.innerHTML = metricsMeta.map(m => {
+                const target = Number(goals.monthly?.[m.key] || 40);
+                const cur = actuals[m.key] || 0;
+                const pct = Math.min(100, Math.round((cur / Math.max(1, target)) * 100));
+                return `<div class="p-3 rounded-xl bg-slate-50 border space-y-1.5">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-bold text-slate-800">${m.label}</span>
+                        <div class="flex items-center gap-1.5 tabular-nums">
+                            <span class="font-extrabold text-slate-900">${cur} /</span>
+                            <input type="number" id="goal-m-${m.key}" value="${target}" min="1" class="w-16 px-2 py-0.5 text-xs font-bold border rounded-lg bg-white text-right">
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden"><div class="bg-emerald-600 h-2 rounded-full" style="width:${pct}%"></div></div>
+                </div>`;
+            }).join('');
+
+            const contactados = Math.max(1, actuals.llamadas + actuals.mensajes);
+            const rateContactoInteres = Math.round((actuals.interesados / contactados) * 100);
+            const rateInteresEntrevista = actuals.interesados > 0 ? Math.round((actuals.entrevistas / actuals.interesados) * 100) : 0;
+            const rateEntrevistaVenta = actuals.entrevistas > 0 ? Math.round((actuals.ventas / actuals.entrevistas) * 100) : 0;
+
+            if (ratesGrid) {
+                ratesGrid.innerHTML = `
+                    <div class="p-3 rounded-xl bg-slate-50 border"><div class="text-[10px] font-bold text-slate-500 uppercase">Contacto → Interés</div><div class="text-xl font-extrabold text-slate-900 mt-0.5 tabular-nums">${rateContactoInteres}%</div></div>
+                    <div class="p-3 rounded-xl bg-slate-50 border"><div class="text-[10px] font-bold text-slate-500 uppercase">Interés → Entrevista</div><div class="text-xl font-extrabold text-purple-700 mt-0.5 tabular-nums">${rateInteresEntrevista}%</div></div>
+                    <div class="p-3 rounded-xl bg-slate-50 border"><div class="text-[10px] font-bold text-slate-500 uppercase">Entrevista → Venta</div><div class="text-xl font-extrabold text-[#EB0A1E] mt-0.5 tabular-nums">${rateEntrevistaVenta}%</div></div>`;
+            }
+
+            latestAiSuggestedWeekly = {
+                llamadas: Math.max(80, Math.round((goals.monthly?.llamadas || 400) / 4)),
+                mensajes: Math.max(120, Math.round((goals.monthly?.mensajes || 600) / 4)),
+                interesados: Math.max(20, Math.round((goals.monthly?.interesados || 100) / 4)),
+                entrevistas: Math.max(8, Math.round((goals.monthly?.entrevistas || 40) / 4)),
+                ventas: Math.max(4, Math.round((goals.monthly?.ventas || 20) / 4))
+            };
+
+            if (insightsList) {
+                insightsList.innerHTML = `
+                    <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950">💡 <b>Ritmo Sugerido:</b> Mantené al menos <b>${Math.ceil(latestAiSuggestedWeekly.mensajes / 5)} mensajes diarios</b> (Lunes a Viernes) más el piloto automático de Sofía 2.7 para sostener ${latestAiSuggestedWeekly.entrevistas} entrevistas por semana.</div>`;
+            }
+        };
+        window.saveGoalsConfig = function() {
+            ['llamadas', 'mensajes', 'interesados', 'entrevistas', 'ventas'].forEach(k => {
+                const wVal = Number(document.getElementById(`goal-w-${k}`)?.value);
+                const mVal = Number(document.getElementById(`goal-m-${k}`)?.value);
+                if (wVal > 0) goals.weekly[k] = wVal;
+                if (mVal > 0) goals.monthly[k] = mVal;
+            });
+            saveLocalData(true);
+            renderObjetivos();
+            showToast("🎯 Metas semanales y mensuales guardadas");
+        };
+        window.applyAiSuggestedGoals = function() {
+            if (!latestAiSuggestedWeekly) renderObjetivos();
+            if (latestAiSuggestedWeekly) {
+                goals.weekly = { ...latestAiSuggestedWeekly };
+                goals.monthly = {
+                    llamadas: latestAiSuggestedWeekly.llamadas * 4,
+                    mensajes: latestAiSuggestedWeekly.mensajes * 4,
+                    interesados: latestAiSuggestedWeekly.interesados * 4,
+                    entrevistas: latestAiSuggestedWeekly.entrevistas * 4,
+                    ventas: latestAiSuggestedWeekly.ventas * 4
+                };
+                saveLocalData(true);
+                renderObjetivos();
+                showToast("✨ Metas sugeridas por IA aplicadas");
+            }
+        };
 
         // ============================================================================
         // LECTURA DE PDFs DE PLANES (3 TRAMOS + INTEGRACIÓN MÍNIMA DINÁMICA + EDICIÓN)
@@ -2561,7 +2836,6 @@
             const pureMatch = rawStr.match(/cuota\s*pura\s*:?\s*\$?\s*([\d]{1,3}(?:\.[\d]{3})+)/i);
             if (pureMatch) pureQuota = Number(pureMatch[1].replace(/\./g, ''));
 
-            // Lectura robusta de los 4 importes de la tabla RANGO / VALOR (funciona aunque la columna RANGO y VALOR tengan distinto tamaño de fuente)
             const lines = rawStr.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
             let c1 = 0;
             const rangeItems = [];
@@ -2886,7 +3160,7 @@
 
             async resolveModels(apiKey) {
                 if (Array.isArray(this.cachedModels) && this.cachedModels.length > 0) return this.cachedModels;
-                const preferredOrder = ['gemini-3.1-flash-lite-preview', 'gemini-3-flash-preview', 'gemini-flash-latest'];
+                const preferredOrder = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-3-flash-preview', 'gemini-flash-latest'];
                 try {
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
                     if (res.ok) {
@@ -2906,82 +3180,98 @@
 
             async syncBrainToFirebase() {
                 try {
+                    let remotePausedMap = {};
+                    try {
+                        const pausedRes = await fetch(`${FIREBASE_DB_URL}/ai_paused/${encodeURIComponent(syncRoom)}.json`);
+                        if (pausedRes.ok) remotePausedMap = (await pausedRes.json()) || {};
+                    } catch (e) {}
+
                     const authorizedContacts = getAllListsCombined()
                         .filter(c => c.phone || c.name)
-                        .map(c => ({
-                            id: c.id,
-                            name: c.name || '',
-                            phone: formatPhoneAR(c.phone || ''),
-                            digitsTail: String(c.phone || '').replace(/\D/g, '').slice(-7),
-                            status: c.status || 'Pendiente',
-                            channel: c.lastOutreachChannel || c.method || 'CRM',
-                            interestModel: c.interestModel || '',
-                            observations: c.observations || '',
-                            aiPaused: Boolean(c.aiPaused),
-                            lastOutreachMsg: c.lastOutreachMsg || ''
-                        }));
+                        .map(c => {
+                            const safeKey = String(c.id || '').replace(/[.#$\[\]\/]/g, '_');
+                            const pausedInCloud = Boolean(remotePausedMap?.[safeKey]?.paused);
+                            if (pausedInCloud) c.aiPaused = true;
+                            return {
+                                id: c.id,
+                                name: c.name || '',
+                                phone: formatPhoneAR(c.phone || ''),
+                                digitsTail: String(c.phone || '').replace(/\D/g, '').slice(-7),
+                                status: c.status || 'Pendiente',
+                                channel: c.lastOutreachChannel || c.method || 'CRM',
+                                interestModel: c.interestModel || '',
+                                observations: c.observations || '',
+                                aiPaused: Boolean(c.aiPaused || pausedInCloud),
+                                lastOutreachMsg: c.lastOutreachMsg || ''
+                            };
+                        });
 
                     const officialPricesText = this.buildOfficialPricesText();
                     const systemPrompt = this.getSystemPrompt(officialPricesText);
                     const normalizedTesters = this.getAllSandboxTesters();
 
                     let effectiveApiKey = String(this.config.geminiApiKey || '').trim();
-                    let effectiveBackup1 = String(this.config.geminiApiKeyBackup1 || '').trim();
-                    let effectiveBackup2 = String(this.config.geminiApiKeyBackup2 || '').trim();
+                    let backupKey1 = String(this.config.geminiApiKeyBackup1 || '').trim();
+                    let backupKey2 = String(this.config.geminiApiKeyBackup2 || '').trim();
                     if (!effectiveApiKey) {
                         try {
                             const [prevRes, keyRes] = await Promise.all([
                                 fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`),
                                 fetch(`${FIREBASE_DB_URL}/ai_keys/${encodeURIComponent(syncRoom)}.json`)
                             ]);
-                            const prevBrain = await prevRes.json().catch(() => null);
-                            const keyBackup = await keyRes.json().catch(() => null);
-                            const recoveredKey = String(prevBrain?.geminiApiKey || keyBackup?.geminiApiKey || '').trim();
-                            if (recoveredKey) {
-                                effectiveApiKey = recoveredKey;
+                            const prevBrain = prevRes.ok ? await prevRes.json() : null;
+                            const keyDoc = keyRes.ok ? await keyRes.json() : null;
+                            effectiveApiKey = String(prevBrain?.geminiApiKey || keyDoc?.geminiApiKey || '').trim();
+                            backupKey1 = backupKey1 || String(prevBrain?.geminiApiKeyBackup1 || keyDoc?.geminiApiKeyBackup1 || '').trim();
+                            backupKey2 = backupKey2 || String(prevBrain?.geminiApiKeyBackup2 || keyDoc?.geminiApiKeyBackup2 || '').trim();
+                            if (effectiveApiKey) {
                                 this.config.geminiApiKey = effectiveApiKey;
+                                this.config.geminiApiKeyBackup1 = backupKey1;
+                                this.config.geminiApiKeyBackup2 = backupKey2;
+                                this.saveConfig();
                             }
-                            if (!effectiveBackup1) effectiveBackup1 = String(prevBrain?.geminiApiKeyBackup1 || keyBackup?.geminiApiKeyBackup1 || '').trim();
-                            if (!effectiveBackup2) effectiveBackup2 = String(prevBrain?.geminiApiKeyBackup2 || keyBackup?.geminiApiKeyBackup2 || '').trim();
-                            this.config.geminiApiKeyBackup1 = effectiveBackup1;
-                            this.config.geminiApiKeyBackup2 = effectiveBackup2;
-                            this.saveConfig();
                         } catch (e) {}
-                    } else {
-                        fetch(`${FIREBASE_DB_URL}/ai_keys/${encodeURIComponent(syncRoom)}.json`, {
+                    }
+
+                    const tasks = [
+                        fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
+                                updatedAt: Date.now(),
+                                room: syncRoom,
+                                active: Boolean(this.config.autoReplyMobile),
+                                cloudWorkerPrimary: true,
+                                sandboxEnabled: Boolean(this.config.sandboxEnabled),
+                                sandboxPhone: formatPhoneAR(normalizedTesters[0] || this.config.sandboxPhone || ''),
+                                sandboxTesters: normalizedTesters,
+                                advisorName: this.config.advisorName || 'Sofía',
+                                branchName: this.config.branchName || 'Ginza Toyota',
                                 geminiApiKey: effectiveApiKey,
-                                geminiApiKeyBackup1: effectiveBackup1,
-                                geminiApiKeyBackup2: effectiveBackup2,
-                                updatedAt: Date.now()
+                                geminiApiKeyBackup1: backupKey1,
+                                geminiApiKeyBackup2: backupKey2,
+                                systemPrompt,
+                                officialPricesText,
+                                authorizedContacts,
+                                toyotaPlans: marketPlansCatalog.filter(p => p.brand === 'Toyota')
                             })
-                        }).catch(() => {});
+                        })
+                    ];
+
+                    if (effectiveApiKey) {
+                        tasks.push(fetch(`${FIREBASE_DB_URL}/ai_keys/${encodeURIComponent(syncRoom)}.json`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                updatedAt: Date.now(),
+                                geminiApiKey: effectiveApiKey,
+                                geminiApiKeyBackup1: backupKey1,
+                                geminiApiKeyBackup2: backupKey2
+                            })
+                        }));
                     }
 
-                    await fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            updatedAt: Date.now(),
-                            room: syncRoom,
-                            active: Boolean(this.config.autoReplyMobile),
-                            cloudWorkerPrimary: true,
-                            sandboxEnabled: Boolean(this.config.sandboxEnabled),
-                            sandboxPhone: formatPhoneAR(normalizedTesters[0] || this.config.sandboxPhone || ''),
-                            sandboxTesters: normalizedTesters,
-                            advisorName: this.config.advisorName || 'Sofía',
-                            branchName: this.config.branchName || 'Ginza Toyota',
-                            geminiApiKey: effectiveApiKey,
-                            geminiApiKeyBackup1: effectiveBackup1,
-                            geminiApiKeyBackup2: effectiveBackup2,
-                            systemPrompt,
-                            officialPricesText,
-                            authorizedContacts,
-                            toyotaPlans: marketPlansCatalog.filter(p => p.brand === 'Toyota')
-                        })
-                    });
+                    await Promise.all(tasks);
                 } catch (e) {}
             },
 
@@ -3039,24 +3329,30 @@
 
 REGLA MAESTRA UNIVERSAL PARA CUALQUIER CHARLA (SIN EXCEPCIONES):
 SECUENCIA OBLIGATORIA DE 4 ETAPAS EN TODA CONVERSACIÓN (SEA CUAL SEA EL MODELO, VERSIÓN O CANAL):
-- ETAPA 1 — INDAGAR PRIMERO: Nunca explicar de golpe ni tirar cuotas ni invitar antes de indagar. Hacé 1 sola pregunta corta por mensaje: modelo -> versión -> alternativa (plan de ahorro o compra convencional) -> si conoce cómo funciona el sistema -> qué valor de cuota mensual le queda cómodo pagar -> si cuenta con usado o ahorro.
+- ETAPA 1 — INDAGAR PRIMERO (EMBUDO ELÁSTICO / SKIP-AHEAD): Nunca explicar de golpe ni tirar cuotas ni invitar antes de indagar. Hacé 1 sola pregunta corta por mensaje: modelo -> versión -> alternativa (plan de ahorro o compra convencional) -> si conoce cómo funciona el sistema -> qué valor de cuota mensual le queda cómodo pagar -> si cuenta con usado o ahorro. REGLA DE ORO: si el cliente ya entregó varios datos juntos en un mensaje largo, NO vuelvas a preguntar lo que ya dijo: confirmá lo recibido y preguntá únicamente el primer dato que falte.
 - ETAPA 2 — EXPLICAR DESPUÉS: Recién con esa información indagada, explicá de forma simple y sobria (pesos sin interés bancario, valores oficiales de la unidad/cuota/integración mínima, retiro desde cuota 2 por sorteo o licitación solo si pregunta, sistema Llave por Llave si tiene usado aclarando que la tasación oficial se hace una vez suscripto al plan) y preguntá si le quedó alguna duda.
 - ETAPA 3 — EVALUAR EL GRADO DE INTERÉS: PROHIBIDO invitar al concesionario sin haber evaluado primero el grado de interés real del cliente ("Contame, con estos números y condiciones, ¿cómo lo ves? ¿Te interesa esta alternativa?").
 - ETAPA 4 — AVANZAR A ENTREVISTA SOLO SI MANIFIESTA INTERÉS: Recién cuando el cliente confirme que le interesa, proponé una reunión en el concesionario ("Te propongo que tengamos una reunión en el concesionario así ves más en detalle la propuesta junto a Gonzalo. ¿Te queda cómodo pasar esta semana por la mañana o por la tarde?"). PROHIBIDO usar la palabra "suscripción" o decir "acercate".
 
-FLUJO SI EL CLIENTE DICE "NO QUIERO PLAN DE AHORRO" (COMPRA CONVENCIONAL / PRENDARIO TCFA):
-- Nunca insistas ni repitas preguntas ya contestadas.
-- Paso A: Indagá versión (ej. naftera o híbrida) -> Paso B: Informá el precio oficial de lista Noviembre 2026 (ej. Yaris Cross XEI Híbrida: $48.457.000; XLI Naftera: $41.464.000; Yaris XS: $36.315.000; Corolla XLI: $44.082.000; Corolla Cross XLI: $51.918.000; Hilux 4x2 DX: $49.621.000) y preguntá con qué usado o anticipo en efectivo cuenta -> Paso C: Cuando pase los datos de su usado (ej. Fiesta 2016 120.000 km), confirmá que le pasás esos datos a Gonzalo para evaluarlo y preguntá qué cuota mensual le quedaría cómoda pagar para el saldo -> Paso D: Explicá la financiación prendaria TCFA y contrastá amablemente la diferencia de cuota frente al plan en pesos sin interés bancario -> Paso E: Evaluá grado de interés antes de proponer reunión en el concesionario.
+CASOS BORDE Y EXCEPCIONES CRÍTICAS:
+- SI PIDE HABLAR DIRECTO CON GONZALO O PREGUNTA SI SOS UN BOT: Respondé con cortesía y transparencia ("Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Ya le dejo aviso a Gonzalo para que te escriba personalmente por acá apenas se libere") y agregá al final la etiqueta oculta [[PAUSAR_HUMANO]].
+- SI CONSULTA POR TOYOTA SW4 EN PLAN DE AHORRO: Aclarale que SW4 actualmente no tiene suscripción directa en Toyota Plan (se trabaja por financiación prendaria convencional TCFA o mediante cambio de modelo al adjudicar en plan), e indagá si prefiere verlo por compra convencional o cambio de modelo.
+- SI CONSULTA POR GASTOS DE RETIRO / PATENTAMIENTO / FLETE / SEGURO: Explicá que la cuota mensual incluye gastos administrativos e IVA, y que al adjudicar se abona la integración mínima más gastos de retiro/patentamiento/flete y el seguro de la unidad una vez retirada, cuyo detalle exacto lo ve junto a Gonzalo al armar los números de entrega.
+- SI CORRIGE EL MODELO ("perdón, quise decir Corolla Cross, no Corolla"): Tomá inmediatamente el modelo corregido descartando el anterior y seguí desde ahí sin confundirlos.
+- ANTI-PROMESA DE PLAZOS DE ENTREGA ("¿en 30 días me la entregan?" / "¿cuánto tarda el retiro?"): Aclarale siempre de forma explícita que en plan de ahorro NO prometemos plazos fijos de entrega; puede adjudicar desde la cuota 2 por sorteo o licitación, y los tiempos de entrega dependen de la asignación de fábrica y la gestión administrativa una vez adjudicada.
+- OBJECIÓN DE DESCONFIANZA CON AUMENTOS ("se va a las nubes" / "me da miedo el plan"): Dale 1 frase corta de tranquilidad real antes de preguntar su presupuesto mensual ("Es normal tener esa consulta; a diferencia de un crédito bancario, acá no hay interés financiero, la cuota acompaña únicamente el valor móvil oficial de fábrica de la unidad y podés adelantar cuotas puras cuando quieras").
+- SALUDO + CONSULTA EN EL MISMO MENSAJE ("Hola, busco financiación"): Si además de saludar ya hizo una pregunta en el primer turno, presentate y respondé la consulta en el mismo mensaje sin cortar en "¿En qué te puedo ayudar?".
+- SI YA HAY HISTORIAL PREVIO Y EL CLIENTE DICE "HOLA": No repitas la presentación completa ni borres la charla; saludalo con naturalidad y retomá exactamente por donde venían conversando.
 
 EMBUDO CONVERSACIONAL OFICIAL ENTRENADO (PASO A PASO, 1 SOLA PREGUNTA CORTA POR MENSAJE):
 1. SALUDO INICIAL PURO ("Hola", "Buen día"):
   - SIEMPRE presentate completo con este texto exacto (adaptando solo buen día/buenas tardes): "Hola, buen día. Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. ¿En qué te puedo ayudar?"
 2. CONSULTA GENERAL DE FINANCIACIÓN (SIN NOMBRAR MODELO):
   - PROHIBIDO nombrar "plan de ahorro" o sacar tema del usado de entrada. Respondé: "Perfecto, tenemos varias opciones de financiación según lo que necesites. Para orientarte mejor, ¿buscás algún modelo en particular o ya tenés vista una unidad?"
-3. CUANDO NOMBRA EL MODELO (SIN PEDIR PLAN TODAVÍA — INCLUYE SI DICE "ESTOY BUSCANDO FINANCIACIÓN DE UN YARIS CROSS"):
-  - Indagá primero la versión (ej. en Yaris Cross: "En Yaris Cross trabajamos tanto la versión naftera como la híbrida. ¿Tenías vista alguna de las dos en particular?") SIN asumir ni mencionar plan de ahorro todavía.
+3. CUANDO NOMBRA EL MODELO (SIN PEDIR PLAN TODAVÍA — INCLUYE SI DICE "BUSCO FINANCIACIÓN DE UN YARIS CROSS"):
+  - Indagá primero la versión (ej. en Yaris Cross: "En Yaris Cross trabajamos tanto la versión naftera como la híbrida. ¿Tenías vista alguna de las dos en particular?") SIN mencionar plan de ahorro todavía.
 4. CUANDO PREGUNTA "A CUÁNTO SE VA" / PRECIO DE LA VERSIÓN O CÓMO ES LA FINANCIACIÓN:
-  - Informá el valor oficial de lista (ej. Yaris Cross XEI Híbrida: $48.457.000) y abrí las 2 alternativas reales de Ginza Toyota sin asumir plan de ahorro todavía: "La Yaris Cross XEI Híbrida está en $48.457.000 de lista. Para pasarte los números exactos, ¿estabas pensando en financiarla mediante plan de ahorro o evaluás una compra convencional?"
+  - Informá el valor oficial de lista (ej. Yaris Cross XEI Híbrida: $48.457.000) y abrí las 2 alternativas reales de Ginza Toyota sin paréntesis excluyentes ni decir "para orientarte...": "La Yaris Cross XEI Híbrida está en $48.457.000 de lista. Para pasarte los números exactos, ¿estabas pensando en financiarla mediante plan de ahorro o evaluás una compra convencional?"
 5. CUANDO ELIGE PLAN DE AHORRO:
   - PROHIBIDO tirar valores de cuota todavía. Aclarale la modalidad (ej. 70/30 en pesos sin interés bancario) y preguntá primero: "Contame, ¿alguna vez estuviste en un plan de ahorro o conocés cómo funciona el sistema?"
 6. SI NUNCA ESTUVO EN UN PLAN / NO CONOCE EL SISTEMA:
@@ -3076,7 +3372,7 @@ EMBUDO CONVERSACIONAL OFICIAL ENTRENADO (PASO A PASO, 1 SOLA PREGUNTA CORTA POR 
   - SI DICE QUE LO QUIERE EVALUAR / PENSAR: Preguntale por qué lo quiere evaluar y qué punto puntual le genera duda para ayudarlo a resolverlo.
   - SI INSISTE EN PENSARLO / PATEARLO: Preguntale qué día o fecha lo podemos volver a contactar para agendarlo en el Calendario IA (cuando confirme fecha/hora, agregá al final [[AGENDAR:YYYY-MM-DD|HH:MM|Interesado a Futuro]]).
   - SI DICE QUE NO LE INTERESA: Preguntale de forma cordial cuál es el motivo por el cual lo descarta para dejarlo registrado.
-13. PROHIBIDO REPETIR UNA RESPUESTA ANTERIOR, TONO SOBRIO Y FORMATO LIMPIO: Jamás repitas la misma frase dos veces seguidas, cero asteriscos (**), cero adulación y cero jerga ("oferta de licitación").
+13. PROHIBIDO REPETIR RESPUESTA ANTERIOR, TONO SOBRIO Y FORMATO LIMPIO: Jamás repitas la misma frase dos veces seguidas, cero asteriscos (**), cero adulación y cero jerga ("oferta de licitación").
 
 ${officialPricesText}`;
             },
@@ -3195,7 +3491,7 @@ ${officialPricesText}`;
             if (prev) sel.value = prev;
         }
 
-        window.openWaAiAssistantModal = function() {
+        window.openWaAiAssistantModal = async function() {
             document.getElementById('wa-ai-auto-reply').checked = Boolean(SOFIA_AI.config.autoReplyMobile);
             document.getElementById('wa-ai-gemini-key').value = SOFIA_AI.config.geminiApiKey || '';
             const b1El = document.getElementById('wa-ai-gemini-key-b1');
@@ -3215,6 +3511,20 @@ ${officialPricesText}`;
             refreshWaAiContactSelect();
             onWaAiContactChange();
             document.getElementById('wa-ai-assistant-modal')?.classList.remove('hidden');
+
+            try {
+                const hRes = await fetch(`${FIREBASE_DB_URL}/wa_health/${encodeURIComponent(syncRoom)}.json`);
+                const hDoc = hRes.ok ? await hRes.json() : null;
+                const badge = document.getElementById('wa-ai-mobile-health-badge');
+                if (badge) {
+                    if (hDoc && hDoc.lastPingAt) {
+                        const mins = Math.max(0, Math.round((Date.now() - hDoc.lastPingAt) / 60000));
+                        badge.textContent = mins <= 15 ? `📱 Puente OK (hace ${mins}m)` : `📱 Último ping: ${hDoc.argTime || 'hoy'}`;
+                    } else {
+                        badge.textContent = `📱 Listo para recibir WA`;
+                    }
+                }
+            } catch (e) {}
         };
         window.closeWaAiAssistantModal = () => document.getElementById('wa-ai-assistant-modal')?.classList.add('hidden');
         window.saveWaAiConfig = async function() {
@@ -3222,19 +3532,6 @@ ${officialPricesText}`;
             SOFIA_AI.config.geminiApiKey = String(document.getElementById('wa-ai-gemini-key')?.value || '').trim();
             SOFIA_AI.config.geminiApiKeyBackup1 = String(document.getElementById('wa-ai-gemini-key-b1')?.value || '').trim();
             SOFIA_AI.config.geminiApiKeyBackup2 = String(document.getElementById('wa-ai-gemini-key-b2')?.value || '').trim();
-            SOFIA_AI.config.advisorName = String(document.getElementById('wa-ai-advisor-name')?.value || 'Sofía').trim();
-            SOFIA_AI.config.branchName = String(document.getElementById('wa-ai-branch')?.value || 'Ginza Toyota').trim();
-            SOFIA_AI.config.workerUrl = String(document.getElementById('wa-ai-worker-url')?.value || '').trim();
-            SOFIA_AI.config.cloudWorkerPrimary = Boolean(document.getElementById('wa-ai-cloud-worker-primary')?.checked);
-            SOFIA_AI.config.sandboxEnabled = Boolean(document.getElementById('wa-ai-sandbox-enabled')?.checked);
-            SOFIA_AI.saveConfig();
-            await SOFIA_AI.syncBrainToFirebase();
-            showToast("🤖 Cerebro Sofi 2.7 sincronizado (con llaves de respaldo)");
-        };
-        window.closeWaAiAssistantModal = () => document.getElementById('wa-ai-assistant-modal')?.classList.add('hidden');
-        window.saveWaAiConfig = async function() {
-            SOFIA_AI.config.autoReplyMobile = Boolean(document.getElementById('wa-ai-auto-reply')?.checked);
-            SOFIA_AI.config.geminiApiKey = String(document.getElementById('wa-ai-gemini-key')?.value || '').trim();
             SOFIA_AI.config.advisorName = String(document.getElementById('wa-ai-advisor-name')?.value || 'Sofía').trim();
             SOFIA_AI.config.branchName = String(document.getElementById('wa-ai-branch')?.value || 'Ginza Toyota').trim();
             SOFIA_AI.config.workerUrl = String(document.getElementById('wa-ai-worker-url')?.value || '').trim();
@@ -3254,17 +3551,32 @@ ${officialPricesText}`;
             const found = findContactGlobal(id);
             return found ? found.contact : { id, name: 'Cliente', phone: '' };
         }
-        window.onWaAiContactChange = function() {
+        window.onWaAiContactChange = async function() {
             const contact = getSelectedWaAiContact();
             const box = document.getElementById('wa-ai-chat-history');
             if (!box) return;
-            const msgs = SOFIA_AI.chats[contact.id] || [];
-            box.innerHTML = msgs.length === 0
-                ? `<div class="text-center text-xs text-slate-500 py-8">Sin mensajes aún con <b>${contact.name}</b>.</div>`
-                : msgs.map(m => m.role === 'user'
-                    ? `<div class="flex justify-start"><div class="max-w-[80%] px-3 py-2 rounded-2xl bg-white border text-xs">${m.text}</div></div>`
-                    : `<div class="flex justify-end"><div class="max-w-[80%] px-3 py-2 rounded-2xl bg-emerald-600 text-white text-xs">${m.text}</div></div>`).join('');
-            box.scrollTop = box.scrollHeight;
+            const renderChat = () => {
+                const msgs = SOFIA_AI.chats[contact.id] || [];
+                box.innerHTML = msgs.length === 0
+                    ? `<div class="text-center text-xs text-slate-500 py-8">Sin mensajes aún con <b>${contact.name}</b>.</div>`
+                    : msgs.map(m => m.role === 'user'
+                        ? `<div class="flex justify-start"><div class="max-w-[80%] px-3 py-2 rounded-2xl bg-white border text-xs">${m.text}</div></div>`
+                        : `<div class="flex justify-end"><div class="max-w-[80%] px-3 py-2 rounded-2xl bg-emerald-600 text-white text-xs">${m.text}</div></div>`).join('');
+                box.scrollTop = box.scrollHeight;
+            };
+            renderChat();
+            try {
+                const safeKey = String(contact.id || 'default').replace(/[.#$\[\]\/]/g, '_').replace(/\s+/g, '_');
+                const res = await fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(safeKey)}.json`);
+                if (res.ok) {
+                    const cloudMsgs = await res.json();
+                    if (Array.isArray(cloudMsgs) && cloudMsgs.length > 0) {
+                        SOFIA_AI.chats[contact.id] = cloudMsgs.filter(m => m && m.text);
+                        SOFIA_AI.saveChats();
+                        renderChat();
+                    }
+                }
+            } catch (e) {}
         };
         window.resetWaAiChatHistory = async function() {
             const contact = getSelectedWaAiContact();
@@ -3327,13 +3639,38 @@ ${officialPricesText}`;
         window.pauseMassCampaignRunner = () => {};
         window.sendNextCampaignItemNow = () => {};
         window.clearMassCampaignQueue = () => {};
-        window.openBackupModal = () => document.getElementById('backup-modal')?.classList.remove('hidden');
+        window.openBackupModal = () => {
+            const inp = document.getElementById('sync-room-input');
+            if (inp) inp.value = syncRoom;
+            document.getElementById('backup-modal')?.classList.remove('hidden');
+        };
         window.closeBackupModal = () => document.getElementById('backup-modal')?.classList.add('hidden');
-        window.changeSyncRoom = () => { closeBackupModal(); };
-        window.exportBackupFile = () => {};
-        window.openWaBridgeModal = () => document.getElementById('wa-bridge-modal')?.classList.remove('hidden');
+        window.changeSyncRoom = async () => {
+            const val = document.getElementById('sync-room-input')?.value.trim();
+            if (val) {
+                syncRoom = val;
+                localStorage.setItem('crm_sync_room', syncRoom);
+                await pullFromFirebase(true);
+                startFirebaseLiveListener();
+                showToast(`🔄 Sala cambiada a: ${syncRoom}`);
+            }
+            closeBackupModal();
+        };
+        window.exportBackupFile = () => {
+            const blob = new Blob([JSON.stringify(buildSyncPayload(Date.now()), null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Respaldo_CRM_Ginza_Toyota_${getTodayISODate()}.json`;
+            a.click();
+            showToast("💾 Copia JSON descargada");
+        };
+        window.openWaBridgeModal = () => {
+            const urlInp = document.getElementById('wa-webhook-url');
+            if (urlInp) urlInp.value = `${(SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '')}/incoming?room=${encodeURIComponent(syncRoom)}&format=text`;
+            document.getElementById('wa-bridge-modal')?.classList.remove('hidden');
+        };
         window.closeWaBridgeModal = () => document.getElementById('wa-bridge-modal')?.classList.add('hidden');
-        window.copyWaWebhookUrl = () => {};
+        window.copyWaWebhookUrl = () => copyInputText('wa-webhook-url');
         window.openSalesforceSyncModal = () => document.getElementById('sf-sync-modal')?.classList.remove('hidden');
         window.closeSalesforceSyncModal = () => document.getElementById('sf-sync-modal')?.classList.add('hidden');
         window.openWaTemplatesModal = () => document.getElementById('wa-templates-modal')?.classList.remove('hidden');
