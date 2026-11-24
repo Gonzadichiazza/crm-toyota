@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, ainitial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1217,7 +1217,7 @@
         let lastSyncedUpdatedAt = 0;
         let isApplyingRemote = false;
         let pushTimeout = null;
-        let firebaseStream = null, waIncomingStream = null, sfIncomingStream = null, waTabRef = null;
+        let firebaseStream = null, aiScheduledStream = null, waIncomingStream = null, sfIncomingStream = null, waTabRef = null;
         let processedSfEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_sf_events') || '[]'));
 
         let kpis = [{ id: '1', name: 'Llamada' }, { id: '2', name: 'Mensaje' }];
@@ -1420,6 +1420,7 @@
 
         function startFirebaseLiveListener() {
             if (firebaseStream) { try { firebaseStream.close(); } catch (e) {} }
+            if (aiScheduledStream) { try { aiScheduledStream.close(); } catch (e) {} }
             try {
                 firebaseStream = new EventSource(`${FIREBASE_DB_URL}/rooms/${encodeURIComponent(syncRoom)}.json`);
                 const handleEvent = (e) => {
@@ -1431,6 +1432,11 @@
                 };
                 firebaseStream.addEventListener('put', handleEvent);
                 firebaseStream.addEventListener('patch', handleEvent);
+
+                aiScheduledStream = new EventSource(`${FIREBASE_DB_URL}/ai_scheduled/${encodeURIComponent(syncRoom)}.json`);
+                const handleSchedEvent = () => { pullAiScheduledFromFirebase(); };
+                aiScheduledStream.addEventListener('put', handleSchedEvent);
+                aiScheduledStream.addEventListener('patch', handleSchedEvent);
             } catch (e) {}
         }
 
@@ -1522,6 +1528,54 @@
             return getAllListsCombined()
                 .filter(c => (c.status === 'Entrevista' || c.status === 'Interesado a Futuro') && c.scheduleDate)
                 .sort((a, b) => `${a.scheduleDate} ${a.scheduleTime || '23:59'}`.localeCompare(`${b.scheduleDate} ${b.scheduleTime || '23:59'}`));
+        }
+        async function pullAiScheduledFromFirebase() {
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/ai_scheduled/${encodeURIComponent(syncRoom)}.json`);
+                if (!res.ok) return;
+                const data = await res.json();
+                if (!data || typeof data !== 'object') return;
+
+                let changed = false;
+                for (const [key, ev] of Object.entries(data)) {
+                    if (!ev || !ev.scheduleDate) continue;
+                    const found = findContactGlobal(ev.contactId) || findContactGlobal(key);
+                    if (found) {
+                        const c = found.contact;
+                        const newStatus = ev.status || 'Interesado a Futuro';
+                        const newTime = ev.scheduleTime || '10:30';
+                        if (c.scheduleDate !== ev.scheduleDate || c.scheduleTime !== newTime || c.status !== newStatus) {
+                            c.scheduleDate = ev.scheduleDate;
+                            c.scheduleTime = newTime;
+                            c.status = newStatus;
+                            changed = true;
+                        }
+                    } else {
+                        const cleanPhone = formatPhoneAR(ev.phone || '');
+                        const existsByPhone = cleanPhone && getAllListsCombined().some(x => formatPhoneAR(x.phone) === cleanPhone);
+                        if (!existsByPhone) {
+                            gestionContacts.unshift({
+                                id: ev.contactId || key,
+                                name: ev.name || 'Cliente WhatsApp IA',
+                                phone: cleanPhone || ev.phone || '',
+                                method: 'WhatsApp IA',
+                                status: ev.status || 'Interesado a Futuro',
+                                scheduleDate: ev.scheduleDate,
+                                scheduleTime: ev.scheduleTime || '10:30',
+                                observations: 'Agendado automáticamente por Sofía 2.7'
+                            });
+                            changed = true;
+                        }
+                    }
+                }
+
+                if (changed) {
+                    saveLocalData(true);
+                    renderAllTables();
+                    updateDashboard();
+                    renderAgendaTab();
+                }
+            } catch (e) {}
         }
         window.copyInputText = function(inputId) {
             const el = document.getElementById(inputId);
@@ -2486,7 +2540,7 @@
             }
             closeScheduleModal();
         };
-        window.deleteScheduledEvent = function(id) {
+        window.deleteScheduledEvent = async function(id) {
             const f = findContactGlobal(id);
             if (f) {
                 f.contact.scheduleDate = '';
@@ -2495,6 +2549,10 @@
                 renderAllTables();
                 updateDashboard();
                 renderAgendaTab();
+                try {
+                    const safeKey = String(id || '').replace(/[.#$\[\]\/]/g, '_');
+                    await fetch(`${FIREBASE_DB_URL}/ai_scheduled/${encodeURIComponent(syncRoom)}/${encodeURIComponent(safeKey)}.json`, { method: 'DELETE' });
+                } catch (e) {}
                 showToast("🗑️ Compromiso quitado del calendario");
             }
         };
@@ -3160,7 +3218,7 @@
 
             async resolveModels(apiKey) {
                 if (Array.isArray(this.cachedModels) && this.cachedModels.length > 0) return this.cachedModels;
-                const preferredOrder = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-3-flash-preview', 'gemini-flash-latest'];
+                const preferredOrder = ['gemini-3-flash-preview', 'gemini-flash-latest', 'gemini-2.5-flash'];
                 try {
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
                     if (res.ok) {
@@ -3651,6 +3709,7 @@ ${officialPricesText}`;
                 syncRoom = val;
                 localStorage.setItem('crm_sync_room', syncRoom);
                 await pullFromFirebase(true);
+                await pullAiScheduledFromFirebase();
                 startFirebaseLiveListener();
                 showToast(`🔄 Sala cambiada a: ${syncRoom}`);
             }
@@ -3729,6 +3788,7 @@ ${officialPricesText}`;
             renderAllTables();
             updateDashboard();
             await pullFromFirebase(true);
+            await pullAiScheduledFromFirebase();
             await SOFIA_AI.syncBrainToFirebase();
             startFirebaseLiveListener();
         });
