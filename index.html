@@ -589,7 +589,7 @@
             <div class="bg-white rounded-2xl border p-5 flex flex-col justify-between">
                 <div>
                     <h2 class="text-base font-bold text-slate-900 mb-1">Subir PDFs de Planes</h2>
-                    <p class="text-xs text-slate-500 mb-4">Extrae cuotas, convierte las hojas a JPG y actualiza los valores oficiales de Toyota Plan.</p>
+                    <p class="text-xs text-slate-500 mb-4">Extrae cuotas, convierte las hojas a JPG y deja actualizados los valores oficiales para Sofía 2.7.</p>
                     <div class="grid grid-cols-3 gap-2 mb-3">
                         <select id="plan-month-input" class="px-2 py-2 text-xs border rounded-xl bg-white"><option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option><option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option><option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option></select>
                         <input type="number" id="plan-year-input" value="2026" class="px-2 py-2 text-xs border rounded-xl">
@@ -620,75 +620,150 @@
     </main>
 
     <!-- ========================================================================= -->
-    <!-- TAB 7: FINANCIACIONES & BANCOS (TCFA + BNA + PRENDARIOS)                  -->
+    <!-- TAB 7: FINANCIACIONES & BANCOS (COTIZADOR TCFA COMPLETO + EXPLICATIVO IA) -->
     <!-- ========================================================================= -->
     <main id="tab-financiaciones" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 hidden space-y-6">
         <div class="bg-gradient-to-r from-[#0A0A0C] via-[#151519] to-zinc-800 text-white rounded-3xl p-5 sm:p-6 shadow-md border border-zinc-800">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div>
-                    <span class="px-2.5 py-1 rounded-full bg-[#EB0A1E] text-white text-[10px] font-extrabold uppercase tracking-wider">Uso Interno • Simulador Rápido</span>
-                    <h2 class="text-lg sm:text-2xl font-extrabold mt-2">🏦 Financiación Convencional Toyota (TCFA) & Créditos Bancarios</h2>
-                    <p class="text-xs sm:text-sm text-zinc-300 mt-1">Calculá al instante cuánto necesita financiar el cliente descontando su usado y su ahorro, y compará la cuota bancaria vs Toyota Plan.</p>
+                    <span class="px-2.5 py-1 rounded-full bg-[#EB0A1E] text-white text-[10px] font-extrabold uppercase tracking-wider">Uso Interno • Cotizador Oficial TCFA Noviembre 2026</span>
+                    <h2 class="text-lg sm:text-2xl font-extrabold mt-2">🏦 Cotizador Prendario TCFA, Bancos & Explicativo Amigable IA</h2>
+                    <p class="text-xs sm:text-sm text-zinc-300 mt-1">Cotizá con la lista oficial 0 km Noviembre 2026, simulá las 5 líneas de TCFA + BNA y obtené al instante una explicación simple para el cliente (y el argumento para volver a Toyota Plan si la cuota le queda alta).</p>
                 </div>
             </div>
         </div>
 
+        <!-- COTIZADOR PRENDARIO OFICIAL TCFA + EXPLICATIVO AMIGABLE -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-5">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
                 <div>
-                    <h3 class="text-base font-extrabold text-slate-900">🧮 Calculadora de Diferencia a Financiar & Cuota Estimada</h3>
-                    <p class="text-xs text-slate-500">Simulador rápido para comparar entrega inmediata vs Toyota Plan en cuotas sin interés.</p>
+                    <h3 class="text-base font-extrabold text-slate-900">🧮 Cotizador Prendario TCFA (Lista Oficial 0 km Noviembre 2026)</h3>
+                    <p class="text-xs text-slate-500">Sistema francés + IVA 21% s/intereses • Tope máximo 75% del valor de lista o tope promocional.</p>
                 </div>
+                <span id="tcfa-model-price-badge" class="px-3 py-1 rounded-xl bg-slate-100 text-slate-900 text-xs font-extrabold tabular-nums">Lista: $49.621.000</span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">1. Valor 0 km Referencia ($)</label>
-                    <input type="number" id="fin-calc-0km" value="49621000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-slate-300 rounded-xl bg-white outline-none tabular-nums">
-                    <span class="text-[10px] text-slate-400">Ej: Hilux 4x2 DX ~$49.621.000</span>
+            <!-- Paso 1: Vehículo, Descuento, Usado y Anticipo -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                <div class="lg:col-span-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">1. Modelo / Versión Toyota 0 km</label>
+                    <select id="tcfa-model-select" onchange="onTcfaModelChange()" class="w-full px-3 py-2 text-xs font-bold border border-slate-300 rounded-xl bg-white outline-none"></select>
+                    <span id="tcfa-group-tag" class="text-[10px] text-slate-500 mt-1 block">Grupo B • Elegible Cupo Especial 0% 18m hasta $30M</span>
                 </div>
                 <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
-                    <label class="block text-[11px] font-bold text-amber-900 uppercase mb-1">2. Usado / Toma Estimada ($)</label>
-                    <input type="number" id="fin-calc-used" value="18000000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-amber-300 rounded-xl bg-white outline-none tabular-nums">
-                    <span class="text-[10px] text-amber-800">Valor estimado de toma del usado</span>
+                    <label class="block text-[11px] font-bold text-amber-900 uppercase mb-1">2. Usado en Parte de Pago ($)</label>
+                    <input type="number" id="tcfa-used-input" value="18000000" min="0" step="100000" oninput="recalcTcfaQuote()" class="w-full px-3 py-2 text-xs font-extrabold border border-amber-300 rounded-xl bg-white outline-none tabular-nums">
+                    <span class="text-[10px] text-amber-800">Toma estimada del usado</span>
                 </div>
                 <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200">
-                    <label class="block text-[11px] font-bold text-emerald-900 uppercase mb-1">3. Ahorro / Entrega Efectivo ($)</label>
-                    <input type="number" id="fin-calc-cash" value="6000000" oninput="recalcFinancingSimulator()" class="w-full px-3 py-2 text-sm font-extrabold border border-emerald-300 rounded-xl bg-white outline-none tabular-nums">
-                    <span class="text-[10px] text-emerald-800">Capital líquido adicional del cliente</span>
+                    <label class="block text-[11px] font-bold text-emerald-900 uppercase mb-1">3. Anticipo Efectivo ($)</label>
+                    <input type="number" id="tcfa-cash-input" value="6621000" min="0" step="100000" oninput="recalcTcfaQuote()" class="w-full px-3 py-2 text-xs font-extrabold border border-emerald-300 rounded-xl bg-white outline-none tabular-nums">
+                    <span class="text-[10px] text-emerald-800">Entrega adicional en pesos</span>
                 </div>
                 <div class="p-3 rounded-xl bg-[#0A0A0C] text-white flex flex-col justify-between">
-                    <span class="text-[11px] font-bold text-zinc-400 uppercase">Saldo Real a Financiar</span>
-                    <div id="fin-calc-gap" class="text-xl sm:text-2xl font-extrabold text-[#EB0A1E] my-1 tabular-nums">$25.621.000</div>
-                    <span id="fin-calc-gap-note" class="text-[10px] text-zinc-300">Capital faltante para retiro inmediato</span>
+                    <span class="text-[11px] font-bold text-zinc-400 uppercase">Capital a Financiar</span>
+                    <div id="tcfa-capital-display" class="text-lg sm:text-xl font-extrabold text-[#EB0A1E] my-0.5 tabular-nums">$25.000.000</div>
+                    <span id="tcfa-cap-warning" class="text-[10px] text-zinc-300">Dentro del tope 75%</span>
                 </div>
             </div>
 
-            <div id="fin-calc-results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-2"></div>
+            <!-- Paso 2: Selector de las 5 Categorías TCFA + Bancos -->
+            <div class="space-y-2">
+                <label class="block text-[11px] font-bold text-slate-600 uppercase">4. Elegí la Línea de Financiación (hacés clic y se explica abajo en lenguaje simple)</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2" id="tcfa-cat-buttons">
+                    <button onclick="selectTcfaCategory('promo')" id="tcfa-cat-promo" class="p-2.5 rounded-xl border-2 border-[#0A0A0C] bg-[#0A0A0C] text-white text-left transition-all">
+                        <div class="text-[10px] font-bold uppercase opacity-75">Opción 1</div>
+                        <div class="text-xs font-extrabold">Promos TCFA 0%–19%</div>
+                    </button>
+                    <button onclick="selectTcfaCategory('subv')" id="tcfa-cat-subv" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-400 text-left transition-all">
+                        <div class="text-[10px] font-bold uppercase text-slate-500">Opción 2</div>
+                        <div class="text-xs font-extrabold text-slate-900">Subsidiada hasta 75%</div>
+                    </button>
+                    <button onclick="selectTcfaCategory('trad')" id="tcfa-cat-trad" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-400 text-left transition-all">
+                        <div class="text-[10px] font-bold uppercase text-slate-500">Opción 3</div>
+                        <div class="text-xs font-extrabold text-slate-900">Tradicional / Ciclo / Agro</div>
+                    </button>
+                    <button onclick="selectTcfaCategory('tamcor')" id="tcfa-cat-tamcor" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-400 text-left transition-all">
+                        <div class="text-[10px] font-bold uppercase text-slate-500">Opción 4</div>
+                        <div class="text-xs font-extrabold text-slate-900">Tasa Variable TAMCOR</div>
+                    </button>
+                    <button onclick="selectTcfaCategory('uva')" id="tcfa-cat-uva" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-400 text-left transition-all">
+                        <div class="text-[10px] font-bold uppercase text-slate-500">Opción 5</div>
+                        <div class="text-xs font-extrabold text-slate-900">Planes UVA 0% / 13,9%</div>
+                    </button>
+                    <button onclick="selectTcfaCategory('bna')" id="tcfa-cat-bna" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-400 text-left transition-all">
+                        <div class="text-[10px] font-bold uppercase text-sky-700">Opción 6</div>
+                        <div class="text-xs font-extrabold text-sky-950">Banco Nación (+Autos)</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Paso 3: Sub-planes y plazos de la categoría elegida -->
+            <div id="tcfa-subplans-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+
+            <!-- Paso 4: Resultado Detallado + Explicativo Amigable para el Cliente + Pivote Toyota Plan -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-2">
+                <div class="lg:col-span-5 p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold uppercase text-slate-800">📊 Resumen Numérico de la Cuota</span>
+                        <span id="tcfa-res-badge" class="px-2 py-0.5 rounded bg-[#EB0A1E] text-white text-[10px] font-bold">TCFA</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div class="p-3 rounded-xl bg-[#0A0A0C] text-white">
+                            <div class="text-[10px] text-zinc-400 uppercase">Cuota Mensual Est.</div>
+                            <div id="tcfa-res-quota" class="text-lg font-extrabold text-emerald-400 mt-0.5 tabular-nums">$1.388.889</div>
+                            <div id="tcfa-res-quota-sub" class="text-[10px] text-zinc-300">Con IVA s/interés</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white border border-slate-200">
+                            <div class="text-[10px] text-slate-500 uppercase">TNA / Imp. Sellos-DyC</div>
+                            <div id="tcfa-res-tna" class="text-base font-extrabold text-slate-900 mt-0.5 tabular-nums">0,00% TNA</div>
+                            <div id="tcfa-res-dyc" class="text-[10px] text-slate-500">DyC 1,2% C1: $300.000</div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-slate-800">
+                        <div class="font-extrabold text-[#EB0A1E]">🔄 Comparativa Rápida vs Toyota Plan:</div>
+                        <p id="tcfa-vs-plan-note" class="mt-1 leading-relaxed">Mientras esta cuota convencional ronda los $1.388.889/mes, en Toyota Plan arrancás con una cuota mucho más liviana en pesos sin interés bancario y podés retirar desde la cuota 2.</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 p-4 rounded-2xl bg-emerald-50/80 border-2 border-emerald-200 flex flex-col justify-between space-y-3">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-xs font-extrabold uppercase text-emerald-950">🧠 Explicación Simple para el Cliente (En términos cotidianos)</span>
+                            <div class="flex items-center gap-1.5">
+                                <button id="btn-tcfa-ai-explain" onclick="generateTcfaFriendlyExplanationWithAi()" class="px-2.5 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold">✨ Personalizar con Sofía IA</button>
+                                <button onclick="copyTcfaFriendlyText()" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-300 text-emerald-950 text-[11px] font-bold hover:bg-emerald-100">📋 Copiar para WA</button>
+                            </div>
+                        </div>
+                        <div id="tcfa-friendly-explanation" class="mt-2.5 p-3.5 rounded-xl bg-white border border-emerald-200 text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-line"></div>
+                    </div>
+                    <div class="text-[11px] text-emerald-900">
+                        💡 <b>Tip de cierre:</b> Si el cliente te dice que esta cuota mensual le queda pesada o no llega con el anticipo hoy, usá el párrafo final para traerlo de vuelta a <b>Toyota Plan</b>.
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="px-5 py-3.5 bg-[#0A0A0C] text-white flex items-center justify-between">
-                    <h3 class="text-sm font-bold">1. Toyota Compañía Financiera (TCFA)</h3>
+                    <h3 class="text-sm font-bold">1. Resumen Oficial TCFA (Noviembre 2026)</h3>
                     <span class="px-2 py-0.5 rounded bg-[#EB0A1E] text-[10px] font-bold">OFICIAL</span>
                 </div>
                 <div class="p-4 space-y-3 text-xs text-slate-700">
                     <div class="p-3 rounded-xl bg-red-50/70 border border-red-200">
-                        <div class="font-extrabold text-[#EB0A1E]">Líneas Promocionales Tasa 0% TNA (Hilux)</div>
+                        <div class="font-extrabold text-[#EB0A1E]">Líneas Promocionales Tasa 0% a 19% TNA</div>
                         <ul class="mt-1.5 space-y-1 list-disc list-inside">
-                            <li><b>18 meses Tasa 0% TNA:</b> tope <b>$25.000.000 a $30.000.000</b> según versión (capital puro: <b>$1.388.889 a $1.666.667/mes</b> + gastos, seguro y patente).</li>
-                            <li><b>24 meses Tasa 0% TNA:</b> tope <b>$18.500.000</b> (capital puro: <b>~$770.833/mes</b> + gastos, seguro y patente).</li>
-                            <li><b>18/24 meses Tasa 0% + UVA:</b> tope <b>$30.000.000</b> (cuota ajustable mensualmente por índice UVA).</li>
+                            <li><b>Cupo Especial 0% TNA 18 meses (500 unid.):</b> Hilux, SW4, Corolla y Corolla Cross hasta <b>$30.000.000</b>.</li>
+                            <li><b>Grupo A (Yaris y Yaris Cross):</b> 12m <b>0%</b> hasta $15M | 18m <b>9,9%</b> hasta $20M | 24m <b>19%</b> hasta $25M | UVA 18m <b>0%</b> hasta $25M.</li>
+                            <li><b>Grupo B (Hilux, Corolla, Corolla Cross, SW4, Hiace):</b> 12m <b>0%</b> hasta $25M | 18m <b>9,9%</b> hasta $19M | 24m <b>19%</b> hasta $24M | UVA 18m <b>0%</b> hasta $30M.</li>
                         </ul>
                     </div>
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                        <div class="font-extrabold text-slate-900">Líneas Tradicionales Tasa Fija en Pesos (TCFA)</div>
+                        <div class="font-extrabold text-slate-900">Líneas Tradicionales hasta el 75% del Valor de Lista</div>
                         <ul class="mt-1.5 space-y-1 list-disc list-inside">
-                            <li><b>18 meses (TNA 9,9%):</b> hasta $19.000.000.</li>
-                            <li><b>24 meses (TNA 19,0%):</b> hasta $24.000.000.</li>
-                            <li><b>36 meses (TNA 26,9% – 27,9%):</b> hasta $30.000.000 (~$1.220.000 a $1.320.000/mes por $30M + seguro/gastos).</li>
-                            <li><b>48 meses (TNA 27,9%):</b> hasta $27.000.000 (~$940.000 a $1.050.000/mes por $27M + seguro/gastos).</li>
+                            <li><b>Subsidiadas (hasta 75%):</b> 0% (12/18/24m), 9,9% (12 a 36m), Escalonada (12/18/24m) y 29,9% (6 a 60m).</li>
+                            <li><b>Sin Subsidio (hasta 75%):</b> Promo (38,9%), Tradicional (41,9%), Agro Semestral (41,9%), Ciclo Toyota 36m (39,9%, 50% en 35 cuotas + 50% en cuota 36) y TAMCOR + 6,5%.</li>
                         </ul>
                     </div>
                 </div>
@@ -1046,6 +1121,47 @@
             FIREBASE_DB_URL: "https://crm-toyota-17151-default-rtdb.firebaseio.com",
             FIXED_INTEREST_MODELS: ['Yaris', 'Yaris Cross', 'Corolla', 'Corolla Cross', 'Hilux', 'Hiace'],
             CLIENT_STATUSES: ['Interesado', 'Interesado a Futuro', 'Entrevista', 'Venta', 'No Compra'],
+            TCFA_MODELS_NOV_2026: [
+                { id: 'yaris-xs', group: 'A', modelo: 'Yaris 5P MY\'27', version: 'XS 1.5 CVT 5P', precio: 36315000, cupoEspecial: false },
+                { id: 'yaris-xls', group: 'A', modelo: 'Yaris 5P MY\'27', version: 'XLS+ 1.5 CVT 5P', precio: 40340000, cupoEspecial: false },
+                { id: 'yaris-s', group: 'A', modelo: 'Yaris 5P MY\'27', version: 'S 1.5 CVT 5P', precio: 43255000, cupoEspecial: false },
+                { id: 'yc-xli', group: 'A', modelo: 'Yaris Cross MY\'27', version: 'XLI 1.5 CVT (Naftera)', precio: 41464000, cupoEspecial: false },
+                { id: 'yc-xei', group: 'A', modelo: 'Yaris Cross MY\'27', version: 'XEI 1.5 CVT (Naftera)', precio: 45260000, cupoEspecial: false },
+                { id: 'yc-xei-hev', group: 'A', modelo: 'Yaris Cross MY\'27', version: 'XEI HEV 1.5 eCVT (Híbrida)', precio: 48457000, cupoEspecial: false },
+                { id: 'yc-seg', group: 'A', modelo: 'Yaris Cross MY\'27', version: 'SEG 1.5 CVT', precio: 50224000, cupoEspecial: false },
+                { id: 'yc-seg-hev', group: 'A', modelo: 'Yaris Cross MY\'27', version: 'SEG HEV 1.5 eCVT (Híbrida)', precio: 54020000, cupoEspecial: false },
+                { id: 'cor-xli', group: 'B', modelo: 'Corolla MY\'27', version: '2.0 XLI CVT', precio: 44082000, cupoEspecial: true },
+                { id: 'cor-xei', group: 'B', modelo: 'Corolla MY\'27', version: '2.0 XEI CVT', precio: 48410000, cupoEspecial: true },
+                { id: 'cor-hev-xei', group: 'B', modelo: 'Corolla MY\'27', version: 'HEV 1.8 XEI eCVT', precio: 50764000, cupoEspecial: true },
+                { id: 'cor-seg', group: 'B', modelo: 'Corolla MY\'27', version: '2.0 SEG CVT', precio: 54392000, cupoEspecial: true },
+                { id: 'cor-gr', group: 'B', modelo: 'Corolla MY\'27', version: 'GR-SPORT 2.0 CVT', precio: 55439000, cupoEspecial: true },
+                { id: 'cor-hev-seg', group: 'B', modelo: 'Corolla MY\'27', version: 'HEV 1.8 SEG eCVT', precio: 56180000, cupoEspecial: true },
+                { id: 'cc-xli', group: 'B', modelo: 'Corolla Cross MY\'27', version: 'XLI 2.0 CVT', precio: 51918000, cupoEspecial: true },
+                { id: 'cc-xei', group: 'B', modelo: 'Corolla Cross MY\'27', version: 'XEI 2.0 CVT', precio: 56263000, cupoEspecial: true },
+                { id: 'cc-xei-hev', group: 'B', modelo: 'Corolla Cross MY\'27', version: 'XEI HEV 1.8 eCVT', precio: 57682000, cupoEspecial: true },
+                { id: 'cc-seg', group: 'B', modelo: 'Corolla Cross MY\'27', version: 'SEG 2.0 CVT', precio: 61732000, cupoEspecial: true },
+                { id: 'cc-seg-hev', group: 'B', modelo: 'Corolla Cross MY\'27', version: 'SEG HEV 1.8 eCVT', precio: 63684000, cupoEspecial: true },
+                { id: 'cc-gr', group: 'B', modelo: 'Corolla Cross MY\'27', version: 'GR-SPORT 2.0 CVT', precio: 64083000, cupoEspecial: true },
+                { id: 'hilux-4x2-dx-mt', group: 'B', modelo: 'Hilux 4X2 MY\'26', version: 'DC DX 2.4 TDI 6 MT', precio: 49621000, cupoEspecial: true },
+                { id: 'hilux-4x2-dx-at', group: 'B', modelo: 'Hilux 4X2 MY\'26', version: 'DC DX 2.4 TDI 6 AT', precio: 51008000, cupoEspecial: true },
+                { id: 'hilux-4x2-sr-mt', group: 'B', modelo: 'Hilux 4X2 MY\'26', version: 'DC SR 2.4 TDI 6 MT', precio: 56562000, cupoEspecial: true },
+                { id: 'hilux-4x2-sr-at', group: 'B', modelo: 'Hilux 4X2 MY\'26', version: 'DC SR 2.4 TDI 6 AT', precio: 59480000, cupoEspecial: true },
+                { id: 'hilux-4x2-srv-at', group: 'B', modelo: 'Hilux 4X2 MY\'26', version: 'DC SRV 2.8 TDI 6 AT', precio: 67911000, cupoEspecial: true },
+                { id: 'hilux-4x2-srx-at', group: 'B', modelo: 'Hilux 4X2 MY\'26', version: 'DC SRX 2.8 TDI 6 AT', precio: 77921000, cupoEspecial: true },
+                { id: 'hilux-4x4-dx-mt', group: 'B', modelo: 'Hilux 4X4 MY\'26', version: 'DC DX 2.4 TDI 6 MT', precio: 58116000, cupoEspecial: true },
+                { id: 'hilux-4x4-dx-at', group: 'B', modelo: 'Hilux 4X4 MY\'26', version: 'DC DX 2.4 TDI 6 AT', precio: 59739000, cupoEspecial: true },
+                { id: 'hilux-4x4-sr-mt', group: 'B', modelo: 'Hilux 4X4 MY\'26', version: 'DC SR 2.8 TDI 6 MT', precio: 66856000, cupoEspecial: true },
+                { id: 'hilux-4x4-sr-at', group: 'B', modelo: 'Hilux 4X4 MY\'26', version: 'DC SR 2.8 TDI 6 AT', precio: 69742000, cupoEspecial: true },
+                { id: 'hilux-4x4-srv-at', group: 'B', modelo: 'Hilux 4X4 MY\'26', version: 'DC SRV 2.8 TDI 6 AT', precio: 76381000, cupoEspecial: true },
+                { id: 'hilux-4x4-srvp-at', group: 'B', modelo: 'Hilux 4X4 MY\'26', version: 'DC SRV+ 2.8 TDI 6 AT', precio: 80317000, cupoEspecial: true },
+                { id: 'hilux-4x4-srx-at', group: 'B', modelo: 'Hilux 4X4 MY\'26', version: 'DC SRX 2.8 TDI 6 AT', precio: 84855000, cupoEspecial: true },
+                { id: 'hilux-4x4-gr', group: 'B', modelo: 'Hilux 4X4 MY\'26', version: 'DC GR-SPORT IV 2.8 TDI 6 AT', precio: 89863000, cupoEspecial: true },
+                { id: 'sw4-srx', group: 'B', modelo: 'SW4 MY\'27', version: 'SRX 2.8 TDI 6 AT 7A', precio: 91585000, cupoEspecial: true },
+                { id: 'sw4-diamond', group: 'B', modelo: 'SW4 MY\'27', version: 'DIAMOND II 2.8 TDI 6 AT 7A', precio: 92508000, cupoEspecial: true },
+                { id: 'sw4-gr', group: 'B', modelo: 'SW4 MY\'27', version: 'GR-SPORT 2.8 TDI 6 AT 7A', precio: 97092000, cupoEspecial: true },
+                { id: 'hiace-furgon', group: 'B', modelo: 'Hiace MY\'26', version: 'Furgón L2H2 2.8 6AT 3A DCM', precio: 72798000, cupoEspecial: false },
+                { id: 'hiace-commuter', group: 'B', modelo: 'Hiace MY\'26', version: 'Commuter 2.8 6AT 14A DCM', precio: 87882000, cupoEspecial: false }
+            ],
             CONTRACT_KNOWLEDGE: {
                 administradora: "Toyota Plan Argentina S.A. de Ahorro para Fines Determinados (garantizada solidariamente por Toyota Argentina S.A.). Controlada por IGJ.",
                 planFlexibleRes183_24: "El Plan Flexible (Res. IGJ N° 183/2024) adjudica una suma de dinero (Certificado equivalente al Valor Móvil) que permite elegir un Automotor 0 km de la lista Toyota o un Automotor Usado Certificado Toyota con Garantía Extendida.",
@@ -1055,24 +1171,27 @@
                 arrepentimientoYRescision: "Derecho de arrepentimiento dentro de los 10 días corridos con devolución del 100%.",
                 cancelacionYCesion: "Cancelación anticipada permitida a valor de Cuota Pura vigente sin cargos administrativos ni seguro; cesión permitida sin comisión de Toyota Plan."
             },
-            CONVENTIONAL_FINANCING_KNOWLEDGE: `FINANCIACIÓN CONVENCIONAL Y BANCARIA VERIFICADA (ARGENTINA - DATOS OFICIALES VIGENTES - USO EXCLUSIVO COMO REFERENCIA ESTIMADA Y ORIENTATIVA, NUNCA COMO OFERTA CERRADA):
-1. Toyota Compañía Financiera Argentina (TCFA - Venta Convencional):
-  - Líneas promocionales Tasa 0% TNA:
-    - Hasta 18 meses Tasa 0% TNA: tope de $25.000.000 a $30.000.000 según versión de Hilux (solo capital puro: $1.388.889/mes por $25M o $1.666.667/mes por $30M, más gastos de otorgamiento, seguro automotor y patente).
-    - Hasta 24 meses Tasa 0% TNA: tope de $18.500.000 (~$770.833/mes solo capital puro, sin gastos ni seguro).
-  - Líneas tradicionales Tasa Fija en pesos (TCFA):
-    - 18 meses (TNA 9,9%): tope $19.000.000.
-    - 24 meses (TNA 19%): tope $24.000.000.
-    - 36 meses (TNA 26,9% a 27,9%): tope $30.000.000 (cuota referencial ~$1.220.000 a $1.320.000/mes por $30M, más seguro y gastos).
-    - 48 meses (TNA 27,9%): tope $27.000.000 (cuota referencial ~$940.000 a $1.050.000/mes por $27M, más seguro y gastos).
-    - También existe línea UVA a 18/24 meses Tasa 0% + UVA (tope $30M, cuota ajustable por inflación UVA).
-2. Bancos Públicos y Privados (Créditos Personales sin prenda / Prendarios bancarios):
-  - Banco Nación ("+Autos con BNA" - préstamo personal hasta $50.000.000, hasta 72 meses tasa fija o 60 meses UVA):
-    - Tasa Preferencial (25% TNA fija, CFT TNA 44,90% — solo si cobra sueldo/jubilación en BNA, tiene tarjeta de crédito BNA y contrata seguro vía BNA): cada $10.000.000 financiados da una cuota inicial de $313.122 (a 72 meses) o $441.348 (a 36 meses).
-    - Tasa General (46% TNA fija, CFT TNA 55,66% — para público general sin haberes en BNA): cada $10.000.000 financiados da una cuota inicial de $491.203 (a 72 meses) o $597.227 (a 36 meses). Ejemplo: financiar $25.000.000 con tasa general BNA da ~$1.228.000/mes a 72 meses o ~$1.493.000/mes a 36 meses (más seguro automotor y patente).
-  - Bancos Privados (Galicia, BBVA, Santander - Préstamos Prendarios):
-    - Tasa Fija en pesos: TNA entre 53% y 63% (CFTEA con IVA entre 86% y 114%), plazos de 12 a 60 meses. Por cada $10.000.000 a 60 meses la cuota supera los $515.000–$608.000/mes (es decir, $20M-$25M financiados superan los $1.100.000 a $1.500.000/mes más seguro obligatorio).
-    - Tasa UVA bancarios: TNA ~24,9%–25% + ajuste mensual por índice UVA (cuota inicial ~$335.000 cada $10M a 60 meses, pero el capital y la cuota suben todos los meses con la inflación).`,
+            CONVENTIONAL_FINANCING_KNOWLEDGE: `FINANCIACIÓN CONVENCIONAL TCFA Y BANCARIA OFICIAL (NOVIEMBRE 2026 - USO EXCLUSIVO COMO REFERENCIA ORIENTATIVA; NUNCA REVELAR QUEBRANTO INTERNO):
+- Lista Oficial 0 km Noviembre 2026:
+  * Yaris 5P MY'27: XS $36.315.000 | XLS+ $40.340.000 | S $43.255.000.
+  * Yaris Cross MY'27: XLI CVT $41.464.000 | XEI CVT $45.260.000 | XEI HEV $48.457.000 | SEG CVT $50.224.000 | SEG HEV $54.020.000.
+  * Corolla MY'27: XLI $44.082.000 | XEI $48.410.000 | HEV XEI $50.764.000 | SEG $54.392.000 | GR-Sport $55.439.000 | HEV SEG $56.180.000.
+  * Corolla Cross MY'27: XLI $51.918.000 | XEI $56.263.000 | XEI HEV $57.682.000 | SEG $61.732.000 | SEG HEV $63.684.000 | GR-Sport $64.083.000.
+  * Hilux 4x2 MY'26: CC DX $40.589.000 | CS DX $44.034.000 | DC DX MT $49.621.000 | DC DX AT $51.008.000 | DC SR MT $56.562.000 | DC SR AT $59.480.000 | DC SRV AT $67.911.000 | DC SRX AT $77.921.000.
+  * Hilux 4x4 MY'26: CC DX $50.227.000 | CS DX $52.934.000 | DC DX MT $58.116.000 | DC DX AT $59.739.000 | DC SR MT $66.856.000 | DC SR AT $69.742.000 | DC SRV AT $76.381.000 | DC SRV+ AT $80.317.000 | DC SRX AT $84.855.000 | GR-Sport IV $89.863.000.
+  * SW4 MY'27: SRX $91.585.000 | Diamond II $92.508.000 | GR-Sport $97.092.000.
+  * Hiace MY'26: Furgón L2H2 $72.798.000 | Commuter $87.882.000.
+- Regla general prendaria TCFA: se puede financiar hasta el 75% del valor de lista de la unidad (o el tope fijo del plan promocional, el que sea menor). Sistema francés + IVA 21% sobre intereses (10,5% Responsable Inscripto) + impuesto Débitos y Créditos 1,2% sobre capital en primera cuota + seguro automotor y gastos.
+- Las 5 Líneas TCFA vigentes:
+  1) Promocionales TCFA:
+     - Cupo Especial 0% TNA 18 meses (cupo 500 unidades): Hilux, SW4, Corolla y Corolla Cross hasta $30.000.000 ($1.666.667/mes capital puro).
+     - Grupo A (Yaris y Yaris Cross): 12m TNA 0% hasta $15.000.000 | 18m TNA 9,9% hasta $20.000.000 | 24m TNA 19,0% hasta $25.000.000.
+     - Grupo B (Hilux, Corolla, Corolla Cross, SW4, Hiace): 12m TNA 0% hasta $25.000.000 | 18m TNA 9,9% hasta $19.000.000 | 24m TNA 19,0% hasta $24.000.000.
+  2) Tasa Subsidiada hasta 75% del vehículo: TNA 0% (12/18/24m), TNA 9,9% (12/18/24/36m), TNA Escalonada (12m 12,25%, 18m 20,9%, 24m 25,3%) y TNA 29,9% (6 a 60m).
+  3) Sin Subsidio hasta 75% del vehículo: Promo (TNA 38,9%, 6 a 60m), Tradicional (TNA 41,9%, 6 a 60m), Agro (TNA 41,9%, 12 a 48m con amortización de capital semestral cada 6 meses e intereses mensuales), Ciclo Toyota (TNA 39,9% a 36 meses: 50% en 35 cuotas mensuales + 50% cuota balón en el mes 36 para renovar o cancelar) y Ciclo Flat (TNA 39,9% a 36 meses).
+  4) Tasa Variable (TAMCOR + 6,5%): 6 a 60 meses hasta el 75% del valor de lista.
+  5) Planes UVA: Promo UVA Yaris 0% TNA (18m hasta $25M), Promo UVA Noviembre 0% TNA (18m hasta $30M para Hilux/Corolla/CC/SW4), UVA TNA 0% (12/18/24/36m hasta 75%) y UVA Tradicional TNA 13,9% (12 a 60m hasta 75%).
+- Bancos: Banco Nación "+Autos con BNA" hasta $50M / 72 meses (Tasa General 46% TNA: $491.203 cada $10M a 72m; Tasa Preferencial haberes BNA 25% TNA: $313.122 cada $10M a 72m).`,
             DEFAULT_MARKET_PLANS: [
                 { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 528803 },
                 { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 891366 },
@@ -1486,7 +1605,282 @@
             else if (tabName === 'comparativa') renderComparativaSelectors();
             else if (tabName === 'objetivos') renderObjetivos();
             else if (tabName === 'planes') renderPlansHistory();
-            else if (tabName === 'financiaciones') recalcFinancingSimulator();
+            else if (tabName === 'financiaciones') initTcfaSimulator();
+        };
+
+        let tcfaState = {
+            modelId: 'hilux-4x2-dx-mt',
+            category: 'promo',
+            selectedPlanKey: 'cupo_0_18'
+        };
+
+        function calcTcfaQuotaWithIva(capital, tna, meses, mode = 'frances') {
+            if (!capital || capital <= 0 || !meses) return 0;
+            if (mode === 'ciclo' && meses === 36) {
+                const half = capital * 0.5;
+                const tm = tna / 12;
+                const qA = half * (tm * Math.pow(1 + tm, 35)) / (Math.pow(1 + tm, 35) - 1);
+                let saldoA = half, total = 0;
+                for (let i = 1; i <= 36; i++) {
+                    const intA = saldoA * tm;
+                    const amortA = i < 36 ? (qA - intA) : saldoA;
+                    saldoA -= amortA;
+                    const intB = half * tm;
+                    const amortB = i === 36 ? half : 0;
+                    const interes = intA + intB;
+                    total += amortA + amortB + interes * 1.21;
+                }
+                return Math.round(total / 36);
+            }
+            if (mode === 'agro') {
+                const tm = tna / 12;
+                const nCap = Math.max(1, Math.floor(meses / 6));
+                const amortSem = capital / nCap;
+                let saldo = capital, total = 0;
+                for (let i = 1; i <= meses; i++) {
+                    const interes = saldo * tm;
+                    const amort = (i % 6 === 0) ? amortSem : 0;
+                    saldo -= amort;
+                    total += amort + interes * 1.21;
+                }
+                return Math.round(total / meses);
+            }
+            if (tna === 0) return Math.round(capital / meses);
+            const tm = tna / 12;
+            const cuotaBruta = capital * (tm * Math.pow(1 + tm, meses)) / (Math.pow(1 + tm, meses) - 1);
+            let saldo = capital, total = 0;
+            for (let i = 1; i <= meses; i++) {
+                const interes = saldo * tm;
+                const amort = cuotaBruta - interes;
+                saldo -= amort;
+                total += amort + interes * 1.21;
+            }
+            return Math.round(total / meses);
+        }
+
+        function getTcfaSubplansForCategory(cat, modelObj) {
+            const max75 = Math.round(modelObj.precio * 0.75);
+            if (cat === 'promo') {
+                const list = [];
+                if (modelObj.cupoEspecial) {
+                    list.push({ key: 'cupo_0_18', title: 'Cupo Especial 0% (18m)', plazo: 18, tna: 0, maxCap: 30000000, mode: 'frances', tag: 'Cupo 500 unid.', plainExplain: 'Es un crédito prendario promocional a 18 meses sin interés (0% TNA) hasta $30.000.000. Dividís el capital en 18 cuotas iguales (más seguro del auto y el 1,2% de impuesto en la primera cuota).' });
+                }
+                if (modelObj.group === 'A') {
+                    list.push(
+                        { key: 'ga_0_12', title: 'Promo Yaris 0% (12m)', plazo: 12, tna: 0, maxCap: 15000000, mode: 'frances', tag: 'TNA 0%', plainExplain: 'Pagás en 12 cuotas mensuales fijas sin interés (0% TNA) financiando hasta $15.000.000. Ideal si tenés gran parte del valor entre tu usado y efectivo.' },
+                        { key: 'ga_99_18', title: 'Promo Yaris 9,9% (18m)', plazo: 18, tna: 0.099, maxCap: 20000000, mode: 'frances', tag: 'TNA 9,9%', plainExplain: 'Crédito prendario a 18 cuotas fijas en pesos con una tasa súper subsidiada del 9,9% anual, financiando hasta $20.000.000.' },
+                        { key: 'ga_19_24', title: 'Promo Yaris 19% (24m)', plazo: 24, tna: 0.19, maxCap: 25000000, mode: 'frances', tag: 'TNA 19%', plainExplain: 'Te permite estirar el plazo a 24 cuotas fijas en pesos y financiar hasta $25.000.000 con una tasa promocional del 19% anual.' }
+                    );
+                } else {
+                    list.push(
+                        { key: 'gb_0_12', title: 'Promo Noviembre 0% (12m)', plazo: 12, tna: 0, maxCap: 25000000, mode: 'frances', tag: 'TNA 0%', plainExplain: 'Financiás hasta $25.000.000 en 12 cuotas fijas sin interés (0% TNA). Solo pagás el capital dividido 12 más seguro e impuestos.' },
+                        { key: 'gb_99_18', title: 'Promo Noviembre 9,9% (18m)', plazo: 18, tna: 0.099, maxCap: 19000000, mode: 'frances', tag: 'TNA 9,9%', plainExplain: 'Crédito a 18 cuotas fijas en pesos con tasa promocional del 9,9% anual hasta $19.000.000.' },
+                        { key: 'gb_19_24', title: 'Promo Noviembre 19% (24m)', plazo: 24, tna: 0.19, maxCap: 24000000, mode: 'frances', tag: 'TNA 19%', plainExplain: 'Crédito a 24 cuotas fijas en pesos con tasa promocional del 19% anual hasta $24.000.000.' }
+                    );
+                }
+                return list;
+            }
+            if (cat === 'subv') {
+                return [
+                    { key: 's_0_24', title: 'Subsidiada 0% (24m)', plazo: 24, tna: 0, maxCap: max75, mode: 'frances', tag: 'Hasta 75%', plainExplain: 'Te permite financiar hasta el 75% del valor de la unidad en 24 cuotas fijas sin interés (0% TNA). Requiere un anticipo del 25%.' },
+                    { key: 's_99_36', title: 'Subsidiada 9,9% (36m)', plazo: 36, tna: 0.099, maxCap: max75, mode: 'frances', tag: 'Hasta 75%', plainExplain: 'Financiás hasta el 75% del auto a 3 años (36 cuotas fijas en pesos) con una tasa muy baja del 9,9% anual.' },
+                    { key: 's_esc_24', title: 'TNA Escalonada (24m)', plazo: 24, tna: 0.253, maxCap: max75, mode: 'frances', tag: 'Hasta 75%', plainExplain: 'Crédito prendario a 24 cuotas fijas en pesos hasta el 75% del vehículo, con tasa subsidiada del 25,3% anual.' },
+                    { key: 's_299_48', title: 'TNA 29,9% (48m)', plazo: 48, tna: 0.299, maxCap: max75, mode: 'frances', tag: 'Hasta 75%', plainExplain: 'Plazo largo de 48 cuotas fijas en pesos hasta el 75% del valor del vehículo, con tasa subsidiada del 29,9% anual.' }
+                ];
+            }
+            if (cat === 'trad') {
+                return [
+                    { key: 't_ciclo', title: 'Ciclo Toyota (36m)', plazo: 36, tna: 0.399, maxCap: max75, mode: 'ciclo', tag: '50% + 50% Balón', plainExplain: 'Funciona así: financiás hasta el 75% del auto en 36 meses, pero durante 35 meses pagás cuotas más bajas porque solo amortizás la mitad del crédito; en el mes 36 queda una cuota final del 50% que podés cancelar o usar entregando el auto para sacar otro 0 km.' },
+                    { key: 't_agro', title: 'Plan Agro Semestral (36m)', plazo: 36, tna: 0.419, maxCap: max75, mode: 'agro', tag: 'Cuota cada 6m', plainExplain: 'Pensado para el campo o ingresos estacionales: todos los meses pagás únicamente los intereses (cuota mensual muy chica) y el capital lo devolvés cada 6 meses coincidiendo con la cosecha.' },
+                    { key: 't_promo_48', title: 'Línea Promo (48m)', plazo: 48, tna: 0.389, maxCap: max75, mode: 'frances', tag: 'TNA 38,9%', plainExplain: 'Crédito prendario tradicional a 48 cuotas fijas en pesos hasta el 75% del auto, sin depender de cupos promocionales.' },
+                    { key: 't_trad_60', title: 'Tradicional (60m)', plazo: 60, tna: 0.419, maxCap: max75, mode: 'frances', tag: '5 años fijos', plainExplain: 'Crédito prendario a 5 años (60 cuotas fijas en pesos) hasta el 75% del valor de la unidad. Sabés exactamente cuánto pagás de la cuota 1 a la 60.' }
+                ];
+            }
+            if (cat === 'tamcor') {
+                return [
+                    { key: 'v_18', title: 'Tasa Variable (18m)', plazo: 18, tna: 0.325, maxCap: max75, mode: 'frances', tag: 'TAMCOR + 6,5%', plainExplain: 'Es un crédito prendario donde la tasa se actualiza según la tasa mayorista de bancos privados (TAMAR) más un margen fijo del 6,5%.' },
+                    { key: 'v_36', title: 'Tasa Variable (36m)', plazo: 36, tna: 0.325, maxCap: max75, mode: 'frances', tag: 'TAMCOR + 6,5%', plainExplain: 'A 36 meses hasta el 75% del vehículo: si las tasas de interés en Argentina bajan, tu cuota baja acompañando el mercado.' },
+                    { key: 'v_48', title: 'Tasa Variable (48m)', plazo: 48, tna: 0.325, maxCap: max75, mode: 'frances', tag: 'TAMCOR + 6,5%', plainExplain: 'A 48 meses con tasa variable TAMCOR + 6,5%, financiando hasta el 75% del valor de lista.' }
+                ];
+            }
+            if (cat === 'uva') {
+                const promoCap = modelObj.group === 'A' ? 25000000 : 30000000;
+                return [
+                    { key: 'u_promo_18', title: 'Promo UVA 0% (18m)', plazo: 18, tna: 0, maxCap: promoCap, mode: 'frances', tag: 'UVA + 0% TNA', plainExplain: `No tiene tasa de interés (0% TNA), sino que el saldo se expresa en UVAs y la cuota se actualiza mes a mes según la inflación oficial. Tope hasta $${promoCap.toLocaleString('es-AR')}.` },
+                    { key: 'u_subv_24', title: 'UVA Subv. 0% (24m)', plazo: 24, tna: 0, maxCap: max75, mode: 'frances', tag: 'Hasta 75%', plainExplain: 'Financiás hasta el 75% del auto a 24 meses sin interés (0% TNA), ajustando el valor de la cuota mensualmente por índice UVA.' },
+                    { key: 'u_trad_48', title: 'UVA Tradicional (48m)', plazo: 48, tna: 0.139, maxCap: max75, mode: 'frances', tag: 'UVA + 13,9%', plainExplain: 'Arranca con una cuota inicial mucho más baja que un préstamo tradicional a 4 años, con tasa del 13,9% anual más actualización mensual por índice UVA.' }
+                ];
+            }
+            return [
+                { key: 'bna_gen_72', title: 'BNA +Autos General (72m)', plazo: 72, tna: 0.46, maxCap: 50000000, mode: 'frances', tag: 'Sin prenda • 46%', plainExplain: 'Préstamo personal del Banco Nación (no prende el auto) hasta $50.000.000 en 72 cuotas fijas en pesos para público general (TNA 46%).' },
+                { key: 'bna_pref_72', title: 'BNA +Autos Haberes (72m)', plazo: 72, tna: 0.25, maxCap: 50000000, mode: 'frances', tag: 'Haberes BNA • 25%', plainExplain: 'Línea preferencial del Banco Nación (TNA 25%) exclusiva para quienes cobran sueldo o jubilación en BNA, tienen tarjeta BNA y contratan seguro por el banco.' },
+                { key: 'bna_gen_36', title: 'BNA +Autos General (36m)', plazo: 36, tna: 0.46, maxCap: 50000000, mode: 'frances', tag: '36 cuotas fijas', plainExplain: 'Préstamo personal del Banco Nación a 3 años (36 cuotas fijas en pesos) sin prenda sobre la unidad.' }
+            ];
+        }
+
+        window.initTcfaSimulator = function() {
+            const sel = document.getElementById('tcfa-model-select');
+            if (sel && sel.options.length === 0) {
+                sel.innerHTML = CRM_CONFIG.TCFA_MODELS_NOV_2026.map(m =>
+                    `<option value="${m.id}">${m.modelo} · ${m.version} — $${m.precio.toLocaleString('es-AR')}</option>`
+                ).join('');
+                sel.value = tcfaState.modelId;
+            }
+            recalcTcfaQuote();
+        };
+
+        window.onTcfaModelChange = function() {
+            const sel = document.getElementById('tcfa-model-select');
+            if (sel) tcfaState.modelId = sel.value;
+            recalcTcfaQuote();
+        };
+
+        window.selectTcfaCategory = function(cat) {
+            tcfaState.category = cat;
+            ['promo', 'subv', 'trad', 'tamcor', 'uva', 'bna'].forEach(k => {
+                const btn = document.getElementById(`tcfa-cat-${k}`);
+                if (!btn) return;
+                if (k === cat) {
+                    btn.className = 'p-2.5 rounded-xl border-2 border-[#0A0A0C] bg-[#0A0A0C] text-white text-left transition-all';
+                    btn.querySelectorAll('div').forEach(d => d.className = d.className.replace(/text-slate-\d+|text-sky-\d+/g, ''));
+                } else {
+                    btn.className = 'p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-400 text-left transition-all';
+                }
+            });
+            const modelObj = CRM_CONFIG.TCFA_MODELS_NOV_2026.find(m => m.id === tcfaState.modelId) || CRM_CONFIG.TCFA_MODELS_NOV_2026[0];
+            const subs = getTcfaSubplansForCategory(cat, modelObj);
+            if (subs.length > 0) tcfaState.selectedPlanKey = subs[0].key;
+            recalcTcfaQuote();
+        };
+
+        window.selectTcfaSubplan = function(key) {
+            tcfaState.selectedPlanKey = key;
+            recalcTcfaQuote();
+        };
+
+        window.recalcTcfaQuote = function() {
+            const modelObj = CRM_CONFIG.TCFA_MODELS_NOV_2026.find(m => m.id === tcfaState.modelId) || CRM_CONFIG.TCFA_MODELS_NOV_2026[0];
+            const usedVal = Math.max(0, Number(document.getElementById('tcfa-used-input')?.value) || 0);
+            const cashVal = Math.max(0, Number(document.getElementById('tcfa-cash-input')?.value) || 0);
+            const rawCapital = Math.max(0, modelObj.precio - usedVal - cashVal);
+            const max75 = Math.round(modelObj.precio * 0.75);
+
+            const priceBadge = document.getElementById('tcfa-model-price-badge');
+            if (priceBadge) priceBadge.textContent = `Lista Nov-26: $${modelObj.precio.toLocaleString('es-AR')}`;
+
+            const groupTag = document.getElementById('tcfa-group-tag');
+            if (groupTag) {
+                groupTag.textContent = `Grupo ${modelObj.group} • Tope 75%: $${max75.toLocaleString('es-AR')}${modelObj.cupoEspecial ? ' • Elegible Cupo Especial 0% 18m ($30M)' : ''}`;
+            }
+
+            const subs = getTcfaSubplansForCategory(tcfaState.category, modelObj);
+            let activePlan = subs.find(s => s.key === tcfaState.selectedPlanKey) || subs[0];
+            if (activePlan) tcfaState.selectedPlanKey = activePlan.key;
+
+            const effectiveCap = Math.min(rawCapital, activePlan.maxCap);
+            const exceedsCap = rawCapital > activePlan.maxCap;
+
+            const capDisp = document.getElementById('tcfa-capital-display');
+            if (capDisp) capDisp.textContent = `$${effectiveCap.toLocaleString('es-AR')}`;
+
+            const capWarn = document.getElementById('tcfa-cap-warning');
+            if (capWarn) {
+                capWarn.textContent = exceedsCap
+                    ? `⚠️ Tope línea $${activePlan.maxCap.toLocaleString('es-AR')} (faltan $${(rawCapital - activePlan.maxCap).toLocaleString('es-AR')} efectivo)`
+                    : `✓ Cubre el 100% del saldo (tope $${activePlan.maxCap.toLocaleString('es-AR')})`;
+                capWarn.className = exceedsCap ? 'text-[10px] text-amber-300 font-bold' : 'text-[10px] text-emerald-300';
+            }
+
+            const subGrid = document.getElementById('tcfa-subplans-grid');
+            if (subGrid) {
+                subGrid.innerHTML = subs.map(sp => {
+                    const capForSp = Math.min(rawCapital, sp.maxCap);
+                    const q = calcTcfaQuotaWithIva(capForSp, sp.tna, sp.plazo, sp.mode);
+                    const isSel = sp.key === activePlan.key;
+                    return `<button onclick="selectTcfaSubplan('${sp.key}')" class="p-3 rounded-2xl border-2 text-left transition-all ${isSel ? 'border-[#EB0A1E] bg-red-50/60 shadow-xs' : 'border-slate-200 bg-slate-50/60 hover:border-slate-400'}">
+                        <div class="flex items-center justify-between gap-1">
+                            <span class="text-xs font-extrabold text-slate-900">${sp.title}</span>
+                            <span class="px-1.5 py-0.5 rounded bg-zinc-900 text-white text-[9px] font-bold">${sp.tag}</span>
+                        </div>
+                        <div class="text-base font-extrabold text-[#EB0A1E] mt-1.5 tabular-nums">$${q.toLocaleString('es-AR')}<span class="text-[11px] font-normal text-slate-500">/mes</span></div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">Tope: $${sp.maxCap.toLocaleString('es-AR')} • TNA ${(sp.tna * 100).toFixed(1).replace('.', ',')}%</div>
+                    </button>`;
+                }).join('');
+            }
+
+            const quotaVal = calcTcfaQuotaWithIva(effectiveCap, activePlan.tna, activePlan.plazo, activePlan.mode);
+            const dycTax = Math.round(effectiveCap * 0.012);
+
+            document.getElementById('tcfa-res-badge').textContent = activePlan.title;
+            document.getElementById('tcfa-res-quota').textContent = `$${quotaVal.toLocaleString('es-AR')}`;
+            document.getElementById('tcfa-res-quota-sub').textContent = `${activePlan.plazo} cuotas ${activePlan.mode === 'ciclo' ? '(50% + cuota 36)' : activePlan.mode === 'agro' ? '(interés mensual + cap. semestral)' : '+ seguro y gastos'}`;
+            document.getElementById('tcfa-res-tna').textContent = `${(activePlan.tna * 100).toFixed(2).replace('.', ',')}% TNA`;
+            document.getElementById('tcfa-res-dyc').textContent = `Imp. DyC 1,2% C1: $${dycTax.toLocaleString('es-AR')}`;
+
+            const matchingToyotaPlan = marketPlansCatalog.find(p => p.brand === 'Toyota' && modelObj.modelo.toLowerCase().includes(p.model.split(' ')[0].toLowerCase())) || marketPlansCatalog[0];
+            const planQuotaRef = matchingToyotaPlan ? matchingToyotaPlan.cuotaPura : 528803;
+
+            const vsNote = document.getElementById('tcfa-vs-plan-note');
+            if (vsNote) {
+                vsNote.textContent = `Cuota convencional: $${quotaVal.toLocaleString('es-AR')}/mes (${activePlan.plazo}m). En Toyota Plan (${matchingToyotaPlan.model}), la cuota de referencia es de $${planQuotaRef.toLocaleString('es-AR')}/mes en pesos sin interés bancario y podés retirar desde la cuota 2.`;
+            }
+
+            const friendlyBox = document.getElementById('tcfa-friendly-explanation');
+            if (friendlyBox) {
+                const extraGapText = exceedsCap
+                    ? `\n⚠️ Como el tope de esta línea es $${activePlan.maxCap.toLocaleString('es-AR')}, además de tu usado/anticipo necesitarías sumar $${(rawCapital - activePlan.maxCap).toLocaleString('es-AR')} en efectivo para retirar.`
+                    : '';
+                friendlyBox.textContent = `Para llevar tu ${modelObj.modelo} (${modelObj.version}) con entrega inmediata mediante ${activePlan.title}:\n• Financiamos $${effectiveCap.toLocaleString('es-AR')} en ${activePlan.plazo} cuotas de aproximadamente $${quotaVal.toLocaleString('es-AR')} por mes (a eso se suma el seguro del auto y el 1,2% de impuesto en la primera cuota).${extraGapText}\n• ¿Cómo funciona? ${activePlan.plainExplain}\n\n💡 Y si preferís una cuota mensual bastante más baja sin descapitalizarte hoy, lo armamos por Toyota Plan (cuota aprox. $${planQuotaRef.toLocaleString('es-AR')}/mes en pesos sin interés bancario) y a partir de la cuota 2 ya podés programar el retiro.`;
+            }
+        };
+
+        window.copyTcfaFriendlyText = function() {
+            const txt = document.getElementById('tcfa-friendly-explanation')?.textContent || '';
+            if (!txt) return;
+            const ta = document.createElement('textarea');
+            ta.value = txt;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast("📋 Explicación amigable copiada para enviar por WhatsApp");
+        };
+
+        window.generateTcfaFriendlyExplanationWithAi = async function() {
+            const btn = document.getElementById('btn-tcfa-ai-explain');
+            const box = document.getElementById('tcfa-friendly-explanation');
+            const apiKey = String(SOFIA_AI.config.geminiApiKey || '').trim();
+            if (!apiKey) {
+                showToast("⚠️ Cargá tu API Key de Gemini en Sofi 2.7 para personalizar con IA");
+                return;
+            }
+            const baseText = box?.textContent || '';
+            if (btn) { btn.disabled = true; btn.textContent = '⏳ Redactando...'; }
+            try {
+                const models = await SOFIA_AI.resolveModels(apiKey);
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(models[0])}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            role: 'user',
+                            parts: [{
+                                text: `Sos Sofía, asesora comercial de Ginza Toyota en Rosario. Reescribí esta explicación financiera en un mensaje cálido, súper claro y cotidiano de WhatsApp (sin tecnicismos difíciles, sin mencionar quebrantos internos) para que alguien que no sabe de finanzas entienda perfecto cómo funciona esta línea convencional, y dejale abierta la puerta para volver a Toyota Plan si la cuota le resulta alta:\n\n${baseText}`
+                            }]
+                        }],
+                        generationConfig: { temperature: 0.6, maxOutputTokens: 450, thinkingConfig: { thinkingBudget: 0 } }
+                    })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    const aiText = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+                    if (aiText && box) {
+                        box.textContent = aiText;
+                        showToast("✨ Explicación personalizada por Sofía IA");
+                    }
+                }
+            } catch (e) {}
+            if (btn) { btn.disabled = false; btn.textContent = '✨ Personalizar con Sofía IA'; }
         };
 
         window.recalcFinancingSimulator = function() {
@@ -2966,7 +3360,10 @@ REGLAS DE ORO DE CONVERSACIÓN (CUMPLIMIENTO ESTRICTO):
 12. COMPARACIÓN INTELIGENTE CON OTRAS MARCAS: Si nombra un modelo de la competencia (ej. Territory, Amarok, Ranger, Cronos, 208), comparalo positivamente con su equivalente Toyota (Territory → Corolla Cross, Ranger/Amarok → Hilux, Cronos/208 → Yaris/Corolla) resaltando valor de reventa, confiabilidad y garantía oficial Toyota, y hacé 1 pregunta sobre qué atributo valora más.
 13. CIERRE CORDIAL ANTE UN "NO": Si responde seco "No", despedite amablemente en 1 renglón sin volver a repreguntar.
 14. NO ENVIAR IMÁGENES NI LINKS DE PLANES POR AHORA: Prohibido enviar URLs de imágenes o folletos JPG en esta etapa; informá todos los valores y condiciones por texto claro.
-15. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
+15. RECONDUCCIÓN INTELIGENTE DESDE VENTA CONVENCIONAL HACIA TOYOTA PLAN (REGLA CLAVE DE CIERRE):
+  - Cuando un cliente esté empecinado en compra convencional / entrega inmediata, explicale en palabras simples y cotidianas (sin tecnicismos bancarios ni mencionar jamás "quebranto") las opciones reales de TCFA (tope 75% de la unidad o topes promocionales de $15M a $30M, cuotas más altas porque se devuelve todo el capital en 12 a 48 meses).
+  - **Si el cliente dice que esa cuota convencional le queda alta, no puede pagarla o no llega con el anticipo para cubrir la diferencia:** reconducilo con empatía y números claros hacia **Toyota Plan**: mostrale cuánto más baja es la cuota mensual en Toyota Plan (en pesos sin interés bancario), explicándole que no necesita entregar todo ese capital junto hoy y que **a partir de la cuota número 2 ya puede programar el retiro** por sorteo o licitación.
+16. UBICACIONES EXACTAS DE GINZA TOYOTA (SIN PARÉNTESIS): Casa central en Bv. Avellaneda entre Cerrito e Ituzaingó (link Google Maps: https://maps.google.com/?q=Ginza+Toyota+Bv+Avellaneda+entre+Cerrito+e+Ituzaingo+Rosario ) y sucursal en Av. Carballo 632.
 ${officialPricesText}
 
 FINANCIACIÓN CONVENCIONAL Y BANCARIA DE REFERENCIA (USAR SOLO SI RECHAZA PLAN DE AHORRO):
