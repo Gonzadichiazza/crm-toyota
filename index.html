@@ -167,7 +167,7 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- TAB 1: PANEL PRINCIPAL EJECUTIVO GINZA TOYOTA (INCLUYE KPIS EXCLUSIVOS)   -->
+    <!-- TAB 1: PANEL PRINCIPAL EJECUTIVO GINZA TOYOTA                             -->
     <!-- ========================================================================= -->
     <main id="tab-botonera" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-5">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -215,7 +215,7 @@
         <div id="wa-tracker-banner" class="bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="font-bold text-slate-900">Seguimiento Autónomo Sofi 2.7 (Google Gemini):</span>
+                <span class="font-bold text-slate-900">Motor Multi-IA Sofi 2.7 (Gemini + Groq 14.400/día):</span>
                 <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h (08:00–21:00h; Redes/IG 24/7).</span>
             </div>
             <div class="flex items-center gap-1.5 flex-wrap">
@@ -237,7 +237,7 @@
                         Gestión Comercial & Asesoramiento IA <span class="text-[#EB0A1E]">Toyota Plan</span>
                     </h1>
                     <p class="text-xs sm:text-sm text-zinc-300 mt-2 leading-relaxed">
-                        Sofía 2.7 razona e interpreta cada conversación con Google Gemini usando los valores, versiones, fichas técnicas y cuotas por tramos cargados en tu CRM.
+                        Sofía 2.7 razona cada conversación combinando Google Gemini + respaldo gratuito Groq (14.400 mensajes diarios sin costo) con los valores, versiones, fichas técnicas y cuotas cargadas en tu CRM.
                     </p>
                     <div class="flex flex-wrap gap-2.5 mt-4">
                         <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs sm:text-sm font-bold shadow-md transition-all">📋 Ir a Prospección (7 Canales)</button>
@@ -839,7 +839,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR VALORES OFICIALES DEL PLAN (SINCRONIZA CON SOFÍA 2.7) -->
+    <!-- MODAL EDITAR VALORES OFICIALES DEL PLAN -->
     <div id="edit-plan-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[72] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[92vh] overflow-y-auto p-5 space-y-4 border border-slate-200">
             <div class="flex items-center justify-between border-b pb-3">
@@ -955,7 +955,7 @@
                             <div><label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Tope Diario</label><input type="number" id="camp-daily-limit" value="40" onchange="saveCampaignConfig()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl tabular-nums"></div>
                             <div><label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Pausa Lote (c/10)</label><input type="number" id="camp-batch-pause" value="4" onchange="saveCampaignConfig()" class="w-full px-2.5 py-1.5 text-xs font-bold border border-slate-300 rounded-xl tabular-nums"></div>
                         </div>
-                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="camp-ai-spin" checked onchange="saveCampaignConfig()"><span>Variación natural con Gemini</span></label>
+                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="camp-ai-spin" checked onchange="saveCampaignConfig()"><span>Variación natural con IA</span></label>
                         <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="camp-daytime-only" checked onchange="saveCampaignConfig()"><span>Solo horario comercial (09:00–20:30 hs)</span></label>
                         <div class="p-2 rounded-xl bg-amber-50 border border-amber-200 text-[11px]">Enviados hoy: <b id="camp-sent-today-count">0</b> / <span id="camp-daily-limit-label">40</span></div>
                     </div>
@@ -1048,9 +1048,9 @@
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
                             <h3 class="text-base sm:text-lg font-extrabold">Sofi 2.7 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
-                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Razonamiento IA Activo</span>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Multi-IA (Gemini + Groq)</span>
                         </div>
-                        <p class="text-xs text-zinc-300">Comprensión contextual profunda • Sin respuestas enlatadas • Conectado al catálogo y planes por tramos.</p>
+                        <p class="text-xs text-zinc-300">Cuota gratuita ilimitada combinando Google Gemini + Groq (14.400/día gratis) • Razonamiento activo.</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1065,13 +1065,26 @@
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50/70">
                 <div class="lg:col-span-5 space-y-4">
                     <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-2.5">
-                        <div class="text-xs font-extrabold uppercase text-slate-800">🔑 Pool de API Keys Google Gemini (Redundancia)</div>
-                        <input type="password" id="wa-ai-gemini-key" onchange="saveWaAiConfig()" placeholder="Key Principal (AIzaSy...)" class="w-full px-2.5 py-1.5 text-xs font-mono border border-sky-300 rounded-lg bg-white outline-none">
-                        <div class="grid grid-cols-2 gap-1.5">
-                            <input type="password" id="wa-ai-gemini-key-b1" onchange="saveWaAiConfig()" placeholder="Key Respaldo 1 (opc.)" class="w-full px-2 py-1 text-[11px] font-mono border border-slate-300 rounded-lg bg-slate-50 outline-none">
-                            <input type="password" id="wa-ai-gemini-key-b2" onchange="saveWaAiConfig()" placeholder="Key Respaldo 2 (opc.)" class="w-full px-2 py-1 text-[11px] font-mono border border-slate-300 rounded-lg bg-slate-50 outline-none">
+                        <div class="text-xs font-extrabold uppercase text-slate-800">🔑 Pool de API Keys Gratuitas (Gemini + Groq 14.400/día)</div>
+                        <div class="flex gap-1.5">
+                            <input type="password" id="wa-ai-gemini-key" onchange="saveWaAiConfig()" placeholder="Gemini Principal (AIzaSy...)" class="flex-1 px-2.5 py-1.5 text-xs font-mono border border-sky-300 rounded-lg bg-white outline-none">
+                            <button onclick="testSingleApiKey('gemini')" class="px-2.5 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-[11px] font-bold shrink-0">🧪 Probar</button>
                         </div>
-                        <div id="wa-ai-kb-summary" class="space-y-1.5 text-xs text-slate-700"></div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <input type="password" id="wa-ai-gemini-key-b1" onchange="saveWaAiConfig()" placeholder="Gemini Respaldo 1 (opc.)" class="w-full px-2 py-1 text-[11px] font-mono border border-slate-300 rounded-lg bg-slate-50 outline-none">
+                            <input type="password" id="wa-ai-gemini-key-b2" onchange="saveWaAiConfig()" placeholder="Gemini Respaldo 2 (opc.)" class="w-full px-2 py-1 text-[11px] font-mono border border-slate-300 rounded-lg bg-slate-50 outline-none">
+                        </div>
+                        <div class="pt-1 border-t border-slate-100 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase text-amber-800">⚡ Respaldo Gratuito Groq (14.400/día sin tarjeta)</span>
+                                <a href="https://console.groq.com/keys" target="_blank" class="text-[10px] font-bold text-sky-700 underline">Obtener Key gratis →</a>
+                            </div>
+                            <div class="flex gap-1.5">
+                                <input type="password" id="wa-ai-groq-key" onchange="saveWaAiConfig()" placeholder="API Key Groq (gsk_...)" class="flex-1 px-2.5 py-1.5 text-xs font-mono border border-amber-300 rounded-lg bg-amber-50/40 outline-none">
+                                <button onclick="testSingleApiKey('groq')" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-zinc-950 text-[11px] font-extrabold shrink-0">🧪 Probar</button>
+                            </div>
+                        </div>
+                        <div id="wa-ai-key-test-status" class="hidden p-2 rounded-lg text-[11px] font-bold"></div>
                         <div class="grid grid-cols-2 gap-2">
                             <input type="text" id="wa-ai-advisor-name" value="Sofía" class="px-2.5 py-1.5 text-xs border rounded-lg">
                             <input type="text" id="wa-ai-branch" value="Ginza Toyota" class="px-2.5 py-1.5 text-xs border rounded-lg">
@@ -1110,7 +1123,7 @@
                     <div class="p-3.5 bg-slate-50 border-b flex flex-wrap items-center justify-between gap-2">
                         <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="flex-1 px-2.5 py-1.5 text-xs font-bold border rounded-xl bg-white"></select>
                         <div class="flex items-center gap-1.5">
-                            <span id="wa-ai-engine-pill" class="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-900">🧠 Gemini Pensando</span>
+                            <span id="wa-ai-engine-pill" class="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-900">🧠 Gemini + Groq</span>
                             <button onclick="resetWaAiChatHistory()" class="px-2.5 py-1.5 rounded-xl bg-slate-200 text-xs font-bold">🧹 Limpiar Chat</button>
                         </div>
                     </div>
@@ -1127,7 +1140,7 @@
                     </div>
 
                     <div id="wa-ai-draft-box" class="hidden p-3 bg-emerald-50 border-t space-y-2">
-                        <div class="flex justify-between"><span class="text-[10px] font-extrabold uppercase text-emerald-900">Respuesta Gemini:</span><span id="wa-ai-source-tag" class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold"></span></div>
+                        <div class="flex justify-between"><span class="text-[10px] font-extrabold uppercase text-emerald-900">Respuesta IA:</span><span id="wa-ai-source-tag" class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold"></span></div>
                         <textarea id="wa-ai-draft-text" rows="2" class="w-full px-3 py-2 text-xs border rounded-xl bg-white"></textarea>
                     </div>
 
@@ -1188,8 +1201,6 @@
                 { id: 'hiace-furgon', group: 'B', modelo: 'Hiace MY\'26', version: 'Furgón L2H2 2.8 6AT 3A DCM', precio: 72798000, cupoEspecial: false },
                 { id: 'hiace-commuter', group: 'B', modelo: 'Hiace MY\'26', version: 'Commuter 2.8 6AT 14A DCM', precio: 87882000, cupoEspecial: false }
             ],
-            CONVENTIONAL_FINANCING_KNOWLEDGE: `FINANCIACIÓN CONVENCIONAL TCFA Y BANCARIA OFICIAL (NOVIEMBRE 2026 - USO EXCLUSIVO COMO CONTRASTE DE NO VENTA):
-- Lista Oficial 0 km Noviembre 2026: Yaris 5P XS $36.315.000 / XLS+ $40.340.000 / S $43.255.000 | Yaris Cross XLI $41.464.000 / XEI $45.260.000 / XEI HEV $48.457.000 | Corolla XLI $44.082.000 | Corolla Cross XLI $51.918.000 | Hilux 4x2 DX $49.621.000 / 4x4 DX AT $59.739.000 | Hiace L2H2 $72.798.000.`,
             DEFAULT_MARKET_PLANS: [
                 { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 528803 },
                 { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 891366 },
@@ -1217,13 +1228,12 @@
         let lastSyncedUpdatedAt = 0;
         let isApplyingRemote = false;
         let pushTimeout = null;
-        let firebaseStream = null, aiScheduledStream = null, waIncomingStream = null, sfIncomingStream = null, waTabRef = null;
-        let processedSfEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_sf_events') || '[]'));
+        let firebaseStream = null, aiScheduledStream = null;
 
         let kpis = [{ id: '1', name: 'Llamada' }, { id: '2', name: 'Mensaje' }];
         let crmContacts = [], gestionContacts = [], redesContacts = [], salesforceContacts = [];
         let convencionalContacts = [], canceladosContacts = [], rescindidosContacts = [];
-        let convencionalSellers = [], plansHistory = [], currentPlanJpgs = [], pendingShareJpgItem = null;
+        let convencionalSellers = [], plansHistory = [], currentPlanJpgs = [];
         let marketPlansCatalog = [...DEFAULT_MARKET_PLANS];
 
         let waTemplates = {
@@ -1244,13 +1254,6 @@
         let latestAiSuggestedWeekly = null;
         let agendaViewYear = new Date().getFullYear(), agendaViewMonth = new Date().getMonth();
         let selectedAgendaDate = new Date().toISOString().split('T')[0];
-        let waIncomingLogs = [];
-        let processedWaEventIds = new Set(JSON.parse(localStorage.getItem('crm_processed_wa_events') || '[]'));
-        let recentWaMessageFingerprints = new Map();
-        let isPollingWa = false;
-        let infoAutoAlerts = JSON.parse(localStorage.getItem('crm_infoauto_alerts') || '[]');
-        let commercialLiveAlerts = JSON.parse(localStorage.getItem('crm_commercial_live_alerts') || '[]');
-        let audioLiveAlerts = JSON.parse(localStorage.getItem('crm_audio_live_alerts') || '[]');
 
         // ============================================================================
         // STORAGE & SYNC
@@ -1960,36 +1963,12 @@
             resBox.classList.remove('hidden');
             const fallbackSummary = `Comparativa ${modA} (${verA?.name || ''}) vs ${modB} (${verB?.name || ''}):\n• Precio de lista: $${Number(verA?.price || 0).toLocaleString('es-AR')} vs $${Number(verB?.price || 0).toLocaleString('es-AR')} (diferencia de $${Math.abs(Number(verA?.price || 0) - Number(verB?.price || 0)).toLocaleString('es-AR')}).\n• ${verA?.name}: ${verA?.notes || techA}\n• ${verB?.name}: ${verB?.notes || techB}`;
 
-            const apiKey = String(SOFIA_AI.config.geminiApiKey || '').trim();
-            if (!apiKey) { resBox.textContent = fallbackSummary; return; }
+            const promptTxt = `Sos Sofía, asesora de Ginza Toyota. Compará de forma clara, sobria y breve (4 a 6 renglones, sin asteriscos Markdown) estas dos opciones:\n\nOPCIÓN A: ${modA} ${verA?.name || ''} ($${Number(verA?.price || 0).toLocaleString('es-AR')}) - ${verA?.notes || ''}\nFicha ${modA}: ${techA}\n\nOPCIÓN B: ${modB} ${verB?.name || ''} ($${Number(verB?.price || 0).toLocaleString('es-AR')}) - ${verB?.notes || ''}\nFicha ${modB}: ${techB}`;
 
             if (btn) { btn.disabled = true; btn.textContent = '⏳ Analizando...'; }
             resBox.textContent = '⏳ Sofía está comparando equipamiento, motorización y relación precio/producto...';
-            try {
-                const models = await SOFIA_AI.resolveModels(apiKey);
-                const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(models[0])}:generateContent?key=${encodeURIComponent(apiKey)}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            role: 'user',
-                            parts: [{
-                                text: `Sos Sofía, asesora de Ginza Toyota. Compará de forma clara, sobria y breve (4 a 6 renglones, sin asteriscos Markdown) estas dos opciones:\n\nOPCIÓN A: ${modA} ${verA?.name || ''} ($${Number(verA?.price || 0).toLocaleString('es-AR')}) - ${verA?.notes || ''}\nFicha ${modA}: ${techA}\n\nOPCIÓN B: ${modB} ${verB?.name || ''} ($${Number(verB?.price || 0).toLocaleString('es-AR')}) - ${verB?.notes || ''}\nFicha ${modB}: ${techB}`
-                            }]
-                        }],
-                        generationConfig: { temperature: 0.5, maxOutputTokens: 420, thinkingConfig: { thinkingBudget: 256 } }
-                    })
-                });
-                if (gRes.ok) {
-                    const gData = await gRes.json();
-                    const txt = (gData?.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('').replace(/\*/g, '').trim();
-                    resBox.textContent = txt || fallbackSummary;
-                } else {
-                    resBox.textContent = fallbackSummary;
-                }
-            } catch (e) {
-                resBox.textContent = fallbackSummary;
-            }
+            const out = await SOFIA_AI.callAnyProvider([{ role: 'user', text: promptTxt }], 'Sos asesora de ventas de Toyota en Rosario.');
+            resBox.textContent = out.text || fallbackSummary;
             if (btn) { btn.disabled = false; btn.textContent = '✨ Analizar Diferencias con IA'; }
         };
 
@@ -2215,26 +2194,10 @@
         window.generateTcfaFriendlyExplanationWithAi = async function() {
             const btn = document.getElementById('btn-tcfa-ai-explain');
             const box = document.getElementById('tcfa-friendly-explanation');
-            const apiKey = String(SOFIA_AI.config.geminiApiKey || '').trim();
-            if (!apiKey) { showToast("⚠️ Cargá tu API Key de Gemini en Sofi 2.7"); return; }
             const baseText = box?.textContent || '';
             if (btn) { btn.disabled = true; btn.textContent = '⏳...'; }
-            try {
-                const models = await SOFIA_AI.resolveModels(apiKey);
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(models[0])}:generateContent?key=${encodeURIComponent(apiKey)}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ role: 'user', parts: [{ text: `Reescribí esta explicación financiera en un mensaje claro, sobrio y cotidiano de WhatsApp (sin asteriscos Markdown):\n\n${baseText}` }] }],
-                        generationConfig: { temperature: 0.6, maxOutputTokens: 400, thinkingConfig: { thinkingBudget: 256 } }
-                    })
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    const aiText = (data?.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('').replace(/\*/g, '').trim();
-                    if (aiText && box) box.textContent = aiText;
-                }
-            } catch (e) {}
+            const out = await SOFIA_AI.callAnyProvider([{ role: 'user', text: `Reescribí esta explicación financiera en un mensaje claro, sobrio y cotidiano de WhatsApp (sin asteriscos Markdown):\n\n${baseText}` }], 'Sos asesora de Ginza Toyota.');
+            if (out.text && box) box.textContent = out.text;
             if (btn) { btn.disabled = false; btn.textContent = '✨ Personalizar con Sofía IA'; }
         };
 
@@ -2368,7 +2331,7 @@
                 <button onclick="deleteContact('${contact.id}')" class="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-xs">🗑️</button>
             </div>`;
         };
-        function renderSimpleChannelTable(list, tbodyId, emptyId, channelKey, waitingBoxId = '') {
+        function renderSimpleChannelTable(list, tbodyId, emptyId, channelKey) {
             const tbody = document.getElementById(tbodyId), emptyEl = document.getElementById(emptyId);
             if (!tbody) return;
             const searchQuery = channelKey === 'crm'
@@ -2387,12 +2350,12 @@
                 tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold"><button onclick="openClientProfileModal('${c.id}')" class="text-left hover:text-[#EB0A1E] underline decoration-slate-300">${c.name || 'Sin Nombre'}</button><div class="mt-0.5 text-xs text-emerald-700">${formatPhoneAR(c.phone)}</div></td><td class="p-3.5 text-xs">${c.method || channelKey}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5">${renderActions(c, channelKey)}</td></tr>`).join('');
             }
         }
-        window.renderCrmTable = () => renderSimpleChannelTable(crmContacts, 'crm-table-body', 'crm-empty-state', 'crm', 'crm-waiting-sublist');
-        window.renderGestionTable = () => renderSimpleChannelTable(gestionContacts, 'gestion-table-body', 'gestion-empty-state', 'gestion', 'gestion-waiting-sublist');
-        window.renderRedesTable = () => renderSimpleChannelTable(redesContacts, 'redes-table-body', 'redes-empty-state', 'redes', 'redes-waiting-sublist');
-        window.renderSalesforceTable = () => renderSimpleChannelTable(salesforceContacts, 'salesforce-table-body', 'salesforce-empty-state', 'salesforce', 'salesforce-waiting-sublist');
-        window.renderCanceladosTable = () => renderSimpleChannelTable(canceladosContacts, 'cancelados-table-body', 'cancelados-empty-state', 'cancelados', 'cancelados-waiting-sublist');
-        window.renderRescindidosTable = () => renderSimpleChannelTable(rescindidosContacts, 'rescindidos-table-body', 'rescindidos-empty-state', 'rescindidos', 'rescindidos-waiting-sublist');
+        window.renderCrmTable = () => renderSimpleChannelTable(crmContacts, 'crm-table-body', 'crm-empty-state', 'crm');
+        window.renderGestionTable = () => renderSimpleChannelTable(gestionContacts, 'gestion-table-body', 'gestion-empty-state', 'gestion');
+        window.renderRedesTable = () => renderSimpleChannelTable(redesContacts, 'redes-table-body', 'redes-empty-state', 'redes');
+        window.renderSalesforceTable = () => renderSimpleChannelTable(salesforceContacts, 'salesforce-table-body', 'salesforce-empty-state', 'salesforce');
+        window.renderCanceladosTable = () => renderSimpleChannelTable(canceladosContacts, 'cancelados-table-body', 'cancelados-empty-state', 'cancelados');
+        window.renderRescindidosTable = () => renderSimpleChannelTable(rescindidosContacts, 'rescindidos-table-body', 'rescindidos-empty-state', 'rescindidos');
         window.addConvencionalSeller = () => { const n = document.getElementById('conv-new-seller')?.value.trim(); if (n) { convencionalSellers.push(n); document.getElementById('conv-new-seller').value = ''; saveLocalData(); renderConvencionalSellers(); } };
         window.renderConvencionalSellers = () => { const el = document.getElementById('conv-sellers-list'); if (el) el.innerHTML = convencionalSellers.map(s => `<span class="px-2 py-0.5 bg-emerald-50 border rounded text-xs font-bold">${s}</span>`).join(''); };
         window.renderConvencionalTables = () => { const tb = document.getElementById('conv-sent-body'); if (tb) tb.innerHTML = convencionalContacts.map(c => `<tr><td class="p-3 text-xs font-bold">${c.name}</td><td class="p-3 text-xs">${c.seller||'-'}</td><td class="p-3 text-xs">${c.status}</td><td class="p-3">${renderActions(c, 'convencional')}</td></tr>`).join(''); };
@@ -2612,7 +2575,7 @@
             renderAgendaTab();
         };
 
-        // --- COMPARATIVA DE PLANES (COMPLETA) ---
+        // --- COMPARATIVA DE PLANES ---
         window.syncPlaneroDeLeyLive = async function(manual = false) { mergeDefaultMarketPlans(); renderComparativaSelectors(); if (manual) showToast("Lista de planes actualizada"); };
         window.onCompSegmentChange = function() { renderComparativaSelectors(); };
         window.selectCompetitorPlanFromTable = function(rivalId) {
@@ -2686,7 +2649,7 @@
                 </div>`;
         };
 
-        // --- OBJETIVOS (COMPLETO CON PROYECCIÓN DÍAS HÁBILES Y COACH IA) ---
+        // --- OBJETIVOS ---
         function countRemainingWeekdaysInMonth() {
             const now = new Date();
             const year = now.getFullYear(), month = now.getMonth(), today = now.getDate();
@@ -2825,7 +2788,7 @@
         };
 
         // ============================================================================
-        // LECTURA DE PDFs DE PLANES (3 TRAMOS + INTEGRACIÓN MÍNIMA DINÁMICA + EDICIÓN)
+        // LECTURA DE PDFs DE PLANES
         // ============================================================================
         const PLAN_IDB_NAME = 'CrmGinzaToyotaPlanesDB', PLAN_IDB_STORE = 'planFiles';
         function openPlansIndexedDB() {
@@ -3189,7 +3152,7 @@
         window.closeShareJpgWaModal = () => document.getElementById('share-jpg-wa-modal')?.classList.add('hidden');
 
         // ============================================================================
-        // MÓDULO SOFIA_AI (SOFÍA 2.7 • RAZONAMIENTO REAL GEMINI + COMPRENSIÓN CONTEXTUAL)
+        // MÓDULO SOFIA_AI (SOFÍA 2.7 • MULTI-PROVEEDOR GRATUITO GEMINI + GROQ)
         // ============================================================================
         const SOFIA_AI = {
             config: {
@@ -3202,6 +3165,7 @@
                 geminiApiKey: '',
                 geminiApiKeyBackup1: '',
                 geminiApiKeyBackup2: '',
+                groqApiKey: '',
                 workerUrl: 'https://sofia-ginza.gonzalodichiazza2.workers.dev',
                 cloudWorkerPrimary: false,
                 sandboxEnabled: true,
@@ -3210,30 +3174,82 @@
                 ...JSON.parse(localStorage.getItem('crm_wa_ai_config') || '{}')
             },
             chats: JSON.parse(localStorage.getItem('crm_wa_ai_chats') || '{}'),
-            cachedModels: null,
-            pendingBuffers: {},
 
             saveConfig() { localStorage.setItem('crm_wa_ai_config', JSON.stringify(this.config)); },
             saveChats() { try { localStorage.setItem('crm_wa_ai_chats', JSON.stringify(this.chats)); } catch (e) {} },
 
-            async resolveModels(apiKey) {
-                if (Array.isArray(this.cachedModels) && this.cachedModels.length > 0) return this.cachedModels;
-                const preferredOrder = ['gemini-3-flash-preview', 'gemini-2.5-flash', 'gemini-flash-latest'];
-                try {
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        const validNames = (data.models || [])
-                            .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
-                            .map(m => String(m.name || '').replace(/^models\//, ''))
-                            .filter(n => n.includes('gemini') && !n.includes('2.0-flash'));
-                        if (validNames.length > 0) {
-                            this.cachedModels = [...preferredOrder.filter(p => validNames.includes(p)), ...validNames.filter(v => !preferredOrder.includes(v))].slice(0, 4);
-                            return this.cachedModels;
-                        }
+            async callAnyProvider(messagesArr, systemPrompt) {
+                const geminiKeys = Array.from(new Set([
+                    this.config.geminiApiKey,
+                    this.config.geminiApiKeyBackup1,
+                    this.config.geminiApiKeyBackup2
+                ].map(k => String(k || '').trim()).filter(k => k.length > 20)));
+
+                const geminiModels = ['gemini-3-flash-preview', 'gemini-flash-lite-latest', 'gemini-3.1-flash-lite-preview', 'gemini-flash-latest'];
+                const contents = messagesArr.map(m => ({ role: m.role === 'model' ? 'model' : 'user', parts: [{ text: m.text }] }));
+
+                for (let kIdx = 0; kIdx < geminiKeys.length; kIdx++) {
+                    const key = geminiKeys[kIdx];
+                    for (const model of geminiModels) {
+                        const supportsThinking = model.includes('3-flash') || model.includes('3.1-flash');
+                        const genCfg = { temperature: 0.75, maxOutputTokens: 900 };
+                        if (supportsThinking) genCfg.thinkingConfig = { thinkingBudget: 512 };
+                        try {
+                            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                                    contents,
+                                    generationConfig: genCfg
+                                })
+                            });
+                            if (!res.ok) {
+                                if (res.status === 400 || res.status === 403) break;
+                                continue;
+                            }
+                            const data = await res.json();
+                            const txt = (data?.candidates?.[0]?.content?.parts || [])
+                                .filter(p => !p.thought)
+                                .map(p => p.text || '')
+                                .join('')
+                                .trim();
+                            if (txt) return { text: txt, source: `Gemini (${model})` };
+                        } catch (e) {}
                     }
-                } catch (e) {}
-                return preferredOrder;
+                }
+
+                // Respaldo gratuito Groq (14.400 requests/día sin tarjeta)
+                const groqKey = String(this.config.groqApiKey || '').trim();
+                if (groqKey.length > 20) {
+                    const groqMessages = [
+                        { role: 'system', content: systemPrompt },
+                        ...messagesArr.map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text }))
+                    ];
+                    for (const gModel of ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant']) {
+                        try {
+                            const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${groqKey}`
+                                },
+                                body: JSON.stringify({
+                                    model: gModel,
+                                    messages: groqMessages,
+                                    temperature: 0.75,
+                                    max_tokens: 700
+                                })
+                            });
+                            if (!res.ok) continue;
+                            const data = await res.json();
+                            const txt = String(data?.choices?.[0]?.message?.content || '').trim();
+                            if (txt) return { text: txt, source: `Groq (${gModel})` };
+                        } catch (e) {}
+                    }
+                }
+
+                return { text: '', source: 'Sin cuota disponible' };
             },
 
             async syncBrainToFirebase() {
@@ -3271,7 +3287,9 @@
                     let effectiveApiKey = String(this.config.geminiApiKey || '').trim();
                     let backupKey1 = String(this.config.geminiApiKeyBackup1 || '').trim();
                     let backupKey2 = String(this.config.geminiApiKeyBackup2 || '').trim();
-                    if (!effectiveApiKey) {
+                    let effectiveGroqKey = String(this.config.groqApiKey || '').trim();
+
+                    if (!effectiveApiKey || !effectiveGroqKey) {
                         try {
                             const [prevRes, keyRes] = await Promise.all([
                                 fetch(`${FIREBASE_DB_URL}/ai_brain/${encodeURIComponent(syncRoom)}.json`),
@@ -3279,15 +3297,15 @@
                             ]);
                             const prevBrain = prevRes.ok ? await prevRes.json() : null;
                             const keyDoc = keyRes.ok ? await keyRes.json() : null;
-                            effectiveApiKey = String(prevBrain?.geminiApiKey || keyDoc?.geminiApiKey || '').trim();
+                            effectiveApiKey = effectiveApiKey || String(prevBrain?.geminiApiKey || keyDoc?.geminiApiKey || '').trim();
                             backupKey1 = backupKey1 || String(prevBrain?.geminiApiKeyBackup1 || keyDoc?.geminiApiKeyBackup1 || '').trim();
                             backupKey2 = backupKey2 || String(prevBrain?.geminiApiKeyBackup2 || keyDoc?.geminiApiKeyBackup2 || '').trim();
-                            if (effectiveApiKey) {
-                                this.config.geminiApiKey = effectiveApiKey;
-                                this.config.geminiApiKeyBackup1 = backupKey1;
-                                this.config.geminiApiKeyBackup2 = backupKey2;
-                                this.saveConfig();
-                            }
+                            effectiveGroqKey = effectiveGroqKey || String(prevBrain?.groqApiKey || keyDoc?.groqApiKey || '').trim();
+                            if (effectiveApiKey) this.config.geminiApiKey = effectiveApiKey;
+                            if (backupKey1) this.config.geminiApiKeyBackup1 = backupKey1;
+                            if (backupKey2) this.config.geminiApiKeyBackup2 = backupKey2;
+                            if (effectiveGroqKey) this.config.groqApiKey = effectiveGroqKey;
+                            this.saveConfig();
                         } catch (e) {}
                     }
 
@@ -3308,6 +3326,7 @@
                                 geminiApiKey: effectiveApiKey,
                                 geminiApiKeyBackup1: backupKey1,
                                 geminiApiKeyBackup2: backupKey2,
+                                groqApiKey: effectiveGroqKey,
                                 systemPrompt,
                                 officialPricesText,
                                 authorizedContacts,
@@ -3316,7 +3335,7 @@
                         })
                     ];
 
-                    if (effectiveApiKey) {
+                    if (effectiveApiKey || effectiveGroqKey) {
                         tasks.push(fetch(`${FIREBASE_DB_URL}/ai_keys/${encodeURIComponent(syncRoom)}.json`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
@@ -3324,7 +3343,8 @@
                                 updatedAt: Date.now(),
                                 geminiApiKey: effectiveApiKey,
                                 geminiApiKeyBackup1: backupKey1,
-                                geminiApiKeyBackup2: backupKey2
+                                geminiApiKeyBackup2: backupKey2,
+                                groqApiKey: effectiveGroqKey
                             })
                         }));
                     }
@@ -3386,100 +3406,135 @@
                 const hr = new Date().getHours();
                 const greeting = hr >= 6 && hr < 13 ? 'Hola, buen día' : (hr >= 13 && hr < 20 ? 'Hola, buenas tardes' : 'Hola, buenas noches');
 
-                return `Sos ${advisor}, asesora comercial senior de Gonzalo Dichiazza en ${branch} (Rosario), conversando por WhatsApp con criterio propio, empatía real y naturalidad humana (Sofi 2.7). Fecha actual: ${todayIso}.
+                return `Sos ${advisor}, asesora comercial senior de Gonzalo Dichiazza en ${branch} (Rosario), conversando por WhatsApp (Sofi 2.7). Fecha actual: ${todayIso}.
 
-CÓMO TENÉS QUE RAZONAR E INTERPRETAR CADA MENSAJE:
-- NO sos un bot de respuestas enlatadas. Antes de responder, leé TODO el historial de la charla, analizá qué dijo exactamente el cliente, qué intención o duda tiene detrás de sus palabras y qué datos ya te dio.
-- PROHIBIDO REPETIRTE: Nunca copies ni recicles una frase o estructura que ya usaste en turnos anteriores. Si el cliente vuelve a preguntar lo mismo o insiste con una duda, interpretá por qué no le quedó claro y explicáselo con palabras nuevas, desde otro ángulo más concreto y humano.
-- TONO Y ESTILO: Directo, cotidiano (vos/contame/fijate), sobrio y profesional. CERO frases melosas o exageradas ("qué lindo", "excelente elección", "excelente lanzamiento"), CERO asteriscos Markdown (**), CERO jerga técnica fría ("oferta de licitación"). Respuestas breves de WhatsApp (2 a 4 renglones) con 1 sola pregunta clara al final para avanzar la charla sin abrumar.
+TU FORMA DE PENSAR Y CONVERSAR (MUY IMPORTANTE):
+- Pensá y razoná cada respuesta antes de escribir: leé todo el historial del chat, entendé qué datos ya dio el cliente (modelo, versión, presupuesto mensual, si tiene usado) y qué duda real tiene detrás de sus palabras.
+- PROHIBIDO volver a preguntar algo que el cliente ya respondió antes.
+- PROHIBIDO repetir frases o estructuras que ya dijiste antes. Si el cliente insiste o repregunta, reformulá desde otro ángulo más claro y humano.
+- Lenguaje natural, sobrio, cercano y profesional de Rosario ("contame", "tenés", "podés"). CERO frases melosas ("qué lindo", "excelente elección", "gran modelo"), CERO asteriscos (**), CERO jerga fría ("oferta de licitación"). Respuestas breves de WhatsApp (1 a 3 renglones).
 
-CRITERIO COMERCIAL Y EMBUDO ELÁSTICO (4 ETAPAS):
-1. SALUDO INICIAL: Si es el primer mensaje y solo saluda ("Hola", "Buen día"), saludá con: "${greeting}. Soy ${advisor}, asistente de Gonzalo Dichiazza en ${branch}. ¿En qué te puedo ayudar?". Si saluda y ya hace una consulta en el mismo mensaje, presentate breve y respondé directo lo que preguntó. Si ya venían charlando y dice "Hola", saludalo con naturalidad sin volver a presentarte y retomá el hilo.
-2. ETAPA 1 — INDAGAR CON INTELIGENCIA (SKIP-AHEAD):
-   - Necesitás conocer: modelo -> versión -> modalidad (plan de ahorro o compra convencional) -> si conoce cómo funciona el sistema -> qué cuota mensual le queda cómoda -> si cuenta con usado o ahorro.
-   - Si el cliente ya te dio varios datos juntos en un mensaje, reconocé todo lo que te dijo y preguntale únicamente el primer dato relevante que falte.
-   - Si consulta por financiación sin decir modelo, indagá qué vehículo o segmento busca antes de hablar de planes. Si nombra modelo sin aclarar versión, indagá la versión antes de pasar cuotas.
-3. ETAPA 2 — EXPLICAR CON CLARIDAD:
-   - Explicá en pesos sin interés bancario, usando los valores oficiales de lista, la cuota final de referencia (tramo más alto) y la integración mínima (30% en planes 70/30) del catálogo de abajo.
-   - Si pregunta cómo se retira: explicá adjudicación desde cuota 2 por sorteo o licitación integrando el porcentaje correspondiente. NUNCA prometas plazos fijos de entrega.
-   - Si tiene usado: destacá el sistema Llave por Llave (sigue usando su auto y recién lo entrega al retirar el 0 km para cubrir la integración, sin quedarse a pie) y pedile marca, modelo, año y kilómetros aproximados para pasárselos a Gonzalo. NUNCA prometas precio de usado ni digas cuándo se hace la tasación oficial; simplemente confirmá que se lo pasás a Gonzalo para que lo evalúe.
-   - Casos especiales: SW4 no tiene suscripción directa en Toyota Plan (se ofrece compra convencional TCFA o cambio de modelo al adjudicar). En Yaris Cross, tanto Naftera (XLI CVT, $41.464.000) como Híbrida (XEI HEV, $48.457.000) son modalidad 70/30.
-4. ETAPA 3 — VALIDAR INTERÉS REAL ANTES DE CITAR:
-   - Cuando ya explicaste los números y aclaraste sus dudas, evaluá cómo ve la propuesta ("Contame, con estos números y condiciones, ¿cómo lo ves? ¿Te interesa avanzar con esta alternativa?").
-5. ETAPA 4 — CITA CON GONZALO O SEGUIMIENTO:
-   - Solo si confirma que le interesa, proponé una reunión en el concesionario junto a Gonzalo (PROHIBIDO usar la palabra "suscripción" o decir "acercate").
-   - Si pide pensarlo y acuerdan fecha/hora de contacto, agregá al final la etiqueta oculta [[AGENDAR:YYYY-MM-DD|HH:MM|Interesado a Futuro]].
-   - Si pide hablar directo con Gonzalo o pregunta si sos un bot, respondé con transparencia que sos ${advisor}, asistente de Gonzalo Dichiazza, y que ya le avisás para que te escriba personalmente, agregando [[PAUSAR_HUMANO]].
+SALUDO SEGÚN FRANJA HORARIA:
+- Solo si es el primer mensaje y únicamente saluda ("Hola", "Buen día"): "${greeting}. Soy ${advisor}, asistente de Gonzalo Dichiazza en ${branch}. ¿En qué te puedo ayudar?"
+- Si en el primer mensaje ya hace una consulta o da datos, presentate breve y respondé directo a todo lo que planteó sin cortar en "¿En qué te puedo ayudar?".
+
+CRITERIO COMERCIAL EN 4 ETAPAS (EMBUDO ELÁSTICO / SKIP-AHEAD):
+1. ETAPA 1 — INDAGAR CON SENTIDO COMÚN (1 sola pregunta corta por mensaje):
+   - Descubrí de a poco lo que falte: modelo -> versión -> alternativa (plan de ahorro o compra convencional) -> si conoce cómo funciona el sistema -> qué valor de cuota mensual le queda cómodo -> si cuenta con usado o ahorro.
+   - SKIP-AHEAD: Si el cliente entrega varios datos juntos en un mensaje, confirmá todos los datos recibidos y preguntá únicamente el primer dato que falte.
+2. ETAPA 2 — EXPLICAR CON CLARIDAD:
+   - Explicá los números oficiales de la base de conocimiento (valor de lista, cuota final de referencia del tramo más alto en pesos sin interés bancario, e integración mínima al retirar).
+   - Plazos de entrega: si pregunta cuándo se entrega, aclarale siempre que en plan de ahorro NO prometemos plazos fijos de entrega; puede adjudicar desde la cuota 2 por sorteo o licitación, y los tiempos de entrega dependen de la adjudicación y asignación de fábrica.
+   - Usado: explicá el sistema Llave por Llave (sigue usando su auto hasta retirar el 0 km) y pedí marca, modelo, año y km aproximados si aún no los dio. NUNCA prometas precio de toma ni digas cuándo se hace la tasación; solo confirmá que se lo pasás a Gonzalo para evaluarlo.
+3. ETAPA 3 — VALIDAR INTERÉS ANTES DE CITAR:
+   - Antes de invitarlo al concesionario, preguntale qué le parecen los números y condiciones y si le interesa avanzar con esa alternativa.
+4. ETAPA 4 — CITA CON GONZALO O SEGUIMIENTO:
+   - Solo cuando confirme que le interesa, proponé una reunión en ${branch} junto a Gonzalo (preguntando si prefiere mañana o tarde). PROHIBIDO usar la palabra "suscripción" o decir "acercate".
+   - Si pide pensarlo: indagá qué punto le genera duda; si insiste en patearlo, pedí día/hora para volver a contactarlo y al confirmar agregá al final [[AGENDAR:YYYY-MM-DD|HH:MM|Interesado a Futuro]].
+   - Si pide hablar directo con Gonzalo o pregunta si sos un bot: respondé con transparencia ("Soy ${advisor}, asistente de Gonzalo Dichiazza en ${branch}. Ya le dejo aviso a Gonzalo para que te escriba personalmente por acá apenas se libere") y agregá al final [[PAUSAR_HUMANO]].
+
+REGLAS PARTICULARES DE PRODUCTO:
+- SW4: No tiene suscripción directa en Toyota Plan; ofrecer compra convencional prendaria (TCFA) o cambio de modelo al adjudicar en plan.
+- Yaris Cross: Tanto la versión Naftera (XLI CVT, $41.464.000) como la Híbrida (XEI HEV, $48.457.000) son modalidad 70/30.
 
 ${officialPricesText}`;
             },
 
             async generateReply(contact, userMessage) {
-                const apiKey = String(this.config.geminiApiKey || '').trim();
-                if (!apiKey) return { reply: '', source: 'Sin API Key Gemini' };
                 const cid = contact?.id || 'default_client';
                 if (!Array.isArray(this.chats[cid])) this.chats[cid] = [];
                 this.chats[cid].push({ role: 'user', text: String(userMessage || '').trim(), ts: Date.now() });
 
                 const systemPrompt = this.getSystemPrompt(this.buildOfficialPricesText());
-                const contents = this.chats[cid].slice(-24).map(m => ({
-                    role: m.role === 'model' ? 'model' : 'user',
-                    parts: [{ text: m.text }]
-                }));
+                const out = await this.callAnyProvider(this.chats[cid].slice(-24), systemPrompt);
+                let cleanReply = String(out.text || '').replace(/\*/g, '').replace(/^[\s"'«“]+|[\s"'»”]+$/g, '').trim();
 
-                const models = await this.resolveModels(apiKey);
-                for (const model of models) {
-                    try {
-                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                systemInstruction: { parts: [{ text: systemPrompt }] },
-                                contents,
-                                generationConfig: {
-                                    temperature: 0.75,
-                                    topP: 0.92,
-                                    maxOutputTokens: 1200,
-                                    thinkingConfig: { thinkingBudget: 512 }
-                                }
-                            })
-                        });
-                        if (!res.ok) continue;
-                        const data = await res.json();
-                        const rawText = (data?.candidates?.[0]?.content?.parts || [])
-                            .filter(p => !p.thought)
-                            .map(p => p.text || '')
-                            .join('')
-                            .trim();
-                        let cleanReply = rawText.replace(/\*/g, '').replace(/^[\s"'«“]+|[\s"'»”]+$/g, '').trim();
-                        const schedMatch = cleanReply.match(/\[\[AGENDAR:(\d{4}-\d{2}-\d{2})\|(\d{2}:\d{2})(?:\|([^\]]+))?\]\]/i);
-                        if (schedMatch) {
-                            cleanReply = cleanReply.replace(schedMatch[0], '').trim();
-                            const found = findContactGlobal(cid);
-                            if (found) {
-                                found.contact.status = schedMatch[3] || 'Interesado a Futuro';
-                                found.contact.scheduleDate = schedMatch[1];
-                                found.contact.scheduleTime = schedMatch[2];
-                                saveLocalData(true);
-                                renderAllTables();
-                                updateDashboard();
-                                showToast(`📅 Agendado en Calendario IA: ${formatDisplayISODate(schedMatch[1])} ${schedMatch[2]} hs`);
-                            }
-                        }
-                        if (cleanReply) {
-                            this.chats[cid].push({ role: 'model', text: cleanReply, ts: Date.now() });
-                            this.saveChats();
-                            return { reply: cleanReply, source: `Gemini (${model} • Pensando)` };
-                        }
-                    } catch (e) {}
+                const schedMatch = cleanReply.match(/\[\[AGENDAR:(\d{4}-\d{2}-\d{2})\|(\d{2}:\d{2})(?:\|([^\]]+))?\]\]/i);
+                if (schedMatch) {
+                    cleanReply = cleanReply.replace(schedMatch[0], '').trim();
+                    const found = findContactGlobal(cid);
+                    if (found) {
+                        found.contact.status = schedMatch[3] || 'Interesado a Futuro';
+                        found.contact.scheduleDate = schedMatch[1];
+                        found.contact.scheduleTime = schedMatch[2];
+                        saveLocalData(true);
+                        renderAllTables();
+                        updateDashboard();
+                        showToast(`📅 Agendado en Calendario IA: ${formatDisplayISODate(schedMatch[1])} ${schedMatch[2]} hs`);
+                    }
                 }
-                return { reply: '', source: 'Error Gemini' };
+                if (cleanReply) {
+                    this.chats[cid].push({ role: 'model', text: cleanReply, ts: Date.now() });
+                    this.saveChats();
+                    return { reply: cleanReply, source: out.source };
+                }
+                return { reply: '', source: out.source || 'Error IA' };
             }
         };
 
-        const waAiConfig = SOFIA_AI.config;
-
         // --- CONTROLES MODALES SOFÍA 2.7 ---
+        window.testSingleApiKey = async function(provider) {
+            const box = document.getElementById('wa-ai-key-test-status');
+            if (!box) return;
+            box.classList.remove('hidden');
+            box.className = 'p-2 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-800';
+            box.textContent = `⏳ Probando conexión con ${provider === 'groq' ? 'Groq' : 'Gemini'}...`;
+
+            if (provider === 'groq') {
+                const gKey = String(document.getElementById('wa-ai-groq-key')?.value || '').trim();
+                if (!gKey) {
+                    box.className = 'p-2 rounded-lg text-[11px] font-bold bg-red-50 text-red-700 border border-red-200';
+                    box.textContent = '⚠️ Pegá primero tu API Key de Groq (gsk_...).';
+                    return;
+                }
+                try {
+                    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${gKey}` },
+                        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: 'Deci OK' }], max_tokens: 10 })
+                    });
+                    if (r.ok) {
+                        await saveWaAiConfig();
+                        box.className = 'p-2 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200';
+                        box.textContent = '✅ Groq OK (200) — 14.400 mensajes/día activos y guardados en la nube.';
+                    } else {
+                        const err = await r.json().catch(() => ({}));
+                        box.className = 'p-2 rounded-lg text-[11px] font-bold bg-red-50 text-red-700 border border-red-200';
+                        box.textContent = `❌ Groq HTTP ${r.status}: ${err?.error?.message || 'Key inválida'}`;
+                    }
+                } catch (e) {
+                    box.textContent = `❌ Error de red Groq: ${e.message}`;
+                }
+                return;
+            }
+
+            const key = String(document.getElementById('wa-ai-gemini-key')?.value || '').trim();
+            if (!key) {
+                box.className = 'p-2 rounded-lg text-[11px] font-bold bg-red-50 text-red-700 border border-red-200';
+                box.textContent = '⚠️ Pegá primero una API Key de Gemini.';
+                return;
+            }
+            const results = [];
+            for (const m of ['gemini-3-flash-preview', 'gemini-flash-lite-latest', 'gemini-3.1-flash-lite-preview']) {
+                try {
+                    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent?key=${encodeURIComponent(key)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'OK' }] }], generationConfig: { maxOutputTokens: 5 } })
+                    });
+                    results.push(`${m}: ${r.ok ? '✅ 200 OK' : `⚠️ HTTP ${r.status}`}`);
+                } catch (e) {
+                    results.push(`${m}: ❌ Error`);
+                }
+            }
+            await saveWaAiConfig();
+            const anyOk = results.some(x => x.includes('200 OK'));
+            box.className = anyOk
+                ? 'p-2 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200'
+                : 'p-2 rounded-lg text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-300';
+            box.textContent = results.join(' | ');
+        };
+
         window.renderSandboxTestersList = function() {
             const listEl = document.getElementById('wa-ai-sandbox-testers-list');
             const countEl = document.getElementById('wa-ai-sandbox-count');
@@ -3545,8 +3600,10 @@ ${officialPricesText}`;
             document.getElementById('wa-ai-gemini-key').value = SOFIA_AI.config.geminiApiKey || '';
             const b1El = document.getElementById('wa-ai-gemini-key-b1');
             const b2El = document.getElementById('wa-ai-gemini-key-b2');
+            const groqEl = document.getElementById('wa-ai-groq-key');
             if (b1El) b1El.value = SOFIA_AI.config.geminiApiKeyBackup1 || '';
             if (b2El) b2El.value = SOFIA_AI.config.geminiApiKeyBackup2 || '';
+            if (groqEl) groqEl.value = SOFIA_AI.config.groqApiKey || '';
             document.getElementById('wa-ai-advisor-name').value = SOFIA_AI.config.advisorName || 'Sofía';
             document.getElementById('wa-ai-branch').value = SOFIA_AI.config.branchName || 'Ginza Toyota';
             document.getElementById('wa-ai-worker-url').value = SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev';
@@ -3581,6 +3638,7 @@ ${officialPricesText}`;
             SOFIA_AI.config.geminiApiKey = String(document.getElementById('wa-ai-gemini-key')?.value || '').trim();
             SOFIA_AI.config.geminiApiKeyBackup1 = String(document.getElementById('wa-ai-gemini-key-b1')?.value || '').trim();
             SOFIA_AI.config.geminiApiKeyBackup2 = String(document.getElementById('wa-ai-gemini-key-b2')?.value || '').trim();
+            SOFIA_AI.config.groqApiKey = String(document.getElementById('wa-ai-groq-key')?.value || '').trim();
             SOFIA_AI.config.advisorName = String(document.getElementById('wa-ai-advisor-name')?.value || 'Sofía').trim();
             SOFIA_AI.config.branchName = String(document.getElementById('wa-ai-branch')?.value || 'Ginza Toyota').trim();
             SOFIA_AI.config.workerUrl = String(document.getElementById('wa-ai-worker-url')?.value || '').trim();
@@ -3588,7 +3646,7 @@ ${officialPricesText}`;
             SOFIA_AI.config.sandboxEnabled = Boolean(document.getElementById('wa-ai-sandbox-enabled')?.checked);
             SOFIA_AI.saveConfig();
             await SOFIA_AI.syncBrainToFirebase();
-            showToast("🤖 Cerebro Sofi 2.7 sincronizado");
+            showToast("🤖 Cerebro Sofi 2.7 (Gemini + Groq) sincronizado");
         };
         function getSelectedWaAiContact() {
             const id = document.getElementById('wa-ai-contact-select')?.value || 'sandbox_test_user';
@@ -3645,11 +3703,9 @@ ${officialPricesText}`;
         };
         window.runWaAiReply = async function() {
             const input = document.getElementById('wa-ai-client-msg-input');
-            const btn = document.getElementById('btn-wa-ai-generate');
             const msg = String(input?.value || '').trim();
             if (!msg) return;
             input.value = '';
-            if (btn) { btn.disabled = true; btn.textContent = '🧠...'; }
             const contact = getSelectedWaAiContact();
             onWaAiContactChange();
             const out = await SOFIA_AI.generateReply(contact, msg);
@@ -3660,9 +3716,8 @@ ${officialPricesText}`;
             if (draftBox && draftText && out.reply) {
                 draftBox.classList.remove('hidden');
                 draftText.value = out.reply;
-                if (sourceTag) sourceTag.textContent = out.source || 'Gemini';
+                if (sourceTag) sourceTag.textContent = out.source || 'IA';
             }
-            if (btn) { btn.disabled = false; btn.textContent = 'Responder'; }
         };
 
         window.requestDeleteAll = async () => {
@@ -3673,7 +3728,7 @@ ${officialPricesText}`;
             showToast("🗑️ Base No Compra vaciada");
         };
 
-        // --- STUBS SEGUROS PARA CONTROLES SECUNDARIOS ---
+        // --- STUBS SEGUROS ---
         window.openClientProfileModal = (id) => { const f = findContactGlobal(id); if (!f) return; document.getElementById('profile-contact-id').value = id; document.getElementById('profile-modal-title').textContent = f.contact.name || 'Cliente'; document.getElementById('profile-name').value = f.contact.name || ''; document.getElementById('profile-phone').value = f.contact.phone || ''; document.getElementById('client-profile-modal')?.classList.remove('hidden'); };
         window.closeClientProfileModal = () => document.getElementById('client-profile-modal')?.classList.add('hidden');
         window.toggleContactAiPause = async (id) => { const f = findContactGlobal(id); if (f) { f.contact.aiPaused = !f.contact.aiPaused; saveLocalData(true); renderAllTables(); await SOFIA_AI.syncBrainToFirebase(); } };
@@ -3703,7 +3758,6 @@ ${officialPricesText}`;
                 syncRoom = val;
                 localStorage.setItem('crm_sync_room', syncRoom);
                 await pullFromFirebase(true);
-                await pullAiScheduledFromFirebase();
                 startFirebaseLiveListener();
                 showToast(`🔄 Sala cambiada a: ${syncRoom}`);
             }
@@ -3756,19 +3810,7 @@ ${officialPricesText}`;
             renderBotonera();
         }
 
-        function runSelfDiagnostics() {
-            const requiredTabs = ['botonera', 'contactos', 'clientes', 'comparativa', 'objetivos', 'planes', 'financiaciones'];
-            const missingTabs = requiredTabs.filter(t => !document.getElementById(`tab-${t}`) || !document.getElementById(`tab-btn-${t}`));
-            const botoneraEl = document.getElementById('tab-botonera');
-            const statTotalEl = document.getElementById('stat-total');
-            const kpisInsideHomeOnly = Boolean(botoneraEl && statTotalEl && botoneraEl.contains(statTotalEl));
-            if (missingTabs.length > 0 || !kpisInsideHomeOnly) {
-                console.error('QA Diagnostic Warning:', { missingTabs, kpisInsideHomeOnly });
-            }
-        }
-
         window.addEventListener('DOMContentLoaded', async () => {
-            runSelfDiagnostics();
             if (typeof pdfjsLib !== 'undefined') {
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
             }
