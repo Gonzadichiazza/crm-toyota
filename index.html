@@ -1048,9 +1048,9 @@
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
                             <h3 class="text-base sm:text-lg font-extrabold">Sofi 2.7 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
-                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Multi-IA (Gemini + Groq)</span>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Multi-IA (Gemini + Groq Auto-Modelos)</span>
                         </div>
-                        <p class="text-xs text-zinc-300">Cuota gratuita ilimitada combinando Google Gemini + Groq (14.400/día gratis) • Razonamiento activo.</p>
+                        <p class="text-xs text-zinc-300">Cuota gratuita ilimitada combinando Google Gemini + Groq (14.400/día gratis) • Autodetección de modelos.</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -3152,7 +3152,7 @@
         window.closeShareJpgWaModal = () => document.getElementById('share-jpg-wa-modal')?.classList.add('hidden');
 
         // ============================================================================
-        // MÓDULO SOFIA_AI (SOFÍA 2.7 • MULTI-PROVEEDOR GRATUITO GEMINI + GROQ)
+        // MÓDULO SOFIA_AI (SOFÍA 2.7 • MULTI-PROVEEDOR GRATUITO GEMINI + GROQ AUTO)
         // ============================================================================
         const SOFIA_AI = {
             config: {
@@ -3177,6 +3177,30 @@
 
             saveConfig() { localStorage.setItem('crm_wa_ai_config', JSON.stringify(this.config)); },
             saveChats() { try { localStorage.setItem('crm_wa_ai_chats', JSON.stringify(this.chats)); } catch (e) {} },
+
+            async resolveActiveGroqModels(groqKey) {
+                const preferred = [
+                    'meta-llama/llama-4-scout-17b-16e-instruct',
+                    'meta-llama/llama-4-maverick-17b-128e-instruct',
+                    'llama-3.1-8b-instant',
+                    'qwen/qwen3-32b'
+                ];
+                try {
+                    const r = await fetch('https://api.groq.com/openai/v1/models', {
+                        headers: { 'Authorization': `Bearer ${groqKey}` }
+                    });
+                    if (r.ok) {
+                        const d = await r.json();
+                        const ids = (d?.data || [])
+                            .map(m => String(m.id || ''))
+                            .filter(id => id && !/whisper|guard|tts|safeguard|embed/i.test(id));
+                        if (ids.length > 0) {
+                            return [...preferred.filter(p => ids.includes(p)), ...ids.filter(x => !preferred.includes(x))].slice(0, 4);
+                        }
+                    }
+                } catch (e) {}
+                return preferred;
+            },
 
             async callAnyProvider(messagesArr, systemPrompt) {
                 const geminiKeys = Array.from(new Set([
@@ -3219,14 +3243,15 @@
                     }
                 }
 
-                // Respaldo gratuito Groq (14.400 requests/día sin tarjeta)
+                // Respaldo gratuito Groq (14.400 requests/día sin tarjeta) con autodetección de modelos vigentes
                 const groqKey = String(this.config.groqApiKey || '').trim();
                 if (groqKey.length > 20) {
+                    const groqModels = await this.resolveActiveGroqModels(groqKey);
                     const groqMessages = [
                         { role: 'system', content: systemPrompt },
                         ...messagesArr.map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text }))
                     ];
-                    for (const gModel of ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant']) {
+                    for (const gModel of groqModels) {
                         try {
                             const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                                 method: 'POST',
@@ -3488,15 +3513,17 @@ ${officialPricesText}`;
                     return;
                 }
                 try {
+                    const activeModels = await SOFIA_AI.resolveActiveGroqModels(gKey);
+                    const chosenModel = activeModels[0] || 'llama-3.1-8b-instant';
                     const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${gKey}` },
-                        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: 'Deci OK' }], max_tokens: 10 })
+                        body: JSON.stringify({ model: chosenModel, messages: [{ role: 'user', content: 'Deci OK' }], max_tokens: 10 })
                     });
                     if (r.ok) {
                         await saveWaAiConfig();
                         box.className = 'p-2 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200';
-                        box.textContent = '✅ Groq OK (200) — 14.400 mensajes/día activos y guardados en la nube.';
+                        box.textContent = `✅ Groq OK (200) con modelo activo "${chosenModel}" — 14.400 mensajes/día guardados en la nube.`;
                     } else {
                         const err = await r.json().catch(() => ({}));
                         box.className = 'p-2 rounded-lg text-[11px] font-bold bg-red-50 text-red-700 border border-red-200';
