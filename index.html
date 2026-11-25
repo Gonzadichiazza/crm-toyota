@@ -1127,7 +1127,10 @@
                     <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-2.5">
                         <div class="flex items-center justify-between gap-2">
                             <span class="text-xs font-extrabold uppercase text-emerald-950">☁️ Persistencia 24/7 (Cloudflare Worker)</span>
-                            <span id="wa-ai-mobile-health-badge" class="px-2 py-0.5 rounded bg-white border border-emerald-300 text-[10px] font-bold text-emerald-900">📱 Verificando puente...</span>
+                            <div class="flex items-center gap-1.5">
+                                <span id="wa-ai-mobile-health-badge" class="px-2 py-0.5 rounded bg-white border border-emerald-300 text-[10px] font-bold text-emerald-900">📱 Verificando puente...</span>
+                                <button onclick="testWorkerBridgeLive()" class="px-2 py-0.5 rounded bg-emerald-700 hover:bg-emerald-800 text-white text-[10px] font-bold">🧪 Probar Puente</button>
+                            </div>
                         </div>
                         <input type="text" id="wa-ai-worker-url" onchange="saveWaAiConfig()" value="https://sofia-ginza.gonzalodichiazza2.workers.dev" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-emerald-300 rounded-lg">
                         <label class="flex items-center gap-2 text-[11px] text-emerald-950"><input type="checkbox" id="wa-ai-cloud-worker-primary" onchange="saveWaAiConfig()"><span>Delegar respuestas 24/7 al Worker</span></label>
@@ -3234,7 +3237,6 @@
             },
 
             async callAnyProvider(messagesArr, systemPrompt) {
-                // PRIORIDAD 1: Groq (14.400 requests/día sin tarjeta) con autodetección de modelos vigentes
                 const groqKey = String(this.config.groqApiKey || '').trim();
                 if (groqKey.length > 20) {
                     const groqModels = await this.resolveActiveGroqModels(groqKey);
@@ -3253,7 +3255,7 @@
                                 body: JSON.stringify({
                                     model: gModel,
                                     messages: groqMessages,
-                                    temperature: 0.75,
+                                    temperature: 0.72,
                                     max_tokens: 700
                                 })
                             });
@@ -3271,7 +3273,6 @@
                     }
                 }
 
-                // PRIORIDAD 2: Pool de 3 Keys de Google Gemini como respaldo automático
                 const geminiKeys = Array.from(new Set([
                     this.config.geminiApiKey,
                     this.config.geminiApiKeyBackup1,
@@ -3285,7 +3286,7 @@
                     const key = geminiKeys[kIdx];
                     for (const model of geminiModels) {
                         const supportsThinking = model.includes('3-flash') || model.includes('3.1-flash');
-                        const genCfg = { temperature: 0.75, maxOutputTokens: 900 };
+                        const genCfg = { temperature: 0.72, maxOutputTokens: 900 };
                         if (supportsThinking) genCfg.thinkingConfig = { thinkingBudget: 512 };
                         try {
                             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`, {
@@ -3870,7 +3871,7 @@ ${officialPricesText}`;
             showToast("🗑️ Base No Compra vaciada");
         };
 
-        // --- STUBS SEGUROS ---
+        // --- STUBS Y DIAGNOSTICO EN VIVO ---
         window.openClientProfileModal = (id) => { const f = findContactGlobal(id); if (!f) return; document.getElementById('profile-contact-id').value = id; document.getElementById('profile-modal-title').textContent = f.contact.name || 'Cliente'; document.getElementById('profile-name').value = f.contact.name || ''; document.getElementById('profile-phone').value = f.contact.phone || ''; document.getElementById('client-profile-modal')?.classList.remove('hidden'); };
         window.closeClientProfileModal = () => document.getElementById('client-profile-modal')?.classList.add('hidden');
         window.toggleContactAiPause = async (id) => { const f = findContactGlobal(id); if (f) { f.contact.aiPaused = !f.contact.aiPaused; saveLocalData(true); renderAllTables(); await SOFIA_AI.syncBrainToFirebase(); } };
@@ -3928,7 +3929,63 @@ ${officialPricesText}`;
         window.focusExistingWhatsAppTab = () => window.open('https://web.whatsapp.com', 'crm_whatsapp_web_singleton');
         window.openWhatsAppSingleTab = (d) => window.open(`https://web.whatsapp.com/send?phone=${d}`, 'crm_whatsapp_web_singleton');
         window.checkWhatsApp48hTimeouts = () => showToast("Verificación 24h/48h al día");
-        window.runSofiaSelfAudit = async () => {};
+        window.testWorkerBridgeLive = async function() {
+            const badge = document.getElementById('wa-ai-mobile-health-badge');
+            const workerBase = (SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '');
+            if (badge) badge.textContent = '⏳ Probando...';
+            try {
+                const [stRes, hRes] = await Promise.all([
+                    fetch(`${workerBase}/selftest?room=${encodeURIComponent(syncRoom)}`),
+                    fetch(`${FIREBASE_DB_URL}/wa_health/${encodeURIComponent(syncRoom)}.json`)
+                ]);
+                const st = stRes.ok ? await stRes.json() : null;
+                const h = hRes.ok ? await hRes.json() : null;
+                if (st && st.allPassed) {
+                    const lastPingStr = h?.lastPingAt ? ` • Último ping móvil: ${h.argTime || 'hoy'}` : ' • Esperando 1er WA';
+                    if (badge) badge.textContent = `✅ Worker ${st.totalTests || 24}/${st.totalTests || 24} PASS${lastPingStr}`;
+                    showToast(`✅ Conexión Worker + Firebase 100% operativa (${st.totalDurationMs}ms)`);
+                } else {
+                    if (badge) badge.textContent = '⚠️ Revisar Worker';
+                    showToast('⚠️ El Worker respondió con advertencia, revisá /selftest');
+                }
+            } catch (e) {
+                if (badge) badge.textContent = '❌ Sin conexión Worker';
+                showToast('❌ No se pudo contactar al Worker: ' + e.message);
+            }
+        };
+        window.runSofiaSelfAudit = async function() {
+            const btn = document.getElementById('btn-run-sofia-audit');
+            const metricsBox = document.getElementById('wa-ai-audit-metrics');
+            const reportBox = document.getElementById('wa-ai-audit-report');
+            const workerBase = (SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '');
+            if (btn) { btn.disabled = true; btn.textContent = '⏳ Analizando...'; }
+            if (reportBox) {
+                reportBox.classList.remove('hidden');
+                reportBox.textContent = '⏳ Auditando conversaciones reales en Firebase y generando diagnóstico comercial...';
+            }
+            try {
+                const res = await fetch(`${workerBase}/audit?room=${encodeURIComponent(syncRoom)}`);
+                const data = res.ok ? await res.json() : null;
+                if (data && data.ok) {
+                    const m = data.metrics || {};
+                    if (metricsBox) {
+                        metricsBox.innerHTML = `
+                            <div class="p-1.5 rounded-lg bg-white border"><div class="text-[9px] text-slate-500 uppercase">Chats</div><div class="text-xs font-extrabold">${m.totalChats || 0}</div></div>
+                            <div class="p-1.5 rounded-lg bg-white border"><div class="text-[9px] text-slate-500 uppercase">Activos</div><div class="text-xs font-extrabold text-emerald-700">${m.repliedChats || 0}</div></div>
+                            <div class="p-1.5 rounded-lg bg-white border"><div class="text-[9px] text-slate-500 uppercase">+3 Turnos</div><div class="text-xs font-extrabold text-indigo-700">${m.engagedChats || 0}</div></div>
+                            <div class="p-1.5 rounded-lg bg-white border"><div class="text-[9px] text-slate-500 uppercase">Últ. Sofía</div><div class="text-xs font-extrabold text-amber-700">${m.droppedAfterSofia || 0}</div></div>`;
+                    }
+                    if (reportBox) {
+                        reportBox.textContent = data.aiDiagnosis || 'Sin conversaciones suficientes para auditar todavía.';
+                    }
+                } else if (reportBox) {
+                    reportBox.textContent = '⚠️ No se pudo obtener el informe de auditoría.';
+                }
+            } catch (e) {
+                if (reportBox) reportBox.textContent = '❌ Error al auditar: ' + e.message;
+            }
+            if (btn) { btn.disabled = false; btn.textContent = '📊 Analizar'; }
+        };
         window.dismissAllInfoAutoAlerts = () => {};
         window.dismissAllCommercialAlerts = () => {};
         window.dismissAllAudioAlerts = () => {};
