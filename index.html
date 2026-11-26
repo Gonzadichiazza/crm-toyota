@@ -90,7 +90,7 @@
                     </span>
                     <button onclick="openWaAiAssistantModal()" id="nav-wa-ai-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-400/50 transition-colors flex items-center gap-1.5 shadow-sm shrink-0">
                         <span id="nav-wa-ai-dot" class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-                        <span id="nav-wa-ai-label">🤖 Sofi 2.7 ON</span>
+                        <span id="nav-wa-ai-label">🤖 Sofi 3.0 ON</span>
                     </button>
                     <button onclick="openMassCampaignModal()" id="nav-mass-campaign-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-zinc-950 border border-amber-300 transition-colors flex items-center gap-1.5 shadow-sm shrink-0">
                         <span>📢 Masivos IA</span>
@@ -215,11 +215,11 @@
         <div id="wa-tracker-banner" class="bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="font-bold text-slate-900">Motor Multi-IA Sofi 2.7 (Gemini + Groq 14.400/día):</span>
+                <span class="font-bold text-slate-900">Motor Multi-IA Sofi 3.0 (0-Tokens + Gemini + Groq 14.400/día):</span>
                 <span class="text-slate-600" id="wa-tracker-summary">0 mensajes en espera • 1 único toque cordial IA a las 24h (08:00–21:00h; Redes/IG 24/7).</span>
             </div>
             <div class="flex items-center gap-1.5 flex-wrap">
-                <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">🤖 Piloto Sofi 2.7</button>
+                <button onclick="openWaAiAssistantModal()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold transition-colors">🤖 Piloto Sofi 3.0</button>
                 <button onclick="openMassCampaignModal()" class="px-2.5 py-1 rounded-lg bg-amber-500 text-zinc-950 hover:bg-amber-600 font-bold transition-colors">📢 Masivos Anti-Ban</button>
                 <button onclick="focusExistingWhatsAppTab()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-semibold transition-colors">🟢 Pestaña WA Web</button>
                 <button onclick="checkWhatsApp48hTimeouts(true)" class="px-2.5 py-1 rounded-lg bg-red-50 text-[#EB0A1E] hover:bg-red-100 border border-red-200 font-semibold transition-colors">Verificar 24h/48h</button>
@@ -237,7 +237,7 @@
                         Gestión Comercial & Asesoramiento IA <span class="text-[#EB0A1E]">Toyota Plan</span>
                     </h1>
                     <p class="text-xs sm:text-sm text-zinc-300 mt-2 leading-relaxed">
-                        Sofía 2.7 razona cada conversación combinando Google Gemini + respaldo gratuito Groq (14.400 mensajes diarios sin costo) con los valores, versiones, fichas técnicas y cuotas cargadas en tu CRM.
+                        Sofía 3.0 razona cada conversación combinando su Cerebro 0-Tokens + Google Gemini + respaldo gratuito Groq (14.400 mensajes diarios sin costo) con los valores, versiones, fichas técnicas y cuotas cargadas en tu CRM.
                     </p>
                     <div class="flex flex-wrap gap-2.5 mt-4">
                         <button onclick="switchTab('contactos')" class="px-4 py-2.5 rounded-xl bg-[#EB0A1E] hover:bg-[#C80818] text-white text-xs sm:text-sm font-bold shadow-md transition-all">📋 Ir a Prospección (7 Canales)</button>
@@ -397,7 +397,7 @@
                 <div class="px-4 sm:px-6 py-4 bg-sky-950 text-white flex flex-wrap items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span><h3 class="text-sm sm:text-base font-bold">4. Salesforce Leads</h3></div>
                     <div class="flex items-center gap-2">
-                        <button onclick="openWaAiAssistantModal()" class="bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold">🤖 Sofi 2.7</button>
+                        <button onclick="openWaAiAssistantModal()" class="bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold">🤖 Sofi 3.0</button>
                         <button onclick="openSalesforceSyncModal()" class="bg-sky-500 text-zinc-950 px-3 py-1 rounded-lg text-xs font-extrabold">🔄 Conectar SF</button>
                         <button onclick="openWaTemplatesModal('salesforce')" class="bg-white/10 text-white px-2.5 py-1 rounded-lg text-xs font-medium">💬 Mensaje WA</button>
                     </div>
@@ -801,7 +801,7 @@
             <button onclick="switchTab('contactos')" id="mob-nav-contactos" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold text-slate-500"><span class="text-base">📋</span><span>Bases</span></button>
             <button onclick="switchTab('clientes')" id="mob-nav-clientes" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold text-slate-500"><span class="text-base">👥</span><span>Clientes</span></button>
             <button onclick="switchTab('planes')" id="mob-nav-planes" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold text-slate-500"><span class="text-base">🚗</span><span>Vehículos</span></button>
-            <button onclick="openWaAiAssistantModal()" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-emerald-700"><span class="text-base">🤖</span><span>Sofi 2.7</span></button>
+            <button onclick="openWaAiAssistantModal()" class="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-emerald-700"><span class="text-base">🤖</span><span>Sofi 3.0</span></button>
         </div>
     </nav>
 
@@ -1026,20 +1026,10 @@
                 </div>
                 <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden min-h-[340px]">
                     <div class="p-3 bg-emerald-50/80 border-b space-y-1.5">
-                        <div class="flex items-center justify-between"><span class="text-[11px] font-extrabold text-emerald-950 uppercase">🧠 Resumen Ejecutivo Sofía 2.7</span><button id="btn-refresh-ai-summary" onclick="generateClientAiSummary(true)" class="px-2.5 py-0.5 rounded-lg bg-emerald-700 text-white text-[10px] font-bold">✨ Actualizar</button></div>
+                        <div class="flex items-center justify-between"><span class="text-[11px] font-extrabold text-emerald-950 uppercase">🧠 Resumen Ejecutivo Sofía 3.0</span><button id="btn-refresh-ai-summary" onclick="generateClientAiSummary(true)" class="px-2.5 py-0.5 rounded-lg bg-emerald-700 text-white text-[10px] font-bold">✨ Actualizar</button></div>
                         <div id="profile-ai-summary-text" class="text-xs text-slate-800 whitespace-pre-line"></div>
                     </div>
-                    <div id="profile-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[250px]"></div>
-                    <div class="p-3 bg-white border-t flex gap-2">
-                        <input type="text" id="profile-manual-note-input" onkeydown="if(event.key==='Enter') logManualAdvisorMessage()" placeholder="Registrar lo que hablaste manualmente..." class="flex-1 px-3 py-2 text-xs border rounded-xl">
-                        <button onclick="logManualAdvisorMessage()" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] text-white text-xs font-bold">+ Contexto IA</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA 2.7) -->
+    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA 3.0) -->
     <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
             <div class="px-5 py-4 bg-gradient-to-r from-[#0A0A0C] via-[#151519] to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
@@ -1047,10 +1037,10 @@
                     <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 2.7 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
-                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Multi-IA (Gemini + Groq Auto-Modelos)</span>
+                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 3.0 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Cerebro Híbrido (0-Tokens + Groq + Gemini)</span>
                         </div>
-                        <p class="text-xs text-zinc-300">Cuota gratuita ilimitada combinando Google Gemini + Groq (14.400/día gratis) • Autodetección de modelos.</p>
+                        <p class="text-xs text-zinc-300">Respuestas instantáneas sin cuota + Groq (14.400/día gratis) + Google Gemini • Conexión Directa 24/7.</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1111,14 +1101,14 @@
                                 </div>
                             </div>
                             <div class="flex justify-between items-center text-[10px] text-zinc-400 pt-1 border-t border-white/10 tabular-nums">
-                                <span>🛡️ Ahorro saludo 0-tokens: <b id="usage-saved-label" class="text-white">0</b></span>
+                                <span>🛡️ Ahorro 0-tokens: <b id="usage-saved-label" class="text-white">0</b></span>
                                 <span id="usage-date-label">Hoy</span>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="wa-ai-advisor-name" value="Sofía" class="px-2.5 py-1.5 text-xs border rounded-lg">
-                            <input type="text" id="wa-ai-branch" value="Ginza Toyota" class="px-2.5 py-1.5 text-xs border rounded-lg">
+                            <input type="text" id="wa-ai-advisor-name" value="Sofía" onchange="saveWaAiConfig()" class="px-2.5 py-1.5 text-xs border rounded-lg">
+                            <input type="text" id="wa-ai-branch" value="Ginza Toyota" onchange="saveWaAiConfig()" class="px-2.5 py-1.5 text-xs border rounded-lg">
                         </div>
                         <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="wa-ai-auto-followup" checked><span>Seguimiento IA suave a las 24h</span></label>
                         <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="wa-ai-allow-schedule" checked><span>Agendamiento automático en Calendario IA</span></label>
@@ -1155,6 +1145,70 @@
                         <div class="grid grid-cols-2 gap-1.5">
                             <input type="text" id="wa-ai-meta-phone-id" onchange="saveWaAiConfig()" placeholder="Meta Phone Number ID (opc.)" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
                             <input type="password" id="wa-ai-meta-token" onchange="saveWaAiConfig()" placeholder="Meta Access Token (opc.)" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: SANDBOX, MEMORIA AUTO-APRENDIZAJE & SIMULADOR SOFÍA 3.0 -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 space-y-2.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-extrabold text-amber-950">
+                                <input type="checkbox" id="wa-ai-sandbox-enabled" checked onchange="saveWaAiConfig()" class="accent-amber-600 w-4 h-4">
+                                <span>🧪 Modo Prueba (Sandbox — Solo responde a Testers autorizados)</span>
+                            </label>
+                            <span id="wa-ai-sandbox-count" class="px-2 py-0.5 rounded bg-amber-200 text-amber-950 text-[10px] font-extrabold">0 tester(s)</span>
+                        </div>
+                        <input type="hidden" id="wa-ai-sandbox-phone">
+                        <div class="flex gap-1.5">
+                            <input type="text" id="wa-ai-new-tester-input" onkeydown="if(event.key==='Enter') addSandboxTester()" placeholder="Agregar teléfono o nombre tester (ej: +5493415551234)..." class="flex-1 px-2.5 py-1.5 text-xs bg-white border border-amber-300 rounded-xl outline-none">
+                            <button onclick="addSandboxTester()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shrink-0">+ Sumar Tester</button>
+                        </div>
+                        <div id="wa-ai-sandbox-testers-list" class="flex flex-wrap gap-1.5"></div>
+                    </div>
+
+                    <!-- MEMORIA DE CONSULTAS SIN TOKEN (AUTO-APRENDIZAJE 0-TOKENS) -->
+                    <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-extrabold uppercase text-indigo-950">🧠 Memoria de Consultas Sin Token (Auto-Aprendizaje)</span>
+                                <span id="wa-ai-memory-count" class="px-2 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold tabular-nums">0</span>
+                            </div>
+                            <button onclick="loadUnansweredMemoryList()" class="px-2.5 py-1 rounded-lg bg-white border border-indigo-300 text-indigo-900 text-[10px] font-bold hover:bg-indigo-100">🔄 Refrescar</button>
+                        </div>
+                        <div id="wa-ai-memory-list" class="max-h-36 overflow-y-auto space-y-2 text-xs"></div>
+                    </div>
+
+                    <!-- AUDITORÍA COMERCIAL -->
+                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold uppercase text-slate-800">📊 Auditoría Comercial en Vivo</span>
+                            <button id="btn-run-sofia-audit" onclick="runSofiaSelfAudit()" class="px-3 py-1 rounded-lg bg-[#0A0A0C] text-white text-[10px] font-bold">📊 Analizar</button>
+                        </div>
+                        <div id="wa-ai-audit-metrics" class="grid grid-cols-4 gap-2 text-center"></div>
+                        <div id="wa-ai-audit-report" class="hidden p-2.5 rounded-xl bg-slate-50 border text-[11px] text-slate-700"></div>
+                    </div>
+
+                    <!-- SIMULADOR DE CONVERSACIÓN EN VIVO -->
+                    <div class="bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden">
+                        <div class="p-3 bg-slate-100 border-b flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+                                <span class="text-xs font-extrabold text-slate-800">💬 Simulador:</span>
+                                <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="flex-1 px-2.5 py-1 text-xs font-bold border border-slate-300 rounded-lg bg-white outline-none"></select>
+                            </div>
+                            <button onclick="resetWaAiChatHistory()" class="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-[11px] font-bold">🧹 Limpiar Chat</button>
+                        </div>
+                        <div id="wa-ai-chat-history" class="p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/60 h-[210px]"></div>
+                        <div id="wa-ai-draft-box" class="hidden p-2.5 bg-emerald-50 border-t border-emerald-200 space-y-1">
+                            <div class="flex justify-between text-[10px] font-bold text-emerald-900">
+                                <span>Respuesta generada:</span>
+                                <span id="wa-ai-source-tag" class="px-1.5 py-0.2 rounded bg-emerald-200">0-Tokens</span>
+                            </div>
+                            <textarea id="wa-ai-draft-text" rows="2" readonly class="w-full p-2 text-xs bg-white border border-emerald-300 rounded-lg outline-none"></textarea>
+                        </div>
+                        <div class="p-3 bg-white border-t flex gap-2">
+                            <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Escribí una consulta de prueba para Sofía 3.0..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
+                            <button onclick="runWaAiReply()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold">Enviar →</button>
                         </div>
                     </div>
                 </div>
@@ -3744,8 +3798,10 @@ ${officialPricesText}`;
             document.getElementById('wa-ai-branch').value = SOFIA_AI.config.branchName || 'Ginza Toyota';
             document.getElementById('wa-ai-worker-url').value = SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev';
             document.getElementById('wa-ai-cloud-worker-primary').checked = Boolean(SOFIA_AI.config.cloudWorkerPrimary);
-            document.getElementById('wa-ai-sandbox-enabled').checked = Boolean(SOFIA_AI.config.sandboxEnabled);
-            document.getElementById('wa-ai-sandbox-phone').value = SOFIA_AI.config.sandboxPhone || '';
+            const sbEnabledEl = document.getElementById('wa-ai-sandbox-enabled');
+            const sbPhoneEl = document.getElementById('wa-ai-sandbox-phone');
+            if (sbEnabledEl) sbEnabledEl.checked = Boolean(SOFIA_AI.config.sandboxEnabled);
+            if (sbPhoneEl) sbPhoneEl.value = SOFIA_AI.config.sandboxPhone || '';
             document.getElementById('wa-ai-incoming-url').value = `${(SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '')}/incoming?room=${encodeURIComponent(syncRoom)}&format=text`;
             document.getElementById('wa-ai-outgoing-url').value = `${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest/reply.json`;
             const directWhEl = document.getElementById('wa-ai-direct-webhook-url');
