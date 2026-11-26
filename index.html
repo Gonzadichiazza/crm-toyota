@@ -4072,13 +4072,22 @@ ${officialPricesText}`;
             renderChat();
             try {
                 const safeKey = String(contact.id || 'default').replace(/[.#$\[\]\/]/g, '_').replace(/\s+/g, '_');
-                const res = await fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(safeKey)}.json`);
-                if (res.ok) {
-                    const cloudMsgs = await res.json();
-                    if (Array.isArray(cloudMsgs) && cloudMsgs.length > 0) {
-                        SOFIA_AI.chats[contact.id] = cloudMsgs.filter(m => m && m.text);
+                const phoneFormatted = formatPhoneAR(contact.phone || '');
+                const phoneKey = phoneFormatted ? phoneFormatted.replace(/[.#$\[\]\/]/g, '_') : '';
+                const nameKey = String(contact.name || '').trim().replace(/[.#$\[\]\/]/g, '_').replace(/\s+/g, '_');
+                const candidateKeys = Array.from(new Set([safeKey, phoneKey, nameKey].filter(Boolean)));
+
+                for (const k of candidateKeys) {
+                    const res = await fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(k)}.json`);
+                    if (!res.ok) continue;
+                    const rawData = await res.json();
+                    const cloudMsgs = Array.isArray(rawData) ? rawData : (rawData && typeof rawData === 'object' ? Object.values(rawData) : []);
+                    const validMsgs = cloudMsgs.filter(m => m && m.text);
+                    if (validMsgs.length > 0) {
+                        SOFIA_AI.chats[contact.id] = validMsgs;
                         SOFIA_AI.saveChats();
                         renderChat();
+                        break;
                     }
                 }
             } catch (e) {}
