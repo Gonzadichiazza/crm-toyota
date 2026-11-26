@@ -3716,16 +3716,19 @@
                         const extraQ = Number(p.extraordinaryQuota || (is100 ? pureQ * minMonths : p.value30) || 0);
                         const extraStr = !is100 && extraQ > 0
                             ? ` | Integración mínima 30% de la unidad: $${extraQ.toLocaleString('es-AR')}`
-                            : (is100 && extraQ > 0 ? ` | Integración mínima (${minMonths} cuotas): $${extraQ.toLocaleString('es-AR')}` : '');
+                            : (is100 ? ` | Plan 100% en 84 cuotas (SIN 30%; integración mínima de ${minMonths} cuotas: se integra solo lo que falte para llegar a esas ${minMonths} cuotas)` : '');
                         const finalQuota = Math.max(Number(p.price || 0), pureQ);
-                        lines.push(`- ${key} [${p.period}]: Valor de la unidad $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Monto que financia: $${financed.toLocaleString('es-AR')} | Cuota Mensual Oficial a informar al cliente: $${finalQuota.toLocaleString('es-AR')}${extraStr}`);
+                        lines.push(`- ${key} [${p.period} — Plazo total 84 cuotas]: Valor de la unidad $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Monto que financia: $${financed.toLocaleString('es-AR')} | Cuota Mensual Oficial a informar al cliente: $${finalQuota.toLocaleString('es-AR')}${extraStr}`);
                     }
                 }
                 const existingUpper = lines.join('\n').toUpperCase();
                 for (const def of marketPlansCatalog.filter(m => m.brand === 'Toyota')) {
                     if (!existingUpper.includes(def.model.toUpperCase())) {
                         const refFinal = Number(def.cuotaFinal || def.cuotaPura || 0);
-                        lines.push(`- ${def.model} (${def.modality}): Valor de la unidad $${Number(def.valorMovil).toLocaleString('es-AR')} | Cuota Mensual Oficial a informar al cliente: $${refFinal.toLocaleString('es-AR')}`);
+                        const modNote = def.modality === '100%'
+                            ? 'Plan 100% en 84 cuotas (SIN 30%; integración mínima en cuotas descontando las ya pagas)'
+                            : 'Plan 70/30 en 84 cuotas (integración mínima 30% al retirar)';
+                        lines.push(`- ${def.model} (${def.modality} — ${modNote}): Valor de la unidad $${Number(def.valorMovil).toLocaleString('es-AR')} | Cuota Mensual Oficial a informar al cliente: $${refFinal.toLocaleString('es-AR')}`);
                     }
                 }
                 const techLines = FIXED_INTEREST_MODELS.map(m => {
@@ -3734,11 +3737,7 @@
                     const verStr = (entry.versions || []).map(v => `${v.name} ($${Number(v.price || 0).toLocaleString('es-AR')}: ${v.notes || ''})`).join(' | ');
                     return `• ${m}: ${verStr}\n  Ficha: ${entry.techSpec || ''}`;
                 }).filter(Boolean).join('\n');
-                const tcfaSummary = `FINANCIACIÓN PRENDARIA CONVENCIONAL TCFA (SOLO SI EL CLIENTE ELIGE COMPRA CONVENCIONAL / NO PLAN):
-- Tope máximo financiable: hasta el 75% del valor de lista (requiere anticipo efectivo o vehículo usado en parte de pago por el 25% o más).
-- Grupo A (Yaris / Yaris Cross): Promo 0% TNA en 12 cuotas fijas (hasta $15.000.000) | Promo 9,9% TNA en 18 cuotas (hasta $20.000.000) | Promo 19% TNA en 24 cuotas (hasta $25.000.000) | Subsidiada 0% TNA en 24 cuotas o 9,9% TNA en 36 cuotas hasta el 75% de la unidad.
-- Grupo B (Corolla / Corolla Cross / Hilux / SW4): Cupo Especial 0% TNA en 18 cuotas (hasta $30.000.000) | Promo 0% TNA en 12 cuotas (hasta $25.000.000) | Subsidiada 0% TNA en 24 cuotas o 9,9% TNA en 36 cuotas hasta el 75% de la unidad.`;
-                return `LISTA OFICIAL DE VALORES Y CUOTAS TOYOTA PLAN:\n${lines.join('\n')}\n\n${tcfaSummary}\n\nCATÁLOGO DE VERSIONES Y FICHAS TÉCNICAS TOYOTA:\n${techLines}`;
+                return `LISTA OFICIAL DE VALORES Y CUOTAS TOYOTA PLAN (TODOS LOS PLANES SON DE 84 CUOTAS / 84 MESES):\n${lines.join('\n')}\n\nCOMPRA CONVENCIONAL / PRENDARIA / CONTADO:\n- Si el cliente NO quiere plan de ahorro o pide financiación convencional/prendaria/contado, NO hagas cuentas ni cotizaciones: derivá directamente con Gonzalo agregando [[PAUSAR_HUMANO]].\n\nCATÁLOGO DE VERSIONES Y FICHAS TÉCNICAS TOYOTA:\n${techLines}`;
             },
 
             getSystemPrompt(officialPricesText) {
@@ -3754,23 +3753,19 @@ REGLAS INQUEBRANTABLES DE COMPORTAMIENTO Y ESTILO NATURAL:
   - Si el cliente te saluda por primera vez ("Hola", "Buen día", etc.), presentate exactamente así: "${greeting}. Soy ${advisor}, asistente virtual de Gonzalo, ¿en qué te puedo ayudar?"
   - No digas el apellido de Gonzalo ni nombres "Ginza Toyota" salvo cuando sea estrictamente necesario (por ejemplo si preguntan dónde queda el concesionario o sucursales).
   - Si ya saludaste en el primer mensaje, no repitas el saludo en los mensajes siguientes.
-2. PLANES POR MODELO E INDAGACIÓN COMERCIAL:
-  - Si pregunta por los planes de Toyota en general: nombrá toda la gama disponible (Yaris, Yaris Cross, Corolla, Corolla Cross, Hilux y Hiace) con planes directos de fábrica en pesos sin interés bancario, y preguntá si conoce o ya estuvo en un plan de ahorro.
-  - Si pregunta por planes de un modelo puntual: explicá qué planes tenemos para ese modelo sin tirar importes de cuota si no los pidió, y preguntá SIEMPRE si conoce o ya estuvo alguna vez en un plan de ahorro.
-  - Si habla del Corolla sedán y pregunta versiones o híbridos, respondé solo sobre el Corolla sedán (nafteras 2.0 XLI, XEI, SEG, GR-Sport e híbridas autorrecargables 1.8 XEI HEV y SEG HEV), aclarando que el plan 70/30 inicia sobre XLI y al adjudicar podés cambiar a cualquiera de esas versiones.
-  - No te apures a derivar ni ofrecer llamado de Gonzalo mientras el cliente esté haciendo consultas normales sobre cómo funciona el plan; seguí indagando y asesorando con naturalidad.
-3. CUOTA MENSUAL, CUOTA PURA Y PLANES 70/30 VS. 100%:
-  - Es plan directo de fábrica oficial de Toyota Plan Argentina.
-  - Cuando el cliente pregunta cuánto sale la cuota, informá ÚNICAMENTE la "Cuota Mensual Oficial" (la cuota final con gastos e impuestos incluidos). PROHIBIDO mencionar el importe de "cuota pura" ni usar las palabras "cuota pura" salvo que el cliente pregunte expresamente qué es la cuota pura o cómo adelantar cuotas.
-  - Planes 70/30 financian el 70% en 84 cuotas en pesos sin interés bancario y tienen integración mínima del 30% al retirar (incluso si ganás por sorteo).
-  - Planes 100% (Yaris 100%, Hilux 4x4 DX, Hiace) financian el 100% de la unidad sin refuerzo del 30% (la integración mínima en cuotas varía según cada plan oficial).
-  - Cuota Pura (solo si preguntan por ella o por adelantar cuotas): NUNCA digas "valor redondo". Decí que es la cuota sin gastos administrativos ni seguro de vida que se utiliza para adelantar cuotas (a partir de la segunda cuota) y cancelar tiempo de pago.
-4. RETIRO, PLAZOS DE ENTREGA Y LICITACIÓN:
-  - Si preguntan si hay entrega pactada, decí simplemente: "No tenemos entrega pactada por contrato."
-  - El monto ofrecido en licitación YA INCLUYE el 30% de integración mínima (no se suma aparte). El excedente por encima del 30% cancela cuotas enteras de atrás hacia adelante, achicando el plazo del plan (no prorratea la cuota mensual).
-  - Plazos de entrega: entre 30 y 75 días por contrato sin cambio de modelo o versión (hasta 135 días corridos si hay cambio), aunque generalmente llega entre 30 y 60 días.
+2. DERIVACIÓN DIRECTA EN FINANCIACIÓN CONVENCIONAL / PRENDARIA / CONTADO:
+  - Si el cliente dice "no quiero plan de ahorro", pide financiación convencional, prendario, banco, tasa 0% o contado: PROHIBIDO calcular cuotas o anticipos. Derivá SIEMPRE directo con Gonzalo y agregá [[PAUSAR_HUMANO]].
+3. PLAZO DE 84 CUOTAS Y DIFERENCIA ENTRE PLAN 70/30 Y PLAN 100%:
+  - TODOS los planes de Toyota Plan son de 84 cuotas (84 meses) en pesos sin interés bancario. NUNCA digas que un plan es de 24 cuotas.
+  - Plan 70/30: financia el 70% en 84 cuotas y tiene integración mínima del 30% al retirar (incluso si ganás por sorteo).
+  - Plan 100% (Yaris 100%, Hilux 4x4 DX, Hiace): financia el 100% en 84 cuotas y NO tiene integración mínima del 30%. Su integración mínima se mide en cantidad de cuotas: al retirar solo integra las cuotas que le falten para llegar a ese mínimo (por ejemplo, si el mínimo es 24 cuotas y ya pagó 10, integra 14 cuotas).
+4. CUOTA MENSUAL, CUOTA PURA Y CAMBIOS PERMITIDOS:
+  - Cuando el cliente pregunta cuánto sale la cuota de Toyota Plan, informá ÚNICAMENTE la "Cuota Mensual Oficial" (la cuota final con gastos incluidos) aclarando que es un plan de 84 cuotas. PROHIBIDO mencionar "cuota pura" salvo que pregunten expresamente qué es la cuota pura o cómo adelantar cuotas.
+  - PROHIBIDO cambio de modelo o versión por líneas GR (GR-Sport / GR), RAV4, Land Cruiser, Crown ni Camry en Toyota Plan (esos van solo por compra convencional con Gonzalo).
+  - Planes adjudicados y avanzados: Sí tenemos según disponibilidad y se derivan directamente con Gonzalo agregando [[PAUSAR_HUMANO]].
+5. RETIRO, USADOS Y SUCURSALES ROSARIO:
+  - No tenemos entrega pactada por contrato. Plazos de entrega: entre 30 y 75 días por contrato sin cambio de modelo o versión (hasta 135 días corridos si hay cambio), aunque generalmente llega entre 30 y 60 días.
   - Gastos de retiro (7% total): 1% derecho de adjudicación + 1% flete al adjudicar, y 5% de patentamiento antes de entregar.
-5. USADO LLAVE POR LLAVE, SUCURSALES ROSARIO Y REGLAS ANTI-TABÚ:
   - Llave por Llave: sigue usando su auto hasta retirar el 0 km; tomamos usados de cualquier marca libres de prenda. No tomamos dólares, prendados, planes de ahorro de otras marcas, motos ni terrenos.
   - Sucursales en Rosario: Avellaneda 2075 y Carballo 632 (Ginza Toyota), Lun–Vie 8:30 a 18:30 hs, Sáb 9:00 a 13:00 hs.
   - Al confirmar día y hora agregá [[AGENDAR:YYYY-MM-DD|HH:MM|Entrevista - Sucursal]]. Si pide hablar directo con Gonzalo, derivá con altura y agregá [[PAUSAR_HUMANO]].
