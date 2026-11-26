@@ -62,7 +62,7 @@
 </head>
 <body class="min-h-screen text-slate-800 pb-24 md:pb-12">
 
-    <!-- NAVBAR CORPORATIVO GINZA TOYOTA (SHOWROOM EDITION) -->
+    <!-- NAVBAR CORPORATIVO GINZA TOYOTA -->
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
         <div class="bg-gradient-to-r from-[#0A0A0C] via-[#141418] to-[#1C1C22] text-white border-b border-white/10">
             <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex justify-between items-center gap-2">
@@ -208,7 +208,7 @@
                     <span class="text-xs px-2 py-0.5 rounded-md bg-red-50 text-[#EB0A1E] font-bold tabular-nums" id="stat-rate-venta">0%</span>
                 </div>
                 <div class="font-toyota-display tabular-nums text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" id="stat-ventas">0</div>
-                <div class="text-[11px] text-slate-400 mt-0.5">Suscripciones Toyota Plan</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">Ingresos Toyota Plan</div>
             </button>
         </div>
 
@@ -312,7 +312,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
                 <div>
                     <h2 class="text-base sm:text-lg font-bold text-slate-900">Base de Datos de Prospección (7 Canales)</h2>
-                    <p class="text-xs text-slate-500">Al enviar un mensaje pasa a <b>espera</b>. Sofía 2.7 clasifica automáticamente <b>No Compra</b> en Sin Respuesta (+24h), Interesados, Contactar a Futuro y No Interesados por motivo.</p>
+                    <p class="text-xs text-slate-500">Al enviar un mensaje pasa a <b>espera</b>. Sofía 3.0 clasifica automáticamente <b>No Compra</b> en Sin Respuesta (+24h), Interesados, Contactar a Futuro y No Interesados por motivo.</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="openMassCampaignModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-extrabold bg-amber-500 text-zinc-950 hover:bg-amber-600 transition-colors">
@@ -527,26 +527,26 @@
     </main>
 
     <!-- ========================================================================= -->
-    <!-- TAB 4: COMPARATIVA DE PLANES (BASE COMPLETA PLANERO DE LEY — TODAS MARCAS)-->
+    <!-- TAB 4: COMPARATIVA DE PLANES (ESTILO PLANERO DE LEY — TODAS LAS MARCAS)   -->
     <!-- ========================================================================= -->
     <main id="tab-comparativa" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6 hidden">
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-6">
             <div class="flex flex-wrap items-center justify-between gap-4 pb-4 mb-5 border-b border-slate-100">
                 <div>
-                    <h2 class="text-base sm:text-xl font-extrabold text-slate-900">⚖️ Comparativa Oficial Planero de Ley: Toyota Plan vs Todas las Marcas</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Compará cualquier modelo Toyota contra todas las marcas y modelos del mercado argentino (VW, Fiat, Chevrolet, Renault, Peugeot, Citroën, Ford, Nissan, Jeep) con cuota pura, cuota final estimada, integración mínima, garantía y distribución.</p>
+                    <h2 class="text-base sm:text-xl font-extrabold text-slate-900">⚖️ Comparativa de Planes: Toyota vs Competencia (Catálogo Planero de Ley)</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Compará todas las marcas y modelos de planes de ahorro de Argentina (VW Autoahorro, Fiat Plan, Chevrolet, Plan Rombo Renault, Peugeot, Citroën, Ford, Nissan y Jeep) contra Toyota Plan.</p>
                 </div>
-                <div class="flex flex-wrap items-center gap-2">
-                    <button onclick="copyComparativaWhatsappPitch()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold">📋 Copiar Argumento WA</button>
-                    <button onclick="syncPlaneroDeLeyLive(true)" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] text-white text-xs font-semibold">🔄 Sincronizar Planero de Ley</button>
+                <div class="flex items-center gap-2">
+                    <button onclick="copyComparativaWhatsApp()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold">📋 Copiar Argumento WA</button>
+                    <button onclick="syncPlaneroDeLeyLive(true)" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] text-white text-xs font-semibold">🔄 Actualizar Lista</button>
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
                 <div class="p-3.5 rounded-xl bg-slate-50 border">
                     <label class="block text-xs font-bold uppercase mb-1.5">1. Segmento</label>
                     <select id="comp-segment-select" onchange="onCompSegmentChange()" class="w-full px-3 py-2 text-sm font-semibold border rounded-xl bg-white">
                         <option value="Todos">Todos los Segmentos</option>
-                        <option value="Pick Up">Pick Up</option>
+                        <option value="Pick Up" selected>Pick Up</option>
                         <option value="SUV">SUV</option>
                         <option value="Hatchback">Hatchback</option>
                         <option value="Sedán">Sedán</option>
@@ -559,7 +559,7 @@
                 </div>
                 <div class="p-3.5 rounded-xl bg-slate-50 border">
                     <label class="block text-xs font-bold uppercase mb-1.5">3. Marca Competidora</label>
-                    <select id="comp-brand-select" onchange="onCompBrandFilterChange()" class="w-full px-3 py-2 text-sm font-bold border rounded-xl bg-white"></select>
+                    <select id="comp-brand-select" onchange="onCompBrandChange()" class="w-full px-3 py-2 text-sm font-semibold border rounded-xl bg-white"></select>
                 </div>
                 <div class="p-3.5 rounded-xl bg-slate-50 border">
                     <label class="block text-xs font-bold uppercase mb-1.5">4. Modelo Competidor</label>
@@ -568,27 +568,27 @@
             </div>
             <div id="comp-head-to-head" class="grid grid-cols-1 lg:grid-cols-12 gap-5"></div>
         </div>
+
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-4 py-3 bg-slate-50 border-b flex flex-wrap justify-between items-center gap-2">
-                <h3 class="text-sm font-bold">Grilla Completa Planero de Ley (Todas las Marcas y Modelos)</h3>
                 <div class="flex items-center gap-2">
-                    <input type="text" id="comp-table-search" oninput="renderComparativaResult()" placeholder="Buscar marca o modelo (Cronos, Polo, Tracker, Kardian, 208...)" class="px-3 py-1.5 text-xs border rounded-xl bg-white w-64">
-                    <span class="text-xs font-bold text-slate-600" id="comp-table-count">0 planes</span>
+                    <h3 class="text-sm font-bold">Listado Completo del Mercado (Todas las Marcas y Modelos)</h3>
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 font-bold" id="comp-table-count">0 planes</span>
                 </div>
+                <input type="text" id="comp-search-input" oninput="renderComparativaResult()" placeholder="Filtrar por marca o modelo (ej: Cronos, Amarok, Tracker, 208)..." class="w-full sm:w-72 px-3 py-1.5 text-xs border border-slate-300 rounded-xl bg-white outline-none">
             </div>
-            <div class="overflow-x-auto max-h-[460px] overflow-y-auto">
+            <div class="overflow-x-auto max-h-[540px] overflow-y-auto">
                 <table class="w-full text-left text-sm">
-                    <thead class="sticky top-0 bg-slate-100 z-10">
-                        <tr class="border-b text-xs uppercase text-slate-600">
-                            <th class="p-3.5">Marca / Plan</th>
+                    <thead class="sticky top-0 bg-white border-b text-xs uppercase text-slate-600 shadow-2xs">
+                        <tr>
+                            <th class="p-3.5">Marca / Administradora</th>
                             <th class="p-3.5">Segmento</th>
                             <th class="p-3.5">Modelo</th>
                             <th class="p-3.5">Modalidad</th>
-                            <th class="p-3.5">Valor Unidad</th>
+                            <th class="p-3.5">Valor Móvil</th>
                             <th class="p-3.5">Cuota Pura</th>
                             <th class="p-3.5">Cuota Final Est.</th>
-                            <th class="p-3.5">Integ. Mínima</th>
-                            <th class="p-3.5">Garantía / Motor</th>
+                            <th class="p-3.5">Distribución</th>
                             <th class="p-3.5">Acción</th>
                         </tr>
                     </thead>
@@ -625,7 +625,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                 <div>
                     <h2 class="text-base sm:text-xl font-extrabold text-slate-900">🚗 Catálogo Oficial de Vehículos — Versiones, Fotos, Ficha Técnica & Planes</h2>
-                    <p class="text-xs text-slate-500">Seleccioná un modelo para ver sus versiones, valores, planes disponibles (70/30 y 100%), galería de fotos por versión y ficha técnica sincronizada con Sofía 2.7.</p>
+                    <p class="text-xs text-slate-500">Seleccioná un modelo para ver sus versiones, valores, planes disponibles (70/30 y 100%), galería de fotos por versión y ficha técnica sincronizada con Sofía 3.0.</p>
                 </div>
                 <span class="px-3 py-1 rounded-full bg-red-50 text-[#EB0A1E] text-xs font-extrabold border border-red-200 self-start sm:self-center">Sincronizado con Sofía IA</span>
             </div>
@@ -678,7 +678,7 @@
                     <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
                         <div>
                             <h3 id="veh-tech-title" class="text-base font-extrabold text-slate-900">📋 Ficha Técnica & Diferencias por Versión</h3>
-                            <p class="text-xs text-slate-500">Sofía 2.7 lee esta ficha para responder consultas técnicas de equipamiento, motor y seguridad</p>
+                            <p class="text-xs text-slate-500">Sofía 3.0 lee esta ficha para responder consultas técnicas de equipamiento, motor y seguridad</p>
                         </div>
                         <button onclick="saveVehicleTechSpec()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">💾 Guardar Ficha</button>
                     </div>
@@ -894,7 +894,7 @@
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[92vh] overflow-y-auto p-5 space-y-4 border border-slate-200">
             <div class="flex items-center justify-between border-b pb-3">
                 <div>
-                    <h3 class="text-base font-extrabold text-slate-900">✏️ Editar Valores Oficiales del Plan (Sincroniza con Sofía 2.7)</h3>
+                    <h3 class="text-base font-extrabold text-slate-900">✏️ Editar Valores Oficiales del Plan (Sincroniza con Sofía 3.0)</h3>
                     <p class="text-xs text-slate-500">Corregí cualquier tramo, cuota pura o integración mínima y se actualiza directo en el cerebro de Sofía.</p>
                 </div>
                 <button onclick="closeEditPlanModal()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-xs font-bold">✕</button>
@@ -1016,7 +1016,7 @@
                             </select>
                             <input type="number" id="camp-batch-size" value="15" onchange="previewCampaignCandidates()" class="px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
                         </div>
-                        <textarea id="camp-base-message" rows="3" class="w-full p-2.5 text-xs border border-slate-300 rounded-xl outline-none">Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Estamos actualizando nuestra base de clientes y vimos tu consulta anterior. Contame, ¿seguís evaluando la compra de un auto?</textarea>
+                        <textarea id="camp-base-message" rows="3" class="w-full p-2.5 text-xs border border-slate-300 rounded-xl outline-none">Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo. Estamos actualizando nuestra base de clientes y vimos tu consulta anterior. Contame, ¿seguís evaluando la compra de un auto?</textarea>
                         <div class="flex items-center justify-between text-[11px]"><span id="camp-candidates-info">0 disponibles</span><button onclick="enqueueSelectedCampaignBatch()" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] text-white text-xs font-bold">+ Agregar a Cola</button></div>
                     </div>
                 </div>
@@ -1092,7 +1092,7 @@
                     <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 3.0 — Asesora Virtual WhatsApp • Ginza Toyota</h3>
+                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 3.0 — Asesora Virtual WhatsApp</h3>
                             <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Cerebro Híbrido (0-Tokens + Groq + Gemini)</span>
                         </div>
                         <p class="text-xs text-zinc-300">Respuestas instantáneas sin cuota + Groq (14.400/día gratis) + Google Gemini • Conexión Directa 24/7.</p>
@@ -1131,7 +1131,6 @@
                         </div>
                         <div id="wa-ai-key-test-status" class="hidden p-2 rounded-lg text-[11px] font-bold"></div>
 
-                        <!-- PANEL EN VIVO DE CONSUMO Y CUOTA DISPONIBLE HOY -->
                         <div id="wa-ai-daily-usage-panel" class="p-3 rounded-xl bg-slate-900 text-white space-y-2 border border-zinc-700">
                             <div class="flex items-center justify-between">
                                 <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400">📊 Consumo y Cuota Disponible Hoy</span>
@@ -1222,7 +1221,6 @@
                         <div id="wa-ai-sandbox-testers-list" class="flex flex-wrap gap-1.5"></div>
                     </div>
 
-                    <!-- MEMORIA DE CONSULTAS SIN TOKEN (AUTO-APRENDIZAJE 0-TOKENS) -->
                     <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-2.5">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
@@ -1234,7 +1232,6 @@
                         <div id="wa-ai-memory-list" class="max-h-36 overflow-y-auto space-y-2 text-xs"></div>
                     </div>
 
-                    <!-- AUDITORÍA COMERCIAL -->
                     <div class="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-extrabold uppercase text-slate-800">📊 Auditoría Comercial en Vivo</span>
@@ -1244,7 +1241,6 @@
                         <div id="wa-ai-audit-report" class="hidden p-2.5 rounded-xl bg-slate-50 border text-[11px] text-slate-700"></div>
                     </div>
 
-                    <!-- SIMULADOR DE CONVERSACIÓN EN VIVO -->
                     <div class="bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden">
                         <div class="p-3 bg-slate-100 border-b flex flex-wrap items-center justify-between gap-2">
                             <div class="flex items-center gap-2 flex-1 min-w-[200px]">
@@ -1320,84 +1316,86 @@
                 { id: 'hiace-commuter', group: 'B', modelo: 'Hiace MY\'26', version: 'Commuter 2.8 6AT 14A DCM', precio: 87882000, cupoEspecial: false }
             ],
             DEFAULT_MARKET_PLANS: [
-                // TOYOTA PLAN OFICIAL
-                { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', cuotas: 84, valorMovil: 49621000, cuotaPura: 528803, warranty: '10 años o 200.000 km', chain: 'Cadena' },
-                { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', cuotas: 84, valorMovil: 59739000, cuotaPura: 891366, warranty: '10 años o 200.000 km', chain: 'Cadena' },
-                { id: 'ty-yariscross-xli', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XLI CVT (Naftera)', modality: '70/30', cuotas: 84, valorMovil: 41464000, cuotaPura: 441862, warranty: '10 años o 200.000 km', chain: 'Cadena' },
-                { id: 'ty-yariscross-hv', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XEI Híbrido (HEV)', modality: '70/30', cuotas: 84, valorMovil: 48457000, cuotaPura: 516395, warranty: '10 años o 200.000 km', chain: 'Cadena' },
-                { id: 'ty-corollacross', brand: 'Toyota', segment: 'SUV', model: 'Corolla Cross XLI CVT', modality: '70/30', cuotas: 84, valorMovil: 51918000, cuotaPura: 582729, warranty: '10 años o 200.000 km', chain: 'Cadena' },
-                { id: 'ty-yaris-70', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '70/30', cuotas: 84, valorMovil: 36315000, cuotaPura: 386998, warranty: '10 años o 200.000 km', chain: 'Cadena' },
-                { id: 'ty-yaris-100', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '100%', cuotas: 84, valorMovil: 36315000, cuotaPura: 541856, warranty: '10 años o 200.000 km', chain: 'Cadena' },
-                { id: 'ty-corolla-xli', brand: 'Toyota', segment: 'Sedán', model: 'Corolla XLI CVT', modality: '70/30', cuotas: 84, valorMovil: 44082000, cuotaPura: 469767, warranty: '10 años o 200.000 km', chain: 'Cadena' },
-                { id: 'ty-hiace-l2h2', brand: 'Toyota', segment: 'Furgón', model: 'Hiace Furgón L2H2 AT', modality: '100%', cuotas: 84, valorMovil: 72798000, cuotaPura: 1086219, warranty: '10 años o 200.000 km', chain: 'Cadena' },
+                // TOYOTA PLAN (OFICIAL)
+                { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 413508, cuotaFinal: 528803, dist: 'Cadena' },
+                { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 711178, cuotaFinal: 891366, dist: 'Cadena' },
+                { id: 'ty-yariscross-xli', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XLI CVT (Naftera)', modality: '70/30', valorMovil: 41464000, cuotaPura: 345533, cuotaFinal: 441862, dist: 'Cadena' },
+                { id: 'ty-yariscross-hv', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XEI Híbrido (HEV)', modality: '70/30', valorMovil: 48457000, cuotaPura: 403808, cuotaFinal: 516395, dist: 'Cadena' },
+                { id: 'ty-corollacross', brand: 'Toyota', segment: 'SUV', model: 'Corolla Cross XLI CVT', modality: '70/30', valorMovil: 51918000, cuotaPura: 432650, cuotaFinal: 582729, dist: 'Cadena' },
+                { id: 'ty-yaris-70', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '70/30', valorMovil: 36315000, cuotaPura: 302625, cuotaFinal: 386998, dist: 'Cadena' },
+                { id: 'ty-yaris-100', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '100%', valorMovil: 36315000, cuotaPura: 432321, cuotaFinal: 541856, dist: 'Cadena' },
+                { id: 'ty-corolla-xli', brand: 'Toyota', segment: 'Sedán', model: 'Corolla XLI CVT', modality: '70/30', valorMovil: 44082000, cuotaPura: 367350, cuotaFinal: 469767, dist: 'Cadena' },
+                { id: 'ty-hiace-l2h2', brand: 'Toyota', segment: 'Furgón', model: 'Hiace Furgón L2H2 AT', modality: '100%', valorMovil: 72798000, cuotaPura: 866642, cuotaFinal: 1086219, dist: 'Cadena' },
 
-                // VOLKSWAGEN AUTOAHORRO (PLANERO DE LEY)
-                { id: 'vw-polo-track', brand: 'Volkswagen Autoahorro', segment: 'Hatchback', model: 'Polo Track 1.6 MSI', modality: '70/30', cuotas: 84, valorMovil: 33950000, cuotaPura: 282917, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'vw-polo-comf', brand: 'Volkswagen Autoahorro', segment: 'Hatchback', model: 'Polo Comfortline 170 TSI AT', modality: '80/20', cuotas: 84, valorMovil: 38400000, cuotaPura: 365714, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'vw-virtus', brand: 'Volkswagen Autoahorro', segment: 'Sedán', model: 'Virtus MSI Manual', modality: '70/30', cuotas: 84, valorMovil: 36800000, cuotaPura: 306667, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'vw-nivus', brand: 'Volkswagen Autoahorro', segment: 'SUV', model: 'Tera / Nivus 170 TSI', modality: '70/30', cuotas: 84, valorMovil: 41900000, cuotaPura: 349167, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'vw-tcross', brand: 'Volkswagen Autoahorro', segment: 'SUV', model: 'T-Cross Trendline 170 TSI', modality: '70/30', cuotas: 84, valorMovil: 44600000, cuotaPura: 371667, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'vw-taos', brand: 'Volkswagen Autoahorro', segment: 'SUV', model: 'Taos Comfortline 250 TSI AT', modality: '70/30', cuotas: 84, valorMovil: 53800000, cuotaPura: 448333, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'vw-saveiro', brand: 'Volkswagen Autoahorro', segment: 'Pick Up', model: 'Saveiro Trendline CS', modality: '70/30', cuotas: 84, valorMovil: 32500000, cuotaPura: 270833, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'vw-amarok', brand: 'Volkswagen Autoahorro', segment: 'Pick Up', model: 'Amarok Trendline 4x2 2.0 TDI', modality: '70/30', cuotas: 84, valorMovil: 53133050, cuotaPura: 442775, warranty: '6 años o 150.000 km', chain: 'Correa dentada' },
-                { id: 'vw-amarok-v6', brand: 'Volkswagen Autoahorro', segment: 'Pick Up', model: 'Amarok Comfortline V6 4x4 AT', modality: '100%', cuotas: 84, valorMovil: 66900000, cuotaPura: 796429, warranty: '6 años o 150.000 km', chain: 'Cadena' },
+                // VOLKSWAGEN AUTOAHORRO
+                { id: 'vw-amarok-trend', brand: 'Volkswagen', segment: 'Pick Up', model: 'Amarok Trendline 4x2 2.0 TDI', modality: '70/30', valorMovil: 53133050, cuotaPura: 442775, cuotaFinal: 566200, dist: 'Correa dentada' },
+                { id: 'vw-amarok-comf', brand: 'Volkswagen', segment: 'Pick Up', model: 'Amarok Comfortline V6 4x4 AT', modality: '60/40', valorMovil: 69850000, cuotaPura: 498928, cuotaFinal: 639400, dist: 'Correa dentada' },
+                { id: 'vw-taos', brand: 'Volkswagen', segment: 'SUV', model: 'Taos Comfortline 250 TSI AT', modality: '70/30', valorMovil: 54920000, cuotaPura: 457666, cuotaFinal: 584900, dist: 'Correa dentada' },
+                { id: 'vw-tcross', brand: 'Volkswagen', segment: 'SUV', model: 'T-Cross Trendline 170 TSI', modality: '70/30', valorMovil: 43850000, cuotaPura: 365416, cuotaFinal: 468100, dist: 'Correa dentada' },
+                { id: 'vw-nivus', brand: 'Volkswagen', segment: 'SUV', model: 'Nivus 170 TSI MT', modality: '70/30', valorMovil: 41290000, cuotaPura: 344083, cuotaFinal: 441200, dist: 'Correa dentada' },
+                { id: 'vw-polo-track', brand: 'Volkswagen', segment: 'Hatchback', model: 'Polo Track 1.6 MSI', modality: '80/20', valorMovil: 34950000, cuotaPura: 332857, cuotaFinal: 424900, dist: 'Correa dentada' },
+                { id: 'vw-polo-100', brand: 'Volkswagen', segment: 'Hatchback', model: 'Polo Track 1.6 MSI', modality: '100%', valorMovil: 34950000, cuotaPura: 416071, cuotaFinal: 531800, dist: 'Correa dentada' },
+                { id: 'vw-virtus', brand: 'Volkswagen', segment: 'Sedán', model: 'Virtus MSI 1.6 MT', modality: '70/30', valorMovil: 39480000, cuotaPura: 329000, cuotaFinal: 421500, dist: 'Correa dentada' },
+                { id: 'vw-saveiro', brand: 'Volkswagen', segment: 'Pick Up', model: 'Saveiro Trendline CS 1.6', modality: '80/20', valorMovil: 33890000, cuotaPura: 322761, cuotaFinal: 412900, dist: 'Correa dentada' },
 
-                // FIAT PLAN (PLANERO DE LEY)
-                { id: 'ft-mobi', brand: 'Fiat Plan', segment: 'Hatchback', model: 'Mobi Trekking 1.0', modality: '80/20', cuotas: 84, valorMovil: 25900000, cuotaPura: 246667, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'ft-cronos-like', brand: 'Fiat Plan', segment: 'Sedán', model: 'Cronos Like 1.3 GSE', modality: '70/30', cuotas: 84, valorMovil: 29800000, cuotaPura: 248333, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ft-cronos', brand: 'Fiat Plan', segment: 'Sedán', model: 'Cronos Drive Pack Plus CVT', modality: '80/20', cuotas: 84, valorMovil: 33400000, cuotaPura: 318095, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ft-pulse', brand: 'Fiat Plan', segment: 'SUV', model: 'Pulse Drive 1.3 MT', modality: '70/30', cuotas: 84, valorMovil: 35600000, cuotaPura: 296667, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ft-fastback', brand: 'Fiat Plan', segment: 'SUV', model: 'Fastback Turbo 270 AT', modality: '70/30', cuotas: 84, valorMovil: 43200000, cuotaPura: 360000, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ft-strada', brand: 'Fiat Plan', segment: 'Pick Up', model: 'Strada Freedom 1.3 CS', modality: '70/30', cuotas: 84, valorMovil: 32900000, cuotaPura: 274167, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ft-toro', brand: 'Fiat Plan', segment: 'Pick Up', model: 'Toro Freedom T270 AT', modality: '70/30', cuotas: 84, valorMovil: 45800000, cuotaPura: 381667, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ft-titano', brand: 'Fiat Plan', segment: 'Pick Up', model: 'Titano Endurance 4x2 MT', modality: '70/30', cuotas: 84, valorMovil: 48900000, cuotaPura: 407500, warranty: '5 años o 150.000 km', chain: 'Correa dentada' },
+                // FIAT PLAN
+                { id: 'ft-titano', brand: 'Fiat', segment: 'Pick Up', model: 'Titano Endurance 4x2 MT', modality: '70/30', valorMovil: 48900000, cuotaPura: 407500, cuotaFinal: 521800, dist: 'Correa dentada' },
+                { id: 'ft-toro', brand: 'Fiat', segment: 'Pick Up', model: 'Toro Freedom 1.8 AT6 4x2', modality: '70/30', valorMovil: 44650000, cuotaPura: 372083, cuotaFinal: 476900, dist: 'Cadena' },
+                { id: 'ft-strada', brand: 'Fiat', segment: 'Pick Up', model: 'Strada Freedom 1.3 CS', modality: '80/20', valorMovil: 33400000, cuotaPura: 318095, cuotaFinal: 407800, dist: 'Cadena' },
+                { id: 'ft-pulse', brand: 'Fiat', segment: 'SUV', model: 'Pulse Drive 1.3 MT', modality: '70/30', valorMovil: 38950000, cuotaPura: 324583, cuotaFinal: 416400, dist: 'Cadena' },
+                { id: 'ft-fastback', brand: 'Fiat', segment: 'SUV', model: 'Fastback Turbo 270 AT6', modality: '70/30', valorMovil: 47200000, cuotaPura: 393333, cuotaFinal: 504200, dist: 'Cadena' },
+                { id: 'ft-argo', brand: 'Fiat', segment: 'Hatchback', model: 'Argo Drive 1.3 GSE', modality: '80/20', valorMovil: 32980000, cuotaPura: 314095, cuotaFinal: 402500, dist: 'Cadena' },
+                { id: 'ft-mobi', brand: 'Fiat', segment: 'Hatchback', model: 'Mobi Trekking 1.0', modality: '80/20', valorMovil: 26850000, cuotaPura: 255714, cuotaFinal: 328400, dist: 'Correa dentada' },
+                { id: 'ft-cronos-70', brand: 'Fiat', segment: 'Sedán', model: 'Cronos Drive 1.3 Pack Plus', modality: '70/30', valorMovil: 35650000, cuotaPura: 297083, cuotaFinal: 381200, dist: 'Cadena' },
+                { id: 'ft-cronos-90', brand: 'Fiat', segment: 'Sedán', model: 'Cronos Like 1.3 GSE', modality: '90/10', valorMovil: 33450000, cuotaPura: 358392, cuotaFinal: 458900, dist: 'Cadena' },
+                { id: 'ft-fiorino', brand: 'Fiat', segment: 'Furgón', model: 'Fiorino Endurance 1.4', modality: '80/20', valorMovil: 31900000, cuotaPura: 303809, cuotaFinal: 389600, dist: 'Correa dentada' },
 
-                // CHEVROLET PLAN (PLANERO DE LEY)
-                { id: 'ch-onix', brand: 'Chevrolet Plan', segment: 'Hatchback', model: 'Onix 1.0 Turbo LT MT', modality: '70/30', cuotas: 84, valorMovil: 32700000, cuotaPura: 272500, warranty: '3 años o 100.000 km', chain: 'Correa bañada en aceite' },
-                { id: 'ch-onix-plus', brand: 'Chevrolet Plan', segment: 'Sedán', model: 'Onix Plus LTZ 1.0 Turbo AT', modality: '80/20', cuotas: 84, valorMovil: 35900000, cuotaPura: 341905, warranty: '3 años o 100.000 km', chain: 'Correa bañada en aceite' },
-                { id: 'ch-tracker-mt', brand: 'Chevrolet Plan', segment: 'SUV', model: 'Tracker 1.2 Turbo MT', modality: '70/30', cuotas: 84, valorMovil: 39800000, cuotaPura: 331667, warranty: '3 años o 100.000 km', chain: 'Correa bañada en aceite' },
-                { id: 'ch-tracker-ltz', brand: 'Chevrolet Plan', segment: 'SUV', model: 'Tracker LTZ 1.2 Turbo AT', modality: '80/20', cuotas: 84, valorMovil: 44500000, cuotaPura: 423810, warranty: '3 años o 100.000 km', chain: 'Correa bañada en aceite' },
-                { id: 'ch-spin', brand: 'Chevrolet Plan', segment: 'SUV', model: 'Spin LT 5 Asientos', modality: '70/30', cuotas: 84, valorMovil: 37400000, cuotaPura: 311667, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'ch-montana', brand: 'Chevrolet Plan', segment: 'Pick Up', model: 'Montana LT 1.2 Turbo', modality: '70/30', cuotas: 84, valorMovil: 41200000, cuotaPura: 343333, warranty: '3 años o 100.000 km', chain: 'Correa bañada en aceite' },
-                { id: 'ch-s10', brand: 'Chevrolet Plan', segment: 'Pick Up', model: 'S10 WT 4x2 2.8 TD', modality: '70/30', cuotas: 84, valorMovil: 49100000, cuotaPura: 409167, warranty: '5 años o 150.000 km', chain: 'Correa dentada' },
+                // CHEVROLET PLAN
+                { id: 'ch-s10', brand: 'Chevrolet', segment: 'Pick Up', model: 'S10 WT 2.8 TD 4x2 MT', modality: '70/30', valorMovil: 50480000, cuotaPura: 420666, cuotaFinal: 538900, dist: 'Correa dentada' },
+                { id: 'ch-montana', brand: 'Chevrolet', segment: 'Pick Up', model: 'Montana LT 1.2 Turbo MT', modality: '70/30', valorMovil: 41890000, cuotaPura: 349083, cuotaFinal: 447500, dist: 'Correa bañada en aceite' },
+                { id: 'ch-tracker-70', brand: 'Chevrolet', segment: 'SUV', model: 'Tracker 1.2 Turbo MT', modality: '70/30', valorMovil: 42950000, cuotaPura: 357916, cuotaFinal: 458800, dist: 'Correa bañada en aceite' },
+                { id: 'ch-tracker-100', brand: 'Chevrolet', segment: 'SUV', model: 'Tracker 1.2 Turbo AT', modality: '100%', valorMovil: 45890000, cuotaPura: 546309, cuotaFinal: 698500, dist: 'Correa bañada en aceite' },
+                { id: 'ch-spin', brand: 'Chevrolet', segment: 'SUV', model: 'Spin LT 1.8 5 Asientos', modality: '80/20', valorMovil: 38750000, cuotaPura: 369047, cuotaFinal: 472900, dist: 'Correa dentada' },
+                { id: 'ch-onix-hb', brand: 'Chevrolet', segment: 'Hatchback', model: 'Onix LT 1.0 Turbo MT', modality: '80/20', valorMovil: 34650000, cuotaPura: 330000, cuotaFinal: 422800, dist: 'Correa bañada en aceite' },
+                { id: 'ch-onix-plus', brand: 'Chevrolet', segment: 'Sedán', model: 'Onix Plus LT 1.0 Turbo MT', modality: '80/20', valorMovil: 35490000, cuotaPura: 338000, cuotaFinal: 432900, dist: 'Correa bañada en aceite' },
 
-                // PLAN ROMBO RENAULT (PLANERO DE LEY)
-                { id: 'rn-kwid', brand: 'Plan Rombo Renault', segment: 'Hatchback', model: 'Kwid Iconic 1.0', modality: '100%', cuotas: 120, valorMovil: 24800000, cuotaPura: 206667, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'rn-logan', brand: 'Plan Rombo Renault', segment: 'Sedán', model: 'Logan Life 1.6', modality: '75/25', cuotas: 84, valorMovil: 30400000, cuotaPura: 271429, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'rn-stepway', brand: 'Plan Rombo Renault', segment: 'Hatchback', model: 'Sandero Stepway Intens', modality: '75/25', cuotas: 84, valorMovil: 33600000, cuotaPura: 300000, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'rn-kardian', brand: 'Plan Rombo Renault', segment: 'SUV', model: 'Kardian Evolution 1.6 / TCe', modality: '75/25', cuotas: 84, valorMovil: 37900000, cuotaPura: 338393, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'rn-duster', brand: 'Plan Rombo Renault', segment: 'SUV', model: 'Duster Intens 1.6', modality: '75/25', cuotas: 84, valorMovil: 40500000, cuotaPura: 361607, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'rn-oroch', brand: 'Plan Rombo Renault', segment: 'Pick Up', model: 'Oroch Emotion 1.6', modality: '75/25', cuotas: 84, valorMovil: 38200000, cuotaPura: 341071, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'rn-kangoo', brand: 'Plan Rombo Renault', segment: 'Furgón', model: 'Kangoo II Express Confort', modality: '75/25', cuotas: 84, valorMovil: 37100000, cuotaPura: 331250, warranty: '2 años o 100.000 km', chain: 'Cadena' },
-                { id: 'rn-alaskan', brand: 'Plan Rombo Renault', segment: 'Pick Up', model: 'Alaskan Confort 4x2 2.3 dCi', modality: '75/25', cuotas: 84, valorMovil: 48700000, cuotaPura: 434821, warranty: '5 años o 150.000 km', chain: 'Cadena' },
+                // PLAN ROMBO RENAULT
+                { id: 'rn-alaskan', brand: 'Renault', segment: 'Pick Up', model: 'Alaskan Confort 2.3 dCi 4x2', modality: '70/30', valorMovil: 49150000, cuotaPura: 409583, cuotaFinal: 524900, dist: 'Cadena' },
+                { id: 'rn-oroch', brand: 'Renault', segment: 'Pick Up', model: 'Oroch Emotion 1.6 SCe', modality: '80/20', valorMovil: 38900000, cuotaPura: 370476, cuotaFinal: 474800, dist: 'Cadena' },
+                { id: 'rn-kardian', brand: 'Renault', segment: 'SUV', model: 'Kardian Evolution 156 MT', modality: '70/30', valorMovil: 39850000, cuotaPura: 332083, cuotaFinal: 425900, dist: 'Cadena' },
+                { id: 'rn-duster', brand: 'Renault', segment: 'SUV', model: 'Duster Intens 1.6 SCe', modality: '80/20', valorMovil: 41650000, cuotaPura: 396666, cuotaFinal: 508200, dist: 'Cadena' },
+                { id: 'rn-kwid', brand: 'Renault', segment: 'Hatchback', model: 'Kwid Iconic Bitono 1.0', modality: '100%', valorMovil: 25950000, cuotaPura: 308928, cuotaFinal: 395800, dist: 'Cadena' },
+                { id: 'rn-sandero', brand: 'Renault', segment: 'Hatchback', model: 'Sandero Life 1.6 SCe', modality: '80/20', valorMovil: 33890000, cuotaPura: 322761, cuotaFinal: 413500, dist: 'Cadena' },
+                { id: 'rn-logan', brand: 'Renault', segment: 'Sedán', model: 'Logan Life 1.6 SCe', modality: '80/20', valorMovil: 34250000, cuotaPura: 326190, cuotaFinal: 417900, dist: 'Cadena' },
+                { id: 'rn-kangoo', brand: 'Renault', segment: 'Furgón', model: 'Kangoo Express Confort 1.6', modality: '75/25', valorMovil: 39450000, cuotaPura: 352232, cuotaFinal: 451200, dist: 'Cadena' },
 
-                // PEUGEOT PLAN (PLANERO DE LEY)
-                { id: 'pg-208', brand: 'Peugeot Plan', segment: 'Hatchback', model: '208 Active 1.6', modality: '70/30', cuotas: 84, valorMovil: 32200000, cuotaPura: 268333, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'pg-208-t200', brand: 'Peugeot Plan', segment: 'Hatchback', model: '208 Allure Pack T200 CVT', modality: '80/20', cuotas: 84, valorMovil: 36900000, cuotaPura: 351429, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'pg-2008', brand: 'Peugeot Plan', segment: 'SUV', model: '2008 Active T200 CVT', modality: '70/30', cuotas: 84, valorMovil: 41600000, cuotaPura: 346667, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'pg-partner', brand: 'Peugeot Plan', segment: 'Furgón', model: 'Partner Confort 1.6 HDI', modality: '70/30', cuotas: 84, valorMovil: 35800000, cuotaPura: 298333, warranty: '2 años o 100.000 km', chain: 'Correa dentada' },
+                // PEUGEOT PLAN
+                { id: 'pg-2008', brand: 'Peugeot', segment: 'SUV', model: 'Nuevo 2008 Active T200 CVT', modality: '70/30', valorMovil: 46850000, cuotaPura: 390416, cuotaFinal: 499800, dist: 'Cadena' },
+                { id: 'pg-208-70', brand: 'Peugeot', segment: 'Hatchback', model: 'Nuevo 208 Active 1.6 MT', modality: '70/30', valorMovil: 36890000, cuotaPura: 307416, cuotaFinal: 393900, dist: 'Correa dentada' },
+                { id: 'pg-208-80', brand: 'Peugeot', segment: 'Hatchback', model: 'Nuevo 208 Allure 1.6 CVT', modality: '80/20', valorMovil: 40450000, cuotaPura: 385238, cuotaFinal: 493200, dist: 'Correa dentada' },
+                { id: 'pg-partner', brand: 'Peugeot', segment: 'Furgón', model: 'Partner Confort 1.6 HDI', modality: '70/30', valorMovil: 38650000, cuotaPura: 322083, cuotaFinal: 412800, dist: 'Correa dentada' },
 
-                // CITROËN PLAN (PLANERO DE LEY)
-                { id: 'ct-c3', brand: 'Citroën Plan', segment: 'Hatchback', model: 'C3 Feel 1.6 VTi', modality: '70/30', cuotas: 84, valorMovil: 29900000, cuotaPura: 249167, warranty: '3 años o 100.000 km', chain: 'Correa dentada' },
-                { id: 'ct-c3-aircross', brand: 'Citroën Plan', segment: 'SUV', model: 'C3 Aircross Feel 7 Asientos', modality: '70/30', cuotas: 84, valorMovil: 37500000, cuotaPura: 312500, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ct-basalt', brand: 'Citroën Plan', segment: 'SUV', model: 'Basalt Live / Feel T200', modality: '70/30', cuotas: 84, valorMovil: 34900000, cuotaPura: 290833, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ct-berlingo', brand: 'Citroën Plan', segment: 'Furgón', model: 'Berlingo Furgón Business HDI', modality: '70/30', cuotas: 84, valorMovil: 35600000, cuotaPura: 296667, warranty: '2 años o 100.000 km', chain: 'Correa dentada' },
+                // CITROËN PLAN
+                { id: 'ct-basalt', brand: 'Citroën', segment: 'SUV', model: 'Basalt Live Pack 1.0 VTi', modality: '70/30', valorMovil: 35450000, cuotaPura: 295416, cuotaFinal: 378900, dist: 'Cadena' },
+                { id: 'ct-c3-aircross', brand: 'Citroën', segment: 'SUV', model: 'C3 Aircross Live 1.0 VTi', modality: '70/30', valorMovil: 37850000, cuotaPura: 315416, cuotaFinal: 404200, dist: 'Cadena' },
+                { id: 'ct-c3', brand: 'Citroën', segment: 'Hatchback', model: 'Nuevo C3 Feel 1.0 VTi', modality: '80/20', valorMovil: 31850000, cuotaPura: 303333, cuotaFinal: 388900, dist: 'Cadena' },
+                { id: 'ct-berlingo', brand: 'Citroën', segment: 'Furgón', model: 'Berlingo Furgón Business 1.6 HDI', modality: '70/30', valorMovil: 38550000, cuotaPura: 321250, cuotaFinal: 411800, dist: 'Correa dentada' },
 
-                // FORD PLAN ÓVALO (PLANERO DE LEY)
-                { id: 'fd-territory', brand: 'Ford Plan Óvalo', segment: 'SUV', model: 'Territory SEL 1.8 EcoBoost', modality: '80/20', cuotas: 84, valorMovil: 52850000, cuotaPura: 503333, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'fd-maverick', brand: 'Ford Plan Óvalo', segment: 'Pick Up', model: 'Maverick XLT 2.0 EcoBoost', modality: '70/30', cuotas: 84, valorMovil: 47200000, cuotaPura: 393333, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'fd-ranger-xl', brand: 'Ford Plan Óvalo', segment: 'Pick Up', model: 'Ranger XL 4x2 2.0 SiT', modality: '70/30', cuotas: 84, valorMovil: 49900000, cuotaPura: 415833, warranty: '5 años o 150.000 km', chain: 'Correa bañada en aceite' },
-                { id: 'fd-ranger-v6', brand: 'Ford Plan Óvalo', segment: 'Pick Up', model: 'Ranger XLS V6 4x4 AT', modality: '80/20', cuotas: 84, valorMovil: 64500000, cuotaPura: 614286, warranty: '5 años o 150.000 km', chain: 'Cadena' },
-                { id: 'fd-transit', brand: 'Ford Plan Óvalo', segment: 'Furgón', model: 'Transit Van Mediana Techo Elevado', modality: '70/30', cuotas: 84, valorMovil: 61800000, cuotaPura: 515000, warranty: '2 años sin límite km', chain: 'Correa bañada en aceite' },
+                // FORD PLAN ÓVALO
+                { id: 'fd-ranger-xl', brand: 'Ford', segment: 'Pick Up', model: 'Ranger XL 2.0 Turbo 4x2 MT', modality: '70/30', valorMovil: 48484213, cuotaPura: 404035, cuotaFinal: 517800, dist: 'Correa bañada en aceite' },
+                { id: 'fd-ranger-xls', brand: 'Ford', segment: 'Pick Up', model: 'Ranger XLS V6 3.0 4WD AT', modality: '80/20', valorMovil: 67890000, cuotaPura: 646571, cuotaFinal: 826900, dist: 'Cadena' },
+                { id: 'fd-maverick', brand: 'Ford', segment: 'Pick Up', model: 'Maverick XLT 2.0 EcoBoost AT', modality: '70/30', valorMovil: 51450000, cuotaPura: 428750, cuotaFinal: 548900, dist: 'Cadena' },
+                { id: 'fd-territory', brand: 'Ford', segment: 'SUV', model: 'Territory SEL 1.8 EcoBoost AT', modality: '70/30', valorMovil: 53850000, cuotaPura: 448750, cuotaFinal: 574200, dist: 'Cadena' },
+                { id: 'fd-transit', brand: 'Ford', segment: 'Furgón', model: 'Transit Van Mediana Techo Normal', modality: '70/30', valorMovil: 69450000, cuotaPura: 578750, cuotaFinal: 739800, dist: 'Correa bañada en aceite' },
 
-                // NISSAN PLAN (PLANERO DE LEY)
-                { id: 'ns-versa', brand: 'Nissan Plan', segment: 'Sedán', model: 'Versa Sense MT', modality: '70/30', cuotas: 84, valorMovil: 33800000, cuotaPura: 281667, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ns-kicks', brand: 'Nissan Plan', segment: 'SUV', model: 'Kicks Play Sense CVT', modality: '70/30', cuotas: 84, valorMovil: 38900000, cuotaPura: 324167, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'ns-frontier', brand: 'Nissan Plan', segment: 'Pick Up', model: 'Frontier S 4x2 MT', modality: '70/30', cuotas: 84, valorMovil: 48800000, cuotaPura: 406667, warranty: '6 años o 150.000 km', chain: 'Cadena' },
+                // NISSAN PLAN
+                { id: 'ns-frontier', brand: 'Nissan', segment: 'Pick Up', model: 'Frontier S 2.3 Bi-Turbo 4x2 MT', modality: '70/30', valorMovil: 48950000, cuotaPura: 407916, cuotaFinal: 522400, dist: 'Cadena' },
+                { id: 'ns-kicks', brand: 'Nissan', segment: 'SUV', model: 'Kicks Sense 1.6 MT', modality: '70/30', valorMovil: 41650000, cuotaPura: 347083, cuotaFinal: 444800, dist: 'Cadena' },
+                { id: 'ns-versa', brand: 'Nissan', segment: 'Sedán', model: 'Versa Sense 1.6 MT', modality: '70/30', valorMovil: 37950000, cuotaPura: 316250, cuotaFinal: 405200, dist: 'Cadena' },
 
-                // JEEP PLAN (PLANERO DE LEY)
-                { id: 'jp-renegade', brand: 'Jeep Plan', segment: 'SUV', model: 'Renegade Sport T270', modality: '70/30', cuotas: 84, valorMovil: 41800000, cuotaPura: 348333, warranty: '3 años o 100.000 km', chain: 'Cadena' },
-                { id: 'jp-compass', brand: 'Jeep Plan', segment: 'SUV', model: 'Compass Sport T270 AT6', modality: '70/30', cuotas: 84, valorMovil: 51500000, cuotaPura: 429167, warranty: '3 años o 100.000 km', chain: 'Cadena' }
+                // JEEP PLAN
+                { id: 'jp-renegade', brand: 'Jeep', segment: 'SUV', model: 'Renegade Sport 1.8 AT6', modality: '70/30', valorMovil: 44850000, cuotaPura: 373750, cuotaFinal: 478900, dist: 'Cadena' },
+                { id: 'jp-compass', brand: 'Jeep', segment: 'SUV', model: 'Compass Sport 1.3 T270 AT6', modality: '70/30', valorMovil: 54650000, cuotaPura: 455416, cuotaFinal: 582900, dist: 'Cadena' }
             ]
         };
 
@@ -1419,14 +1417,14 @@
         let marketPlansCatalog = [...DEFAULT_MARKET_PLANS];
 
         let waTemplates = {
-            crm: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Estamos actualizando nuestra base de clientes y vimos que en su momento consultaste por un vehículo de la marca. Contame, ¿seguís evaluando la compra de un auto?",
-            gestion: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Contame, ¿en qué te puedo ayudar hoy?",
-            redes: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Vi tu consulta en redes, contame qué estabas buscando.",
-            salesforce: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Contame, ¿en qué modelo te puedo asesorar hoy?",
-            convencional: "Hola {nombre}, ¿cómo estás? Soy Sofía, del equipo de Gonzalo Dichiazza en Ginza Toyota. Contame qué vehículo estabas evaluando.",
-            cancelados: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Te escribo por tu plan anterior, ¿charlamos un minuto?",
-            rescindidos: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo Dichiazza en Ginza Toyota. Te contacto respecto a tu suscripción anterior.",
-            clientes: "Hola {nombre}, ¿cómo venís con lo que estuvimos viendo en Ginza Toyota?"
+            crm: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente virtual de Gonzalo. Estamos actualizando nuestra base de clientes y vimos que en su momento consultaste por un vehículo de la marca. Contame, ¿seguís evaluando la compra de un auto?",
+            gestion: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente virtual de Gonzalo. Contame, ¿en qué te puedo ayudar hoy?",
+            redes: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente virtual de Gonzalo. Vi tu consulta en redes, contame qué estabas buscando.",
+            salesforce: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente virtual de Gonzalo. Contame, ¿en qué modelo te puedo asesorar hoy?",
+            convencional: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente virtual de Gonzalo. Contame qué vehículo estabas evaluando.",
+            cancelados: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente virtual de Gonzalo. Te escribo por tu plan anterior, ¿charlamos un minuto?",
+            rescindidos: "Hola {nombre}, ¿cómo estás? Soy Sofía, asistente virtual de Gonzalo. Te contacto respecto a tu plan anterior.",
+            clientes: "Hola {nombre}, ¿cómo venís con lo que estuvimos viendo?"
         };
         let goals = {
             weekly: { llamadas: 100, mensajes: 150, interesados: 25, entrevistas: 10, ventas: 5 },
@@ -1747,7 +1745,7 @@
                                 status: ev.status || 'Interesado a Futuro',
                                 scheduleDate: ev.scheduleDate,
                                 scheduleTime: ev.scheduleTime || '10:30',
-                                observations: 'Agendado automáticamente por Sofía 2.7'
+                                observations: 'Agendado automáticamente por Sofía 3.0'
                             });
                             changed = true;
                         }
@@ -2030,7 +2028,7 @@
                 } else {
                     plansBox.innerHTML = matchingRefs.map(r => `<div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
                         <div><b>${r.model}</b> <span class="px-1.5 py-0.5 rounded bg-zinc-900 text-white text-[10px] font-bold ml-1">${r.modality}</span></div>
-                        <div class="tabular-nums">Ref. Cuota: <b class="text-[#EB0A1E]">$${Number(r.cuotaPura).toLocaleString('es-AR')}</b></div>
+                        <div class="tabular-nums">Cuota Mensual Ref.: <b class="text-[#EB0A1E]">$${Number(r.cuotaFinal || r.cuotaPura).toLocaleString('es-AR')}</b></div>
                     </div>`).join('');
                 }
             }
@@ -2125,7 +2123,7 @@
             if (!vehiclesCatalogState[modelName]) vehiclesCatalogState[modelName] = { versions: [], techSpec: '' };
             vehiclesCatalogState[modelName].techSpec = document.getElementById('veh-tech-textarea')?.value.trim() || '';
             saveVehiclesCatalogState();
-            showToast(`📋 Ficha técnica de ${modelName} guardada y sincronizada con Sofía 2.7`);
+            showToast(`📋 Ficha técnica de ${modelName} guardada y sincronizada con Sofía 3.0`);
         };
 
         window.analyzeVehicleDifferencesWithAi = async function() {
@@ -2145,11 +2143,11 @@
             resBox.classList.remove('hidden');
             const fallbackSummary = `Comparativa ${modA} (${verA?.name || ''}) vs ${modB} (${verB?.name || ''}):\n• Precio de lista: $${Number(verA?.price || 0).toLocaleString('es-AR')} vs $${Number(verB?.price || 0).toLocaleString('es-AR')} (diferencia de $${Math.abs(Number(verA?.price || 0) - Number(verB?.price || 0)).toLocaleString('es-AR')}).\n• ${verA?.name}: ${verA?.notes || techA}\n• ${verB?.name}: ${verB?.notes || techB}`;
 
-            const promptTxt = `Sos Sofía, asesora de Ginza Toyota. Compará de forma clara, sobria y breve (4 a 6 renglones, sin asteriscos Markdown) estas dos opciones:\n\nOPCIÓN A: ${modA} ${verA?.name || ''} ($${Number(verA?.price || 0).toLocaleString('es-AR')}) - ${verA?.notes || ''}\nFicha ${modA}: ${techA}\n\nOPCIÓN B: ${modB} ${verB?.name || ''} ($${Number(verB?.price || 0).toLocaleString('es-AR')}) - ${verB?.notes || ''}\nFicha ${modB}: ${techB}`;
+            const promptTxt = `Sos Sofía, asistente virtual de Gonzalo. Compará de forma clara, sobria y breve (4 a 6 renglones, sin asteriscos Markdown) estas dos opciones:\n\nOPCIÓN A: ${modA} ${verA?.name || ''} ($${Number(verA?.price || 0).toLocaleString('es-AR')}) - ${verA?.notes || ''}\nFicha ${modA}: ${techA}\n\nOPCIÓN B: ${modB} ${verB?.name || ''} ($${Number(verB?.price || 0).toLocaleString('es-AR')}) - ${verB?.notes || ''}\nFicha ${modB}: ${techB}`;
 
             if (btn) { btn.disabled = true; btn.textContent = '⏳ Analizando...'; }
             resBox.textContent = '⏳ Sofía está comparando equipamiento, motorización y relación precio/producto...';
-            const out = await SOFIA_AI.callAnyProvider([{ role: 'user', text: promptTxt }], 'Sos asesora de ventas de Toyota en Rosario.');
+            const out = await SOFIA_AI.callAnyProvider([{ role: 'user', text: promptTxt }], 'Sos asistente virtual de Gonzalo en Rosario.');
             resBox.textContent = out.text || fallbackSummary;
             if (btn) { btn.disabled = false; btn.textContent = '✨ Analizar Diferencias con IA'; }
         };
@@ -2350,10 +2348,10 @@
             document.getElementById('tcfa-res-dyc').textContent = `Imp. DyC 1,2% C1: $${dycTax.toLocaleString('es-AR')}`;
 
             const matchingToyotaPlan = marketPlansCatalog.find(p => p.brand === 'Toyota' && modelObj.modelo.toLowerCase().includes(p.model.split(' ')[0].toLowerCase())) || marketPlansCatalog[0];
-            const planQuotaRef = matchingToyotaPlan ? matchingToyotaPlan.cuotaPura : 528803;
+            const planQuotaRef = matchingToyotaPlan ? (matchingToyotaPlan.cuotaFinal || matchingToyotaPlan.cuotaPura) : 528803;
 
             const vsNote = document.getElementById('tcfa-vs-plan-note');
-            if (vsNote) vsNote.textContent = `Cuota convencional: $${quotaVal.toLocaleString('es-AR')}/mes (${activePlan.plazo}m). En Toyota Plan (${matchingToyotaPlan.model}), la cuota de referencia es de $${planQuotaRef.toLocaleString('es-AR')}/mes en pesos sin interés bancario.`;
+            if (vsNote) vsNote.textContent = `Cuota convencional: $${quotaVal.toLocaleString('es-AR')}/mes (${activePlan.plazo}m). En Toyota Plan (${matchingToyotaPlan.model}), la cuota mensual oficial de referencia es de $${planQuotaRef.toLocaleString('es-AR')}/mes en pesos sin interés bancario.`;
 
             const friendlyBox = document.getElementById('tcfa-friendly-explanation');
             if (friendlyBox) {
@@ -2378,7 +2376,7 @@
             const box = document.getElementById('tcfa-friendly-explanation');
             const baseText = box?.textContent || '';
             if (btn) { btn.disabled = true; btn.textContent = '⏳...'; }
-            const out = await SOFIA_AI.callAnyProvider([{ role: 'user', text: `Reescribí esta explicación financiera en un mensaje claro, sobrio y cotidiano de WhatsApp (sin asteriscos Markdown):\n\n${baseText}` }], 'Sos asesora de Ginza Toyota.');
+            const out = await SOFIA_AI.callAnyProvider([{ role: 'user', text: `Reescribí esta explicación financiera en un mensaje claro, sobrio y cotidiano de WhatsApp (sin asteriscos Markdown):\n\n${baseText}` }], 'Sos asistente virtual de Gonzalo.');
             if (out.text && box) box.textContent = out.text;
             if (btn) { btn.disabled = false; btn.textContent = '✨ Personalizar con Sofía IA'; }
         };
@@ -2757,168 +2755,168 @@
             renderAgendaTab();
         };
 
-        // --- COMPARATIVA DE PLANES (PLANERO DE LEY — TODAS LAS MARCAS Y MODELOS) ---
-        function calcPlaneroPlanDetails(planObj) {
-            const mod = String(planObj.modality || '70/30');
-            const pctFin = mod === '100%' ? 1.0 : mod === '80/20' ? 0.80 : mod === '75/25' ? 0.75 : 0.70;
-            const pctInteg = 1 - pctFin;
-            const cuotas = Number(planObj.cuotas || 84);
-            const pureQuota = Number(planObj.cuotaPura || Math.round((planObj.valorMovil * pctFin) / cuotas));
-            const finalQuotaEst = planObj.brand === 'Toyota'
-                ? pureQuota
-                : Math.round(pureQuota * 1.185);
-            const minIntegration = mod === '100%'
-                ? Math.round(pureQuota * 24)
-                : Math.round(planObj.valorMovil * pctInteg);
-            return { pureQuota, finalQuotaEst, minIntegration, cuotas };
-        }
+        // --- COMPARATIVA DE PLANES (PLANERO DE LEY COMPLETO) ---
+        let latestComparativaWaText = '';
 
         window.syncPlaneroDeLeyLive = async function(manual = false) {
             mergeDefaultMarketPlans();
             renderComparativaSelectors();
-            if (manual) showToast("✅ Catálogo Planero de Ley actualizado (10 marcas / 58 modelos)");
+            if (manual) showToast("🔄 Catálogo completo de todas las marcas actualizado");
         };
+
         window.onCompSegmentChange = function() { renderComparativaSelectors(); };
-        window.onCompBrandFilterChange = function() {
-            const seg = document.getElementById('comp-segment-select')?.value || 'Todos';
+        window.onCompBrandChange = function() {
+            const seg = document.getElementById('comp-segment-select')?.value || 'Pick Up';
             const brand = document.getElementById('comp-brand-select')?.value || 'Todas';
             const rvEl = document.getElementById('comp-rival-select');
             if (!rvEl) return;
-            const rivals = marketPlansCatalog.filter(p =>
-                p.brand !== 'Toyota' &&
-                (seg === 'Todos' || p.segment === seg) &&
-                (brand === 'Todas' || p.brand === brand)
-            );
-            rvEl.innerHTML = rivals.map(p => `<option value="${p.id}">${p.brand} — ${p.model} (${p.modality}) · $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
+            const rivals = marketPlansCatalog.filter(p => p.brand !== 'Toyota' && (seg === 'Todos' || p.segment === seg) && (brand === 'Todas' || p.brand === brand));
+            rvEl.innerHTML = rivals.map(p => `<option value="${p.id}">${p.brand} ${p.model} (${p.modality}) — $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
             renderComparativaResult();
         };
+
         window.selectCompetitorPlanFromTable = function(rivalId) {
-            const target = marketPlansCatalog.find(p => p.id === rivalId);
-            if (!target) return;
+            const plan = marketPlansCatalog.find(p => p.id === rivalId);
+            if (!plan) return;
             const segEl = document.getElementById('comp-segment-select');
             const brEl = document.getElementById('comp-brand-select');
-            const rvEl = document.getElementById('comp-rival-select');
-            if (segEl && segEl.value !== 'Todos' && segEl.value !== target.segment) {
-                segEl.value = target.segment;
+            if (segEl && segEl.value !== 'Todos' && segEl.value !== plan.segment) {
+                segEl.value = plan.segment;
                 renderComparativaSelectors();
             }
-            if (brEl && brEl.value !== 'Todas' && brEl.value !== target.brand) {
-                brEl.value = target.brand;
-                onCompBrandFilterChange();
+            if (brEl) {
+                brEl.value = 'Todas';
+                onCompBrandChange();
             }
+            const rvEl = document.getElementById('comp-rival-select');
             if (rvEl) {
                 rvEl.value = rivalId;
                 renderComparativaResult();
             }
-            document.getElementById('tab-comparativa')?.scrollIntoView({ behavior: 'smooth' });
         };
+
         function renderComparativaSelectors() {
             const segEl = document.getElementById('comp-segment-select');
             const tyEl = document.getElementById('comp-toyota-select');
             const brEl = document.getElementById('comp-brand-select');
             const rvEl = document.getElementById('comp-rival-select');
-            if (!segEl || !tyEl || !rvEl) return;
-            const seg = segEl.value || 'Todos';
-            const segPlans = marketPlansCatalog.filter(p => seg === 'Todos' || p.segment === seg);
-            const prevTy = tyEl.value, prevRv = rvEl.value, prevBr = brEl?.value || 'Todas';
+            if (!segEl || !tyEl || !rvEl || !brEl) return;
 
-            const toyPlans = segPlans.filter(p => p.brand === 'Toyota');
-            tyEl.innerHTML = toyPlans.map(p => `<option value="${p.id}">${p.model} (${p.modality}) — $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
-            if (prevTy && toyPlans.some(p => p.id === prevTy)) tyEl.value = prevTy;
+            const seg = segEl.value || 'Pick Up';
+            const tyPlans = marketPlansCatalog.filter(p => p.brand === 'Toyota' && (seg === 'Todos' || p.segment === seg));
+            const allRivals = marketPlansCatalog.filter(p => p.brand !== 'Toyota' && (seg === 'Todos' || p.segment === seg));
 
-            if (brEl) {
-                const brands = Array.from(new Set(segPlans.filter(p => p.brand !== 'Toyota').map(p => p.brand)));
-                brEl.innerHTML = `<option value="Todas">Todas las marcas (${brands.length})</option>` + brands.map(b => `<option value="${b}">${b}</option>`).join('');
-                if (prevBr && (prevBr === 'Todas' || brands.includes(prevBr))) brEl.value = prevBr;
-            }
-            const activeBrand = brEl?.value || 'Todas';
-            const rivalPlans = segPlans.filter(p => p.brand !== 'Toyota' && (activeBrand === 'Todas' || p.brand === activeBrand));
-            rvEl.innerHTML = rivalPlans.map(p => `<option value="${p.id}">${p.brand} — ${p.model} (${p.modality}) · $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
-            if (prevRv && rivalPlans.some(p => p.id === prevRv)) rvEl.value = prevRv;
+            const prevTy = tyEl.value, prevBr = brEl.value, prevRv = rvEl.value;
+            tyEl.innerHTML = tyPlans.map(p => `<option value="${p.id}">${p.model} (${p.modality}) — $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
+            if (prevTy && tyPlans.some(p => p.id === prevTy)) tyEl.value = prevTy;
+
+            const brands = Array.from(new Set(allRivals.map(p => p.brand)));
+            brEl.innerHTML = `<option value="Todas">Todas las Marcas (${brands.length})</option>` + brands.map(b => `<option value="${b}">${b}</option>`).join('');
+            if (prevBr && (prevBr === 'Todas' || brands.includes(prevBr))) brEl.value = prevBr;
+
+            const activeBrand = brEl.value || 'Todas';
+            const filteredRivals = allRivals.filter(p => activeBrand === 'Todas' || p.brand === activeBrand);
+            rvEl.innerHTML = filteredRivals.map(p => `<option value="${p.id}">${p.brand} ${p.model} (${p.modality}) — $${p.valorMovil.toLocaleString('es-AR')}</option>`).join('');
+            if (prevRv && filteredRivals.some(p => p.id === prevRv)) rvEl.value = prevRv;
+
             renderComparativaResult();
         }
-        window.copyComparativaWhatsappPitch = function() {
-            if (!window._lastComparativaPitch) return;
+
+        window.copyComparativaWhatsApp = function() {
+            if (!latestComparativaWaText) return;
             const ta = document.createElement('textarea');
-            ta.value = window._lastComparativaPitch;
+            ta.value = latestComparativaWaText;
             document.body.appendChild(ta);
             ta.select();
             document.execCommand('copy');
             document.body.removeChild(ta);
-            showToast("📋 Comparativa Planero de Ley copiada para WhatsApp");
+            showToast("📋 Comparativa copiada para pegar en WhatsApp");
         };
+
         window.renderComparativaResult = function() {
             const container = document.getElementById('comp-head-to-head');
             const tbody = document.getElementById('comp-segment-table-body');
             const countBadge = document.getElementById('comp-table-count');
-            const seg = document.getElementById('comp-segment-select')?.value || 'Todos';
-            const activeBrand = document.getElementById('comp-brand-select')?.value || 'Todas';
-            const searchQ = String(document.getElementById('comp-table-search')?.value || '').toLowerCase().trim();
+            const seg = document.getElementById('comp-segment-select')?.value || 'Pick Up';
+            const searchQ = String(document.getElementById('comp-search-input')?.value || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
-            const segPlans = marketPlansCatalog.filter(p =>
-                (seg === 'Todos' || p.segment === seg) &&
-                (p.brand === 'Toyota' || activeBrand === 'Todas' || p.brand === activeBrand) &&
-                (!searchQ || `${p.brand} ${p.model} ${p.segment} ${p.modality}`.toLowerCase().includes(searchQ))
-            );
-            const ty = marketPlansCatalog.find(p => p.id === document.getElementById('comp-toyota-select')?.value) || segPlans.find(p => p.brand === 'Toyota') || marketPlansCatalog[0];
+            const segPlans = marketPlansCatalog.filter(p => {
+                const segOk = seg === 'Todos' || p.segment === seg;
+                if (!segOk) return false;
+                if (!searchQ) return true;
+                const hay = `${p.brand} ${p.model} ${p.segment} ${p.modality} ${p.dist || ''}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                return hay.includes(searchQ);
+            });
+
+            const ty = marketPlansCatalog.find(p => p.id === document.getElementById('comp-toyota-select')?.value) || marketPlansCatalog.find(p => p.brand === 'Toyota');
             const rv = marketPlansCatalog.find(p => p.id === document.getElementById('comp-rival-select')?.value) || segPlans.find(p => p.brand !== 'Toyota');
 
             if (countBadge) countBadge.textContent = `${segPlans.length} planes`;
             if (tbody) {
                 tbody.innerHTML = segPlans.map(p => {
                     const isTy = p.brand === 'Toyota';
-                    const det = calcPlaneroPlanDetails(p);
+                    const cFinal = Number(p.cuotaFinal || Math.round(p.cuotaPura * 1.26));
+                    const isCadena = (p.dist || '').toLowerCase().includes('cadena');
                     return `<tr class="${isTy ? 'bg-red-50/40 font-semibold' : 'hover:bg-slate-50'}">
                         <td class="p-3.5"><span class="px-2 py-0.5 rounded text-xs font-extrabold ${isTy ? 'bg-[#EB0A1E] text-white' : 'bg-slate-200 text-slate-800'}">${p.brand}</span></td>
                         <td class="p-3.5 text-xs text-slate-500">${p.segment}</td>
-                        <td class="p-3.5 font-bold text-slate-900">${p.model}</td>
-                        <td class="p-3.5 text-xs">${p.modality} (${det.cuotas}m)</td>
+                        <td class="p-3.5 font-bold">${p.model}</td>
+                        <td class="p-3.5 text-xs font-semibold">${p.modality}</td>
                         <td class="p-3.5 tabular-nums">$${Number(p.valorMovil).toLocaleString('es-AR')}</td>
-                        <td class="p-3.5 font-bold tabular-nums text-slate-800">$${det.pureQuota.toLocaleString('es-AR')}</td>
-                        <td class="p-3.5 font-extrabold tabular-nums ${isTy ? 'text-[#EB0A1E]' : 'text-slate-900'}">$${det.finalQuotaEst.toLocaleString('es-AR')}</td>
-                        <td class="p-3.5 tabular-nums text-xs text-slate-600">$${det.minIntegration.toLocaleString('es-AR')}</td>
-                        <td class="p-3.5 text-xs text-slate-600">${p.warranty || '3 años'} • ${p.chain || 'Cadena'}</td>
-                        <td class="p-3.5">${isTy ? '<span class="text-xs font-bold text-emerald-700">Toyota Oficial</span>' : `<button onclick="selectCompetitorPlanFromTable('${p.id}')" class="px-2.5 py-1 rounded-lg bg-[#0A0A0C] hover:bg-[#EB0A1E] text-white text-xs font-bold transition-colors">⚖️ Comparar</button>`}</td>
+                        <td class="p-3.5 tabular-nums text-slate-600">$${Number(p.cuotaPura).toLocaleString('es-AR')}</td>
+                        <td class="p-3.5 font-extrabold tabular-nums ${isTy ? 'text-[#EB0A1E]' : 'text-slate-900'}">$${cFinal.toLocaleString('es-AR')}</td>
+                        <td class="p-3.5 text-xs"><span class="px-2 py-0.5 rounded-full font-bold ${isCadena ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}">${p.dist || 'Cadena'}</span></td>
+                        <td class="p-3.5">${isTy ? '<span class="text-xs font-bold text-emerald-700">✓ Referencia Toyota</span>' : `<button onclick="selectCompetitorPlanFromTable('${p.id}')" class="px-2.5 py-1 rounded-lg bg-[#0A0A0C] hover:bg-zinc-800 text-white text-xs font-bold">Comparar</button>`}</td>
                     </tr>`;
                 }).join('');
             }
 
             if (!container || !ty) return;
-            const tyDet = calcPlaneroPlanDetails(ty);
+            const tyFinal = Number(ty.cuotaFinal || Math.round(ty.cuotaPura * 1.26));
+            const tyIntegPct = ty.modality === '100%' ? 0 : (ty.modality === '80/20' ? 0.20 : 0.30);
+            const tyIntegPesos = Math.round(ty.valorMovil * tyIntegPct);
+
             if (!rv) {
-                container.innerHTML = `<div class="lg:col-span-12 p-5 rounded-2xl bg-[#0A0A0C] text-white border-2 border-[#EB0A1E]"><h3 class="text-lg font-extrabold">${ty.model} (${ty.modality})</h3><p class="text-sm mt-2">Valor unidad: <b>$${ty.valorMovil.toLocaleString('es-AR')}</b> • Cuota Pura: <b class="text-emerald-400">$${tyDet.pureQuota.toLocaleString('es-AR')}</b> • Garantía oficial 10 años o 200.000 km.</p></div>`;
+                container.innerHTML = `<div class="lg:col-span-12 p-5 rounded-2xl bg-[#0A0A0C] text-white border-2 border-[#EB0A1E]"><h3 class="text-lg font-extrabold">${ty.model} (${ty.modality})</h3><p class="text-sm mt-2">Valor unidad: <b>$${ty.valorMovil.toLocaleString('es-AR')}</b> • Cuota Final Ref.: <b class="text-emerald-400">$${tyFinal.toLocaleString('es-AR')}</b>.</p></div>`;
                 return;
             }
-            const rvDet = calcPlaneroPlanDetails(rv);
-            const diffQuota = rvDet.finalQuotaEst - tyDet.finalQuotaEst;
-            const diffText = diffQuota > 0
-                ? `Ahorro mensual estimado con Toyota: $${diffQuota.toLocaleString('es-AR')}/mes ($${(diffQuota * 84).toLocaleString('es-AR')} en 84 cuotas)`
-                : `Diferencia mensual de $${Math.abs(diffQuota).toLocaleString('es-AR')}/mes frente a ${rv.model}, sumando garantía oficial de 10 años o 200.000 km (vs ${rv.warranty || '3 años'}), motor cadenero y el mayor valor de reventa del país`;
 
-            window._lastComparativaPitch = `Comparando Toyota ${ty.model} (${ty.modality}) contra ${rv.brand} ${rv.model} (${rv.modality}): en Toyota Plan entrás solo con DNI, tenés sistema Llave por Llave para no quedarte a pie, garantía oficial de 10 años o 200.000 km (frente a ${rv.warranty || '3 años'}) y el mayor valor de reventa del mercado. ${diffText}.`;
+            const rvFinal = Number(rv.cuotaFinal || Math.round(rv.cuotaPura * 1.26));
+            const rvIntegPct = rv.modality === '100%' ? 0 : (rv.modality === '90/10' ? 0.10 : (rv.modality === '80/20' ? 0.20 : (rv.modality === '75/25' ? 0.25 : (rv.modality === '60/40' ? 0.40 : 0.30))));
+            const rvIntegPesos = Math.round(rv.valorMovil * rvIntegPct);
+
+            const diffQuota = rvFinal - tyFinal;
+            const diffText = diffQuota > 0
+                ? `Con Toyota Plan ahorrás $${diffQuota.toLocaleString('es-AR')}/mes ($${(diffQuota * 84).toLocaleString('es-AR')} en 84 cuotas) frente a ${rv.brand} ${rv.model}.`
+                : `Diferencia mensual de $${Math.abs(diffQuota).toLocaleString('es-AR')}/mes con mayor valor de reventa Toyota, garantía de 10 años o 200.000 km y sistema Llave por Llave.`;
+
+            latestComparativaWaText = `Comparativa de Plan (${ty.model} vs ${rv.brand} ${rv.model}):\n• Toyota ${ty.model} (${ty.modality}): Valor $${ty.valorMovil.toLocaleString('es-AR')} | Cuota mensual ref. $${tyFinal.toLocaleString('es-AR')} | Garantía 10 años o 200.000 km + motor cadenero.\n• ${rv.brand} ${rv.model} (${rv.modality}): Valor $${rv.valorMovil.toLocaleString('es-AR')} | Cuota mensual ref. $${rvFinal.toLocaleString('es-AR')}.\n• ${diffText}`;
 
             container.innerHTML = `
-                <div class="lg:col-span-6 p-5 rounded-2xl bg-[#0A0A0C] text-white border-2 border-[#EB0A1E] space-y-2.5">
-                    <div class="flex items-center justify-between"><span class="px-2.5 py-0.5 rounded bg-[#EB0A1E] text-white text-[10px] font-extrabold uppercase">Toyota Plan Oficial</span><span class="text-xs text-zinc-400">Modalidad ${ty.modality} • ${tyDet.cuotas}m</span></div>
+                <div class="lg:col-span-6 p-5 rounded-2xl bg-[#0A0A0C] text-white border-2 border-[#EB0A1E] space-y-3">
+                    <div class="flex items-center justify-between"><span class="px-2.5 py-0.5 rounded bg-[#EB0A1E] text-white text-[10px] font-extrabold uppercase">Toyota Plan Oficial</span><span class="text-xs text-zinc-400">Modalidad ${ty.modality} • 84 meses</span></div>
                     <h3 class="text-lg font-extrabold">${ty.model}</h3>
-                    <div class="grid grid-cols-2 gap-2 pt-1 tabular-nums">
-                        <div class="p-2.5 rounded-xl bg-white/10"><div class="text-[10px] text-zinc-400 uppercase">Valor Unidad</div><div class="text-sm font-extrabold">$${ty.valorMovil.toLocaleString('es-AR')}</div></div>
-                        <div class="p-2.5 rounded-xl bg-emerald-600/20 border border-emerald-500/40"><div class="text-[10px] text-emerald-300 uppercase">Cuota Pura / Final</div><div class="text-sm font-extrabold text-emerald-400">$${tyDet.pureQuota.toLocaleString('es-AR')}</div></div>
-                        <div class="p-2.5 rounded-xl bg-white/10"><div class="text-[10px] text-zinc-400 uppercase">Integración Mín.</div><div class="text-xs font-bold">$${tyDet.minIntegration.toLocaleString('es-AR')}</div></div>
-                        <div class="p-2.5 rounded-xl bg-white/10"><div class="text-[10px] text-zinc-400 uppercase">Garantía & Motor</div><div class="text-xs font-bold text-emerald-300">10 años / Cadenero</div></div>
+                    <div class="grid grid-cols-3 gap-2 pt-1 tabular-nums">
+                        <div class="p-2.5 rounded-xl bg-white/10"><div class="text-[10px] text-zinc-400 uppercase">Valor Unidad</div><div class="text-xs sm:text-sm font-extrabold">$${ty.valorMovil.toLocaleString('es-AR')}</div></div>
+                        <div class="p-2.5 rounded-xl bg-emerald-600/20 border border-emerald-500/40"><div class="text-[10px] text-emerald-300 uppercase">Cuota Final Ref.</div><div class="text-xs sm:text-sm font-extrabold text-emerald-400">$${tyFinal.toLocaleString('es-AR')}</div></div>
+                        <div class="p-2.5 rounded-xl bg-white/10"><div class="text-[10px] text-zinc-400 uppercase">Integ. Mín.</div><div class="text-xs sm:text-sm font-extrabold">${tyIntegPesos > 0 ? '$' + tyIntegPesos.toLocaleString('es-AR') : 'Sin 30%'}</div></div>
                     </div>
-                    <p class="text-xs text-zinc-300 pt-1">✓ Retiro desde cuota 2 • Llave por Llave • Mayor valor de reventa del mercado.</p>
+                    <div class="text-xs text-zinc-300 space-y-1 pt-1">
+                        <div>✓ Garantía oficial <b>10 años o 200.000 km</b> + motor con <b>cadena de distribución</b>.</div>
+                        <div>✓ Retiro desde cuota 2 por sorteo o licitación • Sistema <b>Llave por Llave</b> para tu usado.</div>
+                    </div>
                 </div>
-                <div class="lg:col-span-6 p-5 rounded-2xl bg-slate-50 border border-slate-300 space-y-2.5">
-                    <div class="flex items-center justify-between"><span class="px-2.5 py-0.5 rounded bg-slate-800 text-white text-[10px] font-extrabold uppercase">${rv.brand}</span><span class="text-xs text-slate-500">Modalidad ${rv.modality} • ${rvDet.cuotas}m</span></div>
+                <div class="lg:col-span-6 p-5 rounded-2xl bg-slate-50 border border-slate-300 space-y-3">
+                    <div class="flex items-center justify-between"><span class="px-2.5 py-0.5 rounded bg-slate-800 text-white text-[10px] font-extrabold uppercase">${rv.brand}</span><span class="text-xs text-slate-500">Modalidad ${rv.modality} • ${rv.dist || 'Correa'}</span></div>
                     <h3 class="text-lg font-bold text-slate-900">${rv.model}</h3>
-                    <div class="grid grid-cols-2 gap-2 pt-1 tabular-nums">
-                        <div class="p-2.5 rounded-xl bg-white border"><div class="text-[10px] text-slate-500 uppercase">Valor Móvil</div><div class="text-sm font-extrabold">$${rv.valorMovil.toLocaleString('es-AR')}</div></div>
-                        <div class="p-2.5 rounded-xl bg-white border"><div class="text-[10px] text-slate-500 uppercase">Cuota Pura / Final Est.</div><div class="text-sm font-extrabold text-slate-900">$${rvDet.pureQuota.toLocaleString('es-AR')} / $${rvDet.finalQuotaEst.toLocaleString('es-AR')}</div></div>
-                        <div class="p-2.5 rounded-xl bg-white border"><div class="text-[10px] text-slate-500 uppercase">Integración Mín.</div><div class="text-xs font-bold">$${rvDet.minIntegration.toLocaleString('es-AR')}</div></div>
-                        <div class="p-2.5 rounded-xl bg-white border"><div class="text-[10px] text-slate-500 uppercase">Garantía & Distribución</div><div class="text-xs font-bold text-amber-800">${rv.warranty || '3 años'} • ${rv.chain || 'Correa'}</div></div>
+                    <div class="grid grid-cols-3 gap-2 pt-1 tabular-nums">
+                        <div class="p-2.5 rounded-xl bg-white border"><div class="text-[10px] text-slate-500 uppercase">Valor Unidad</div><div class="text-xs sm:text-sm font-extrabold">$${rv.valorMovil.toLocaleString('es-AR')}</div></div>
+                        <div class="p-2.5 rounded-xl bg-white border"><div class="text-[10px] text-slate-500 uppercase">Cuota Final Ref.</div><div class="text-xs sm:text-sm font-extrabold text-slate-900">$${rvFinal.toLocaleString('es-AR')}</div></div>
+                        <div class="p-2.5 rounded-xl bg-white border"><div class="text-[10px] text-slate-500 uppercase">Integ. Mín.</div><div class="text-xs sm:text-sm font-extrabold">${rvIntegPesos > 0 ? '$' + rvIntegPesos.toLocaleString('es-AR') : 'Sin refuerzo'}</div></div>
                     </div>
-                    <p class="text-xs font-bold text-[#EB0A1E] pt-1">⚖️ ${diffText}</p>
+                    <div class="p-3 rounded-xl bg-red-50 border border-red-200 text-xs font-bold text-[#EB0A1E]">
+                        ⚖️ ${diffText}
+                    </div>
                 </div>`;
         };
 
@@ -2972,7 +2970,7 @@
                 { key: 'mensajes', label: 'Mensajes WhatsApp Enviados' },
                 { key: 'interesados', label: 'Interesados Generados' },
                 { key: 'entrevistas', label: 'Entrevistas Agendadas' },
-                { key: 'ventas', label: 'Ventas / Suscripciones' }
+                { key: 'ventas', label: 'Ventas / Ingresos al Plan' }
             ];
 
             wContainer.innerHTML = metricsMeta.map(m => {
@@ -3029,7 +3027,7 @@
 
             if (insightsList) {
                 insightsList.innerHTML = `
-                    <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950">💡 <b>Ritmo Sugerido:</b> Mantené al menos <b>${Math.ceil(latestAiSuggestedWeekly.mensajes / 5)} mensajes diarios</b> (Lunes a Viernes) más el piloto automático de Sofía 2.7 para sostener ${latestAiSuggestedWeekly.entrevistas} entrevistas por semana.</div>`;
+                    <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950">💡 <b>Ritmo Sugerido:</b> Mantené al menos <b>${Math.ceil(latestAiSuggestedWeekly.mensajes / 5)} mensajes diarios</b> (Lunes a Viernes) más el piloto automático de Sofía 3.0 para sostener ${latestAiSuggestedWeekly.entrevistas} entrevistas por semana.</div>`;
             }
         };
         window.saveGoalsConfig = function() {
@@ -3195,7 +3193,7 @@
             const tramo2 = t2Obj.amount;
             const tramo3 = t3Obj.amount;
 
-            const highestPeriodQuota = Math.max(c1, tramo1, tramo2, tramo3) || (refPlan ? refPlan.cuotaPura : 0);
+            const highestPeriodQuota = Math.max(c1, tramo1, tramo2, tramo3) || (refPlan ? (refPlan.cuotaFinal || refPlan.cuotaPura) : 0);
             if (!pureQuota) pureQuota = refPlan ? refPlan.cuotaPura : Math.round(financedAmount / 84);
 
             let minIntegrationMonths = 24;
@@ -3416,7 +3414,7 @@
             renderVehiclesCatalogSection();
             renderPlansHistory();
             await SOFIA_AI.syncBrainToFirebase();
-            showToast(`✅ Plan "${p.vehicleName}" actualizado y sincronizado con Sofía 2.7`);
+            showToast(`✅ Plan "${p.vehicleName}" actualizado y sincronizado con Sofía 3.0`);
         };
         window.deletePlanRecord = async (id) => { plansHistory = plansHistory.filter(p => p.id !== id); await deletePlanBlobsFromIndexedDB(id); saveLocalData(true); renderVehiclesCatalogSection(); renderPlansHistory(); };
         window.clearPlansHistory = async () => { for (const p of plansHistory) await deletePlanBlobsFromIndexedDB(p.id); plansHistory = []; currentPlanJpgs = []; saveLocalData(true); renderVehiclesCatalogSection(); renderPlansHistory(); };
@@ -3425,7 +3423,7 @@
         window.closeShareJpgWaModal = () => document.getElementById('share-jpg-wa-modal')?.classList.add('hidden');
 
         // ============================================================================
-        // MÓDULO SOFIA_AI (SOFÍA 2.7 • MULTI-PROVEEDOR GRATUITO GEMINI + GROQ AUTO)
+        // MÓDULO SOFIA_AI (SOFÍA 3.0 • MULTI-PROVEEDOR GRATUITO GEMINI + GROQ AUTO)
         // ============================================================================
         const SOFIA_AI = {
             config: {
@@ -3717,16 +3715,17 @@
                         const minMonths = Number(p.minIntegrationMonths || 24);
                         const extraQ = Number(p.extraordinaryQuota || (is100 ? pureQ * minMonths : p.value30) || 0);
                         const extraStr = !is100 && extraQ > 0
-                            ? ` | Integración mínima 30% de la unidad: ($${extraQ.toLocaleString('es-AR')})`
-                            : (is100 && extraQ > 0 ? ` | Integración mínima (${minMonths} cuotas puras): ($${extraQ.toLocaleString('es-AR')})` : '');
-                        const pureStr = pureQ > 0 ? ` | Cuota Pura: $${pureQ.toLocaleString('es-AR')}` : '';
-                        lines.push(`- ${key} [${p.period}]: Valor de la unidad $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Monto que financia: $${financed.toLocaleString('es-AR')} | Cuota Final Referencia (tramo más alto): $${Number(p.price || 0).toLocaleString('es-AR')}${pureStr}${extraStr}`);
+                            ? ` | Integración mínima 30% de la unidad: $${extraQ.toLocaleString('es-AR')}`
+                            : (is100 && extraQ > 0 ? ` | Integración mínima (${minMonths} cuotas): $${extraQ.toLocaleString('es-AR')}` : '');
+                        const finalQuota = Math.max(Number(p.price || 0), pureQ);
+                        lines.push(`- ${key} [${p.period}]: Valor de la unidad $${Number(p.vehicleValue || 0).toLocaleString('es-AR')} | Monto que financia: $${financed.toLocaleString('es-AR')} | Cuota Mensual Oficial a informar al cliente: $${finalQuota.toLocaleString('es-AR')}${extraStr}`);
                     }
                 }
                 const existingUpper = lines.join('\n').toUpperCase();
                 for (const def of marketPlansCatalog.filter(m => m.brand === 'Toyota')) {
                     if (!existingUpper.includes(def.model.toUpperCase())) {
-                        lines.push(`- ${def.model} (${def.modality}): Valor de la unidad $${Number(def.valorMovil).toLocaleString('es-AR')} | Cuota Final Referencia: $${Number(def.cuotaPura).toLocaleString('es-AR')}`);
+                        const refFinal = Number(def.cuotaFinal || def.cuotaPura || 0);
+                        lines.push(`- ${def.model} (${def.modality}): Valor de la unidad $${Number(def.valorMovil).toLocaleString('es-AR')} | Cuota Mensual Oficial a informar al cliente: $${refFinal.toLocaleString('es-AR')}`);
                     }
                 }
                 const techLines = FIXED_INTEREST_MODELS.map(m => {
@@ -3739,62 +3738,43 @@
 - Tope máximo financiable: hasta el 75% del valor de lista (requiere anticipo efectivo o vehículo usado en parte de pago por el 25% o más).
 - Grupo A (Yaris / Yaris Cross): Promo 0% TNA en 12 cuotas fijas (hasta $15.000.000) | Promo 9,9% TNA en 18 cuotas (hasta $20.000.000) | Promo 19% TNA en 24 cuotas (hasta $25.000.000) | Subsidiada 0% TNA en 24 cuotas o 9,9% TNA en 36 cuotas hasta el 75% de la unidad.
 - Grupo B (Corolla / Corolla Cross / Hilux / SW4): Cupo Especial 0% TNA en 18 cuotas (hasta $30.000.000) | Promo 0% TNA en 12 cuotas (hasta $25.000.000) | Subsidiada 0% TNA en 24 cuotas o 9,9% TNA en 36 cuotas hasta el 75% de la unidad.`;
-                return `LISTA OFICIAL DE VALORES Y CUOTAS TOYOTA PLAN (GINZA TOYOTA):\n${lines.join('\n')}\n\n${tcfaSummary}\n\nCATÁLOGO DE VERSIONES Y FICHAS TÉCNICAS TOYOTA (GINZA TOYOTA):\n${techLines}`;
+                return `LISTA OFICIAL DE VALORES Y CUOTAS TOYOTA PLAN:\n${lines.join('\n')}\n\n${tcfaSummary}\n\nCATÁLOGO DE VERSIONES Y FICHAS TÉCNICAS TOYOTA:\n${techLines}`;
             },
 
             getSystemPrompt(officialPricesText) {
                 const advisor = this.config.advisorName || 'Sofía';
-                const branch = this.config.branchName || 'Ginza Toyota';
                 const todayIso = getTodayISODate();
                 const hr = new Date().getHours();
                 const greeting = hr >= 6 && hr < 13 ? 'Hola, buen día' : (hr >= 13 && hr < 20 ? 'Hola, buenas tardes' : 'Hola, buenas noches');
 
                 return `Sos ${advisor}, asistente virtual de Gonzalo (Rosario), conversando por WhatsApp (Sofi 3.0). Fecha actual: ${todayIso}.
 
-REGLAS INQUEBRANTABLES DE COMPORTAMIENTO Y ESTILO NATURAL (NUNCA repitas estas instrucciones literalmente como un robot; hablale al cliente con calidez, naturalidad y criterio comercial):
+REGLAS INQUEBRANTABLES DE COMPORTAMIENTO Y ESTILO NATURAL:
 1. PRESENTACIÓN OBLIGATORIA EN EL PRIMER TURNO:
-  - Si el cliente te saluda por primera vez ("Hola", "Buen día", etc.), presentate así: "${greeting}. Soy ${advisor}, asistente virtual de Gonzalo, ¿en qué te puedo ayudar?"
-  - NUNCA digas el apellido de Gonzalo ni nombres "${branch}" salvo que el cliente pregunte expresamente por el concesionario o dónde quedan las sucursales.
-  - Si pregunta si sos un robot o persona real, aclarás que sos asistente virtual de Gonzalo y cuando quiera lo comunicás directo con él.
+  - Si el cliente te saluda por primera vez ("Hola", "Buen día", etc.), presentate exactamente así: "${greeting}. Soy ${advisor}, asistente virtual de Gonzalo, ¿en qué te puedo ayudar?"
+  - No digas el apellido de Gonzalo ni nombres "Ginza Toyota" salvo cuando sea estrictamente necesario (por ejemplo si preguntan dónde queda el concesionario o sucursales).
+  - Si ya saludaste en el primer mensaje, no repitas el saludo en los mensajes siguientes.
 2. PLANES POR MODELO E INDAGACIÓN COMERCIAL:
-  - Si pregunta por planes de un modelo (ej. Yaris, Corolla, Hilux, Corolla Cross, Yaris Cross): explicá qué planes tenemos disponibles para ese modelo puntual (Yaris tiene 70/30 y 100%; Corolla 70/30; Hilux 4x2 70/30 y 4x4 100%; Corolla Cross 70/30; Yaris Cross 70/30) y preguntá SIEMPRE si conoce o ya estuvo en un plan de ahorro. PROHIBIDO ofrecer compra convencional o prendario en esa pregunta.
-  - Si pregunta solo por Hilux, respondé solo por Hilux (sin meter Hiace); si pregunta solo por Hiace, respondé solo por Hiace (sin meter Hilux). Explicá el plan 100% de forma natural para el cliente, sin mencionar reglas internas ni PDFs.
-  - Si dice "quiero cambiar el auto": indagá si busca usado o 0 km; si busca usado, planteá que quizá llega al 0 km y si no quiere plan/0 km se deriva a convencional.
-  - Si pide solo precios de lista, informá los valores oficiales y preguntá si evalúa contado o financiación.
-  - Si pide financiación sin aclarar cuál, diferenciá plan de ahorro vs. financiación prendaria convencional y cerrá preguntando cuál de las dos le interesa más, PROHIBIDO nombrar cantidad de cuotas (no digas 84, 72, 60, 48, 36, 24, 18 ni 12).
-  - Tono sobrio, directo y cotidiano de Rosario ("contame", "tenés", "podés"). CERO asteriscos (**). Respuestas cortas y claras de WhatsApp (2 a 4 renglones).
-3. CUOTA PURA VS. FINAL Y PLANES 70/30 VS. 100%:
+  - Si pregunta por los planes de Toyota en general: nombrá toda la gama disponible (Yaris, Yaris Cross, Corolla, Corolla Cross, Hilux y Hiace) con planes directos de fábrica en pesos sin interés bancario, y preguntá si conoce o ya estuvo en un plan de ahorro.
+  - Si pregunta por planes de un modelo puntual: explicá qué planes tenemos para ese modelo sin tirar importes de cuota si no los pidió, y preguntá SIEMPRE si conoce o ya estuvo alguna vez en un plan de ahorro.
+  - Si habla del Corolla sedán y pregunta versiones o híbridos, respondé solo sobre el Corolla sedán (nafteras 2.0 XLI, XEI, SEG, GR-Sport e híbridas autorrecargables 1.8 XEI HEV y SEG HEV), aclarando que el plan 70/30 inicia sobre XLI y al adjudicar podés cambiar a cualquiera de esas versiones.
+  - No te apures a derivar ni ofrecer llamado de Gonzalo mientras el cliente esté haciendo consultas normales sobre cómo funciona el plan; seguí indagando y asesorando con naturalidad.
+3. CUOTA MENSUAL, CUOTA PURA Y PLANES 70/30 VS. 100%:
   - Es plan directo de fábrica oficial de Toyota Plan Argentina.
+  - Cuando el cliente pregunta cuánto sale la cuota, informá ÚNICAMENTE la "Cuota Mensual Oficial" (la cuota final con gastos e impuestos incluidos). PROHIBIDO mencionar el importe de "cuota pura" ni usar las palabras "cuota pura" salvo que el cliente pregunte expresamente qué es la cuota pura o cómo adelantar cuotas.
   - Planes 70/30 financian el 70% en 84 cuotas en pesos sin interés bancario y tienen integración mínima del 30% al retirar (incluso si ganás por sorteo).
-  - Planes 100% (Yaris 100%, Hilux 4x4 DX, Hiace) financian el 100% de la unidad sin refuerzo del 30% (la integración mínima en cuotas puras varía según cada plan oficial).
-  - Cuota Pura: NUNCA digas "valor redondo". Decí que es la cuota sin gastos administrativos ni seguro de vida que se utiliza para adelantar cuotas (a partir de la segunda cuota) y cancelar tiempo de pago. Si pregunta con qué adelanta, decile directo que para adelantar se hace con cuota pura (sin hablar de excedentes).
+  - Planes 100% (Yaris 100%, Hilux 4x4 DX, Hiace) financian el 100% de la unidad sin refuerzo del 30% (la integración mínima en cuotas varía según cada plan oficial).
+  - Cuota Pura (solo si preguntan por ella o por adelantar cuotas): NUNCA digas "valor redondo". Decí que es la cuota sin gastos administrativos ni seguro de vida que se utiliza para adelantar cuotas (a partir de la segunda cuota) y cancelar tiempo de pago.
 4. RETIRO, PLAZOS DE ENTREGA Y LICITACIÓN:
   - Si preguntan si hay entrega pactada, decí simplemente: "No tenemos entrega pactada por contrato."
-  - El monto ofrecido en licitación YA INCLUYE el 30% de integración mínima (no se suma aparte). El excedente por encima del 30% cancela cuotas puras enteras de atrás hacia adelante, achicando el plazo del plan (no prorratea la cuota mensual). Si licitás con el 30% exacto y nadie más licita (como pasa en los planes más avanzados), sí ganás.
-  - Si no querés licitar, podés esperar a salir sorteado participando todos los meses (no hables del 30% en esa pregunta). Si salís adjudicado por sorteo y no querés retirar todavía, podés rechazar la adjudicación sin perder el plan y seguís participando.
-  - Plazos de entrega: una vez adjudicado, el plazo por contrato es entre 30 y 75 días si no hacés cambio de modelo o versión; en caso de hacerlo se puede extender hasta 135 días corridos por contrato, pero generalmente cualquiera sea el caso llega entre 30 y 60 días. Si una vez adjudicado se demoran más de los plazos de entrega por contrato, la fábrica tiene una multa. Generalmente envían el auto a Avellaneda 2075, aunque eventualmente se informa al cliente dónde va a llegar.
-  - Colores: el plan permite elegir 3 gamas de colores y por agilidad se asigna la primera que ingresa; si insiste con un color específico, decile que podemos pedir a Administración que lo tome como prioritario, pero sin prometer nada.
-5. GASTOS DE RETIRO, REQUISITOS, EDAD, GARANTÍA Y MEDIOS DE PAGO:
-  - Gastos de retiro (7% total): primero se paga la licitación, el 1% de derecho de adjudicación y el 1% de flete, y unos días antes de que te entreguen la unidad se abona el 5% de patentamiento.
-  - Requisitos de ingreso: elegís el plan que querés, DNI en mano, mail y el valor de la primera cuota; con eso ya podés ingresar, actualmente podés hacer todo de forma online. PROHIBIDO mencionar recibo de sueldo salvo que el cliente pregunte expresamente por recibo de sueldo (en ese caso decile que no piden recibo de sueldo ni garante).
-  - Edad y extranjeros: tenés que estar agrupado antes de los 75 años (no hace falta cubrir integración mínima para ingresar). Si es extranjero con DNI argentino puede ingresar sin problema. Al salir adjudicado sí presenta DNI y carpeta de respaldo para el retiro.
-  - Dólares y primera cuota: no tomamos dólares; todo se abona en pesos argentinos, por lo que debe cambiarlos antes. La primera cuota se puede pagar con tarjeta o transferencia en pesos.
-  - Garantía oficial Toyota: 10 años o 200.000 km (lo que ocurra primero). PROHIBIDO mencionar los services a menos que el cliente pregunte expresamente por ellos.
-  - Seguro y Factura A: durante el plan incluye seguro de vida; al retirar, siempre que el vehículo esté prendado elegís dentro del listado de compañías habilitadas, y si cancelás el total podés elegir el seguro que quieras. Podemos hacer plan para empresas y hacemos Factura A por los gastos administrativos durante el plan, y el vehículo recién se factura al retirarlo.
-6. USADO LLAVE POR LLAVE (SIN PRENDADOS NI PLANES):
-  - Explicá que sigue usando su auto hasta retirar el 0 km y que la gestoría del concesionario se encarga de los papeles de transferencia. Sí puede entregar su usado para cubrir el 30% y tomamos usados de cualquier marca siempre que estén libres de prenda.
-  - SOLO si el cliente pregunta cuánto vale o cuánto le dan por su usado, aclarale amablemente que vos no tasás (solo manejás referencia de revista) y que Gonzalo lo evalúa. Si no pidió tasación, PROHIBIDO mencionar "no taso" ni "revista". No tomamos planes de ahorro ni vehículos prendados (ni motos, terrenos o cheques).
-7. BONIFICACIONES, TEST DRIVE, SUCURSALES ROSARIO Y EXCEPCIONES:
-  - Bonificaciones: por política de la empresa no podemos pasar bonificaciones por acá, pero podés ofrecer que Gonzalo lo llame ya mismo para comentarle.
-  - Test drive: decile que sí y proponé una reunión para hacer el test drive.
-  - Asesor asignado: si ya viene hablando con un asesor corresponde que lo siga asesorando; si no habló con nadie, Gonzalo lo va a asesorar.
-  - Sucursales en Rosario: Avellaneda 2075 y Carballo 632 (Lun–Vie 8:30 a 18:30 hs, Sáb 9:00 a 13:00 hs). En Avellaneda no hay estacionamiento propio, pero no hay estacionamiento medido en las calles aledañas al concesionario. Si quiere ir sin turno, pedirle que avise antes porque tenemos dos concesionarios y Gonzalo puede estar en el otro.
-  - Si pregunta si puede pasar hoy: decile que sí y preguntale en qué horario puede pasar así coordinás con Gonzalo para que lo reciba (PROHIBIDO usar "acercate").
-  - Excepciones domingo / fuera de horario: si necesita encontrarse un domingo o fuera de horario (ej. sábado a la tarde), aclarar que si es necesario hacemos una excepción y le decís a Gonzalo que lo reciba (siempre fuera de horario es en Avellaneda 2075). Si pide el teléfono de Gonzalo, decirle que se puede comunicar por este mismo número y que si necesita lo contactás con él y te lo pasa.
-  - Beneficios Toyota: motor fiable, valor de reventa, sistema cadenero y la mayor garantía del país (10 años o 200.000 km) sin asteriscos.
-  - Si está enojado porque en otro lado le mintieron: "Entiendo tu frustración, en Toyota somos claros y queremos que no te vuelva a pasar."
+  - El monto ofrecido en licitación YA INCLUYE el 30% de integración mínima (no se suma aparte). El excedente por encima del 30% cancela cuotas enteras de atrás hacia adelante, achicando el plazo del plan (no prorratea la cuota mensual).
+  - Plazos de entrega: entre 30 y 75 días por contrato sin cambio de modelo o versión (hasta 135 días corridos si hay cambio), aunque generalmente llega entre 30 y 60 días.
+  - Gastos de retiro (7% total): 1% derecho de adjudicación + 1% flete al adjudicar, y 5% de patentamiento antes de entregar.
+5. USADO LLAVE POR LLAVE, SUCURSALES ROSARIO Y REGLAS ANTI-TABÚ:
+  - Llave por Llave: sigue usando su auto hasta retirar el 0 km; tomamos usados de cualquier marca libres de prenda. No tomamos dólares, prendados, planes de ahorro de otras marcas, motos ni terrenos.
+  - Sucursales en Rosario: Avellaneda 2075 y Carballo 632 (Ginza Toyota), Lun–Vie 8:30 a 18:30 hs, Sáb 9:00 a 13:00 hs.
   - Al confirmar día y hora agregá [[AGENDAR:YYYY-MM-DD|HH:MM|Entrevista - Sucursal]]. Si pide hablar directo con Gonzalo, derivá con altura y agregá [[PAUSAR_HUMANO]].
-  - PROHIBIDO usar las palabras "suscripción", "suscribirte" o "acercate".
+  - PROHIBIDO usar asteriscos (**), ni las palabras "suscripción", "suscribirte" o "acercate".
 
 ${officialPricesText}`;
             },
@@ -3831,7 +3811,7 @@ ${officialPricesText}`;
             }
         };
 
-        // --- CONTROLES MODALES SOFÍA 2.7 ---
+        // --- CONTROLES MODALES SOFÍA 3.0 ---
         window.testSingleApiKey = async function(provider) {
             const box = document.getElementById('wa-ai-key-test-status');
             if (!box) return;
@@ -3926,7 +3906,7 @@ ${officialPricesText}`;
             renderSandboxTestersList();
             refreshWaAiContactSelect();
             await SOFIA_AI.syncBrainToFirebase();
-            showToast(`🧪 Tester(s) sumado(s) y sincronizado(s) con Sofía 2.7`);
+            showToast(`🧪 Tester(s) sumado(s) y sincronizado(s) con Sofía 3.0`);
         };
 
         window.removeSandboxTester = async function(idx) {
