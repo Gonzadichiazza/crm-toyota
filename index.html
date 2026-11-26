@@ -1010,14 +1010,24 @@
                         <div class="p-2 rounded-xl bg-amber-50 border border-amber-200 text-[11px]">Enviados hoy: <b id="camp-sent-today-count">0</b> / <span id="camp-daily-limit-label">40</span></div>
                     </div>
                     <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3">
-                        <div class="grid grid-cols-2 gap-2">
-                            <select id="camp-source-select" onchange="previewCampaignCandidates()" class="px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-xl bg-white">
-                                <option value="crm">1. No Compra</option><option value="sin_respuesta_24h">1b. Sin Respuesta 24h</option><option value="gestion">2. Gestión</option><option value="redes">3. Redes</option><option value="salesforce">4. Salesforce</option>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="camp-source-select" onchange="onCampaignSourceChange()" class="px-2 py-2 text-xs font-bold border border-slate-300 rounded-xl bg-white">
+                                <option value="crm">1. No Compra</option><option value="sin_respuesta_24h">1b. No Contesta (+24h)</option><option value="gestion">2. Gestión</option><option value="redes">3. Redes</option><option value="salesforce">4. Salesforce</option><option value="cancelados">6. Cancelados</option><option value="rescindidos">7. Rescindidos</option>
                             </select>
-                            <input type="number" id="camp-batch-size" value="15" onchange="previewCampaignCandidates()" class="px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-xl tabular-nums">
+                            <select id="camp-area-select" onchange="previewCampaignCandidates()" class="px-2 py-2 text-xs font-bold border border-slate-300 rounded-xl bg-white">
+                                <option value="all">Todos Cód. Área</option><option value="341">341 (Rosario)</option><option value="11">11 (CABA/GBA)</option><option value="351">351 (Córdoba)</option><option value="342">342 (Santa Fe)</option>
+                            </select>
+                            <input type="number" id="camp-batch-size" value="15" onchange="previewCampaignCandidates()" class="px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-xl tabular-nums" title="Cantidad aleatoria">
                         </div>
-                        <textarea id="camp-base-message" rows="3" class="w-full p-2.5 text-xs border border-slate-300 rounded-xl outline-none">Hola {nombre}, ¿cómo estás? Soy Sofía, asistente de Gonzalo. Estamos actualizando nuestra base de clientes y vimos tu consulta anterior. Contame, ¿seguís evaluando la compra de un auto?</textarea>
-                        <div class="flex items-center justify-between text-[11px]"><span id="camp-candidates-info">0 disponibles</span><button onclick="enqueueSelectedCampaignBatch()" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] text-white text-xs font-bold">+ Agregar a Cola</button></div>
+                        <textarea id="camp-base-message" rows="3" class="w-full p-2.5 text-xs border border-slate-300 rounded-xl outline-none">Hola {nombre}, ¿cómo estás? Soy Sofía, asistente virtual de Gonzalo. Estamos actualizando nuestra base de clientes y vimos que en su momento consultaste por un vehículo de la marca. Contame, ¿seguís evaluando la compra de un auto?</textarea>
+                        <div class="flex items-center justify-between text-[11px]"><span id="camp-candidates-info">0 disponibles (aleatorio)</span><button onclick="enqueueSelectedCampaignBatch()" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] text-white text-xs font-bold">+ Agregar Aleatorios</button></div>
+                        <div class="pt-2.5 border-t border-slate-200 space-y-1.5">
+                            <div class="text-[10px] font-extrabold uppercase text-emerald-800">🧪 Tester Real a Mi Número (Simula Salida Masiva)</div>
+                            <div class="flex gap-1.5">
+                                <input type="text" id="camp-tester-phone" placeholder="Tu celular (ej: +549341...)" class="flex-1 px-2.5 py-1.5 text-xs border border-emerald-300 rounded-xl bg-emerald-50/40 outline-none">
+                                <button onclick="sendTestCampaignToMyNumber()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shrink-0">📲 Probar Conmigo</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden min-h-[380px]">
@@ -1067,7 +1077,7 @@
                         <input type="date" id="profile-schedule-date" class="px-2.5 py-1.5 text-xs border rounded-xl">
                         <input type="time" id="profile-schedule-time" class="px-2.5 py-1.5 text-xs border rounded-xl">
                     </div>
-                    <select id="profile-no-interest-reason" class="w-full px-2.5 py-1.5 text-xs border rounded-xl bg-white"><option value="">Sin motivo / Activo</option><option value="Ya compró otro vehículo">Ya compró otro vehículo</option><option value="Presupuesto / Cuota elevada">Presupuesto / Cuota elevada</option><option value="Problema con usado / Tasación anterior">Problema con usado / Tasación anterior</option><option value="No quiere Plan de Ahorro">No quiere Plan de Ahorro</option><option value="Situación económica / Frenó búsqueda">Situación económica / Frenó búsqueda</option><option value="Averiguaba para un tercero">Averiguaba para un tercero</option><option value="Número equivocado">Número equivocado</option><option value="Otros">Otros</option></select>
+                    <select id="profile-no-interest-reason" class="w-full px-2.5 py-1.5 text-xs border rounded-xl bg-white"><option value="">Sin motivo / Activo</option><option value="Ya compró otro vehículo">Ya compró otro vehículo</option><option value="No quiere Plan de Ahorro">No quiere Plan de Ahorro</option><option value="Presupuesto / Cuota elevada">Presupuesto / Cuota elevada</option><option value="No tiene ahorro / Integración inicial">No tiene ahorro / Integración inicial</option><option value="Problema con usado / Tasación anterior">Problema con usado / Tasación anterior</option><option value="Mala experiencia previa con planes">Mala experiencia previa con planes</option><option value="Frenó búsqueda / Situación económica">Frenó búsqueda / Situación económica</option><option value="Averiguaba para un tercero">Averiguaba para un tercero</option><option value="No recuerda haber consultado">No recuerda haber consultado</option><option value="Número equivocado / Ya no pertenece">Número equivocado / Ya no pertenece</option><option value="Pide no ser contactado">Pide no ser contactado</option><option value="Otros">Otros</option></select>
                     <textarea id="profile-obs" rows="3" class="w-full px-3 py-2 text-xs border rounded-xl"></textarea>
                     <div class="flex gap-2">
                         <button onclick="saveClientProfileChanges()" class="flex-1 py-2.5 rounded-xl bg-[#EB0A1E] text-white text-xs font-bold">💾 Guardar Ficha</button>
@@ -1316,7 +1326,6 @@
                 { id: 'hiace-commuter', group: 'B', modelo: 'Hiace MY\'26', version: 'Commuter 2.8 6AT 14A DCM', precio: 87882000, cupoEspecial: false }
             ],
             DEFAULT_MARKET_PLANS: [
-                // TOYOTA PLAN (OFICIAL)
                 { id: 'ty-hilux-dx', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x2 DX MT', modality: '70/30', valorMovil: 49621000, cuotaPura: 413508, cuotaFinal: 528803, dist: 'Cadena' },
                 { id: 'ty-hilux-4x4', brand: 'Toyota', segment: 'Pick Up', model: 'Hilux 4x4 DX AT', modality: '100%', valorMovil: 59739000, cuotaPura: 711178, cuotaFinal: 891366, dist: 'Cadena' },
                 { id: 'ty-yariscross-xli', brand: 'Toyota', segment: 'SUV', model: 'Yaris Cross XLI CVT (Naftera)', modality: '70/30', valorMovil: 41464000, cuotaPura: 345533, cuotaFinal: 441862, dist: 'Cadena' },
@@ -1326,8 +1335,6 @@
                 { id: 'ty-yaris-100', brand: 'Toyota', segment: 'Hatchback', model: 'Yaris XS CVT', modality: '100%', valorMovil: 36315000, cuotaPura: 432321, cuotaFinal: 541856, dist: 'Cadena' },
                 { id: 'ty-corolla-xli', brand: 'Toyota', segment: 'Sedán', model: 'Corolla XLI CVT', modality: '70/30', valorMovil: 44082000, cuotaPura: 367350, cuotaFinal: 469767, dist: 'Cadena' },
                 { id: 'ty-hiace-l2h2', brand: 'Toyota', segment: 'Furgón', model: 'Hiace Furgón L2H2 AT', modality: '100%', valorMovil: 72798000, cuotaPura: 866642, cuotaFinal: 1086219, dist: 'Cadena' },
-
-                // VOLKSWAGEN AUTOAHORRO
                 { id: 'vw-amarok-trend', brand: 'Volkswagen', segment: 'Pick Up', model: 'Amarok Trendline 4x2 2.0 TDI', modality: '70/30', valorMovil: 53133050, cuotaPura: 442775, cuotaFinal: 566200, dist: 'Correa dentada' },
                 { id: 'vw-amarok-comf', brand: 'Volkswagen', segment: 'Pick Up', model: 'Amarok Comfortline V6 4x4 AT', modality: '60/40', valorMovil: 69850000, cuotaPura: 498928, cuotaFinal: 639400, dist: 'Correa dentada' },
                 { id: 'vw-taos', brand: 'Volkswagen', segment: 'SUV', model: 'Taos Comfortline 250 TSI AT', modality: '70/30', valorMovil: 54920000, cuotaPura: 457666, cuotaFinal: 584900, dist: 'Correa dentada' },
@@ -1337,8 +1344,6 @@
                 { id: 'vw-polo-100', brand: 'Volkswagen', segment: 'Hatchback', model: 'Polo Track 1.6 MSI', modality: '100%', valorMovil: 34950000, cuotaPura: 416071, cuotaFinal: 531800, dist: 'Correa dentada' },
                 { id: 'vw-virtus', brand: 'Volkswagen', segment: 'Sedán', model: 'Virtus MSI 1.6 MT', modality: '70/30', valorMovil: 39480000, cuotaPura: 329000, cuotaFinal: 421500, dist: 'Correa dentada' },
                 { id: 'vw-saveiro', brand: 'Volkswagen', segment: 'Pick Up', model: 'Saveiro Trendline CS 1.6', modality: '80/20', valorMovil: 33890000, cuotaPura: 322761, cuotaFinal: 412900, dist: 'Correa dentada' },
-
-                // FIAT PLAN
                 { id: 'ft-titano', brand: 'Fiat', segment: 'Pick Up', model: 'Titano Endurance 4x2 MT', modality: '70/30', valorMovil: 48900000, cuotaPura: 407500, cuotaFinal: 521800, dist: 'Correa dentada' },
                 { id: 'ft-toro', brand: 'Fiat', segment: 'Pick Up', model: 'Toro Freedom 1.8 AT6 4x2', modality: '70/30', valorMovil: 44650000, cuotaPura: 372083, cuotaFinal: 476900, dist: 'Cadena' },
                 { id: 'ft-strada', brand: 'Fiat', segment: 'Pick Up', model: 'Strada Freedom 1.3 CS', modality: '80/20', valorMovil: 33400000, cuotaPura: 318095, cuotaFinal: 407800, dist: 'Cadena' },
@@ -1349,8 +1354,6 @@
                 { id: 'ft-cronos-70', brand: 'Fiat', segment: 'Sedán', model: 'Cronos Drive 1.3 Pack Plus', modality: '70/30', valorMovil: 35650000, cuotaPura: 297083, cuotaFinal: 381200, dist: 'Cadena' },
                 { id: 'ft-cronos-90', brand: 'Fiat', segment: 'Sedán', model: 'Cronos Like 1.3 GSE', modality: '90/10', valorMovil: 33450000, cuotaPura: 358392, cuotaFinal: 458900, dist: 'Cadena' },
                 { id: 'ft-fiorino', brand: 'Fiat', segment: 'Furgón', model: 'Fiorino Endurance 1.4', modality: '80/20', valorMovil: 31900000, cuotaPura: 303809, cuotaFinal: 389600, dist: 'Correa dentada' },
-
-                // CHEVROLET PLAN
                 { id: 'ch-s10', brand: 'Chevrolet', segment: 'Pick Up', model: 'S10 WT 2.8 TD 4x2 MT', modality: '70/30', valorMovil: 50480000, cuotaPura: 420666, cuotaFinal: 538900, dist: 'Correa dentada' },
                 { id: 'ch-montana', brand: 'Chevrolet', segment: 'Pick Up', model: 'Montana LT 1.2 Turbo MT', modality: '70/30', valorMovil: 41890000, cuotaPura: 349083, cuotaFinal: 447500, dist: 'Correa bañada en aceite' },
                 { id: 'ch-tracker-70', brand: 'Chevrolet', segment: 'SUV', model: 'Tracker 1.2 Turbo MT', modality: '70/30', valorMovil: 42950000, cuotaPura: 357916, cuotaFinal: 458800, dist: 'Correa bañada en aceite' },
@@ -1358,8 +1361,6 @@
                 { id: 'ch-spin', brand: 'Chevrolet', segment: 'SUV', model: 'Spin LT 1.8 5 Asientos', modality: '80/20', valorMovil: 38750000, cuotaPura: 369047, cuotaFinal: 472900, dist: 'Correa dentada' },
                 { id: 'ch-onix-hb', brand: 'Chevrolet', segment: 'Hatchback', model: 'Onix LT 1.0 Turbo MT', modality: '80/20', valorMovil: 34650000, cuotaPura: 330000, cuotaFinal: 422800, dist: 'Correa bañada en aceite' },
                 { id: 'ch-onix-plus', brand: 'Chevrolet', segment: 'Sedán', model: 'Onix Plus LT 1.0 Turbo MT', modality: '80/20', valorMovil: 35490000, cuotaPura: 338000, cuotaFinal: 432900, dist: 'Correa bañada en aceite' },
-
-                // PLAN ROMBO RENAULT
                 { id: 'rn-alaskan', brand: 'Renault', segment: 'Pick Up', model: 'Alaskan Confort 2.3 dCi 4x2', modality: '70/30', valorMovil: 49150000, cuotaPura: 409583, cuotaFinal: 524900, dist: 'Cadena' },
                 { id: 'rn-oroch', brand: 'Renault', segment: 'Pick Up', model: 'Oroch Emotion 1.6 SCe', modality: '80/20', valorMovil: 38900000, cuotaPura: 370476, cuotaFinal: 474800, dist: 'Cadena' },
                 { id: 'rn-kardian', brand: 'Renault', segment: 'SUV', model: 'Kardian Evolution 156 MT', modality: '70/30', valorMovil: 39850000, cuotaPura: 332083, cuotaFinal: 425900, dist: 'Cadena' },
@@ -1368,32 +1369,22 @@
                 { id: 'rn-sandero', brand: 'Renault', segment: 'Hatchback', model: 'Sandero Life 1.6 SCe', modality: '80/20', valorMovil: 33890000, cuotaPura: 322761, cuotaFinal: 413500, dist: 'Cadena' },
                 { id: 'rn-logan', brand: 'Renault', segment: 'Sedán', model: 'Logan Life 1.6 SCe', modality: '80/20', valorMovil: 34250000, cuotaPura: 326190, cuotaFinal: 417900, dist: 'Cadena' },
                 { id: 'rn-kangoo', brand: 'Renault', segment: 'Furgón', model: 'Kangoo Express Confort 1.6', modality: '75/25', valorMovil: 39450000, cuotaPura: 352232, cuotaFinal: 451200, dist: 'Cadena' },
-
-                // PEUGEOT PLAN
                 { id: 'pg-2008', brand: 'Peugeot', segment: 'SUV', model: 'Nuevo 2008 Active T200 CVT', modality: '70/30', valorMovil: 46850000, cuotaPura: 390416, cuotaFinal: 499800, dist: 'Cadena' },
                 { id: 'pg-208-70', brand: 'Peugeot', segment: 'Hatchback', model: 'Nuevo 208 Active 1.6 MT', modality: '70/30', valorMovil: 36890000, cuotaPura: 307416, cuotaFinal: 393900, dist: 'Correa dentada' },
                 { id: 'pg-208-80', brand: 'Peugeot', segment: 'Hatchback', model: 'Nuevo 208 Allure 1.6 CVT', modality: '80/20', valorMovil: 40450000, cuotaPura: 385238, cuotaFinal: 493200, dist: 'Correa dentada' },
                 { id: 'pg-partner', brand: 'Peugeot', segment: 'Furgón', model: 'Partner Confort 1.6 HDI', modality: '70/30', valorMovil: 38650000, cuotaPura: 322083, cuotaFinal: 412800, dist: 'Correa dentada' },
-
-                // CITROËN PLAN
                 { id: 'ct-basalt', brand: 'Citroën', segment: 'SUV', model: 'Basalt Live Pack 1.0 VTi', modality: '70/30', valorMovil: 35450000, cuotaPura: 295416, cuotaFinal: 378900, dist: 'Cadena' },
                 { id: 'ct-c3-aircross', brand: 'Citroën', segment: 'SUV', model: 'C3 Aircross Live 1.0 VTi', modality: '70/30', valorMovil: 37850000, cuotaPura: 315416, cuotaFinal: 404200, dist: 'Cadena' },
                 { id: 'ct-c3', brand: 'Citroën', segment: 'Hatchback', model: 'Nuevo C3 Feel 1.0 VTi', modality: '80/20', valorMovil: 31850000, cuotaPura: 303333, cuotaFinal: 388900, dist: 'Cadena' },
                 { id: 'ct-berlingo', brand: 'Citroën', segment: 'Furgón', model: 'Berlingo Furgón Business 1.6 HDI', modality: '70/30', valorMovil: 38550000, cuotaPura: 321250, cuotaFinal: 411800, dist: 'Correa dentada' },
-
-                // FORD PLAN ÓVALO
                 { id: 'fd-ranger-xl', brand: 'Ford', segment: 'Pick Up', model: 'Ranger XL 2.0 Turbo 4x2 MT', modality: '70/30', valorMovil: 48484213, cuotaPura: 404035, cuotaFinal: 517800, dist: 'Correa bañada en aceite' },
                 { id: 'fd-ranger-xls', brand: 'Ford', segment: 'Pick Up', model: 'Ranger XLS V6 3.0 4WD AT', modality: '80/20', valorMovil: 67890000, cuotaPura: 646571, cuotaFinal: 826900, dist: 'Cadena' },
                 { id: 'fd-maverick', brand: 'Ford', segment: 'Pick Up', model: 'Maverick XLT 2.0 EcoBoost AT', modality: '70/30', valorMovil: 51450000, cuotaPura: 428750, cuotaFinal: 548900, dist: 'Cadena' },
                 { id: 'fd-territory', brand: 'Ford', segment: 'SUV', model: 'Territory SEL 1.8 EcoBoost AT', modality: '70/30', valorMovil: 53850000, cuotaPura: 448750, cuotaFinal: 574200, dist: 'Cadena' },
                 { id: 'fd-transit', brand: 'Ford', segment: 'Furgón', model: 'Transit Van Mediana Techo Normal', modality: '70/30', valorMovil: 69450000, cuotaPura: 578750, cuotaFinal: 739800, dist: 'Correa bañada en aceite' },
-
-                // NISSAN PLAN
                 { id: 'ns-frontier', brand: 'Nissan', segment: 'Pick Up', model: 'Frontier S 2.3 Bi-Turbo 4x2 MT', modality: '70/30', valorMovil: 48950000, cuotaPura: 407916, cuotaFinal: 522400, dist: 'Cadena' },
                 { id: 'ns-kicks', brand: 'Nissan', segment: 'SUV', model: 'Kicks Sense 1.6 MT', modality: '70/30', valorMovil: 41650000, cuotaPura: 347083, cuotaFinal: 444800, dist: 'Cadena' },
                 { id: 'ns-versa', brand: 'Nissan', segment: 'Sedán', model: 'Versa Sense 1.6 MT', modality: '70/30', valorMovil: 37950000, cuotaPura: 316250, cuotaFinal: 405200, dist: 'Cadena' },
-
-                // JEEP PLAN
                 { id: 'jp-renegade', brand: 'Jeep', segment: 'SUV', model: 'Renegade Sport 1.8 AT6', modality: '70/30', valorMovil: 44850000, cuotaPura: 373750, cuotaFinal: 478900, dist: 'Cadena' },
                 { id: 'jp-compass', brand: 'Jeep', segment: 'SUV', model: 'Compass Sport 1.3 T270 AT6', modality: '70/30', valorMovil: 54650000, cuotaPura: 455416, cuotaFinal: 582900, dist: 'Cadena' }
             ]
@@ -1493,7 +1484,7 @@
         }
 
         function syncModelDropdowns() {
-            ['cli-direct-model', 'input-interest-model', 'edit-model'].forEach(id => {
+            ['cli-direct-model', 'input-interest-model', 'edit-model', 'profile-model'].forEach(id => {
                 const sel = document.getElementById(id);
                 if (!sel) return;
                 const prev = sel.value;
@@ -1767,6 +1758,324 @@
             document.execCommand('copy');
             showToast("Copiado al portapapeles");
         };
+
+        // ============================================================================
+        // ENVÍO MASIVO IA + TESTER REAL + CLASIFICACIÓN AUTOMÁTICA POST-CHARLA
+        // ============================================================================
+        let massCampaignQueue = [];
+        let massCampaignTimer = null;
+
+        window.openMassCampaignModal = (defaultSource = null) => {
+            if (defaultSource) {
+                const sel = document.getElementById('camp-source-select');
+                if (sel) sel.value = defaultSource;
+            }
+            const testerInp = document.getElementById('camp-tester-phone');
+            if (testerInp && !testerInp.value) {
+                const firstTester = SOFIA_AI.getAllSandboxTesters().find(t => /\d{7,}/.test(t)) || SOFIA_AI.config.sandboxPhone || '';
+                testerInp.value = firstTester;
+            }
+            onCampaignSourceChange();
+            document.getElementById('mass-campaign-modal')?.classList.remove('hidden');
+        };
+        window.closeMassCampaignModal = () => document.getElementById('mass-campaign-modal')?.classList.add('hidden');
+        window.onCampaignSourceChange = () => {
+            const src = document.getElementById('camp-source-select')?.value || 'crm';
+            const msgBox = document.getElementById('camp-base-message');
+            const tplKey = src === 'sin_respuesta_24h' ? 'crm' : src;
+            if (msgBox && waTemplates[tplKey]) msgBox.value = waTemplates[tplKey];
+            previewCampaignCandidates();
+        };
+        function getCampaignSourceList(src) {
+            const area = document.getElementById('camp-area-select')?.value || 'all';
+            const matchesArea = (c) => {
+                if (area === 'all') return true;
+                const d = formatPhoneAR(c.phone || '').replace(/\D/g, '');
+                return d.startsWith('549' + area) || d.startsWith(area);
+            };
+            let base = [];
+            if (src === 'crm') base = crmContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)' && c.status !== 'Sin Respuesta 24h');
+            else if (src === 'sin_respuesta_24h') base = crmContacts.filter(c => c.status === 'Sin Respuesta 24h');
+            else if (src === 'gestion') base = gestionContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            else if (src === 'redes') base = redesContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            else if (src === 'salesforce') base = salesforceContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            else if (src === 'cancelados') base = canceladosContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            else if (src === 'rescindidos') base = rescindidosContacts.filter(c => !isClientStatus(c.status) && c.status !== 'Mensaje Enviado (48h)');
+            return base.filter(c => c.phone && matchesArea(c));
+        }
+        window.saveCampaignConfig = () => {
+            const lim = Number(document.getElementById('camp-daily-limit')?.value || 40);
+            const lbl = document.getElementById('camp-daily-limit-label');
+            if (lbl) lbl.textContent = lim;
+        };
+        window.previewCampaignCandidates = () => {
+            const src = document.getElementById('camp-source-select')?.value || 'crm';
+            const list = getCampaignSourceList(src);
+            const info = document.getElementById('camp-candidates-info');
+            if (info) info.textContent = `${list.length} disponibles sin contactar en esta ronda`;
+        };
+        window.enqueueSelectedCampaignBatch = () => {
+            const src = document.getElementById('camp-source-select')?.value || 'crm';
+            const batchSize = Math.max(1, Number(document.getElementById('camp-batch-size')?.value || 15));
+            const tpl = document.getElementById('camp-base-message')?.value.trim() || waTemplates.crm;
+            const pool = getCampaignSourceList(src).filter(c => !massCampaignQueue.some(q => q.id === c.id));
+            // Selección aleatoria dentro de la base y código de área elegidos
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+            const candidates = pool.slice(0, batchSize);
+            candidates.forEach(c => {
+                const firstName = String(c.name || '').trim().split(/\s+/)[0] || 'hola';
+                const personalized = tpl.replace(/\{nombre\}/gi, firstName);
+                massCampaignQueue.push({ id: c.id, name: c.name || 'Cliente', phone: formatPhoneAR(c.phone), channel: src, message: personalized });
+            });
+            renderMassCampaignQueue();
+            showToast(`🎲 ${candidates.length} contacto(s) aleatorios de "${src}" agregados a la cola`);
+        };
+        function renderMassCampaignQueue() {
+            const qBox = document.getElementById('camp-queue-list');
+            const cnt = document.getElementById('camp-queue-count');
+            const badge = document.getElementById('nav-campaign-badge');
+            if (cnt) cnt.textContent = massCampaignQueue.length;
+            if (badge) badge.textContent = massCampaignQueue.length;
+            if (!qBox) return;
+            qBox.innerHTML = massCampaignQueue.length === 0
+                ? `<div class="text-center text-xs text-slate-400 py-8">Cola vacía. Seleccioná una base y tocá "+ Agregar Aleatorios".</div>`
+                : massCampaignQueue.map(item => `<div class="p-2.5 rounded-xl bg-slate-50 border flex items-center justify-between gap-2 text-xs">
+                    <div class="min-w-0"><b>${item.name}</b> <span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold uppercase">${item.channel}</span><div class="text-[11px] text-slate-600 truncate mt-0.5">${item.message}</div></div>
+                    <span class="text-[10px] font-mono text-emerald-700 shrink-0">${item.phone}</span>
+                </div>`).join('');
+        }
+        window.sendTestCampaignToMyNumber = async () => {
+            const rawPhone = document.getElementById('camp-tester-phone')?.value.trim();
+            const phone = formatPhoneAR(rawPhone);
+            if (!phone || phone.replace(/\D/g, '').length < 10) {
+                showToast("⚠️ Ingresá un número válido (ej: +549341...)");
+                return;
+            }
+            const src = document.getElementById('camp-source-select')?.value || 'crm';
+            const tpl = document.getElementById('camp-base-message')?.value.trim() || waTemplates.crm;
+            const personalized = tpl.replace(/\{nombre\}/gi, 'Gonzalo');
+            const testId = `campaign_tester_${phone.replace(/\D/g, '')}`;
+
+            let existing = findContactGlobal(testId);
+            if (!existing) {
+                crmContacts.unshift({
+                    id: testId,
+                    name: 'Tester Masivo (Mi Número)',
+                    phone,
+                    method: `Masivo ${src}`,
+                    status: 'Mensaje Enviado (48h)',
+                    lastOutreachChannel: src,
+                    lastOutreachMsg: personalized,
+                    lastOutreachAt: Date.now()
+                });
+            } else {
+                existing.contact.status = 'Mensaje Enviado (48h)';
+                existing.contact.lastOutreachChannel = src;
+                existing.contact.lastOutreachMsg = personalized;
+                existing.contact.lastOutreachAt = Date.now();
+            }
+
+            SOFIA_AI.chats[testId] = [{ role: 'model', text: personalized, ts: Date.now() }];
+            SOFIA_AI.saveChats();
+
+            const safeKey = testId.replace(/[.#$\[\]\/]/g, '_');
+            const phoneKey = phone.replace(/[.#$\[\]\/]/g, '_');
+            await Promise.all([
+                fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(safeKey)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(SOFIA_AI.chats[testId])
+                }),
+                fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(phoneKey)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(SOFIA_AI.chats[testId])
+                })
+            ]).catch(() => {});
+
+            saveLocalData(true);
+            renderAllTables();
+            updateDashboard();
+            await SOFIA_AI.syncBrainToFirebase();
+
+            const workerBase = (SOFIA_AI.config.workerUrl || '').replace(/\/$/, '');
+            if (workerBase) {
+                try {
+                    const res = await fetch(`${workerBase}/outgoing-campaign?room=${encodeURIComponent(syncRoom)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone, text: personalized, channel: src, contactId: testId, name: 'Tester Masivo' })
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (data?.delivery?.sent) {
+                        showToast(`📲 Mensaje real enviado a ${phone} como [${src}]. ¡Respondé desde tu WhatsApp!`);
+                        return;
+                    }
+                } catch (e) {}
+            }
+            openWhatsAppSingleTab(phone.replace(/\D/g, ''), testId, src, 'Gonzalo');
+            showToast(`📲 Abriendo WhatsApp hacia ${phone} [${src}]`);
+        };
+        window.sendNextCampaignItemNow = async () => {
+            if (massCampaignQueue.length === 0) { pauseMassCampaignRunner(); return; }
+            const item = massCampaignQueue.shift();
+            renderMassCampaignQueue();
+
+            const found = findContactGlobal(item.id);
+            if (found) {
+                found.contact.status = 'Mensaje Enviado (48h)';
+                found.contact.lastOutreachChannel = item.channel;
+                found.contact.lastOutreachMsg = item.message;
+                found.contact.lastOutreachAt = Date.now();
+            }
+
+            if (!Array.isArray(SOFIA_AI.chats[item.id])) SOFIA_AI.chats[item.id] = [];
+            SOFIA_AI.chats[item.id].push({ role: 'model', text: item.message, ts: Date.now() });
+            SOFIA_AI.saveChats();
+
+            const safeKey = String(item.id || '').replace(/[.#$\[\]\/]/g, '_');
+            const phoneKey = String(item.phone || '').replace(/[.#$\[\]\/]/g, '_');
+            await Promise.all([
+                fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(safeKey)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(SOFIA_AI.chats[item.id])
+                }),
+                phoneKey ? fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(phoneKey)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(SOFIA_AI.chats[item.id])
+                }) : Promise.resolve()
+            ]).catch(() => {});
+
+            saveLocalData(true);
+            renderAllTables();
+            updateDashboard();
+            previewCampaignCandidates();
+
+            const workerBase = (SOFIA_AI.config.workerUrl || '').replace(/\/$/, '');
+            if (SOFIA_AI.config.metaPhoneNumberId && SOFIA_AI.config.metaWaToken && workerBase) {
+                fetch(`${workerBase}/outgoing-campaign?room=${encodeURIComponent(syncRoom)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: item.phone, text: item.message, channel: item.channel, contactId: item.id, name: item.name })
+                }).catch(() => {});
+            } else {
+                openWhatsAppSingleTab(item.phone.replace(/\D/g, ''), item.id, item.channel, item.name);
+            }
+
+            const logBox = document.getElementById('camp-sent-log-list');
+            if (logBox) {
+                logBox.innerHTML = `<div class="text-emerald-700 font-semibold">✓ Enviado a <b>${item.name}</b> [${item.channel}]</div>` + logBox.innerHTML;
+            }
+        };
+        window.startMassCampaignRunner = () => {
+            if (massCampaignQueue.length === 0) { showToast("⚠️ Agregá contactos a la cola primero"); return; }
+            document.getElementById('btn-camp-start')?.classList.add('hidden');
+            document.getElementById('btn-camp-pause')?.classList.remove('hidden');
+            const pill = document.getElementById('campaign-status-pill');
+            if (pill) { pill.textContent = 'ENVIANDO'; pill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500 text-zinc-950'; }
+            const runStep = async () => {
+                await sendNextCampaignItemNow();
+                if (massCampaignQueue.length === 0) return;
+                const minS = Math.max(10, Number(document.getElementById('camp-delay-min')?.value || 45));
+                const maxS = Math.max(minS + 5, Number(document.getElementById('camp-delay-max')?.value || 95));
+                const waitMs = (Math.floor(Math.random() * (maxS - minS + 1)) + minS) * 1000;
+                const cd = document.getElementById('camp-next-countdown');
+                if (cd) cd.textContent = `Próximo envío seguro en ${Math.round(waitMs / 1000)}s...`;
+                massCampaignTimer = setTimeout(runStep, waitMs);
+            };
+            runStep();
+        };
+        window.pauseMassCampaignRunner = () => {
+            clearTimeout(massCampaignTimer);
+            document.getElementById('btn-camp-start')?.classList.remove('hidden');
+            document.getElementById('btn-camp-pause')?.classList.add('hidden');
+            const pill = document.getElementById('campaign-status-pill');
+            if (pill) { pill.textContent = 'PAUSADO'; pill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-zinc-700 text-zinc-200'; }
+        };
+        window.clearMassCampaignQueue = () => {
+            pauseMassCampaignRunner();
+            massCampaignQueue = [];
+            renderMassCampaignQueue();
+        };
+
+        async function pullCampaignOutcomesFromFirebase() {
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/ai_outcomes/${encodeURIComponent(syncRoom)}.json`);
+                if (!res.ok) return;
+                const outcomes = (await res.json()) || {};
+                let changed = false;
+
+                // 1. Aplicar clasificaciones automáticas de Sofía tras conversar
+                for (const [key, out] of Object.entries(outcomes)) {
+                    if (!out || !out.outcome) continue;
+                    const cleanPhone = formatPhoneAR(out.phone || '');
+                    const found = findContactGlobal(out.contactId) || findContactGlobal(key) ||
+                        (cleanPhone ? (() => {
+                            const lists = [
+                                { arr: crmContacts, name: 'crm' }, { arr: gestionContacts, name: 'gestion' },
+                                { arr: redesContacts, name: 'redes' }, { arr: salesforceContacts, name: 'salesforce' },
+                                { arr: canceladosContacts, name: 'cancelados' }, { arr: rescindidosContacts, name: 'rescindidos' }
+                            ];
+                            for (const l of lists) {
+                                const c = l.arr.find(x => formatPhoneAR(x.phone) === cleanPhone);
+                                if (c) return { contact: c, source: l.name };
+                            }
+                            return null;
+                        })() : null);
+
+                    if (found) {
+                        const c = found.contact;
+                        if (out.outcome === 'no_compra') {
+                            c.status = 'No Compra';
+                            c.noInterestReason = out.reason || 'No quiere comprar';
+                            c.observations = `Clasificado por Sofía (${c.noInterestReason})`;
+                            // Sacarlo de la lista de origen si no estaba ya en No Compra
+                            if (found.source !== 'crm') {
+                                if (found.source === 'gestion') gestionContacts = gestionContacts.filter(x => x.id !== c.id);
+                                if (found.source === 'redes') redesContacts = redesContacts.filter(x => x.id !== c.id);
+                                if (found.source === 'salesforce') salesforceContacts = salesforceContacts.filter(x => x.id !== c.id);
+                                if (found.source === 'cancelados') canceladosContacts = canceladosContacts.filter(x => x.id !== c.id);
+                                if (found.source === 'rescindidos') rescindidosContacts = rescindidosContacts.filter(x => x.id !== c.id);
+                                crmContacts.unshift(c);
+                            }
+                            changed = true;
+                        } else if (out.outcome === 'a_futuro') {
+                            c.status = 'Interesado a Futuro';
+                            if (out.scheduleDate) c.scheduleDate = out.scheduleDate;
+                            if (out.scheduleTime) c.scheduleTime = out.scheduleTime;
+                            c.observations = `Recontacto a futuro: ${out.reason || ''}`;
+                            changed = true;
+                        } else if (out.outcome === 'interesado') {
+                            c.status = 'Interesado';
+                            if (out.interestModel) c.interestModel = out.interestModel;
+                            changed = true;
+                        }
+                        await fetch(`${FIREBASE_DB_URL}/ai_outcomes/${encodeURIComponent(syncRoom)}/${encodeURIComponent(key)}.json`, { method: 'DELETE' }).catch(() => {});
+                    }
+                }
+
+                // 2. Pasar automáticamente a "Sin Respuesta 24h" los enviados hace +24 hs sin respuesta
+                const now = Date.now();
+                const dayMs = 24 * 3600 * 1000;
+                getAllListsCombined().forEach(c => {
+                    if (c.status === 'Mensaje Enviado (48h)' && c.lastOutreachAt && (now - Number(c.lastOutreachAt)) >= dayMs) {
+                        c.status = 'Sin Respuesta 24h';
+                        changed = true;
+                    }
+                });
+
+                if (changed) {
+                    saveLocalData(true);
+                    renderAllTables();
+                    updateDashboard();
+                }
+            } catch (e) {}
+        }
 
         // --- NAVEGACIÓN DE PESTAÑAS ---
         window.switchTab = function(tabName) {
@@ -2518,7 +2827,7 @@
                 ? String(document.getElementById('search-crm')?.value || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
                 : '';
             const filtered = list.filter(c => {
-                if (isClientStatus(c.status) || c.status === 'Mensaje Enviado (48h)') return false;
+                if (isClientStatus(c.status) || c.status === 'Mensaje Enviado (48h)' || c.status === 'Sin Respuesta 24h') return false;
                 if (!searchQuery) return true;
                 const haystack = `${c.name || ''} ${c.phone || ''} ${formatPhoneAR(c.phone || '')} ${c.method || ''} ${c.reference || ''} ${c.status || ''}`
                     .toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -2529,6 +2838,35 @@
                 emptyEl?.classList.add('hidden');
                 tbody.innerHTML = filtered.map(c => `<tr><td class="p-3.5 font-bold"><button onclick="openClientProfileModal('${c.id}')" class="text-left hover:text-[#EB0A1E] underline decoration-slate-300">${c.name || 'Sin Nombre'}</button><div class="mt-0.5 text-xs text-emerald-700">${formatPhoneAR(c.phone)}</div></td><td class="p-3.5 text-xs">${c.method || channelKey}</td><td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClass(c.status)}">${c.status}</span></td><td class="p-3.5">${renderActions(c, channelKey)}</td></tr>`).join('');
             }
+            if (channelKey === 'crm') renderNoCompraSublists();
+        }
+        function renderNoCompraSublists() {
+            const box = document.getElementById('crm-classification-sublists');
+            if (!box) return;
+            const waiting = getAllListsCombined().filter(c => c.status === 'Mensaje Enviado (48h)');
+            const noContesta = getAllListsCombined().filter(c => c.status === 'Sin Respuesta 24h');
+            const aFuturo = getAllListsCombined().filter(c => c.status === 'Interesado a Futuro');
+            const noQuieren = crmContacts.filter(c => c.status === 'No Compra');
+
+            box.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                    <div class="p-3 rounded-xl bg-white border border-teal-200">
+                        <div class="font-extrabold text-teal-900">⏳ En Espera (&lt;24h): ${waiting.length}</div>
+                        <div class="mt-1.5 space-y-1 max-h-32 overflow-y-auto">${waiting.slice(0, 12).map(c => `<div class="truncate text-slate-700">• <b>${c.name}</b> (${formatPhoneAR(c.phone)})</div>`).join('') || '<span class="text-slate-400">Ninguno</span>'}</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-white border border-amber-300">
+                        <div class="font-extrabold text-amber-900">📵 Lista No Contesta (+24h): ${noContesta.length}</div>
+                        <div class="mt-1.5 space-y-1 max-h-32 overflow-y-auto">${noContesta.slice(0, 12).map(c => `<div class="truncate text-slate-700">• <b>${c.name}</b> (${formatPhoneAR(c.phone)})</div>`).join('') || '<span class="text-slate-400">Ninguno</span>'}</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-white border border-purple-300">
+                        <div class="font-extrabold text-purple-900">📅 Lista A Futuro (Calendario): ${aFuturo.length}</div>
+                        <div class="mt-1.5 space-y-1 max-h-32 overflow-y-auto">${aFuturo.slice(0, 12).map(c => `<div class="truncate text-slate-700">• <b>${c.name}</b> ${c.scheduleDate ? '(' + formatDisplayISODate(c.scheduleDate) + ')' : ''}</div>`).join('') || '<span class="text-slate-400">Ninguno</span>'}</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-white border border-rose-300">
+                        <div class="font-extrabold text-rose-900">🚫 Lista No Compra (Motivos): ${noQuieren.length}</div>
+                        <div class="mt-1.5 space-y-1 max-h-32 overflow-y-auto">${noQuieren.slice(0, 12).map(c => `<div class="truncate text-slate-700">• <b>${c.name}</b>: <span class="text-rose-700">${c.noInterestReason || 'Sin interés'}</span></div>`).join('') || '<span class="text-slate-400">Ninguno</span>'}</div>
+                    </div>
+                </div>`;
         }
         window.renderCrmTable = () => renderSimpleChannelTable(crmContacts, 'crm-table-body', 'crm-empty-state', 'crm');
         window.renderGestionTable = () => renderSimpleChannelTable(gestionContacts, 'gestion-table-body', 'gestion-empty-state', 'gestion');
@@ -3746,7 +4084,7 @@
                 const hr = new Date().getHours();
                 const greeting = hr >= 6 && hr < 13 ? 'Hola, buen día' : (hr >= 13 && hr < 20 ? 'Hola, buenas tardes' : 'Hola, buenas noches');
 
-                return `Sos ${advisor}, asistente virtual de Gonzalo en Toyota Ginza (Rosario), conversando por WhatsApp (Sofi 3.0). Fecha actual: ${todayIso}.
+                return `Sos ${advisor}, asistente virtual de Gonzalo en Rosario, conversando por WhatsApp (Sofi 3.0). Fecha actual: ${todayIso}.
 
 MISIÓN COMERCIAL PRINCIPAL:
 - Tu objetivo es asesorar con claridad, indagar primero qué necesita el cliente y lograr que venga personalmente al concesionario (Avellaneda 2075 o Carballo 632) SIN COMPROMISO para revisar todos los detalles y despejar todas las dudas con Gonzalo.
@@ -3755,23 +4093,16 @@ MISIÓN COMERCIAL PRINCIPAL:
 
 REGLAS INQUEBRANTABLES DE COMPORTAMIENTO Y ESTILO NATURAL:
 1. PRESENTACIÓN OBLIGATORIA EN EL PRIMER TURNO:
-  - Si el cliente te saluda por primera vez ("Hola", "Buen día", etc.), presentate exactamente así: "${greeting}. Soy ${advisor}, asistente virtual de Gonzalo en Toyota Ginza, ¿en qué te puedo ayudar?"
+  - Si el cliente te saluda por primera vez ("Hola", "Buen día", etc.), presentate exactamente así: "${greeting}. Soy ${advisor}, asistente virtual de Gonzalo, ¿en qué te puedo ayudar?"
   - No digas el apellido de Gonzalo.
   - Si ya saludaste en el primer mensaje, no repitas el saludo en los mensajes siguientes.
 2. DERIVACIÓN DIRECTA EN FINANCIACIÓN CONVENCIONAL / PRENDARIA / CONTADO:
   - Si el cliente dice "no quiero plan de ahorro", pide financiación convencional, prendario, banco, tasa 0% o contado: PROHIBIDO calcular cuotas o anticipos. Derivá SIEMPRE directo con Gonzalo y agregá [[PAUSAR_HUMANO]].
 3. PLAZO DE 84 CUOTAS Y DIFERENCIA ENTRE PLAN 70/30 Y PLAN 100%:
-  - TODOS los planes de Toyota Plan son de 84 cuotas (84 meses) en pesos sin interés bancario. NUNCA digas que un plan es de 24 cuotas.
-  - Plan 70/30: financia el 70% en 84 cuotas y tiene integración mínima del 30% al retirar (incluso si ganás por sorteo).
-  - Plan 100% (Yaris 100%, Hilux 4x4 DX, Hiace): financia el 100% en 84 cuotas y NO tiene integración mínima del 30%. Su integración mínima se mide en cantidad de cuotas: al retirar solo integra las cuotas que le falten para llegar a ese mínimo (por ejemplo, si el mínimo es 24 cuotas y ya pagó 10, integra 14 cuotas).
-4. ESTRATEGIA PUENTE HIACE 100% Y DOWNSELLING ESCALONADO:
-  - Puente Hiace 100%: Ante consultas por Hilux SRV o SRX, se puede ofrecer ingresar por Plan 100% Hiace para achicar la diferencia de cambio de modelo, indagando siempre primero qué cuota mensual cómoda puede pagar porque la cuota de Hiace es alta.
-  - Downselling escalonado: Si una cuota le resulta alta, bajá de a poco escalonadamente sin saltos bruscos de precio (nunca bajes de Hilux directo a Yaris).
-5. CUOTA MENSUAL, CUOTA PURA Y CAMBIOS PERMITIDOS:
-  - Cuando el cliente pregunta cuánto sale la cuota de Toyota Plan, informá ÚNICAMENTE la "Cuota Mensual Oficial" (la cuota final con gastos incluidos) aclarando que es un plan de 84 cuotas. PROHIBIDO mencionar "cuota pura" salvo que pregunten expresamente qué es la cuota pura o cómo adelantar cuotas.
-  - PROHIBIDO cambio de modelo o versión por líneas GR (GR-Sport / GR), RAV4, Land Cruiser, Crown ni Camry en Toyota Plan (esos van solo por compra convencional con Gonzalo).
-  - Planes adjudicados y avanzados: Sí tenemos según disponibilidad y se derivan directamente con Gonzalo agregando [[PAUSAR_HUMANO]].
-6. RETIRO, USADOS Y SUCURSALES ROSARIO:
+  - El plazo máximo es de 84 cuotas pensado para que el valor mensual sea accesible, pero puede cancelarlo en el tiempo que quiera adelantando cuotas puras.
+  - Plan 70/30: financia el 70% en cuotas en pesos sin interés bancario y tiene integración mínima del 30% al retirar.
+  - Plan 100%: financia el 100% sin 30% extraordinario.
+4. RETIRO, USADOS Y SUCURSALES ROSARIO:
   - No tenemos entrega pactada por contrato. Plazos de entrega: entre 30 y 75 días por contrato sin cambio de modelo o versión (hasta 135 días corridos si hay cambio), aunque generalmente llega entre 30 y 60 días.
   - Gastos de retiro (7% total): 1% derecho de adjudicación + 1% flete al adjudicar, y 5% de patentamiento antes de entregar.
   - Llave por Llave: sigue usando su auto hasta retirar el 0 km; tomamos usados de cualquier marca libres de prenda. No tomamos dólares, prendados, planes de ahorro de otras marcas, motos ni terrenos.
@@ -4097,7 +4428,6 @@ ${officialPricesText}`;
             delete SOFIA_AI.chats[contact.id];
             SOFIA_AI.saveChats();
 
-            // Limpiar visualmente de inmediato
             const box = document.getElementById('wa-ai-chat-history');
             if (box) {
                 box.innerHTML = `<div class="text-center text-xs text-slate-500 py-8">Sin mensajes aún con <b>${contact.name}</b>.</div>`;
@@ -4112,7 +4442,6 @@ ${officialPricesText}`;
             const keysToClear = new Set([contact.id, safeKey, phoneKey, 'sandbox_test_user', 'sandbox_tester_hans']);
 
             try {
-                // Buscar en Firebase todas las claves reales de ese chat (ej: Hans__549341..._)
                 const allChatsRes = await fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}.json?shallow=true`);
                 if (allChatsRes.ok) {
                     const allKeys = Object.keys((await allChatsRes.json()) || {});
@@ -4175,15 +4504,7 @@ ${officialPricesText}`;
         window.openProfileWhatsAppChat = () => {};
         window.generateClientAiSummary = async () => {};
         window.logManualAdvisorMessage = async () => {};
-        window.openMassCampaignModal = () => document.getElementById('mass-campaign-modal')?.classList.remove('hidden');
-        window.closeMassCampaignModal = () => document.getElementById('mass-campaign-modal')?.classList.add('hidden');
-        window.saveCampaignConfig = () => {};
-        window.previewCampaignCandidates = () => {};
-        window.enqueueSelectedCampaignBatch = () => {};
-        window.startMassCampaignRunner = () => {};
-        window.pauseMassCampaignRunner = () => {};
-        window.sendNextCampaignItemNow = () => {};
-        window.clearMassCampaignQueue = () => {};
+
         window.openBackupModal = () => {
             const inp = document.getElementById('sync-room-input');
             if (inp) inp.value = syncRoom;
@@ -4223,7 +4544,7 @@ ${officialPricesText}`;
         window.saveWaTemplates = () => { closeWaTemplatesModal(); };
         window.focusExistingWhatsAppTab = () => window.open('https://web.whatsapp.com', 'crm_whatsapp_web_singleton');
         window.openWhatsAppSingleTab = (d) => window.open(`https://web.whatsapp.com/send?phone=${d}`, 'crm_whatsapp_web_singleton');
-        window.checkWhatsApp48hTimeouts = () => showToast("Verificación 24h/48h al día");
+        window.checkWhatsApp48hTimeouts = () => { pullCampaignOutcomesFromFirebase(); showToast("Verificación 24h/48h al día"); };
         window.testWorkerBridgeLive = async function() {
             const badge = document.getElementById('wa-ai-mobile-health-badge');
             const workerBase = (SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '');
@@ -4390,8 +4711,10 @@ ${officialPricesText}`;
                 updateDashboard();
                 await pullFromFirebase(true);
                 await pullAiScheduledFromFirebase();
+                await pullCampaignOutcomesFromFirebase();
                 await SOFIA_AI.syncBrainToFirebase();
                 startFirebaseLiveListener();
+                setInterval(pullCampaignOutcomesFromFirebase, 15000);
             } catch (err) {
                 console.warn("Error inicializando CRM:", err);
             }
