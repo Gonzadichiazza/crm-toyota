@@ -1137,60 +1137,25 @@
                         <div class="flex gap-1"><input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-incoming-url')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
                         <div class="flex gap-1"><input type="text" id="wa-ai-outgoing-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-outgoing-url')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
                     </div>
-                </div>
 
-                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden min-h-[400px]">
-                    <div class="p-3 bg-amber-50 border-b-2 border-amber-300 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <label class="inline-flex items-center gap-2 text-xs font-extrabold text-amber-950"><input type="checkbox" id="wa-ai-sandbox-enabled" checked onchange="saveWaAiConfig()"><span>🧪 MODO PRUEBA AISLADO (MÚLTIPLES TESTERS)</span></label>
-                            <span id="wa-ai-sandbox-count" class="px-2 py-0.5 rounded bg-amber-200 text-amber-950 text-[10px] font-extrabold">0 testers</span>
+                    <div class="p-4 rounded-2xl bg-sky-50 border-2 border-sky-300 space-y-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-extrabold uppercase text-sky-950">⚡ Conexión Directa API WhatsApp (Sin Notificaciones)</span>
+                            <span class="px-2 py-0.5 rounded bg-sky-600 text-white text-[10px] font-bold">24/7 Real</span>
                         </div>
-                        <div class="flex gap-1.5">
-                            <input type="text" id="wa-ai-new-tester-input" onkeydown="if(event.key==='Enter') addSandboxTester()" placeholder="Ingresá celular del tester (ej: 3415551234)..." class="flex-1 px-2.5 py-1.5 text-xs font-bold border border-amber-300 rounded-xl bg-white outline-none">
-                            <button onclick="addSandboxTester()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold shrink-0">+ Sumar Celular</button>
+                        <p class="text-[11px] text-sky-900">No depende del celular ni de notificaciones. Pegá esta URL de Webhook en tu puente QR (Evolution API) o en Meta Cloud API:</p>
+                        <div class="flex gap-1">
+                            <input type="text" id="wa-ai-direct-webhook-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-sky-300 rounded-lg">
+                            <button onclick="copyInputText('wa-ai-direct-webhook-url')" class="px-2 py-1 bg-sky-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
                         </div>
-                        <p class="text-[10px] text-amber-900">💡 Si el tester NO está agendado en tu celular, WhatsApp muestra su número y activa automático por celular. (Si ya lo tenés agendado con nombre en tu teléfono, WhatsApp muestra ese nombre).</p>
-                        <div id="wa-ai-sandbox-testers-list" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto"></div>
-                        <input type="hidden" id="wa-ai-sandbox-phone">
-                    </div>
-
-                    <div class="p-3.5 bg-slate-50 border-b flex flex-wrap items-center justify-between gap-2">
-                        <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="flex-1 px-2.5 py-1.5 text-xs font-bold border rounded-xl bg-white"></select>
-                        <div class="flex items-center gap-1.5">
-                            <span id="wa-ai-engine-pill" class="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-900">🧠 Gemini + Groq</span>
-                            <button onclick="resetWaAiChatHistory()" class="px-2.5 py-1.5 rounded-xl bg-slate-200 text-xs font-bold">🧹 Limpiar Chat</button>
+                        <div class="grid grid-cols-2 gap-1.5 pt-1">
+                            <input type="text" id="wa-ai-evo-url" onchange="saveWaAiConfig()" placeholder="URL Puente QR (ej: https://api...)" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
+                            <input type="password" id="wa-ai-evo-key" onchange="saveWaAiConfig()" placeholder="API Key Puente QR" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
                         </div>
-                    </div>
-
-                    <div id="wa-ai-chat-history" class="flex-1 p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/50 max-h-[260px]"></div>
-
-                    <div id="wa-ai-audit-panel" class="p-3 bg-indigo-50/90 border-t border-indigo-200 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-extrabold uppercase text-indigo-950">🔍 Auto-Auditoría IA</span>
-                            <button id="btn-run-sofia-audit" onclick="runSofiaSelfAudit()" class="px-3 py-1 rounded-lg bg-indigo-700 text-white text-[11px] font-bold">📊 Analizar</button>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <input type="text" id="wa-ai-meta-phone-id" onchange="saveWaAiConfig()" placeholder="Meta Phone Number ID (opc.)" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
+                            <input type="password" id="wa-ai-meta-token" onchange="saveWaAiConfig()" placeholder="Meta Access Token (opc.)" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
                         </div>
-                        <div id="wa-ai-audit-metrics" class="grid grid-cols-4 gap-1.5 text-center"></div>
-                        <div id="wa-ai-audit-report" class="text-xs bg-white p-2.5 rounded-xl border hidden"></div>
-                    </div>
-
-                    <div id="wa-ai-memory-panel" class="p-3 bg-amber-50/90 border-t border-amber-200 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-extrabold uppercase text-amber-950">🧠 Memoria de Consultas Sin Token (<span id="wa-ai-memory-count">0</span>)</span>
-                            <button onclick="loadUnansweredMemoryList()" class="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold">🔄 Ver Memorizadas</button>
-                        </div>
-                        <div id="wa-ai-memory-list" class="max-h-36 overflow-y-auto space-y-1.5 text-xs">
-                            <div class="text-[11px] text-amber-900">Las preguntas que lleguen sin cuota de tokens se memorizan acá automáticamente para que Sofía las aprenda en 0-Tokens.</div>
-                        </div>
-                    </div>
-
-                    <div id="wa-ai-draft-box" class="hidden p-3 bg-emerald-50 border-t space-y-2">
-                        <div class="flex justify-between"><span class="text-[10px] font-extrabold uppercase text-emerald-900">Respuesta IA:</span><span id="wa-ai-source-tag" class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold"></span></div>
-                        <textarea id="wa-ai-draft-text" rows="2" class="w-full px-3 py-2 text-xs border rounded-xl bg-white"></textarea>
-                    </div>
-
-                    <div class="p-3 bg-white border-t flex gap-2">
-                        <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Simulá un mensaje del cliente..." class="flex-1 px-3 py-2 text-xs border rounded-xl">
-                        <button id="btn-wa-ai-generate" onclick="runWaAiReply()" class="px-4 py-2 rounded-xl bg-[#EB0A1E] text-white text-xs font-bold">Responder</button>
                     </div>
                 </div>
             </div>
@@ -3212,6 +3177,12 @@
                 groqApiKey: '',
                 workerUrl: 'https://sofia-ginza.gonzalodichiazza2.workers.dev',
                 cloudWorkerPrimary: false,
+                evolutionApiUrl: '',
+                evolutionApiKey: '',
+                evolutionInstance: 'ginza',
+                metaPhoneNumberId: '',
+                metaWaToken: '',
+                waVerifyToken: 'ginza_toyota_sofia_2026',
                 sandboxEnabled: true,
                 sandboxPhone: '',
                 sandboxTesters: [],
@@ -3421,6 +3392,12 @@
                                 sandboxTesters: normalizedTesters,
                                 advisorName: this.config.advisorName || 'Sofía',
                                 branchName: this.config.branchName || 'Ginza Toyota',
+                                evolutionApiUrl: String(this.config.evolutionApiUrl || '').trim(),
+                                evolutionApiKey: String(this.config.evolutionApiKey || '').trim(),
+                                evolutionInstance: String(this.config.evolutionInstance || 'ginza').trim(),
+                                metaPhoneNumberId: String(this.config.metaPhoneNumberId || '').trim(),
+                                metaWaToken: String(this.config.metaWaToken || '').trim(),
+                                waVerifyToken: String(this.config.waVerifyToken || 'ginza_toyota_sofia_2026').trim(),
                                 geminiApiKey: effectiveApiKey,
                                 geminiApiKeyBackup1: backupKey1,
                                 geminiApiKeyBackup2: backupKey2,
@@ -3771,6 +3748,12 @@ ${officialPricesText}`;
             document.getElementById('wa-ai-sandbox-phone').value = SOFIA_AI.config.sandboxPhone || '';
             document.getElementById('wa-ai-incoming-url').value = `${(SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '')}/incoming?room=${encodeURIComponent(syncRoom)}&format=text`;
             document.getElementById('wa-ai-outgoing-url').value = `${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest/reply.json`;
+            const directWhEl = document.getElementById('wa-ai-direct-webhook-url');
+            if (directWhEl) directWhEl.value = `${(SOFIA_AI.config.workerUrl || 'https://sofia-ginza.gonzalodichiazza2.workers.dev').replace(/\/$/, '')}/webhook?room=${encodeURIComponent(syncRoom)}`;
+            if (document.getElementById('wa-ai-evo-url')) document.getElementById('wa-ai-evo-url').value = SOFIA_AI.config.evolutionApiUrl || '';
+            if (document.getElementById('wa-ai-evo-key')) document.getElementById('wa-ai-evo-key').value = SOFIA_AI.config.evolutionApiKey || '';
+            if (document.getElementById('wa-ai-meta-phone-id')) document.getElementById('wa-ai-meta-phone-id').value = SOFIA_AI.config.metaPhoneNumberId || '';
+            if (document.getElementById('wa-ai-meta-token')) document.getElementById('wa-ai-meta-token').value = SOFIA_AI.config.metaWaToken || '';
 
             renderSandboxTestersList();
             refreshWaAiContactSelect();
@@ -3804,6 +3787,10 @@ ${officialPricesText}`;
             SOFIA_AI.config.branchName = String(document.getElementById('wa-ai-branch')?.value || 'Ginza Toyota').trim();
             SOFIA_AI.config.workerUrl = String(document.getElementById('wa-ai-worker-url')?.value || '').trim();
             SOFIA_AI.config.cloudWorkerPrimary = Boolean(document.getElementById('wa-ai-cloud-worker-primary')?.checked);
+            SOFIA_AI.config.evolutionApiUrl = String(document.getElementById('wa-ai-evo-url')?.value || '').trim();
+            SOFIA_AI.config.evolutionApiKey = String(document.getElementById('wa-ai-evo-key')?.value || '').trim();
+            SOFIA_AI.config.metaPhoneNumberId = String(document.getElementById('wa-ai-meta-phone-id')?.value || '').trim();
+            SOFIA_AI.config.metaWaToken = String(document.getElementById('wa-ai-meta-token')?.value || '').trim();
             SOFIA_AI.config.sandboxEnabled = Boolean(document.getElementById('wa-ai-sandbox-enabled')?.checked);
             SOFIA_AI.saveConfig();
             await SOFIA_AI.syncBrainToFirebase();
