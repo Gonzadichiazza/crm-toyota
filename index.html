@@ -1173,6 +1173,16 @@
                         <div id="wa-ai-audit-report" class="text-xs bg-white p-2.5 rounded-xl border hidden"></div>
                     </div>
 
+                    <div id="wa-ai-memory-panel" class="p-3 bg-amber-50/90 border-t border-amber-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold uppercase text-amber-950">🧠 Memoria de Consultas Sin Token (<span id="wa-ai-memory-count">0</span>)</span>
+                            <button onclick="loadUnansweredMemoryList()" class="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold">🔄 Ver Memorizadas</button>
+                        </div>
+                        <div id="wa-ai-memory-list" class="max-h-36 overflow-y-auto space-y-1.5 text-xs">
+                            <div class="text-[11px] text-amber-900">Las preguntas que lleguen sin cuota de tokens se memorizan acá automáticamente para que Sofía las aprenda en 0-Tokens.</div>
+                        </div>
+                    </div>
+
                     <div id="wa-ai-draft-box" class="hidden p-3 bg-emerald-50 border-t space-y-2">
                         <div class="flex justify-between"><span class="text-[10px] font-extrabold uppercase text-emerald-900">Respuesta IA:</span><span id="wa-ai-source-tag" class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[10px] font-bold"></span></div>
                         <textarea id="wa-ai-draft-text" rows="2" class="w-full px-3 py-2 text-xs border rounded-xl bg-white"></textarea>
@@ -3766,6 +3776,7 @@ ${officialPricesText}`;
             refreshWaAiContactSelect();
             onWaAiContactChange();
             refreshDailyAiUsagePanel();
+            loadUnansweredMemoryList();
             document.getElementById('wa-ai-assistant-modal')?.classList.remove('hidden');
 
             try {
@@ -3992,6 +4003,76 @@ ${officialPricesText}`;
                 if (reportBox) reportBox.textContent = '❌ Error al auditar: ' + e.message;
             }
             if (btn) { btn.disabled = false; btn.textContent = '📊 Analizar'; }
+        };
+        window.loadUnansweredMemoryList = async function() {
+            const listBox = document.getElementById('wa-ai-memory-list');
+            const countBadge = document.getElementById('wa-ai-memory-count');
+            if (!listBox) return;
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/ai_unanswered_memory/${encodeURIComponent(syncRoom)}.json`);
+                const raw = res.ok ? await res.json() : null;
+                const items = raw && typeof raw === 'object'
+                    ? Object.values(raw).filter(x => x && x.question && !x.resolved).sort((a, b) => (b.lastAskedAt || 0) - (a.lastAskedAt || 0))
+                    : [];
+                if (countBadge) countBadge.textContent = items.length;
+                if (items.length === 0) {
+                    listBox.innerHTML = `<div class="text-[11px] text-emerald-800 bg-white p-2 rounded-lg border border-emerald-200">✅ Sin consultas pendientes sin token. Todo fue respondido al instante.</div>`;
+                    return;
+                }
+                listBox.innerHTML = items.map(it => {
+                    const safeId = String(it.id || '').replace(/'/g, "\\'");
+                    const safeQ = String(it.question || '').replace(/"/g, '&quot;');
+                    return `<div class="p-2 rounded-xl bg-white border border-amber-300 space-y-1.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="font-bold text-slate-900">❓ "${it.question}"</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 font-bold shrink-0">${it.count || 1}x • ${it.argTime || ''}</span>
+                        </div>
+                        <div class="flex gap-1.5">
+                            <input type="text" id="mem-ans-${safeId}" placeholder="Escribí la respuesta oficial para que Sofía la aprenda..." class="flex-1 px-2 py-1 text-[11px] border border-slate-300 rounded-lg outline-none">
+                            <button onclick="teachSofiaMemorizedQuestion('${safeId}', &quot;${safeQ}&quot;)" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold shrink-0">💾 Enseñar</button>
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch (e) {}
+        };
+        window.teachSofiaMemorizedQuestion = async function(memId, questionText) {
+            const ansInput = document.getElementById(`mem-ans-${memId}`);
+            const ans = String(ansInput?.value || '').trim();
+            if (!ans) {
+                showToast("⚠️ Escribí primero la respuesta oficial para memorizar");
+                return;
+            }
+            const normalized = String(questionText || '')
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^\p{L}\p{N}\s+]/gu, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+            try {
+                await Promise.all([
+                    fetch(`${FIREBASE_DB_URL}/ai_learned_qa/${encodeURIComponent(syncRoom)}/${encodeURIComponent(memId)}.json`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: memId,
+                            question: questionText,
+                            normalized,
+                            answer: ans.replace(/\*/g, ''),
+                            learnedAt: Date.now()
+                        })
+                    }),
+                    fetch(`${FIREBASE_DB_URL}/ai_unanswered_memory/${encodeURIComponent(syncRoom)}/${encodeURIComponent(memId)}.json`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ resolved: true, learnedAt: Date.now() })
+                    })
+                ]);
+                showToast("🧠 ¡Aprendido! Sofía responderá esta consulta en 0-Tokens");
+                loadUnansweredMemoryList();
+            } catch (e) {
+                showToast("❌ Error al guardar aprendizaje: " + e.message);
+            }
         };
         window.dismissAllInfoAutoAlerts = () => {};
         window.dismissAllCommercialAlerts = () => {};
