@@ -4096,17 +4096,48 @@ ${officialPricesText}`;
             const contact = getSelectedWaAiContact();
             delete SOFIA_AI.chats[contact.id];
             SOFIA_AI.saveChats();
-            onWaAiContactChange();
+
+            // Limpiar visualmente de inmediato
+            const box = document.getElementById('wa-ai-chat-history');
+            if (box) {
+                box.innerHTML = `<div class="text-center text-xs text-slate-500 py-8">Sin mensajes aún con <b>${contact.name}</b>.</div>`;
+            }
+
             const safeKey = String(contact.id || 'default').replace(/[.#$\[\]\/]/g, '_').replace(/\s+/g, '_');
-            const keysToClear = Array.from(new Set([contact.id, safeKey, 'sandbox_test_user', 'sandbox_tester_hans']));
+            const phoneFormatted = formatPhoneAR(contact.phone || '');
+            const phoneKey = phoneFormatted ? phoneFormatted.replace(/[.#$\[\]\/]/g, '_') : '';
+            const nameNorm = String(contact.name || '').toLowerCase().trim();
+            const phoneTail = String(contact.phone || '').replace(/\D/g, '').slice(-7);
+
+            const keysToClear = new Set([contact.id, safeKey, phoneKey, 'sandbox_test_user', 'sandbox_tester_hans']);
+
             try {
+                // Buscar en Firebase todas las claves reales de ese chat (ej: Hans__549341..._)
+                const allChatsRes = await fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}.json?shallow=true`);
+                if (allChatsRes.ok) {
+                    const allKeys = Object.keys((await allChatsRes.json()) || {});
+                    for (const k of allKeys) {
+                        const kLow = k.toLowerCase();
+                        if ((nameNorm && kLow.includes(nameNorm)) || (phoneTail && k.includes(phoneTail))) {
+                            keysToClear.add(k);
+                        }
+                    }
+                }
+
                 await Promise.all([
-                    ...keysToClear.map(k => fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(k)}.json`, { method: 'DELETE' })),
-                    ...keysToClear.map(k => fetch(`${FIREBASE_DB_URL}/wa_buffer/${encodeURIComponent(syncRoom)}/${encodeURIComponent(k)}.json`, { method: 'DELETE' })),
+                    ...Array.from(keysToClear).filter(Boolean).map(k =>
+                        fetch(`${FIREBASE_DB_URL}/ai_chats/${encodeURIComponent(syncRoom)}/${encodeURIComponent(k)}.json`, { method: 'DELETE' })
+                    ),
+                    ...Array.from(keysToClear).filter(Boolean).map(k =>
+                        fetch(`${FIREBASE_DB_URL}/wa_buffer/${encodeURIComponent(syncRoom)}/${encodeURIComponent(k)}.json`, { method: 'DELETE' })
+                    ),
+                    ...Array.from(keysToClear).filter(Boolean).map(k =>
+                        fetch(`${FIREBASE_DB_URL}/ai_paused/${encodeURIComponent(syncRoom)}/${encodeURIComponent(k)}.json`, { method: 'DELETE' })
+                    ),
                     fetch(`${FIREBASE_DB_URL}/wa_outgoing/${encodeURIComponent(syncRoom)}/latest.json`, { method: 'DELETE' })
                 ]);
             } catch (e) {}
-            showToast(`🧹 Historial y buffer borrados para ${contact.name}`);
+            showToast(`🧹 Chat y memoria de Firebase borrados por completo para ${contact.name}`);
         };
         window.runWaAiReply = async function() {
             const input = document.getElementById('wa-ai-client-msg-input');
