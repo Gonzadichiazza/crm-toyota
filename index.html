@@ -1223,6 +1223,7 @@
                             <button onclick="addSandboxTester()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shrink-0">+ Sumar Tester</button>
                         </div>
                         <div id="wa-ai-sandbox-testers-list" class="flex flex-wrap gap-1.5"></div>
+                        <p class="text-[10px] text-amber-900">💡 Tip Tester: escribí <b>"terminamos charla"</b> en WhatsApp o en el simulador para reiniciar la charla desde cero.</p>
                     </div>
 
                     <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-2.5">
@@ -1813,7 +1814,6 @@
             const batchSize = Math.max(1, Number(document.getElementById('camp-batch-size')?.value || 15));
             const tpl = document.getElementById('camp-base-message')?.value.trim() || waTemplates.crm;
             const pool = getCampaignSourceList(src).filter(c => !massCampaignQueue.some(q => q.id === c.id));
-            // Selección aleatoria dentro de la base y código de área elegidos
             for (let i = pool.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -2004,7 +2004,6 @@
                 const outcomes = (await res.json()) || {};
                 let changed = false;
 
-                // 1. Aplicar clasificaciones automáticas de Sofía tras conversar
                 for (const [key, out] of Object.entries(outcomes)) {
                     if (!out || !out.outcome) continue;
                     const cleanPhone = formatPhoneAR(out.phone || '');
@@ -2028,7 +2027,6 @@
                             c.status = 'No Compra';
                             c.noInterestReason = out.reason || 'No quiere comprar';
                             c.observations = `Clasificado por Sofía (${c.noInterestReason})`;
-                            // Sacarlo de la lista de origen si no estaba ya en No Compra
                             if (found.source !== 'crm') {
                                 if (found.source === 'gestion') gestionContacts = gestionContacts.filter(x => x.id !== c.id);
                                 if (found.source === 'redes') redesContacts = redesContacts.filter(x => x.id !== c.id);
@@ -2053,7 +2051,6 @@
                     }
                 }
 
-                // 2. Pasar automáticamente a "Sin Respuesta 24h" los enviados hace +24 hs sin respuesta
                 const now = Date.now();
                 const dayMs = 24 * 3600 * 1000;
                 getAllListsCombined().forEach(c => {
@@ -4092,13 +4089,13 @@ REGLAS INQUEBRANTABLES DE COMPORTAMIENTO Y ESTILO NATURAL:
   - Si el cliente te saluda por primera vez ("Hola", "Buen día", etc.), presentate exactamente así: "${greeting}. Soy ${advisor}, asistente virtual de Gonzalo, ¿en qué te puedo ayudar?"
   - No digas el apellido de Gonzalo.
   - Si ya saludaste en el primer mensaje, no repitas el saludo en los mensajes siguientes.
-2. DERIVACIÓN DIRECTA EN FINANCIACIÓN CONVENCIONAL / PRENDARIA / CONTADO:
-  - Si el cliente dice "no quiero plan de ahorro", pide financiación convencional, prendario, banco, tasa 0% o contado: PROHIBIDO calcular cuotas o anticipos. Derivá SIEMPRE directo con Gonzalo y agregá [[PAUSAR_HUMANO]].
-3. PLAZO DE 84 CUOTAS Y DIFERENCIA ENTRE PLAN 70/30 Y PLAN 100%:
+2. BIFURCACIÓN CLAVE (MODELO SOLO vs. PLAN DIRECTO):
+  - Si pregunta por un modelo en específico SIN nombrar "plan" (ej: "Quiero averiguar por un Yaris", "Info de Hilux"): NO asumas que es por plan de ahorro; preguntale directamente qué negocio tiene pensado hacer.
+  - Si pregunta por PLANES directamente: indagá exclusivamente por el lado de Toyota Plan destacando siempre sus ventajas, sin mencionar nada de financiación por crédito prendario o bancario.
   - El plazo máximo es de 84 cuotas pensado para que el valor mensual sea accesible, pero puede cancelarlo en el tiempo que quiera adelantando cuotas puras.
   - Plan 70/30: financia el 70% en cuotas en pesos sin interés bancario y tiene integración mínima del 30% al retirar.
   - Plan 100%: financia el 100% sin 30% extraordinario.
-4. RETIRO, USADOS Y SUCURSALES ROSARIO:
+3. RETIRO, USADOS Y SUCURSALES ROSARIO:
   - No tenemos entrega pactada por contrato. Plazos de entrega: entre 30 y 75 días por contrato sin cambio de modelo o versión (hasta 135 días corridos si hay cambio), aunque generalmente llega entre 30 y 60 días.
   - Gastos de retiro (7% total): 1% derecho de adjudicación + 1% flete al adjudicar, y 5% de patentamiento antes de entregar.
   - Llave por Llave: sigue usando su auto hasta retirar el 0 km; tomamos usados de cualquier marca libres de prenda. No tomamos dólares, prendados, planes de ahorro de otras marcas, motos ni terrenos.
@@ -4111,8 +4108,18 @@ ${officialPricesText}`;
 
             async generateReply(contact, userMessage) {
                 const cid = contact?.id || 'default_client';
+                const cleanMsg = String(userMessage || '').trim();
+                const normMsg = cleanMsg.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+                if (/^(terminamos charla|terminamos la charla|reiniciar charla|nueva charla|reset charla)$/.test(normMsg)) {
+                    delete this.chats[cid];
+                    this.saveChats();
+                    const resetReply = 'Listo, charla reiniciada desde cero. Cuando quieras mandame un Hola y arrancamos una prueba nueva.';
+                    return { reply: resetReply, source: 'tester_reset_0tokens' };
+                }
+
                 if (!Array.isArray(this.chats[cid])) this.chats[cid] = [];
-                this.chats[cid].push({ role: 'user', text: String(userMessage || '').trim(), ts: Date.now() });
+                this.chats[cid].push({ role: 'user', text: cleanMsg, ts: Date.now() });
 
                 const systemPrompt = this.getSystemPrompt(this.buildOfficialPricesText());
                 const out = await this.callAnyProvider(this.chats[cid].slice(-24), systemPrompt);
@@ -4566,6 +4573,11 @@ ${officialPricesText}`;
 
             openClientProfileModal(id);
             showToast("🧠 Respuesta tuya guardada: Sofía la estudió y la incorporó a su criterio");
+        };
+        window.openBackupModal = () => {
+            const inp = document.getElementById('sync-room-input');
+            if (inp) inp.value = syncRoom;
+            document.getElementById('backup-modal')?.classList.remove('hidden');
         };
         window.closeBackupModal = () => document.getElementById('backup-modal')?.classList.add('hidden');
         window.changeSyncRoom = async () => {
