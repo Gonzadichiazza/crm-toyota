@@ -1067,6 +1067,175 @@
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50">
                 <div class="lg:col-span-5 space-y-3 bg-white p-4 rounded-2xl border border-slate-200">
                     <input type="hidden" id="profile-contact-id">
+                    <input type="text" id="profile-name" class="w-full px-3 py-2 text-xs font-bold border rounded-xl">
+                    <input type="text" id="profile-phone" class="w-full px-3 py-2 text-xs font-bold border rounded-xl">
+                    <div class="grid grid-cols-2 gap-2">
+                        <select id="profile-model" class="px-2.5 py-2 text-xs font-bold border rounded-xl bg-white"></select>
+                        <select id="profile-status" class="px-2.5 py-2 text-xs font-bold border rounded-xl bg-white"><option value="Pendiente">Pendiente</option><option value="Mensaje Enviado (48h)">Mensaje Enviado (48h)</option><option value="Sin Respuesta 24h">Sin Respuesta 24h</option><option value="Contestó">Contestó</option><option value="Interesado">Interesado</option><option value="Interesado a Futuro">Interesado a Futuro</option><option value="Entrevista">Entrevista</option><option value="Venta">Venta</option><option value="No Compra">No Compra</option></select>
+                    </div>
+                    <textarea id="profile-obs" rows="3" class="w-full px-3 py-2 text-xs border rounded-xl"></textarea>
+                    <div class="flex gap-2">
+                        <button onclick="saveClientProfileChanges()" class="flex-1 py-2.5 rounded-xl bg-[#EB0A1E] text-white text-xs font-bold">💾 Guardar Ficha</button>
+                        <button onclick="openProfileWhatsAppChat()" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold">🟢 WA</button>
+                    </div>
+                </div>
+                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden min-h-[340px]">
+                    <div class="p-3 bg-slate-100 border-b text-xs font-extrabold text-slate-800">💬 Historial & Entrenamiento Directo con Tu Estilo</div>
+                    <div id="profile-chat-history" class="flex-1 p-3.5 space-y-2 overflow-y-auto bg-[#efeae2]/60 max-h-[240px]"></div>
+                    <div class="p-3 bg-white border-t flex gap-2">
+                        <input type="text" id="profile-advisor-msg-input" onkeydown="if(event.key==='Enter') logManualAdvisorMessage()" placeholder="Escribí cómo responderías vos para que Sofía aprenda tu estilo..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
+                        <button onclick="logManualAdvisorMessage()" class="px-3.5 py-2 rounded-xl bg-[#0A0A0C] text-white text-xs font-bold">🧠 Enseñar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ASISTENTE CONVERSACIONAL IA WHATSAPP (SOFÍA 3.0) -->
+    <div id="wa-ai-assistant-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[69] hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
+            <div class="px-5 py-4 bg-gradient-to-r from-[#0A0A0C] via-[#151519] to-emerald-950 text-white flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-xl shadow">🤖</div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h3 class="text-base sm:text-lg font-extrabold">Sofi 3.0 — Asesora Virtual WhatsApp</h3>
+                            <span id="wa-ai-cloud-brain-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-500/20 text-sky-200 border border-sky-400/30">☁️ Cerebro Híbrido (0-Tokens + Groq + Gemini)</span>
+                        </div>
+                        <p class="text-xs text-zinc-300">Respuestas instantáneas sin cuota + Groq (14.400/día gratis) + Google Gemini • Conexión Directa 24/7.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="inline-flex items-center gap-2 cursor-pointer px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-xs font-bold">
+                        <input type="checkbox" id="wa-ai-auto-reply" checked onchange="saveWaAiConfig()" class="accent-emerald-500 w-4 h-4">
+                        <span>Piloto Automático 24/7</span>
+                    </label>
+                    <button onclick="closeWaAiAssistantModal()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">✕ Cerrar</button>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50/70">
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-2.5">
+                        <div class="text-xs font-extrabold uppercase text-slate-800">🔑 Pool de API Keys Gratuitas (Gemini + Groq 14.400/día)</div>
+                        <div class="flex gap-1.5">
+                            <input type="password" id="wa-ai-gemini-key" onchange="saveWaAiConfig()" placeholder="Gemini Principal (AIzaSy...)" class="flex-1 px-2.5 py-1.5 text-xs font-mono border border-sky-300 rounded-lg bg-white outline-none">
+                            <button onclick="testSingleApiKey('gemini')" class="px-2.5 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-[11px] font-bold shrink-0">🧪 Probar</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <input type="password" id="wa-ai-gemini-key-b1" onchange="saveWaAiConfig()" placeholder="Gemini Respaldo 1 (opc.)" class="w-full px-2 py-1 text-[11px] font-mono border border-slate-300 rounded-lg bg-slate-50 outline-none">
+                            <input type="password" id="wa-ai-gemini-key-b2" onchange="saveWaAiConfig()" placeholder="Gemini Respaldo 2 (opc.)" class="w-full px-2 py-1 text-[11px] font-mono border border-slate-300 rounded-lg bg-slate-50 outline-none">
+                        </div>
+                        <div class="pt-1 border-t border-slate-100 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase text-amber-800">⚡ Motor Principal Groq (14.400/día sin tarjeta)</span>
+                                <a href="https://console.groq.com/keys" target="_blank" class="text-[10px] font-bold text-sky-700 underline">Obtener Key gratis →</a>
+                            </div>
+                            <div class="flex gap-1.5">
+                                <input type="password" id="wa-ai-groq-key" onchange="saveWaAiConfig()" placeholder="API Key Groq (gsk_...)" class="flex-1 px-2.5 py-1.5 text-xs font-mono border border-amber-300 rounded-lg bg-amber-50/40 outline-none">
+                                <button onclick="testSingleApiKey('groq')" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-zinc-950 text-[11px] font-extrabold shrink-0">🧪 Probar</button>
+                            </div>
+                        </div>
+                        <div id="wa-ai-key-test-status" class="hidden p-2 rounded-lg text-[11px] font-bold"></div>
+
+                        <div id="wa-ai-daily-usage-panel" class="p-3 rounded-xl bg-slate-900 text-white space-y-2 border border-zinc-700">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400">📊 Consumo y Cuota Disponible Hoy</span>
+                                <button onclick="refreshDailyAiUsagePanel()" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] font-bold">🔄 Actualizar</button>
+                            </div>
+                            <div class="space-y-1 text-[11px] tabular-nums">
+                                <div class="flex justify-between">
+                                    <span class="text-zinc-300">⚡ Groq (Prioridad 1):</span>
+                                    <span id="usage-groq-label" class="font-extrabold text-emerald-300">0 / 14.400 (14.400 disp.)</span>
+                                </div>
+                                <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                                    <div id="usage-groq-bar" class="bg-emerald-500 h-1.5 rounded-full transition-all" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-1 text-[11px] tabular-nums pt-0.5">
+                                <div class="flex justify-between">
+                                    <span class="text-zinc-300">💎 Gemini (Respaldo):</span>
+                                    <span id="usage-gemini-label" class="font-extrabold text-sky-300">0 / 60 (60 disp.)</span>
+                                </div>
+                                <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                                    <div id="usage-gemini-bar" class="bg-sky-500 h-1.5 rounded-full transition-all" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center text-[10px] text-zinc-400 pt-1 border-t border-white/10 tabular-nums">
+                                <span>🛡️ Ahorro 0-tokens: <b id="usage-saved-label" class="text-white">0</b></span>
+                                <span id="usage-date-label">Hoy</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="wa-ai-advisor-name" value="Sofía" onchange="saveWaAiConfig()" class="px-2.5 py-1.5 text-xs border rounded-lg">
+                            <input type="text" id="wa-ai-branch" value="Ginza Toyota" onchange="saveWaAiConfig()" class="px-2.5 py-1.5 text-xs border rounded-lg">
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 space-y-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-extrabold uppercase text-emerald-950">☁️ Persistencia 24/7 (Cloudflare Worker)</span>
+                            <div class="flex items-center gap-1.5">
+                                <span id="wa-ai-mobile-health-badge" class="px-2 py-0.5 rounded bg-white border border-emerald-300 text-[10px] font-bold text-emerald-900">📱 Verificando puente...</span>
+                                <button onclick="testWorkerBridgeLive()" class="px-2 py-0.5 rounded bg-emerald-700 hover:bg-emerald-800 text-white text-[10px] font-bold">🧪 Probar Puente</button>
+                            </div>
+                        </div>
+                        <input type="text" id="wa-ai-worker-url" onchange="saveWaAiConfig()" value="https://sofia-ginza.gonzalodichiazza2.workers.dev" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-emerald-300 rounded-lg">
+                        <label class="flex items-center gap-2 text-[11px] text-emerald-950"><input type="checkbox" id="wa-ai-cloud-worker-primary" onchange="saveWaAiConfig()"><span>Delegar respuestas 24/7 al Worker</span></label>
+                        <div class="flex gap-1"><input type="text" id="wa-ai-incoming-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-incoming-url')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
+                        <div class="flex gap-1"><input type="text" id="wa-ai-outgoing-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border rounded-lg"><button onclick="copyInputText('wa-ai-outgoing-url')" class="px-2 py-1 bg-[#0A0A0C] text-white rounded-lg text-[10px] font-bold">Copiar</button></div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-sky-50 border-2 border-sky-300 space-y-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-extrabold uppercase text-sky-950">⚡ Conexión Directa API WhatsApp (Meta Cloud)</span>
+                            <span class="px-2 py-0.5 rounded bg-sky-600 text-white text-[10px] font-bold">24/7 Real</span>
+                        </div>
+                        <div class="flex gap-1">
+                            <input type="text" id="wa-ai-direct-webhook-url" readonly class="flex-1 px-2 py-1 text-[10px] font-mono bg-white border border-sky-300 rounded-lg">
+                            <button onclick="copyInputText('wa-ai-direct-webhook-url')" class="px-2 py-1 bg-sky-900 text-white rounded-lg text-[10px] font-bold">Copiar</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5 pt-1">
+                            <input type="text" id="wa-ai-evo-url" onchange="saveWaAiConfig()" placeholder="URL Puente QR (opc.)" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
+                            <input type="password" id="wa-ai-evo-key" onchange="saveWaAiConfig()" placeholder="API Key Puente QR" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <input type="text" id="wa-ai-meta-phone-id" onchange="saveWaAiConfig()" placeholder="Meta Phone Number ID" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
+                            <input type="password" id="wa-ai-meta-token" onchange="saveWaAiConfig()" placeholder="Meta Access Token" class="px-2 py-1 text-[11px] font-mono bg-white border border-sky-200 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: SANDBOX, MEMORIA AUTO-APRENDIZAJE & SIMULADOR SOFÍA 3.0 -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 space-y-2.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-extrabold text-amber-950">
+                                <input type="checkbox" id="wa-ai-sandbox-enabled" checked onchange="saveWaAiConfig()" class="accent-amber-600 w-4 h-4">
+                                <span>🧪 Modo Prueba (Sandbox — Solo responde a Testers autorizados)</span>
+                            </label>
+                            <span id="wa-ai-sandbox-count" class="px-2 py-0.5 rounded bg-amber-200 text-amber-950 text-[10px] font-extrabold">0 tester(s)</span>
+                        </div>
+                        <input type="hidden" id="wa-ai-sandbox-phone">
+                        <div class="flex gap-1.5">
+                            <input type="text" id="wa-ai-new-tester-input" onkeydown="if(event.key==='Enter') addSandboxTester()" placeholder="Agregar teléfono o nombre tester (ej: +5493415551234)..." class="flex-1 px-2.5 py-1.5 text-xs bg-white border border-amber-300 rounded-xl outline-none">
+                            <button onclick="addSandboxTester()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shrink-0">+ Sumar Tester</button>
+                        </div>
+                        <div id="wa-ai-sandbox-testers-list" class="flex flex-wrap gap-1.5"></div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-extrabold uppercase text-indigo-950">🧠 Memoria de Consultas Sin Token (Auto-Aprendizaje)</span>
+                                <span id="wa-ai-memory-count" class="px-2 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold tabular-nums">0</span>
+                            </div>
+                            <button onclick="loadUnansweredMemoryList()" class="px-2.5 py-1 rounded-lg bg-white border border-indigo-300 text-indigo-900 text-[10px] font-bold hover:bg-indigo-100">🔄 Refrescar</button>
+                        </div>
+                        <div id="wa-ai-memory-list" class="max-h-36 overflow-y-auto space-y-2 text-xs"></div>
+                    </div>
+
                     <div class="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-extrabold uppercase text-slate-800">📊 Auditoría Comercial en Vivo</span>
