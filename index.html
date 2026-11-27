@@ -1067,34 +1067,34 @@
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50">
                 <div class="lg:col-span-5 space-y-3 bg-white p-4 rounded-2xl border border-slate-200">
                     <input type="hidden" id="profile-contact-id">
-                    <input type="text" id="profile-name" class="w-full px-3 py-2 text-xs font-bold border rounded-xl">
-                    <input type="text" id="profile-phone" class="w-full px-3 py-2 text-xs font-bold border rounded-xl">
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="profile-model" class="px-2.5 py-2 text-xs font-bold border rounded-xl bg-white"></select>
-                        <select id="profile-status" class="px-2.5 py-2 text-xs font-bold border rounded-xl bg-white"><option value="Pendiente">Pendiente</option><option value="Mensaje Enviado (48h)">Mensaje Enviado (48h)</option><option value="Sin Respuesta 24h">Sin Respuesta 24h</option><option value="Contestó">Contestó</option><option value="Interesado">Interesado</option><option value="Interesado a Futuro">Interesado a Futuro</option><option value="Entrevista">Entrevista</option><option value="Venta">Venta</option><option value="No Compra">No Compra</option></select>
+                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold uppercase text-slate-800">📊 Auditoría Comercial en Vivo</span>
+                            <button id="btn-run-sofia-audit" onclick="runSofiaSelfAudit()" class="px-3 py-1 rounded-lg bg-[#0A0A0C] text-white text-[10px] font-bold">📊 Analizar</button>
+                        </div>
+                        <div id="wa-ai-audit-metrics" class="grid grid-cols-4 gap-2 text-center"></div>
+                        <div id="wa-ai-audit-report" class="hidden p-2.5 rounded-xl bg-slate-50 border text-[11px] text-slate-700"></div>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="date" id="profile-schedule-date" class="px-2.5 py-1.5 text-xs border rounded-xl">
-                        <input type="time" id="profile-schedule-time" class="px-2.5 py-1.5 text-xs border rounded-xl">
-                    </div>
-                    <select id="profile-no-interest-reason" class="w-full px-2.5 py-1.5 text-xs border rounded-xl bg-white"><option value="">Sin motivo / Activo</option><option value="Ya compró otro vehículo">Ya compró otro vehículo</option><option value="No quiere Plan de Ahorro">No quiere Plan de Ahorro</option><option value="Presupuesto / Cuota elevada">Presupuesto / Cuota elevada</option><option value="No tiene ahorro / Integración inicial">No tiene ahorro / Integración inicial</option><option value="Problema con usado / Tasación anterior">Problema con usado / Tasación anterior</option><option value="Mala experiencia previa con planes">Mala experiencia previa con planes</option><option value="Frenó búsqueda / Situación económica">Frenó búsqueda / Situación económica</option><option value="Averiguaba para un tercero">Averiguaba para un tercero</option><option value="No recuerda haber consultado">No recuerda haber consultado</option><option value="Número equivocado / Ya no pertenece">Número equivocado / Ya no pertenece</option><option value="Pide no ser contactado">Pide no ser contactado</option><option value="Otros">Otros</option></select>
-                    <textarea id="profile-obs" rows="3" class="w-full px-3 py-2 text-xs border rounded-xl"></textarea>
-                    <div class="flex gap-2">
-                        <button onclick="saveClientProfileChanges()" class="flex-1 py-2.5 rounded-xl bg-[#EB0A1E] text-white text-xs font-bold">💾 Guardar Ficha</button>
-                        <button onclick="openProfileWhatsAppChat()" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold">🟢 WA</button>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden min-h-[340px]">
-                    <div class="p-3 bg-emerald-50/80 border-b space-y-1.5">
-                        <div class="flex items-center justify-between"><span class="text-[11px] font-extrabold text-emerald-950 uppercase">🧠 Resumen Ejecutivo Sofía 3.0</span><button id="btn-refresh-ai-summary" onclick="generateClientAiSummary(true)" class="px-2.5 py-0.5 rounded-lg bg-emerald-700 text-white text-[10px] font-bold">✨ Actualizar</button></div>
-                        <div id="profile-ai-summary-text" class="text-xs text-slate-800 whitespace-pre-line"></div>
-                    </div>
-                    <div id="profile-chat-history" class="flex-1 p-3.5 space-y-2 overflow-y-auto bg-[#efeae2]/50 max-h-[240px]"></div>
-                    <div class="p-2.5 bg-white border-t space-y-1.5">
-                        <div class="text-[10px] font-bold text-slate-500">✍️ Registrá cómo le respondiste vos (Sofía estudia tus respuestas y aprende tu estilo):</div>
-                        <div class="flex gap-1.5">
-                            <input type="text" id="profile-advisor-msg-input" onkeydown="if(event.key==='Enter') logManualAdvisorMessage()" placeholder="Pegá o escribí tu respuesta real al cliente..." class="flex-1 px-2.5 py-1.5 text-xs border border-slate-300 rounded-xl outline-none">
-                            <button onclick="logManualAdvisorMessage()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">🧠 Enseñar</button>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden">
+                        <div class="p-3 bg-slate-100 border-b flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+                                <span class="text-xs font-extrabold text-slate-800">💬 Simulador:</span>
+                                <select id="wa-ai-contact-select" onchange="onWaAiContactChange()" class="flex-1 px-2.5 py-1 text-xs font-bold border border-slate-300 rounded-lg bg-white outline-none"></select>
+                            </div>
+                            <button onclick="resetWaAiChatHistory()" class="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-[11px] font-bold">🧹 Limpiar Chat</button>
+                        </div>
+                        <div id="wa-ai-chat-history" class="p-4 space-y-2.5 overflow-y-auto bg-[#efeae2]/60 h-[210px]"></div>
+                        <div id="wa-ai-draft-box" class="hidden p-2.5 bg-emerald-50 border-t border-emerald-200 space-y-1">
+                            <div class="flex justify-between text-[10px] font-bold text-emerald-900">
+                                <span>Respuesta generada:</span>
+                                <span id="wa-ai-source-tag" class="px-1.5 py-0.2 rounded bg-emerald-200">0-Tokens</span>
+                            </div>
+                            <textarea id="wa-ai-draft-text" rows="2" readonly class="w-full p-2 text-xs bg-white border border-emerald-300 rounded-lg outline-none"></textarea>
+                        </div>
+                        <div class="p-3 bg-white border-t flex gap-2">
+                            <input type="text" id="wa-ai-client-msg-input" onkeydown="if(event.key==='Enter') runWaAiReply()" placeholder="Escribí una consulta de prueba para Sofía 3.0..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-xl outline-none">
+                            <button onclick="runWaAiReply()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold">Enviar →</button>
                         </div>
                     </div>
                 </div>
@@ -3911,10 +3911,12 @@
 
                 return `Sos ${advisor}, asistente virtual de Gonzalo en Rosario, conversando por WhatsApp (Sofi 3.0). Fecha actual: ${todayIso}.
 
-MISIÓN COMERCIAL PRINCIPAL:
-- Tu objetivo es asesorar con claridad, indagar primero qué necesita el cliente y lograr que venga personalmente al concesionario (Avellaneda 2075 o Carballo 632) SIN COMPROMISO para revisar todos los detalles y despejar todas las dudas con Gonzalo.
-- Nunca seas agresiva de entrada: primero indagá con calma; recién después de entender su necesidad, si detectás que duda o necesita un empujón, apretá comercialmente con altura y respaldo Toyota para concretar la visita.
-- PROHIBIDO poner límite de tiempo a las reuniones (nunca digas "charla de 10 minutos"); siempre decí que es sin compromiso así revisamos todos los detalles y dudas.
+MISIÓN COMERCIAL Y PSICOLOGÍA DE VENTA (SPIN + JOLT + EMPATÍA TÁCTICA + DOBLE ALTERNATIVA):
+- Tu objetivo es asesorar con claridad, indagar primero con preguntas consultivas SPIN qué necesita el cliente y lograr que venga personalmente al concesionario (Avellaneda 2075 o Carballo 632) SIN COMPROMISO para revisar todos los detalles con Gonzalo.
+- Etiquetado Empático: Antes de responder una objeción, validá primero lo que siente o cuida el cliente ("Es totalmente lógico que cuides tu bolsillo...", "Hacés muy bien en averiguar todo antes de decidir...") y recién después dá el argumento Toyota.
+- Escudo Anti-Indecisión (Efecto JOLT): Si el cliente duda o dice "dejame pensarlo", recordale sin presión que acá su capital nunca queda atrapado porque el plan es transferible y preguntale qué horario le queda cómodo para que Gonzalo lo llame.
+- Cierre por Doble Alternativa: Cuando muestra interés real en avanzar, ofrecé dos alternativas concretas ("¿Te queda más cómodo pasar sin compromiso por Avellaneda 2075 o por Carballo 632?").
+- PROHIBIDO mencionar desventajas o trabas por iniciativa propia salvo pregunta directa, y PROHIBIDO poner límite de tiempo a las reuniones.
 
 REGLAS INQUEBRANTABLES DE COMPORTAMIENTO Y ESTILO NATURAL:
 1. PRESENTACIÓN OBLIGATORIA EN EL PRIMER TURNO:
