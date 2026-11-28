@@ -4608,9 +4608,27 @@ ${officialPricesText}`;
         window.copyWaWebhookUrl = () => copyInputText('wa-webhook-url');
         window.openSalesforceSyncModal = () => document.getElementById('sf-sync-modal')?.classList.remove('hidden');
         window.closeSalesforceSyncModal = () => document.getElementById('sf-sync-modal')?.classList.add('hidden');
-        window.openWaTemplatesModal = () => document.getElementById('wa-templates-modal')?.classList.remove('hidden');
+        window.openWaTemplatesModal = (focusKey = null) => {
+            ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'cancelados', 'rescindidos', 'clientes'].forEach(k => {
+                const el = document.getElementById(`tpl-input-${k}`);
+                if (el) el.value = waTemplates[k] || '';
+            });
+            document.getElementById('wa-templates-modal')?.classList.remove('hidden');
+            if (focusKey) {
+                const target = document.getElementById(`tpl-input-${focusKey}`);
+                if (target) setTimeout(() => target.focus(), 50);
+            }
+        };
         window.closeWaTemplatesModal = () => document.getElementById('wa-templates-modal')?.classList.add('hidden');
-        window.saveWaTemplates = () => { closeWaTemplatesModal(); };
+        window.saveWaTemplates = async () => {
+            ['crm', 'gestion', 'redes', 'salesforce', 'convencional', 'cancelados', 'rescindidos', 'clientes'].forEach(k => {
+                const el = document.getElementById(`tpl-input-${k}`);
+                if (el) waTemplates[k] = el.value.trim();
+            });
+            saveLocalData(true);
+            closeWaTemplatesModal();
+            showToast("💬 Mensajes predeterminados guardados y sincronizados en la nube");
+        };
         window.focusExistingWhatsAppTab = () => window.open('https://web.whatsapp.com', 'crm_whatsapp_web_singleton');
         window.openWhatsAppSingleTab = (d) => window.open(`https://web.whatsapp.com/send?phone=${d}`, 'crm_whatsapp_web_singleton');
         window.checkWhatsApp48hTimeouts = () => { pullCampaignOutcomesFromFirebase(); showToast("Verificación 24h/48h al día"); };
